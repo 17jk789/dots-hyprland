@@ -17,6 +17,28 @@
     <h3></h3>
 </div>
 
+> [!IMPORTANT]
+> ## jk-arch-features – An Extension of end-4
+>
+> This repository is a **fork of the original project by end-4** and is based on their excellent Hyprland configuration.
+>
+> I am building my own customized version on top of this foundation, adding new features and personal improvements, including:
+>
+> - custom **Neovim configuration**
+> - additional **Arch Linux features**
+> - custom **jk-arch UI improvements**
+> - additional tools, scripts, and workflow optimizations
+>
+> The goal of **jk-arch-features** is to extend the powerful foundation created by end-4 and turn it into my own personalized Arch Linux desktop environment with additional features and a unique workflow.
+>
+> The original work by **end-4** remains the foundation of this project. All additional features, customizations, and changes in this fork are developed by me.
+>
+> **Setup & Installation Guide:**
+>
+> https://github.com/17jk789/jk-arch/blob/main/my-arch-jk.md
+>
+> Huge thanks to **end-4** for the original project, the inspiration, and the amazing work!
+
 > [!WARNING]  
 > Hyprland 0.55 update:
 > If your distro has not shipped Hyprland 0.55 and/or you're not ready for it, you should switch to the Pre-Hyprland Luaification release (or not update yet, if you're going to do that). See the wiki for more info: [Install](https://ii.clsty.link/en/ii-qs/01setup/#automated-installation) | [Update](https://ii.clsty.link/en/ii-qs/01setup/#updating)
