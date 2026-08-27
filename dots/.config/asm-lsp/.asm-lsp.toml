@@ -1,0 +1,10 @@
+version = "0.10.0"
+
+[default_config]
+assembler = "gas"
+instruction_set = "x86-64"
+
+[default_config.opts]
+compiler = "as"
+diagnostics = true
+default_diagnostics = true
