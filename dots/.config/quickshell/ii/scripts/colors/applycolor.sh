@@ -38,7 +38,8 @@ apply_kitty() {
   cp "$SCRIPT_DIR/terminal/kitty-theme.conf" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
+    printf -v placeholder '#\\$term%s #' "$i"
+    sed -i "s|$placeholder|${colorvalues[$i]}|g" "$STATE_DIR"/user/generated/terminal/kitty-theme.conf
   done
 
   # Reload
@@ -59,7 +60,8 @@ apply_anyterm() {
   cp "$SCRIPT_DIR/terminal/sequences.txt" "$STATE_DIR"/user/generated/terminal/sequences.txt
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/sequences.txt
+    printf -v placeholder '#\\$term%s #' "$i"
+    sed -i "s|$placeholder|${colorvalues[$i]}|g" "$STATE_DIR"/user/generated/terminal/sequences.txt
   done
 
   sed -i "s/\$alpha/$term_alpha/g" "$STATE_DIR/user/generated/terminal/sequences.txt"

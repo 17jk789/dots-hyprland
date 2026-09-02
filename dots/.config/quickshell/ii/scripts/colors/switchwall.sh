@@ -34,10 +34,70 @@ handle_kde_material_you_colors() {
     "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
 }
 
+handle_catppuccin_theme() {
+    local gtk_theme_dir kde_scheme_file kde_scheme_name gtk4_source gtk4_config konsole_profile
+
+    mkdir -p "$XDG_CONFIG_HOME/gtk-3.0" "$XDG_CONFIG_HOME/gtk-4.0"
+    cp "$SCRIPT_DIR/catppuccin-mocha-gtk3.css" "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
+    cp "$SCRIPT_DIR/catppuccin-mocha-gtk4.css" "$XDG_CONFIG_HOME/gtk-4.0/gtk.css"
+
+    if command -v gsettings >/dev/null 2>&1; then
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
+        gtk_theme_dir="$(find "$HOME/.themes" /usr/share/themes -maxdepth 1 -type d -iname 'Catppuccin*Mocha*' -print -quit 2>/dev/null)"
+        if [[ -n "$gtk_theme_dir" ]]; then
+            gsettings set org.gnome.desktop.interface gtk-theme "$(basename "$gtk_theme_dir")" 2>/dev/null || true
+
+            gtk4_source="$gtk_theme_dir/gtk-4.0"
+            gtk4_config="$XDG_CONFIG_HOME/gtk-4.0"
+            [[ -d "$gtk4_source" ]] && cp -a "$gtk4_source/." "$gtk4_config/"
+        else
+            echo "[switchwall] Catppuccin GTK theme not found in ~/.themes or /usr/share/themes" >&2
+        fi
+    fi
+
+    kde_scheme_file="$(find "$HOME/.local/share/color-schemes" /usr/share/color-schemes -type f -iname 'Catppuccin*Mocha*.colors' -print -quit 2>/dev/null)"
+    if [[ -n "$kde_scheme_file" ]]; then
+        kde_scheme_name="$(basename "$kde_scheme_file" .colors)"
+        if command -v kwriteconfig6 >/dev/null 2>&1; then
+            kwriteconfig6 --file kdeglobals --group General --key ColorScheme "$kde_scheme_name"
+        elif command -v kwriteconfig5 >/dev/null 2>&1; then
+            kwriteconfig5 --file kdeglobals --group General --key ColorScheme "$kde_scheme_name"
+        fi
+
+        if command -v qdbus6 >/dev/null 2>&1; then
+            qdbus6 org.kde.KWin /KWin reconfigure 2>/dev/null || true
+        elif command -v qdbus >/dev/null 2>&1; then
+            qdbus org.kde.KWin /KWin reconfigure 2>/dev/null || true
+        fi
+    else
+        echo "[switchwall] Catppuccin KDE color scheme not found" >&2
+    fi
+
+    konsole_profile="$(find "$HOME/.local/share/konsole" -maxdepth 1 -type f -name '*.profile' -print -quit 2>/dev/null)"
+    if [[ -n "$konsole_profile" ]] && command -v kwriteconfig6 >/dev/null 2>&1; then
+        kwriteconfig6 --file "$konsole_profile" --group Appearance --key ColorScheme "Catppuccin Mocha"
+    elif [[ -n "$konsole_profile" ]] && command -v kwriteconfig5 >/dev/null 2>&1; then
+        kwriteconfig5 --file "$konsole_profile" --group Appearance --key ColorScheme "Catppuccin Mocha"
+    fi
+}
+
+handle_konsole_material_you() {
+    local konsole_profile
+    konsole_profile="$(find "$HOME/.local/share/konsole" -maxdepth 1 -type f -name '*.profile' -print -quit 2>/dev/null)"
+    [[ -z "$konsole_profile" ]] && return
+    if command -v kwriteconfig6 >/dev/null 2>&1; then
+        kwriteconfig6 --file "$konsole_profile" --group Appearance --key ColorScheme MaterialYou
+    elif command -v kwriteconfig5 >/dev/null 2>&1; then
+        kwriteconfig5 --file "$konsole_profile" --group Appearance --key ColorScheme MaterialYou
+    fi
+}
+
 pre_process() {
     local mode_flag="$1"
     # Set GNOME color-scheme if mode_flag is dark or light
-    if [[ "$mode_flag" == "dark" ]]; then
+    if [[ "$type_flag" == "scheme-catppuccin-mocha" ]]; then
+        handle_catppuccin_theme
+    elif [[ "$mode_flag" == "dark" ]]; then
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
         gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
     elif [[ "$mode_flag" == "light" ]]; then
@@ -55,7 +115,10 @@ post_process() {
     local screen_height="$2"
     local wallpaper_path="$3"
 
-    handle_kde_material_you_colors &
+    if [[ "$type_flag" != "scheme-catppuccin-mocha" ]]; then
+        handle_kde_material_you_colors &
+        handle_konsole_material_you &
+    fi
     "$SCRIPT_DIR/code/material-code-set-color.sh" &
 }
 
@@ -303,6 +366,31 @@ switch() {
         [[ "$term_fg_boost" != "null" && -n "$term_fg_boost" ]] && generate_colors_material_args+=(--term_fg_boost "$term_fg_boost")
     fi
 
+    if [[ "$type_flag" == "scheme-catppuccin-mocha" ]]; then
+        local catppuccin_colors="$SCRIPT_DIR/catppuccin-mocha.json"
+        local catppuccin_terminal_colors="$SCRIPT_DIR/catppuccin-mocha.scss"
+
+        if [[ ! -f "$catppuccin_colors" || ! -f "$catppuccin_terminal_colors" ]]; then
+            echo "[switchwall.sh] Catppuccin Mocha color files are missing" >&2
+            exit 1
+        fi
+
+        mkdir -p "$STATE_DIR/user/generated"
+
+        cp "$catppuccin_colors" \
+            "$STATE_DIR/user/generated/colors.json"
+        cp "$catppuccin_terminal_colors" \
+            "$STATE_DIR/user/generated/material_colors.scss"
+
+        "$SCRIPT_DIR/applycolor.sh"
+
+        max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
+        max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
+        post_process "$max_width_desired" "$max_height_desired" "$imgpath"
+
+        return
+    fi
+
     matugen "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
@@ -395,7 +483,7 @@ main() {
     fi
 
     # Validate type_flag (allow 'auto' as well)
-    allowed_types=(scheme-content scheme-expressive scheme-fidelity scheme-fruit-salad scheme-monochrome scheme-neutral scheme-rainbow scheme-tonal-spot auto)
+    allowed_types=(scheme-content scheme-expressive scheme-fidelity scheme-fruit-salad scheme-catppuccin-mocha scheme-monochrome scheme-neutral scheme-rainbow scheme-tonal-spot auto)
     valid_type=0
     for t in "${allowed_types[@]}"; do
         if [[ "$type_flag" == "$t" ]]; then

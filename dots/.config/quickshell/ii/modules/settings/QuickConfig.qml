@@ -212,6 +212,10 @@ ContentPage {
                 {
                     "value": "scheme-tonal-spot",
                     "displayName": Translation.tr("Tonal Spot")
+                },
+                {
+                    "value": "scheme-catppuccin-mocha",
+                    "displayName": Translation.tr("Catppuccin Mocha")
                 }
             ]
         }
