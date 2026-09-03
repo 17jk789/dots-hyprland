@@ -35,7 +35,7 @@ handle_kde_material_you_colors() {
 }
 
 handle_catppuccin_theme() {
-    local gtk_theme_dir kde_scheme_file kde_scheme_name gtk4_source gtk4_config konsole_profile
+    local gtk_theme_dir kde_scheme_file gtk4_source gtk4_config konsole_profile
     local konsole_scheme_file konsole_scheme_name
 
     mkdir -p "$XDG_CONFIG_HOME/gtk-3.0" "$XDG_CONFIG_HOME/gtk-4.0"
@@ -56,13 +56,12 @@ handle_catppuccin_theme() {
         fi
     fi
 
-    kde_scheme_file="$(find "$HOME/.local/share/color-schemes" /usr/share/color-schemes -type f -iname 'Catppuccin*Mocha*.colors' -print -quit 2>/dev/null)"
+    kde_scheme_file="$(find "$XDG_DATA_HOME/color-schemes" /usr/share/color-schemes -type f -name 'MaterialCatppuccinMocha.colors' -print -quit 2>/dev/null)"
     if [[ -n "$kde_scheme_file" ]]; then
-        kde_scheme_name="$(basename "$kde_scheme_file" .colors)"
         if command -v kwriteconfig6 >/dev/null 2>&1; then
-            kwriteconfig6 --file kdeglobals --group General --key ColorScheme "$kde_scheme_name"
+            kwriteconfig6 --file kdeglobals --group General --key ColorScheme MaterialCatppuccinMocha
         elif command -v kwriteconfig5 >/dev/null 2>&1; then
-            kwriteconfig5 --file kdeglobals --group General --key ColorScheme "$kde_scheme_name"
+            kwriteconfig5 --file kdeglobals --group General --key ColorScheme MaterialCatppuccinMocha
         fi
 
         if command -v qdbus6 >/dev/null 2>&1; then
