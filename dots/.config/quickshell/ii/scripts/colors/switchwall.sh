@@ -4,6 +4,7 @@ QUICKSHELL_CONFIG_NAME="ii"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 CONFIG_DIR="$XDG_CONFIG_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
 CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
@@ -56,12 +57,12 @@ handle_catppuccin_theme() {
         fi
     fi
 
-    kde_scheme_file="$(find "$XDG_DATA_HOME/color-schemes" /usr/share/color-schemes -type f -name 'MaterialCatppuccinMocha.colors' -print -quit 2>/dev/null)"
+    kde_scheme_file="$(find "$XDG_DATA_HOME/color-schemes" "$HOME/.local/share/color-schemes" /usr/share/color-schemes -type f -name 'MaterialCatppuccinMocha.colors' -print -quit 2>/dev/null)"
     if [[ -n "$kde_scheme_file" ]]; then
         if command -v kwriteconfig6 >/dev/null 2>&1; then
-            kwriteconfig6 --file kdeglobals --group General --key ColorScheme MaterialCatppuccinMocha
+            kwriteconfig6 --file "$XDG_CONFIG_HOME/kdeglobals" --group General --key ColorScheme MaterialCatppuccinMocha
         elif command -v kwriteconfig5 >/dev/null 2>&1; then
-            kwriteconfig5 --file kdeglobals --group General --key ColorScheme MaterialCatppuccinMocha
+            kwriteconfig5 --file "$XDG_CONFIG_HOME/kdeglobals" --group General --key ColorScheme MaterialCatppuccinMocha
         fi
 
         if command -v qdbus6 >/dev/null 2>&1; then
