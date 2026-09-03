@@ -4,10 +4,27 @@ printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
 
 # shellcheck shell=bash
 
-install_neovim_starter(){
+install_neovim_lazyvim_nerdfont(){
   if [[ "$OS_GROUP_ID" == "arch" ]]; then
-    printf "${STY_CYAN}[$0]: Installing Neovim and Vim${STY_RST}\n"
-    x sudo pacman -S --needed --noconfirm neovim vim
+    local install_choice="y"
+    if [[ "$ask" != "false" ]]; then
+      while true; do
+        read -p "Install Neovim, LazyVim and JetBrainsMono Nerd Font? [Y/n] " install_choice
+        case "$install_choice" in
+          [yY]|[yY][eE][sS]|"") install_choice="y"; break ;;
+          [nN]|[nN][oO]) install_choice="n"; break ;;
+          *) printf "${STY_RED}Please enter y or n.${STY_RST}\n" ;;
+        esac
+      done
+    fi
+
+    if [[ "$install_choice" != "y" ]]; then
+      printf "${STY_YELLOW}[$0]: Skipping Neovim, LazyVim and Nerd Font installation.${STY_RST}\n"
+      return
+    fi
+
+    printf "${STY_CYAN}[$0]: Installing Neovim, Vim, LazyVim and JetBrainsMono Nerd Font${STY_RST}\n"
+    x sudo pacman -S --needed --noconfirm neovim vim wget unzip
 
     if [[ -e "$XDG_CONFIG_HOME/nvim" ]]; then
       printf "${STY_BLUE}[$0]: $XDG_CONFIG_HOME/nvim already exists; keeping it.${STY_RST}\n"
@@ -16,11 +33,23 @@ install_neovim_starter(){
       x git clone https://github.com/LazyVim/starter "$XDG_CONFIG_HOME/nvim"
       x rm -rf "$XDG_CONFIG_HOME/nvim/.git"
     fi
+
+    if [[ -d "$XDG_DATA_HOME/fonts/JetBrainsMono" ]]; then
+      printf "${STY_BLUE}[$0]: $XDG_DATA_HOME/fonts/JetBrainsMono already exists; keeping it.${STY_RST}\n"
+    else
+      x mkdir -p "$XDG_DATA_HOME/fonts"
+      x cd "$XDG_DATA_HOME/fonts"
+      x wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+      x unzip JetBrainsMono.zip -d JetBrainsMono
+      x rm -f JetBrainsMono.zip
+      x fc-cache -fv
+      x cd "$REPO_ROOT"
+    fi
   fi
 }
 
-showfun install_neovim_starter
-v install_neovim_starter
+showfun install_neovim_lazyvim_nerdfont
+v install_neovim_lazyvim_nerdfont
 
 function warning_overwrite(){
   printf "${STY_YELLOW}"
