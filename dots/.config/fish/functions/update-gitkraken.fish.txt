@@ -1,0 +1,33 @@
+# WARNUNG: Dieses Skript ist NUR für die MANUELLE Installation von GitKraken (.tar.gz) gedacht!
+# Wenn Sie GitKraken über das AUR (z.B. mit 'yay -S gitkraken') installiert haben,
+# dürfen Sie dieses Skript NICHT verwenden.
+
+function update-gitkraken
+    echo "Starting GitKraken update..."
+
+    cd /tmp
+
+    wget -O gitkraken-new.tar.gz https://release.gitkraken.com/linux/gitkraken-amd64.tar.gz
+
+    if test $status -ne 0
+        echo "Download failed!"
+        return 1
+    end
+
+    mkdir -p /tmp/gitkraken-update
+    tar -xzf gitkraken-new.tar.gz -C /tmp/gitkraken-update
+
+    if test $status -ne 0
+        echo "Extraction failed!"
+        return 1
+    end
+
+    sudo rm -rf /opt/gitkraken
+    sudo mv /tmp/gitkraken-update/gitkraken /opt/
+
+    rm -rf /tmp/gitkraken-update gitkraken-new.tar.gz
+
+    echo "GitKraken was successfully updated."
+end
+
+funcsave update-gitkraken
