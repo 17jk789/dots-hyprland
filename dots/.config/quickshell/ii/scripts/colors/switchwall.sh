@@ -59,7 +59,9 @@ handle_catppuccin_theme() {
 
     kde_scheme_file="$(find "$XDG_DATA_HOME/color-schemes" "$HOME/.local/share/color-schemes" /usr/share/color-schemes -type f -name 'MaterialCatppuccinMocha.colors' -print -quit 2>/dev/null)"
     if [[ -n "$kde_scheme_file" ]]; then
-        if command -v kwriteconfig6 >/dev/null 2>&1; then
+        if command -v plasma-apply-colorscheme >/dev/null 2>&1; then
+            plasma-apply-colorscheme MaterialCatppuccinMocha
+        elif command -v kwriteconfig6 >/dev/null 2>&1; then
             kwriteconfig6 --file "$XDG_CONFIG_HOME/kdeglobals" --group General --key ColorScheme MaterialCatppuccinMocha
         elif command -v kwriteconfig5 >/dev/null 2>&1; then
             kwriteconfig5 --file "$XDG_CONFIG_HOME/kdeglobals" --group General --key ColorScheme MaterialCatppuccinMocha
@@ -67,8 +69,10 @@ handle_catppuccin_theme() {
 
         if command -v qdbus6 >/dev/null 2>&1; then
             qdbus6 org.kde.KWin /KWin reconfigure 2>/dev/null || true
+            qdbus6 org.kde.KGlobalSettings /KGlobalSettings notifyChange 2>/dev/null || true
         elif command -v qdbus >/dev/null 2>&1; then
             qdbus org.kde.KWin /KWin reconfigure 2>/dev/null || true
+            qdbus org.kde.KGlobalSettings /KGlobalSettings notifyChange 2>/dev/null || true
         fi
     else
         echo "[switchwall] Catppuccin KDE color scheme not found" >&2
