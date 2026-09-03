@@ -1,5 +1,32 @@
 # Don't print a new line at the start of the prompt
 add_newline = false
+
+# ============================================================
+# CATPPUCCIN MOCHA
+# ============================================================
+#
+# Base     #1e1e2e
+# Mantle   #181825
+# Crust    #11111b
+# Surface0 #313244
+# Surface1 #45475a
+# Surface2 #585b70
+# Overlay0 #6c7086
+# Subtext0 #a6adc8
+# Text     #cdd6f4
+#
+# Red      #f38ba8
+# Peach    #fab387
+# Yellow   #f9e2af
+# Green    #a6e3a1
+# Teal     #94e2d5
+# Sky      #89dceb
+# Sapphire #74c7ec
+# Blue     #89b4fa
+# Lavender #b4befe
+# Mauve    #cba6f7
+#
+
 # Pipes ╰─ ╭─
 # Powerline symbols                                     
 # Wedges 🭧🭒 🭣🭧🭓
@@ -9,95 +36,398 @@ add_newline = false
 # format = """
 # $directory $fill $git_branch $cmd_duration
 #  $character"""
+
 format = """
-$cmd_duration $directory$git_branch
-  $character"""
+$os$username$hostname$directory${env_var.MY_IP}${env_var.PUB_IP}$git_branch$git_status$python$rust$golang$nodejs$java$c$lua$fill$cmd_duration$jobs$battery$time
+$character"""
+
+# ============================================================
+# OS
+# ============================================================
+
+[os]
+disabled = false
+style = "bg:#313244 fg:#cdd6f4"
+format = " [](bold fg:#313244)[ ]($style)"
+# format = " [](bold fg:#313244)[  ]($style)"
+
+# ============================================================
+# USERNAME
+# ============================================================
+
+[username]
+disabled = false
+show_always = true
+style_user = "bg:#313244 fg:#cdd6f4"
+style_root = "bg:#313244 fg:#f38ba8"
+format = "[$user]($style)"
+
+# ============================================================
+# HOSTNAME
+# ============================================================
+
+[hostname]
+disabled = false
+ssh_only = false
+style = "bg:#313244 fg:#cdd6f4"
+format = "[@$hostname]($style)[](bold fg:#313244)"
+trim_at = "."
+
+# ============================================================
+# FILL
+# ============================================================
 
 [fill]
-symbol = '-'
-style = 'fg:245'
+symbol = " ─"
+style = "fg:#585b70"
+
+# ============================================================
+# CHARACTER
+# ============================================================
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[ ](bold fg:243)"
-error_symbol = "[ ](bold fg:244)"
+success_symbol = "  [ ](bold #a6e3a1)"
+error_symbol = "  [ ](bold #f38ba8)"
 
 # Disable the package module, hiding it from the prompt completely
+
+# ============================================================
+# PACKAGE
+# ============================================================
+
 [package]
 disabled = true
 
+# ============================================================
+# GIT BRANCH
+# ============================================================
+
 [git_branch]
-style = "bg: 252"
+# style = "bg: #45475a"
+style = "bg:#cba6f7 fg:#1e1e2e"
 symbol = "󰘬"
 truncation_length = 12
 truncation_symbol = ""
-format = " 󰜥 [](bold fg:252)[$symbol $branch(:$remote_branch)](fg:235 bg:252)[ ](bold fg:252)"
+# format = " 󰜥 [](bold fg:#45475a)[$symbol $branch(:$remote_branch)]($style)[ ](bold fg:#45475a)"
+format = " [](bold fg:#cba6f7)[$symbol $branch(:$remote_branch)]($style)[](bold fg:#cba6f7)"
+
+# ============================================================
+# GIT COMMIT
+# ============================================================
 
 [git_commit]
 commit_hash_length = 4
 tag_symbol = " "
 
+# ============================================================
+# GIT STATE
+# ============================================================
+
 [git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
-cherry_pick = "[🍒 PICKING](bold red)"
+style = "bg:#b4befe fg:#1e1e2e"
+format = ' [\($state( $progress_current of $progress_total)\)]($style)'
+cherry_pick = "[🍒 PICKING](bold #f38ba8)"
+
+# ============================================================
+# GIT STATUS
+# ============================================================
 
 [git_status]
-conflicted = " 🏳 "
-ahead = " 🏎💨 "
-behind = " 😰 "
-diverged = " 😵 "
-untracked = " 🤷 ‍"
-stashed = " 📦 "
-modified = " 📝 "
-staged = '[++\($count\)](green)'
-renamed = " ✍️ "
-deleted = " 🗑 "
+style = "bg:#f9e2af fg:#1e1e2e"
 
-[hostname]
-ssh_only = false
-format =  "[•$hostname](bg:252 bold fg:235)[](bold fg:252)"
-trim_at = ".companyname.com"
-disabled = false
+format = " [](bold fg:#f9e2af)[ $all_status]($style)[](bold fg:#f9e2af)"
+
+# conflicted = " 🏳 "
+# ahead = " 🏎💨 "
+# behind = " 😰 "
+# diverged = " 😵 "
+# untracked = " 🤷 ‍"
+# stashed = " 📦 "
+# modified = " 📝 "
+# staged = '[++\($count\)](green)'
+# renamed = " ✍️ "
+# deleted = " 🗑 "
+
+conflicted = "conflicted"
+untracked = "untracked"
+modified = "modified"
+deleted = "deleted"
+renamed = "renamed"
+stashed = "stashed"
+staged = " ++($count)"
+ahead = "ahead"
+behind = "behind"
+diverged = "diverged"
+
+# ============================================================
+# HOSTNAME
+# ============================================================
+
+# [hostname]
+# ssh_only = true
+# style = "bg:252 fg:235"
+# format =  " [](bold fg:252)[•$hostname]($style)[](bold fg:252)"
+# trim_at = ".companyname.com"
+# disabled = false
+
+# ============================================================
+# LINE BREAK
+# ============================================================
 
 [line_break]
 disabled = false
+
+# ============================================================
+# MEMORY
+# ============================================================
 
 [memory_usage]
 disabled = true
 threshold = -1
 symbol = " "
-style = "bold dimmed green"
+style = "bold dimmed #a6e3a1"
+
+# ============================================================
+# TIME
+# ============================================================
 
 [time]
-disabled = true
-format = '🕙[\[ $time \]]($style) '
+disabled = false
+style = "bg:#313244 fg:#cdd6f4"
+format = " [](bold fg:#313244)[󰥔 $time]($style)[](bold fg:#313244) "
 time_format = "%T"
 
-[username]
-style_user = "bold bg:252 fg:235"
-style_root = "red bold"
-format = "[](bold fg:252)[$user]($style)"
-disabled = false
-show_always = true
+# ============================================================
+# USERNAME
+# ============================================================
+
+# [username]
+# style_user = "bold bg:252 fg:235"
+# style_root = "red bold"
+# format = " [](bold fg:252)[$user]($style)[](bold fg:252)"
+# disabled = false
+# show_always = false
+
+# ============================================================
+# JOBS
+# ============================================================
+
+[jobs]
+symbol = "󰒋"
+style = "bg:#45475a fg:#cdd6f4"
+format = " [](bold fg:#45475a)[$symbol $number]($style)[](bold fg:#45475a)"
+number_threshold = 1
+
+# ============================================================
+# BATTERY
+# ============================================================
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+empty_symbol = "󰂎 "
+unknown_symbol = "󰂑 "
+format = " [](bold fg:#a6e3a1)[$symbol$percentage](bg:#a6e3a1 fg:#1e1e2e)[](bold fg:#a6e3a1)"
+
+# ============================================================
+# DIRECTORY
+# ============================================================
+# Location → Teal
+# ============================================================
+
+# [directory]
+# home_symbol = " "
+# read_only = "  "
+# style = "bg:255 fg:240"
+# truncation_length = 5
+# # truncation_symbol = ".../"
+# format = " [](bold fg:255)[󰉋 → $path]($style)[](bold fg:255)"
+#
+# [directory.substitutions]
+# "Desktop" = "  "
+# "Documents" = "  "
+# "Downloads" = "  "
+# "Music" = " 󰎈 "
+# "Pictures" = "  "
+# "Videos" = "  "
+# "GitHub" = " 󰊤 "
 
 [directory]
-home_symbol = " "
+style = "bg:#94e2d5 fg:#1e1e2e"
 read_only = "  "
-style = "bg:255 fg:240"
-truncation_length = 2
-truncation_symbol = ".../"
-format = '[](bold fg:255)[󰉋 → $path]($style)[](bold fg:255)'
+truncation_length = 0
+fish_style_pwd_dir_length = 3
+format = " [](bold fg:#94e2d5)[󰉋 → $path]($style)[](bold fg:#94e2d5)"
 
-
-[directory.substitutions]
-"Desktop" = "  "
-"Documents" = "  "
-"Downloads" = "  "
-"Music" = " 󰎈 "
-"Pictures" = "  "
-"Videos" = "  "
-"GitHub" = " 󰊤 "
+# ============================================================
+# COMMAND DURATION
+# ============================================================
+# Performance → Peach
+# ============================================================
 
 [cmd_duration]
 min_time = 0
-format = '[](bold fg:252)[󰪢 $duration](bold bg:252 fg:235)[](bold fg:252)'
+show_milliseconds = true
+style = "bold bg:#fab387 fg:#1e1e2e"
+format = "[](bold fg:#fab387)[󰪢 $duration]($style)[](bold fg:#fab387)"
+
+# ============================================================
+# PROGRAMMING LANGUAGES
+# ============================================================
+# All languages → Green
+# ============================================================
+
+# ============================================================
+# PYTHON
+# ============================================================
+
+[python]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $virtualenv]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "py"
+]
+detect_files = [
+    "requirements.txt",
+    "pyproject.toml",
+    ".python-version"
+]
+detect_folders = [
+    ".venv",
+    "venv",
+    "env",
+    ".env"
+]
+
+# ============================================================
+# RUST
+# ============================================================
+
+[rust]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "rs"
+]
+detect_files = [
+    "Cargo.toml"
+]
+
+# ============================================================
+# NODE.JS
+# ============================================================
+
+[nodejs]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "js",
+    "ts",
+    "jsx",
+    "tsx"
+]
+detect_files = [
+    "package.json",
+    "node_modules"
+]
+
+# ============================================================
+# GOLANG
+# ============================================================
+
+[golang]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "go"
+]
+detect_files = [
+    "go.mod",
+    "go.sum"
+]
+
+# ============================================================
+# LUA
+# ============================================================
+
+[lua]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "lua"
+]
+detect_files = [
+    ".lua-version"
+]
+
+# ============================================================
+# JAVA
+# ============================================================
+
+[java]
+symbol = " "
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "java",
+    "gradle",
+    "jar"
+]
+detect_files = [
+    "pom.xml",
+    "build.gradle",
+    "gradlew"
+]
+
+# ============================================================
+# C / C++
+# ============================================================
+
+[c]
+symbol = " "
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = [
+    "c",
+    "h",
+    "cpp",
+    "hpp",
+    "cc"
+]
+detect_files = [
+    "CMakeLists.txt",
+    "Makefile"
+]
+
+# unötig -> immer C!!!
+# [cpp]
+# symbol = " "
+# style = "bg:248 fg:235"
+# format = " [](bold fg:248)[$symbol $version]($style)[](bold fg:248)"
+# detect_extensions = ["cpp", "hpp", "cc"]
+# detect_files = ["CMakeLists.txt", "Makefile"]
+
+# ============================================================
+# LOCAL IP
+# ============================================================
+
+[env_var.MY_IP]
+variable = "MY_IP"
+style = "bg:#74c7ec fg:#1e1e2e"
+format = " [](bold fg:#74c7ec)[󰒋 $env_value]($style)[](bold fg:#74c7ec)"
+
+# ============================================================
+# PUBLIC IP
+# ============================================================
+
+[env_var.PUB_IP]
+variable = "PUB_IP"
+style = "bg:#89b4fa fg:#1e1e2e"
+format = " [](bold fg:#89b4fa)[󰖟 $env_value]($style)[](bold fg:#89b4fa)"
