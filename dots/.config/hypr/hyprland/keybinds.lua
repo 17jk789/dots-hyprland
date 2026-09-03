@@ -93,8 +93,9 @@ hl.bind("SUPER + SHIFT + ALT + R", hl.dsp.exec_cmd(qsScripts .. "/videos/record.
     { locked = true, description = "Utilities: Record screen (with sound)" })
 --# Fullscreen screenshot
 local grimhyprctl = "grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\""
-hl.bind("Print", hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"),
-    { locked = true, description = "Utilities: Screenshot >> clipboard" })
+-- hl.bind("Print", hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"),
+    -- { locked = true, description = "Utilities: Screenshot >> clipboard" })
+hl.bind("Print", hl.dsp.exec_cmd("obs"), { description = "App: Start OBS" })
 hl.bind("CTRL + Print", hl.dsp.exec_cmd(
     "mkdir -p $(xdg-user-dir PICTURES)/Screenshots && " ..
     grimhyprctl .. " $(xdg-user-dir PICTURES)/Screenshots/Screenshot_\"$(date '+%Y-%m-%d_%H.%M.%S')\".png"
@@ -339,7 +340,20 @@ hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("systemctl suspend || loginctl susp
 
 hl.bind("CTRL + SHIFT + ALT + SUPER + Delete", hl.dsp.exec_cmd("systemctl poweroff || loginctl poweroff"),
     { description = "Session: Shut down" }) -- # [hidden] Power off
-
+hl.bind("SUPER + H", hl.dsp.focus({ workspace = "+1" }))
+hl.bind("SUPER + ALT + H", hl.dsp.focus({ workspace = "-1" }))
+hl.bind("SUPER + ALT + F", function()
+	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+	hl.dispatch(hl.dsp.window.pin())
+end, { description = "Window: Float + Always on top" })
+hl.bind("SUPER + ALT + P", function()
+	hl.dispatch(hl.dsp.window.pin())
+	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+end, { description = "Window: Return to tiling" })
+hl.bind("XF86Calculator", hl.dsp.exec_cmd("qalculate-gtk"), { description = "App: Start Qalculate" })
+hl.bind("SUPER + SHIFT + 7", hl.dsp.global("quickshell:cheatsheetToggle"), { description = "Shell: Toggle cheatsheet" })
+hl.bind("CTRL + SUPER + G", hl.dsp.exec_cmd("fish -c glasstoggle"), { description = "Toggle glass mode" })
+hl.bind("CTRL + SUPER + B", hl.dsp.exec_cmd("fish -c border-visible"), { description = "Toggle border visibility" })
 
 --##! Apps
 hl.bind("SUPER + Return", hl.dsp.exec_cmd(terminal), { description = "App: Terminal" })
@@ -353,7 +367,13 @@ hl.bind("SUPER + X", hl.dsp.exec_cmd(textEditor), { description = "App: Text edi
 hl.bind("CTRL + SUPER + V", hl.dsp.exec_cmd(volumeMixer), { description = "App: Volume mixer" })
 hl.bind("SUPER + I", hl.dsp.exec_cmd(settingsApp), { description = "App: Settings app" })
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd(taskManager), { description = "App: Task manager" })
+hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox-developer-edition"), { description = "App: Firefox Developer" })
 
 --# Cursed stuff
 --## Make window not amogus large
 hl.bind("CTRL + SUPER + Backslash", hl.dsp.window.resize({ x = 640, y = 480, "exact" }))
+
+-- Magic Mouse Vor und Zurück mit SUPER-Taste + Wischen
+-- hl.bind("mouse:274", hl.dsp.exec_cmd("kitty"))
+-- hl.bind("SUPER + mouse_down", hl.dsp.exec_cmd("hyprctl dispatch workspace e+1"))
+-- hl.bind("SUPER + mouse_up", hl.dsp.exec_cmd("hyprctl dispatch workspace e-1"))
