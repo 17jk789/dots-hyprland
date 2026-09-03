@@ -1,5 +1,6 @@
 [Appearance]
-ColorScheme=MaterialYou
+# ColorScheme=MaterialYou
+ColorScheme=Catppuccin-Mocha
 
 [General]
 Command=/bin/fish
