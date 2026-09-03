@@ -4,6 +4,24 @@ printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
 
 # shellcheck shell=bash
 
+install_neovim_starter(){
+  if [[ "$OS_GROUP_ID" == "arch" ]]; then
+    printf "${STY_CYAN}[$0]: Installing Neovim and Vim${STY_RST}\n"
+    x sudo pacman -S --needed --noconfirm neovim vim
+
+    if [[ -e "$XDG_CONFIG_HOME/nvim" ]]; then
+      printf "${STY_BLUE}[$0]: $XDG_CONFIG_HOME/nvim already exists; keeping it.${STY_RST}\n"
+    else
+      x mkdir -p "$XDG_CONFIG_HOME"
+      x git clone https://github.com/LazyVim/starter "$XDG_CONFIG_HOME/nvim"
+      x rm -rf "$XDG_CONFIG_HOME/nvim/.git"
+    fi
+  fi
+}
+
+showfun install_neovim_starter
+v install_neovim_starter
+
 function warning_overwrite(){
   printf "${STY_YELLOW}"
   printf "The command below overwrites the destination.\n"
