@@ -1,0 +1,209 @@
+###############################
+# Optimized for Wayland + Hyprland + Neovim
+###############################
+
+# live_config_reload = true
+
+[general]
+import = []
+
+[env]
+TERM = "xterm-256color"
+
+###############################
+# WINDOW
+###############################
+
+[window]
+decorations = "None"
+opacity = 0.3
+blur = true
+startup_mode = "Windowed"
+dynamic_padding = false
+resize_increments = false
+padding = { x = 3, y = 5 }
+
+###############################
+# SCROLLBACK
+###############################
+
+[scrolling]
+history = 50000
+multiplier = 3
+
+###############################
+# FONT
+###############################
+
+[font]
+size = 11.5
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+###############################
+# CURSOR
+###############################
+
+[cursor]
+unfocused_hollow = false
+blink_interval = 0
+
+[cursor.style]
+shape = "Block"
+blinking = "Never"
+
+###############################
+# TERMINAL
+###############################
+
+[terminal]
+
+[terminal.shell]
+program = "/usr/bin/fish"
+args = ["--login"]
+
+###############################
+# COLORS (Matrix Theme)
+###############################
+
+[colors.primary]
+background = "#000000"
+foreground = "#00FF00"
+dim_foreground = "#00CC00"
+bright_foreground = "#66FF66"
+
+###############################
+# CURSOR
+###############################
+
+[colors.cursor]
+text = "#000000"
+cursor = "#00FF00"
+
+###############################
+# SELECTION
+###############################
+
+[colors.selection]
+text = "#000000"
+background = "#00FF00"
+
+###############################
+# SEARCH
+###############################
+
+[colors.search.matches]
+foreground = "#000000"
+background = "#00FF00"
+
+[colors.search.focused_match]
+foreground = "#000000"
+background = "#66FF66"
+
+###############################
+# VI MODE
+###############################
+
+[colors.vi_mode_cursor]
+text = "#000000"
+cursor = "#00FF00"
+
+###############################
+# FOOTER
+###############################
+
+[colors.footer_bar]
+foreground = "#000000"
+background = "#00FF00"
+
+###############################
+# HINTS
+###############################
+
+[colors.hints.start]
+foreground = "#000000"
+background = "#00FF00"
+
+[colors.hints.end]
+foreground = "#000000"
+background = "#66FF66"
+
+###############################
+# LINE INDICATOR
+###############################
+
+[colors.line_indicator]
+foreground = "None"
+background = "None"
+
+###############################
+# NORMAL ANSI
+###############################
+
+[colors.normal]
+black   = "#000000"
+red     = "#00AA00"
+green   = "#00FF00"
+yellow  = "#55FF55"
+blue    = "#00DD00"
+magenta = "#00CC66"
+cyan    = "#33FF99"
+white   = "#99FF99"
+
+###############################
+# BRIGHT ANSI
+###############################
+
+[colors.bright]
+black   = "#003300"
+red     = "#00CC00"
+green   = "#66FF66"
+yellow  = "#88FF88"
+blue    = "#55FF55"
+magenta = "#77FF99"
+cyan    = "#AAFFCC"
+white   = "#CCFFCC"
+
+###############################
+# MOUSE
+###############################
+
+[mouse]
+hide_when_typing = true
+
+###############################
+# SELECTION
+###############################
+
+[selection]
+save_to_clipboard = true
+
+###############################
+# KEYBOARD
+###############################
+
+[keyboard]
+
+###############################
+# PERFORMANCE
+###############################
+
+[debug]
+render_timer = false
+persistent_logging = false
+log_level = "Off"
+print_events = false
