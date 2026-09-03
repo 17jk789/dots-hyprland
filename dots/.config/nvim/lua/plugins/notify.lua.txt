@@ -1,0 +1,25 @@
+-- plugins/notify.lua
+
+-- local old_notify = vim.notify
+
+-- vim.notify = function(msg, log_level, opts)
+--   local text = nil
+
+--   if type(msg) == "string" then
+--     text = msg
+--   elseif type(msg) == "table" and type(msg.msg) == "string" then
+--     text = msg.msg
+--   end
+
+--   if text and text:lower():match("reload.*cargo workspace") then
+--     return
+--   end
+
+--   if old_notify then
+--     pcall(old_notify, msg, log_level, opts)
+--   else
+--     if type(msg) == "string" then
+--       vim.api.nvim_echo({ { msg } }, true, {})
+--     end
+--   end
+-- end

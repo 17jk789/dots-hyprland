@@ -1,0 +1,6 @@
+-- config/lazyvim.lua
+
+-- return {
+--   -- disable lazyvim's builtin cmp
+--   { "hrsh7th/nvim-cmp", enabled = false },
+-- }

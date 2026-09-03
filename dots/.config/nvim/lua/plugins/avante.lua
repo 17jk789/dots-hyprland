@@ -1,0 +1,33 @@
+-- plugins/avante.lua
+
+return {
+	--   "yetone/avante.nvim",
+	--   event = "VeryLazy",
+	--   lazy = false,
+	--   version = false,
+	--   opts = {
+	--     provider = "copilot", -- Nutzt bestehendes Setup
+	--     auto_suggestions_provider = "copilot",
+	--     behaviour = {
+	--       auto_suggestions = false, -- Konfliktvermeidung mit blink.cmp
+	--       minimal_diff = true,
+	--     },
+	--   },
+	--   build = "make", -- Windows-Nutzer: "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+	--   dependencies = {
+	--     "nvim-treesitter/nvim-treesitter",
+	--     "stevearc/dressing.nvim",
+	--     "nvim-lua/plenary.nvim",
+	--     "MunifTanjim/nui.nvim",
+	--     "zbirenbaum/copilot.lua", -- Bestehende Integration
+	--     {
+	--       "HakonHarnes/img-clip.nvim",
+	--       opts = { default = { embed_image_as_base64 = false, prompt_for_file_name = false, drag_and_drop = { insert_mode = true }, use_absolute_path = true } },
+	--     },
+	--     {
+	--       "MeanderingProgrammer/render-markdown.nvim",
+	--       opts = { file_types = { "markdown", "Avante" } },
+	--       ft = { "markdown", "Avante" },
+	--     },
+	--   },
+}

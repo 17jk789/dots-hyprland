@@ -1,0 +1,36 @@
+-- plugins/zig.lua
+
+return {
+	--   {
+	--     "neovim/nvim-lspconfig",
+	--     ft = { "zig" },
+	--
+	--     opts = function(_, opts)
+	--       local lspconfig = require("lspconfig")
+	--       local util = require("lspconfig.util")
+	--
+	--       lspconfig.zls.setup({
+	--         cmd = { "zls" }, -- zls muss installiert sein
+	--         filetypes = { "zig" },
+	--
+	--         root_dir = util.root_pattern("build.zig", ".git"),
+	--
+	--         capabilities = opts.capabilities,
+	--
+	--         on_attach = function(_, bufnr)
+	--           local function buf_map(mode, lhs, rhs)
+	--             vim.keymap.set(mode, lhs, rhs, { buffer = bufnr })
+	--           end
+	--
+	--           -- Standard LSP-Keymaps
+	--           buf_map("n", "K", vim.lsp.buf.hover)
+	--           buf_map("n", "<leader>rn", vim.lsp.buf.rename)
+	--           -- buf_map("n", "<leader>ca", vim.lsp.buf.code_action)
+	--           buf_map("n", "<leader>f", function()
+	--             vim.lsp.buf.format({ async = true })
+	--           end)
+	--         end,
+	--       })
+	--     end,
+	--   },
+}
