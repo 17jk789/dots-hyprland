@@ -131,8 +131,8 @@ ForegroundPositive=#A6E3A1
 ForegroundVisited=#F5C2E7
 
 [General]
-ColorScheme=Catppuccin Mocha
-Name=Catppuccin Mocha
+ColorScheme=Material Catppuccin Mocha
+Name=Material Catppuccin Mocha
 shadeSortColumn=true
 
 [KDE]

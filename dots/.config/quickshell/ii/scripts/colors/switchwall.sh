@@ -36,6 +36,7 @@ handle_kde_material_you_colors() {
 
 handle_catppuccin_theme() {
     local gtk_theme_dir kde_scheme_file kde_scheme_name gtk4_source gtk4_config konsole_profile
+    local konsole_scheme_file konsole_scheme_name
 
     mkdir -p "$XDG_CONFIG_HOME/gtk-3.0" "$XDG_CONFIG_HOME/gtk-4.0"
     cp "$SCRIPT_DIR/catppuccin-mocha-gtk3.css" "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
@@ -74,10 +75,14 @@ handle_catppuccin_theme() {
     fi
 
     konsole_profile="$(find "$HOME/.local/share/konsole" -maxdepth 1 -type f -name '*.profile' -print -quit 2>/dev/null)"
-    if [[ -n "$konsole_profile" ]] && command -v kwriteconfig6 >/dev/null 2>&1; then
-        kwriteconfig6 --file "$konsole_profile" --group Appearance --key ColorScheme "Catppuccin Mocha"
-    elif [[ -n "$konsole_profile" ]] && command -v kwriteconfig5 >/dev/null 2>&1; then
-        kwriteconfig5 --file "$konsole_profile" --group Appearance --key ColorScheme "Catppuccin Mocha"
+    konsole_scheme_file="$(find "$HOME/.local/share/konsole" -maxdepth 1 -type f -iname 'Catppuccin*Mocha*.colorscheme' -print -quit 2>/dev/null)"
+    if [[ -n "$konsole_profile" && -n "$konsole_scheme_file" ]]; then
+        konsole_scheme_name="$(basename "$konsole_scheme_file" .colorscheme)"
+        if command -v kwriteconfig6 >/dev/null 2>&1; then
+            kwriteconfig6 --file "$konsole_profile" --group Appearance --key ColorScheme "$konsole_scheme_name"
+        elif command -v kwriteconfig5 >/dev/null 2>&1; then
+            kwriteconfig5 --file "$konsole_profile" --group Appearance --key ColorScheme "$konsole_scheme_name"
+        fi
     fi
 }
 

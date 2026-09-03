@@ -16,6 +16,7 @@ case "${SKIP_MISCCONF}" in
       fi
     done
     install_dir "dots/.local/share/konsole" "${XDG_DATA_HOME}"/konsole
+    install_dir "dots/.local/share/color-schemes" "${XDG_DATA_HOME}"/color-schemes
     ;;
 esac
 
