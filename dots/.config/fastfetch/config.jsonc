@@ -1,0 +1,71 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "auto",
+    // "source": "~/.config/fastfetch/arch.txt",
+    "source": "arch",
+    "color": {
+      "1": "#94e2d5",
+      "2": "white"
+    }
+  },
+
+  "modules": [
+    "title",
+
+    // {
+    //   "type": "title",
+    //   "format": "jk@JK-Arch"
+    // },
+
+    "separator",
+
+    {
+      "type": "os",
+      "format": "Arch Linux x86_64"
+    },
+
+    "host",
+
+    {
+      "type": "kernel",
+      "format": "{release}-peharge"
+    },
+
+    "uptime",
+    "packages",
+
+    {
+      "type": "shell",
+      "format": "PP-Term 8.3.9.26980"
+    },
+
+    "display",
+    "de",
+    "wm",
+    "wmtheme",
+    "theme",
+    "icons",
+    "font",
+    "cursor",
+
+    {
+      "type": "terminal",
+      "format": "Peharge Kernel 8.0.3.6984"
+    },
+
+    "terminalfont",
+    // "cpu",
+    // "gpu",
+    "memory",
+    // "swap",
+    "disk",
+    "localip",
+    "battery",
+    "poweradapter",
+    "locale",
+    "break",
+    "colors",
+    "break"
+  ]
+}
