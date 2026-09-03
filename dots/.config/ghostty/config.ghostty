@@ -1,0 +1,376 @@
+# WINDOW / UI
+# window-decoration = auto
+# window-padding-x = 4
+# window-padding-y = 4
+# window-inherit-working-directory = true
+
+# confirm-close-surface = false
+
+# HINTERGRUND (GLAS / HYPRLAND)
+# background = #1a1b1b
+# background-opacity = 0.7
+# background-blur-radius = 20
+
+# background-image = /home/jk/Pictures/walpaper4-new.jpg
+# background-image-fit = cover
+# background-image-position = center
+
+# FONT
+# font-family = "JetBrains Mono Nerd Font"
+# font-family = "JetBrainsMono Nerd Font"
+# font-family = "JetBrainsMono Nerd Font Complete"
+# selection-invert-fg-bg = true
+# gl-screen-composite = true
+# prefetch-glyphs = true
+# font-variation-settings = "wght=750"
+# font-thicken = false
+# text-rendering = performance
+# font-feature = ["-calt", "-liga", "-dlig"]
+# max-frame-rate = 0
+# fps-limit = 60
+# font-family-italic = "JetBrainsMono Nerd Font Complete"
+# font-family-bold = "JetBrainsMono Nerd Font Complete"
+# font-family-bold-italic = "JetBrainsMono Nerd Font Complete"
+# window-title-font-family = "JetBrainsMono Nerd Font Complete"
+# font-size = 13.5
+
+# adjust-cell-height = 0%
+# adjust-cell-width = 0%
+
+# cursor-style = block
+
+# TERMINAL CORE
+# term = ghostty
+# term = xterm-256color
+# cursor-style = block
+# shell-integration = bash
+# shell-integration = fish
+# cursor-style-blink = false
+# shell-integration-features = no-cursor
+# custom-shader = "shaders/cursor_warp.glsl"
+# custom-shader-animation = always
+
+# scrollback-limit = 30000
+
+# CLIPBOARD & MAUS
+# clipboard-read = allow
+# clipboard-write = allow
+# copy-on-select = true
+# mouse-hide-while-typing = true
+# confirm-close-surface = false
+
+# KEYBINDS
+# keybind = ctrl+m=toggle_maximize
+# keybind = ctrl+shift+m=toggle_fullscreen
+# keybind = global:cmd+=toggle_quick_terminal
+# keybind = shift+ctrl+,=move_tab:-1
+# keybind = shift+ctrl+.=move_tab:+1
+
+# keybind = ctrl+shift+n=new_wind# ow
+# keybind = ctrl+shift+q=quit
+
+# TABS
+# keybind = ctrl+shift+t=new_tab
+# keybind = ctrl+shift+w=close_surface
+# keybind = ctrl+tab=next_tab
+# keybind = ctrl+shift+tab=previous_tab
+
+# SPLITS
+# keybind = ctrl+shift+o=new_split:right
+# keybind = ctrl+shift+e=new_split:down
+
+# keybind = alt+left=goto_split:left
+# keybind = alt+right=goto_split:right
+# keybind = alt+up=goto_split:up
+# keybind = alt+down=goto_split:down
+
+# keybind = alt+p=goto_split:previous
+# keybind = alt+n=goto_split:next
+
+# keybind = alt+shift+left=resize_split:left,10
+# keybind = alt+shift+right=resize_split:right,10
+# keybind = alt+shift+up=resize_split:up,10
+# keybind = alt+shift+down=resize_split:down,10
+
+# keybind = alt+shift+equal=equalize_splits
+# keybind = ctrl+shift+enter=toggle_split_zoom
+
+# CLIPBOARD
+# keybind = performable:ctrl+shift+c=copy_to_clipboard
+# keybind = performable:ctrl+shift+v=paste_from_clipboard
+
+# FONT SIZE
+# keybind = ctrl+equal=increase_font_size:1
+# keybind = ctrl+minus=decrease_font_size:1
+# keybind = ctrl+zero=reset_font_size
+
+# CONFIG
+# keybind = ctrl+comma=open_config
+# keybind = ctrl+shift+comma=reload_config
+
+# ============================================================
+# GHOSTTY — HYPRLAND / ENDEAVOUROS
+# CATPPUCCIN MOCHA
+# ============================================================
+
+
+# ============================================================
+# WINDOW / UI
+# ============================================================
+
+window-decoration = auto
+
+window-padding-x = 0
+window-padding-y = 0
+
+window-inherit-working-directory = true
+
+confirm-close-surface = false
+
+
+# ============================================================
+# BACKGROUND
+# ============================================================
+
+background = #1E1E2E
+foreground = #CDD6F4
+
+# Kein Transparenz-/Blur-Trick.
+# Falls du später Glas möchtest:
+#
+# background-opacity = 0.65
+# background-blur-radius = 20
+
+
+# ============================================================
+# FONT
+# ============================================================
+
+font-family = "JetBrainsMono Nerd Font"
+font-size = 11.5
+
+font-thicken = false
+
+adjust-cell-height = 0%
+adjust-cell-width = 0%
+
+
+# ============================================================
+# CURSOR
+# ============================================================
+
+cursor-style = block
+cursor-style-blink = false
+
+cursor-color = #F5E0DC
+cursor-text = #1E1E2E
+
+
+# ============================================================
+# TERMINAL CORE
+# ============================================================
+
+term = xterm-ghostty
+
+shell-integration = fish
+shell-integration-features = no-cursor
+
+scrollback-limit = 20000
+
+
+# ============================================================
+# CATPPUCCIN MOCHA
+# ============================================================
+
+foreground = #CDD6F4
+background = #1E1E2E
+
+selection-foreground = #1E1E2E
+selection-background = #F5E0DC
+
+cursor-color = #F5E0DC
+cursor-text = #1E1E2E
+
+
+# ============================================================
+# ANSI COLORS
+# ============================================================
+
+palette = 0=#45475A
+palette = 1=#F38BA8
+palette = 2=#A6E3A1
+palette = 3=#F9E2AF
+palette = 4=#89B4FA
+palette = 5=#F5C2E7
+palette = 6=#94E2D5
+palette = 7=#BAC2DE
+
+palette = 8=#585B70
+palette = 9=#F38BA8
+palette = 10=#A6E3A1
+palette = 11=#F9E2AF
+palette = 12=#89B4FA
+palette = 13=#F5C2E7
+palette = 14=#94E2D5
+palette = 15=#A6ADC8
+
+
+# ============================================================
+# EXTENDED 256-COLOR PALETTE
+# ============================================================
+
+palette = 232=#1E1E2E
+palette = 233=#CDD6F4
+palette = 234=#313244
+palette = 235=#BAC2DE
+palette = 236=#181825
+palette = 237=#11111B
+palette = 238=#F38BA8
+palette = 239=#F2CDCD
+palette = 240=#1E1E2E
+
+palette = 243=#A6ADC8
+palette = 244=#F38BA8
+palette = 245=#6C7086
+
+palette = 248=#BA1B1D
+palette = 249=#F38BA8
+palette = 250=#7F849C
+palette = 251=#A6ADC8
+palette = 252=#585B70
+palette = 253=#BAC2DE
+palette = 254=#45475A
+palette = 255=#CDD6F4
+
+
+# ============================================================
+# CLIPBOARD
+# ============================================================
+
+clipboard-read = allow
+clipboard-write = allow
+
+copy-on-select = true
+
+
+# ============================================================
+# MOUSE
+# ============================================================
+
+mouse-hide-while-typing = true
+
+
+# ============================================================
+# TABS
+# ============================================================
+
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+w=close_surface
+
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+
+keybind = shift+ctrl+,=move_tab:-1
+keybind = shift+ctrl+.=move_tab:1
+
+
+# ============================================================
+# WINDOWS
+# ============================================================
+
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+q=quit
+
+keybind = ctrl+shift+m=toggle_fullscreen
+
+keybind = ctrl+shift+enter=toggle_split_zoom
+
+
+# ============================================================
+# SPLITS
+# ============================================================
+
+# Horizontal / down
+keybind = ctrl+shift+e=new_split:down
+
+# Vertical / right
+keybind = ctrl+shift+o=new_split:right
+
+
+# ============================================================
+# SPLIT NAVIGATION
+# ============================================================
+
+keybind = alt+left=goto_split:left
+keybind = alt+right=goto_split:right
+keybind = alt+up=goto_split:up
+keybind = alt+down=goto_split:down
+
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+l=goto_split:right
+
+
+# ============================================================
+# SPLIT RESIZE
+# ============================================================
+
+keybind = alt+shift+left=resize_split:left,10
+keybind = alt+shift+right=resize_split:right,10
+keybind = alt+shift+up=resize_split:up,5
+keybind = alt+shift+down=resize_split:down,5
+
+keybind = alt+shift+equal=equalize_splits
+
+
+# ============================================================
+# COPY / PASTE
+# ============================================================
+
+keybind = performable:ctrl+shift+c=copy_to_clipboard
+keybind = performable:ctrl+shift+v=paste_from_clipboard
+
+
+# ============================================================
+# FONT SIZE
+# ============================================================
+
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+plus=increase_font_size:1
+
+keybind = ctrl+minus=decrease_font_size:1
+
+keybind = ctrl+zero=reset_font_size
+
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+keybind = ctrl+comma=open_config
+keybind = ctrl+shift+comma=reload_config
+
+
+# ============================================================
+# SEARCH
+# ============================================================
+
+# Keine Kitty-search.py-Integration.
+# Ghostty verwendet seine eigene Suchfunktion.
+
+
+# ============================================================
+# HYPRLAND
+# ============================================================
+
+# Wayland wird automatisch verwendet.
+# Keine X11-spezifische Konfiguration notwendig.
+
+window-decoration = auto
+
+window-padding-x = 0
+window-padding-y = 0
+
+cursor-style = block
+cursor-style-blink = false
