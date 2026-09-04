@@ -33,10 +33,6 @@
 >
 > The original work by **end-4** remains the foundation of this project. All additional features, customizations, and changes in this fork are developed by me.
 >
-> **Setup & Installation Guide:**
->
-> https://github.com/17jk789/jk-arch/blob/main/my-arch-jk.md
->
 > Huge thanks to **end-4** for the original project, the inspiration, and the amazing work!
 
 > [!WARNING]  
