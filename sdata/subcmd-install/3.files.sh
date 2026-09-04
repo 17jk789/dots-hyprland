@@ -9,7 +9,7 @@ setup_jk_arch(){
     local install_choice="y"
     if [[ "$ask" != "false" ]]; then
       while true; do
-        read -p "Do you want to run the jk-arch-installer to set up jk-arch? [Y/n] " install_choice
+        read -p "We are ready to customize jk-arch. This will install all developer tools required for your Arch Linux system. We will now leave the current installer and switch to the jk-arch-installer. Do you want to proceed? [Y/n] " install_choice
         case "$install_choice" in
           [yY]|[yY][eE][sS]|"") install_choice="y"; break ;;
           [nN]|[nN][oO]) install_choice="n"; break ;;
