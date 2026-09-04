@@ -1,0 +1,47 @@
+{
+    "id": "install_zig",
+
+    "name": {
+        "de": "Zig installieren",
+        "en": "Install Zig"
+    },
+
+    "description": {
+        "de": "Installiert Zig als Compiler- und Build-Toolchain für native Softwareentwicklung.",
+        "en": "Installs Zig as a compiler and build toolchain for native software development."
+    },
+
+    "question": {
+        "de": "Soll Zig jetzt installiert werden?",
+        "en": "Should Zig be installed now?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert den Zig-Compiler und die zugehörigen Werkzeuge über Pacman.",
+                "en": "Installs the Zig compiler and related tools using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "zig"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

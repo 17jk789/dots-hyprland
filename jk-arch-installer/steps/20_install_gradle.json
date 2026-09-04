@@ -1,0 +1,153 @@
+{
+    "id": "install_gradle",
+
+    "variants": {
+        "pacman": {
+            "id": "install_gradle_pacman",
+
+            "name": {
+                "de": "Gradle über Pacman installieren",
+                "en": "Install Gradle with Pacman"
+            },
+
+            "description": {
+                "de": "Installiert Gradle über das offizielle Arch-Paket.",
+                "en": "Installs Gradle from the official Arch package."
+            },
+
+            "question": {
+                "de": "Soll Gradle über Pacman installiert werden?",
+                "en": "Should Gradle be installed using Pacman?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "gradle_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Gradle über Pacman.",
+                        "en": "Installs Gradle using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gradle"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "yay": {
+            "id": "install_gradle_yay",
+
+            "name": {
+                "de": "Gradle über AUR installieren",
+                "en": "Install Gradle from the AUR"
+            },
+
+            "description": {
+                "de": "Installiert Gradle alternativ über den AUR-Helper yay.",
+                "en": "Installs Gradle alternatively using the yay AUR helper."
+            },
+
+            "question": {
+                "de": "Soll Gradle über das AUR mit yay installiert werden?",
+                "en": "Should Gradle be installed from the AUR using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "gradle_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Gradle über den AUR-Helper yay.",
+                        "en": "Installs Gradle using the yay AUR helper."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gradle"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "sdkman": {
+            "id": "install_gradle_sdkman",
+
+            "name": {
+                "de": "Gradle über SDKMAN installieren",
+                "en": "Install Gradle with SDKMAN"
+            },
+
+            "description": {
+                "de": "Installiert Gradle 9.7 über SDKMAN.",
+                "en": "Installs Gradle 9.7 using SDKMAN."
+            },
+
+            "question": {
+                "de": "Soll Gradle 9.7 über SDKMAN installiert werden?",
+                "en": "Should Gradle 9.7 be installed using SDKMAN?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "gradle_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Gradle 9.7 über SDKMAN.",
+                        "en": "Installs Gradle 9.7 using SDKMAN."
+                    },
+
+                    "command": [
+                        "bash",
+                        "-c",
+                        "source \"$HOME/.sdkman/bin/sdkman-init.sh\" && sdk install gradle 9.7"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

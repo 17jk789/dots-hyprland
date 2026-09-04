@@ -1,0 +1,100 @@
+{
+    "id": "install_python_dev_tools",
+
+    "name": {
+        "de": "Optionale Python-Entwicklungswerkzeuge installieren",
+        "en": "Install optional Python development tools"
+    },
+
+    "description": {
+        "de": "Installiert pipx und richtet isolierte Python-Entwicklungswerkzeuge wie Black und Ruff ein.",
+        "en": "Installs pipx and sets up isolated Python development tools such as Black and Ruff."
+    },
+
+    "question": {
+        "de": "Sollen die optionalen Python-Entwicklungswerkzeuge installiert werden?",
+        "en": "Should the optional Python development tools be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert pipx über Pacman.",
+                "en": "Installs pipx using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "python-pipx"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Richtet den Python-Bin-Pfad für pipx ein.",
+                "en": "Configures the Python binary path for pipx."
+            },
+
+            "command": [
+                "pipx",
+                "ensurepath"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Black isoliert über pipx.",
+                "en": "Installs Black in an isolated environment using pipx."
+            },
+
+            "command": [
+                "pipx",
+                "install",
+                "black"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Ruff isoliert über pipx.",
+                "en": "Installs Ruff in an isolated environment using pipx."
+            },
+
+            "command": [
+                "pipx",
+                "install",
+                "ruff"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

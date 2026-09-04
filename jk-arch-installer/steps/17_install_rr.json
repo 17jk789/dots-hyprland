@@ -1,0 +1,47 @@
+{
+    "id": "install_rr",
+
+    "name": {
+        "de": "C/C++ Advanced Debugging installieren",
+        "en": "Install C/C++ advanced debugging"
+    },
+
+    "description": {
+        "de": "Installiert rr, ein fortgeschrittenes Debugging-Tool für deterministische Aufzeichnungen und Wiederholungen von C/C++-Programmausführungen.",
+        "en": "Installs rr, an advanced debugging tool for deterministic recording and replay of C/C++ program execution."
+    },
+
+    "question": {
+        "de": "Soll rr für erweitertes C/C++-Debugging installiert werden?",
+        "en": "Should rr be installed for advanced C/C++ debugging?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert rr über den AUR-Helper yay.",
+                "en": "Installs rr using the yay AUR helper."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "rr"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,81 @@
+{
+    "id": "docker_without_sudo",
+
+    "name": {
+        "de": "Docker ohne sudo verwenden",
+        "en": "Use Docker without sudo"
+    },
+
+    "description": {
+        "de": "Fügt den aktuellen Benutzer zur Docker-Gruppe hinzu und ermöglicht die Verwendung von Docker ohne sudo.",
+        "en": "Adds the current user to the Docker group and allows Docker to be used without sudo."
+    },
+
+    "question": {
+        "de": "Soll Docker für die Verwendung ohne sudo eingerichtet werden?",
+        "en": "Should Docker be configured for use without sudo?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Fügt den aktuellen Benutzer zur Docker-Gruppe hinzu.",
+                "en": "Adds the current user to the Docker group."
+            },
+
+            "command": [
+                "usermod",
+                "-aG",
+                "docker",
+                "$USER"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Lädt die Docker-Gruppenmitgliedschaft für die aktuelle Shell neu.",
+                "en": "Reloads Docker group membership for the current shell."
+            },
+
+            "command": [
+                "newgrp",
+                "docker"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Testet Docker ohne sudo mit dem Hello-World-Container.",
+                "en": "Tests Docker without sudo using the Hello-World container."
+            },
+
+            "command": [
+                "docker",
+                "run",
+                "hello-world"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

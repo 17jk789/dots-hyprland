@@ -1,0 +1,47 @@
+{
+    "id": "install_zoxide",
+
+    "name": {
+        "de": "Zoxide installieren",
+        "en": "Install zoxide"
+    },
+
+    "description": {
+        "de": "Installiert zoxide für intelligente Ordner-Navigation basierend auf häufig verwendeten Verzeichnissen.",
+        "en": "Installs zoxide for intelligent directory navigation based on frequently used directories."
+    },
+
+    "question": {
+        "de": "Soll zoxide jetzt installiert werden?",
+        "en": "Should zoxide be installed now?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert zoxide über Pacman.",
+                "en": "Installs zoxide using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "zoxide"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

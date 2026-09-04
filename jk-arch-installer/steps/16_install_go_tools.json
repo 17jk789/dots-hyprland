@@ -1,0 +1,102 @@
+{
+    "id": "install_go_tools",
+
+    "name": {
+        "de": "Optionale Go-Tools installieren",
+        "en": "Install optional Go tools"
+    },
+
+    "description": {
+        "de": "Installiert zusätzliche Tools für Go-Entwicklung, Codeanalyse und Debugging.",
+        "en": "Installs additional tools for Go development, code analysis, and debugging."
+    },
+
+    "question": {
+        "de": "Sollen die optionalen Go-Tools installiert werden?",
+        "en": "Should the optional Go tools be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert gopls, den Language Server für Go.",
+                "en": "Installs gopls, the Go language server."
+            },
+
+            "command": [
+                "go",
+                "install",
+                "golang.org/x/tools/gopls@latest"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert goimports zum Formatieren von Go-Code und Verwalten der Imports.",
+                "en": "Installs goimports for formatting Go code and managing imports."
+            },
+
+            "command": [
+                "go",
+                "install",
+                "golang.org/x/tools/cmd/goimports@latest"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert golangci-lint in das Go-Bin-Verzeichnis des Benutzers.",
+                "en": "Installs golangci-lint into the user's Go bin directory."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh -o /tmp/golangci-lint-install.sh && sh /tmp/golangci-lint-install.sh -b \"$(go env GOPATH)/bin\" v1.59.2 && rm -f /tmp/golangci-lint-install.sh"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Delve, den Debugger für Go.",
+                "en": "Installs Delve, the debugger for Go."
+            },
+
+            "command": [
+                "go",
+                "install",
+                "github.com/go-delve/delve/cmd/dlv@latest"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

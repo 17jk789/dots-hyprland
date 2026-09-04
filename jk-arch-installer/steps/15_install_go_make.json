@@ -1,0 +1,48 @@
+{
+    "id": "install_go_make",
+
+    "name": {
+        "de": "Go und Make installieren",
+        "en": "Install Go and Make"
+    },
+
+    "description": {
+        "de": "Installiert Go für Backend-, Netzwerk- und CLI-Entwicklung sowie Make zur Automatisierung von Build-Prozessen.",
+        "en": "Installs Go for backend, networking, and CLI development as well as Make for build automation."
+    },
+
+    "question": {
+        "de": "Sollen Go und Make jetzt installiert werden?",
+        "en": "Should Go and Make be installed now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Go und Make über Pacman.",
+                "en": "Installs Go and Make using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "go",
+                "make"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

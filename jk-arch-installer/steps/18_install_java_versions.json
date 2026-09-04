@@ -1,0 +1,86 @@
+{
+    "id": "install_java_versions",
+
+    "name": {
+        "de": "Java-Versionen installieren",
+        "en": "Install Java versions"
+    },
+
+    "description": {
+        "de": "Installiert Java 21, Java 25 und das Standard-OpenJDK-Paket.",
+        "en": "Installs Java 21, Java 25, and the default OpenJDK package."
+    },
+
+    "question": {
+        "de": "Sollen die benötigten Java-Versionen installiert werden?",
+        "en": "Should the required Java versions be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Java 21, Java 25 und das Standard-OpenJDK.",
+                "en": "Installs Java 21, Java 25, and the default OpenJDK."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "jdk21-openjdk",
+                "jdk25-openjdk",
+                "jdk-openjdk"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Zeigt die installierten Java-Versionen und die aktuell ausgewählte Standardversion an.",
+                "en": "Displays the installed Java versions and the currently selected default version."
+            },
+
+            "command": [
+                "archlinux-java",
+                "status"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Setzt Java 21 als Standard-Java-Version.",
+                "en": "Sets Java 21 as the default Java version."
+            },
+
+            "command": [
+                "archlinux-java",
+                "set",
+                "java-21-openjdk"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

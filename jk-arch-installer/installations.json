@@ -169,8 +169,8 @@
         {
             "id": "install_optional_rust_tools",
             "name": {
-                "de": "Optionale Rust-Tools installieren",
-                "en": "Install optional Rust tools"
+                "de": "✨ Optionale Rust-Tools installieren",
+                "en": "✨ Install optional Rust tools"
             },
             "description": {
                 "de": "Installiert zusätzliche Rust-Tools für Embedded-Entwicklung, Binary-Analyse, Testing und Performance-Analyse.",
@@ -229,6 +229,239 @@
                 "en": "Installs the required extensions for Visual Studio Code."
             },
             "file": "14_vscode_extensions.json"
+        },
+        {
+            "id": "install_go_make",
+            "name": {
+                "de": "Go und Make installieren",
+                "en": "Install Go and Make"
+            },
+            "description": {
+                "de": "Installiert Go und Make über den Arch-Paketmanager.",
+                "en": "Installs Go and Make using the Arch package manager."
+            },
+            "file": "15_install_go_make.json"
+        },
+        {
+            "id": "install_go_tools",
+            "name": {
+                "de": "✨ Optionale Go-Tools installieren",
+                "en": "✨ Install optional Go tools"
+            },
+            "description": {
+                "de": "Installiert optionale Entwicklungs-, Analyse- und Debugging-Tools für Go.",
+                "en": "Installs optional development, analysis, and debugging tools for Go."
+            },
+            "file": "16_install_go_tools.json"
+        },
+        {
+            "id": "install_rr",
+            "name": {
+                "de": "✨ C/C++ Advanced Debugging installieren",
+                "en": "✨ Install C/C++ advanced debugging"
+            },
+            "description": {
+                "de": "Installiert rr für deterministisches Aufzeichnen und Debuggen von C/C++-Programmen.",
+                "en": "Installs rr for deterministic recording and debugging of C/C++ programs."
+            },
+            "file": "17_install_rr.json"
+        },
+        {
+            "id": "install_java_versions",
+            "name": {
+                "de": "Java-Versionen installieren",
+                "en": "Install Java versions"
+            },
+            "description": {
+                "de": "Installiert mehrere OpenJDK-Versionen einschließlich Java 21 und Java 25.",
+                "en": "Installs multiple OpenJDK versions including Java 21 and Java 25."
+            },
+            "file": "18_install_java_versions.json"
+        },
+        {
+            "id": "install_maven",
+            "name": {
+                "de": "Maven installieren",
+                "en": "Install Maven"
+            },
+            "description": {
+                "de": "Installiert Maven als Build-System für Java-Projekte.",
+                "en": "Installs Maven as a build system for Java projects."
+            },
+            "file": "19_install_maven.json"
+        },
+        {
+            "id": "install_gradle",
+            "name": {
+                "de": "Gradle installieren",
+                "en": "Install Gradle"
+            },
+            "description": {
+                "de": "Installiert Gradle als Build-System für Java- und Android-Projekte.",
+                "en": "Installs Gradle as a build system for Java and Android projects."
+            },
+            "file": "20_install_gradle.json",
+            "substeps": [
+                {
+                    "id": "install_gradle_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Gradle über Pacman installieren",
+                        "en": "Install Gradle with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Gradle über das offizielle Arch-Paket.",
+                        "en": "Installs Gradle from the official Arch package."
+                    },
+                    "exclusive_group": "gradle_method"
+                },
+                {
+                    "id": "install_gradle_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Gradle über AUR installieren",
+                        "en": "Install Gradle from the AUR"
+                    },
+                    "description": {
+                        "de": "Installiert Gradle alternativ über den AUR-Helper yay.",
+                        "en": "Installs Gradle alternatively using the yay AUR helper."
+                    },
+                    "exclusive_group": "gradle_method"
+                },
+                {
+                    "id": "install_gradle_sdkman",
+                    "variant": "sdkman",
+                    "name": {
+                        "de": "Gradle über SDKMAN installieren",
+                        "en": "Install Gradle with SDKMAN"
+                    },
+                    "description": {
+                        "de": "Installiert eine bestimmte Gradle-Version über SDKMAN.",
+                        "en": "Installs a specific Gradle version using SDKMAN."
+                    },
+                    "exclusive_group": "gradle_method"
+                }
+            ]
+        },
+        {
+            "id": "install_assembler_tools",
+            "name": {
+                "de": "Assembler- und Binär-Werkzeuge installieren",
+                "en": "Install assembler and binary tools"
+            },
+            "description": {
+                "de": "Installiert NASM und grundlegende Werkzeuge zur Analyse und Verarbeitung von Binärdateien.",
+                "en": "Installs NASM and essential tools for analyzing and processing binary files."
+            },
+            "file": "21_install_assembler_tools.json"
+        },
+        {
+            "id": "install_pwntools",
+            "name": {
+                "de": "Pwntools installieren",
+                "en": "Install Pwntools"
+            },
+            "description": {
+                "de": "Installiert Pwntools für Binary Exploitation, CTFs und autorisierte Security-Tests.",
+                "en": "Installs Pwntools for binary exploitation, CTFs, and authorized security testing."
+            },
+            "file": "22_install_pwntools.json"
+        },
+        {
+            "id": "install_zig",
+            "name": {
+                "de": "Zig installieren",
+                "en": "Install Zig"
+            },
+            "description": {
+                "de": "Installiert die Programmiersprache Zig und die zugehörige Compiler-Toolchain.",
+                "en": "Installs the Zig programming language and its compiler toolchain."
+            },
+            "file": "23_install_zig.json"
+        },
+        {
+            "id": "install_jetbrains_toolbox",
+            "name": {
+                "de": "JetBrains Toolbox installieren",
+                "en": "Install JetBrains Toolbox"
+            },
+            "description": {
+                "de": "Lädt die aktuelle JetBrains Toolbox automatisch herunter, entpackt sie und startet sie.",
+                "en": "Automatically downloads, extracts, and starts the latest JetBrains Toolbox."
+            },
+            "file": "24_install_jetbrains_toolbox.json"
+        },
+        {
+            "id": "install_docker",
+            "name": {
+                "de": "Docker und Erweiterungen installieren",
+                "en": "Install Docker and extensions"
+            },
+            "description": {
+                "de": "Installiert Docker, Docker Compose und Docker Buildx und aktiviert den Docker-Dienst.",
+                "en": "Installs Docker, Docker Compose, and Docker Buildx and enables the Docker service."
+            },
+            "file": "25_install_docker.json"
+        },
+        {
+            "id": "docker_without_sudo",
+            "name": {
+                "de": "✨ Docker ohne sudo verwenden",
+                "en": "✨ Use Docker without sudo"
+            },
+            "description": {
+                "de": "Fügt den Benutzer zur Docker-Gruppe hinzu, damit Docker ohne sudo verwendet werden kann.",
+                "en": "Adds the user to the Docker group so Docker can be used without sudo."
+            },
+            "file": "26_docker_without_sudo.json"
+        },
+        {
+            "id": "install_system_python_tools",
+            "name": {
+                "de": "Systemwerkzeuge und Python einrichten",
+                "en": "Install system utilities and Python"
+            },
+            "description": {
+                "de": "Installiert wl-clipboard, fd, Python und Python-Pip.",
+                "en": "Installs wl-clipboard, fd, Python, and Python Pip."
+            },
+            "file": "27_install_system_python_tools.json"
+        },
+        {
+            "id": "install_python_dev_tools",
+            "name": {
+                "de": "✨ Optionale Python-Entwicklungswerkzeuge installieren",
+                "en": "✨ Install optional Python development tools"
+            },
+            "description": {
+                "de": "Installiert pipx sowie Black und Ruff für die Python-Entwicklung.",
+                "en": "Installs pipx, Black, and Ruff for Python development."
+            },
+            "file": "28_install_python_dev_tools.json"
+        },
+        {
+            "id": "install_ripgrep",
+            "name": {
+                "de": "Ripgrep installieren",
+                "en": "Install ripgrep"
+            },
+            "description": {
+                "de": "Installiert ripgrep für schnelle Textsuche in Dateien und Softwareprojekten.",
+                "en": "Installs ripgrep for fast text searching in files and software projects."
+            },
+            "file": "29_install_ripgrep.json"
+        },
+        {
+            "id": "install_zoxide",
+            "name": {
+                "de": "✨ Zoxide installieren",
+                "en": "✨ Install zoxide"
+            },
+            "description": {
+                "de": "Installiert zoxide für intelligente und schnelle Ordner-Navigation.",
+                "en": "Installs zoxide for intelligent and fast directory navigation."
+            },
+            "file": "30_install_zoxide.json"
         }
     ]
 }
