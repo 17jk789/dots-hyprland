@@ -18,20 +18,41 @@
 </div>
 
 > [!IMPORTANT]
+>
 > ## jk-arch-features – An Extension of end-4
 >
 > This repository is a **fork of the original project by end-4** and is based on their excellent Hyprland configuration.
 >
 > I am building my own customized version on top of this foundation, adding new features and personal improvements, including:
 >
-> - custom **Neovim configuration**
-> - additional **Arch Linux features**
-> - custom **jk-arch UI improvements**
-> - additional tools, scripts, and workflow optimizations
+> * custom **Neovim configuration**
+> * additional **Arch Linux features**
+> * custom **jk-arch UI improvements**
+> * additional tools and scripts
+> * workflow optimizations
+> * a custom **jk-arch installation system**
 >
-> The goal of **jk-arch-features** is to extend the powerful foundation created by end-4 and turn it into my own personalized Arch Linux desktop environment with additional features and a unique workflow.
+> The goal of **jk-arch-features** is to extend the powerful foundation created by end-4 and turn it into my own personalized **Arch Linux + Hyprland environment**, with additional features and a unique workflow.
 >
-> The original work by **end-4** remains the foundation of this project. All additional features, customizations, and changes in this fork are developed by me.
+> ### Installation
+>
+> The complete installation can be started with just three commands:
+>
+> ```bash
+> git clone https://github.com/17jk789/dots-hyprland.git
+> cd dots-hyprland
+> ./setup install
+> ```
+>
+> That's it.
+>
+> `jk-arch` handles the rest of the installation and setup process.
+>
+> If Arch Linux is not installed yet, the installer can start the complete Arch Linux installation process directly from the official Arch Linux ISO.
+>
+> If an Arch-based system such as **CachyOS** is already installed, the installation process can skip the operating-system installation and directly configure the existing system.
+>
+> The original work by **end-4** remains the foundation of this project. All additional features, customizations, installation tooling, and changes in this fork are developed as part of **jk-arch-features**.
 >
 > Huge thanks to **end-4** for the original project, the inspiration, and the amazing work!
 
