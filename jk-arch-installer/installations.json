@@ -161,6 +161,18 @@
                 "en": "Installs radare2 and the r2ghidra decompilation plugin for reverse engineering."
             },
             "file": "13_install_r2ghidra.json"
+        },
+        {
+            "id": "install_vscode_extensions",
+            "name": {
+                "de": "VS Code Erweiterungen installieren",
+                "en": "Install VS Code extensions"
+            },
+            "description": {
+                "de": "Installiert die benötigten Erweiterungen für Visual Studio Code.",
+                "en": "Installs the required extensions for Visual Studio Code."
+            },
+            "file": "14_vscode_extensions.json"
         }
     ]
 }

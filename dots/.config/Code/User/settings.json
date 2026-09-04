@@ -1,0 +1,268 @@
+{
+    "editor.mouseWheelZoom": true,
+    // "python.defaultInterpreterPath": "...",
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": true,
+        "markdown": true,
+        "scminput": true
+    },
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    // New
+    // Komfort & Editor-Visuals
+    // "editor.mouseWheelZoom": true,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.smoothScrolling": true,
+    // "editor.bracketPairColorization.enabled": true, // Seit VS Code 1.71+ ist das Standard
+    "editor.guides.bracketPairs": true,
+    "editor.lineNumbers": "relative",
+    "editor.occurrencesHighlight": "off",
+    "editor.selectionHighlight": false,
+
+    // Tabs & Indentation (nur Anzeige, keine automatische Änderung)
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true, // VS Code passt sich an bestehende Datei an
+
+    // Dateien & Speicherung
+    "files.insertFinalNewline": true,
+    // "files.exclude": {
+    //    "**/.git": true,
+    //    "**/node_modules": true,
+    //    "**/.DS_Store": true
+    // },
+    "files.autoSave": "off", // Kein automatisches Speichern, um ungewollte Änderungen zu vermeiden
+
+    // Suche
+    "search.smartCase": true,
+    "workbench.editor.enablePreview": false,
+
+    // Vim-Erweiterung (sicher, nur Anzeige & Navigation)
+    "vim.useSystemClipboard": true,
+    "vim.incsearch": true,
+    "vim.hlsearch": true,
+    "vim.visualstar": true,
+    "vim.cursorStylePerMode": true,
+    "vim.expandtab": true,
+    "vim.tabstop": 4,
+    "vim.shiftwidth": 4,
+    "vim.softtabstop": 4,
+    "vim.surround": true,
+    "vim.commentary": true,
+    "vim.remapKeys": true,
+    "vim.jumpBackwards": true,
+    // "vim.visualModeKeyBindingsNonRecursive": [],
+    "vim.leader": "<space>",
+    // "vim.recordMacroKey": "q",
+    // "vim.repeatMacroKey": "@",
+    "vim.recordMacroKey": null,
+    "vim.repeatMacroKey": null,
+    "vim.autoread": true,
+    "vim.splitbelow": true,
+    "vim.splitright": true,
+    // "vim.handleKeys": {},
+    "vim.useCtrlKeys": true,
+    // "vim.smartRelativeLine": true,
+    "vim.timeout": 500,
+    "vim.colorcolumn": "80",
+    "vim.showmatch": true,
+    "vim.matchpairs": "(:),{:},[:],<:>",
+    "vim.wrap": false,
+    "vim.autowrite": false, // Kein automatisches Schreiben,
+    "vim.handleKeys": {
+        "<C-b>": false,
+        "<C-j>": false,
+        "u": false
+    },
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+        "before": ["d"],
+        "after": ["\"", "_", "d"]
+        },
+        {
+        "before": ["d", "d"],
+        "after": ["\"", "_", "d", "d"]
+        }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["d"],
+            "after": ["\"", "_", "d"]
+        }
+    ],
+    "vim.statusBarColorControl": true,
+    // "vim.statusBarColors.normal": ["#78A4F1", "#ffffff"],
+    // "vim.statusBarColors.insert": ["#BF616A", "#ffffff"],
+    // "vim.statusBarColors.visual": ["#B48EAD", "#ffffff"],
+    // "vim.statusBarColors.visualline": ["#B48EAD", "#ffffff"],
+    // "vim.statusBarColors.visualblock": ["#A3BE8C", "#ffffff"],
+    // "vim.statusBarColors.replace": ["#D08770", "#ffffff"],
+    // "vim.statusBarColors.commandlineinprogress": ["#020408", "#ffffff"],
+    // "vim.statusBarColors.searchinprogressmode": ["#020408", "#ffffff"],
+    // "vim.statusBarColors.easymotionmode": ["#020408", "#ffffff"],
+    // "vim.statusBarColors.easymotioninputmode": ["#020408", "#ffffff"],
+    // "vim.statusBarColors.surroundinputmode": ["#020408", "#ffffff"],
+    // Catppuccin Mocha
+    "vim.statusBarColors.normal": ["#C5AAF1", "#11111b"],
+    "vim.statusBarColors.insert": ["#89b4fa", "#11111b"],
+    "vim.statusBarColors.visual": ["#a6e3a1", "#11111b"],
+    "vim.statusBarColors.visualline": ["#b4befe", "#11111b"],
+    "vim.statusBarColors.visualblock": ["#fab387", "#11111b"],
+    "vim.statusBarColors.replace": ["#f38ba8", "#11111b"],
+    "vim.statusBarColors.commandlineinprogress": ["#11111A", "#cdd6f4"],
+    "vim.statusBarColors.searchinprogressmode": ["#11111A", "#cdd6f4"],
+    "vim.statusBarColors.easymotionmode": ["#11111A", "#11111b"],
+    "vim.statusBarColors.easymotioninputmode": ["#11111A", "#11111b"],
+    "vim.statusBarColors.surroundinputmode": ["#11111A", "#11111b"],
+    "editor.wordWrap": "off",
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#C5AAF1",
+        "statusBar.noFolderBackground": "#C5AAF1",
+        "statusBar.debuggingBackground": "#C5AAF1",
+        "statusBar.foreground": "#11111b",
+        "statusBar.debuggingForeground": "#11111b"
+    },
+    // Windows
+    // "vim.shell": "...",
+    /* "vim.shellArgs": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command"
+    ], */
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.activityBar.location": "top",
+    "gitlens.ai.enabled": false,
+    "workbench.sideBar.location": "right",
+    "window.menuBarVisibility": "compact",
+    "window.commandCenter": false,
+
+    // Rust Analyzer
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.checkOnSave": true,
+    "rust-analyzer.checkOnSave.command": "clippy",
+    // "rust-analyzer.checkOnSave.command": "check" // fatser
+    "rust-analyzer.checkOnSave.extraArgs": ["--", "-W", "clippy::all"],
+    "rust-analyzer.inlayHints.enable": true,
+    "rust-analyzer.inlayHints.typeHints": true,
+    "rust-analyzer.inlayHints.parameterHints": true,
+    "rust-analyzer.lens.enable": true,
+    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"],
+    "rust-analyzer.server.extraEnv": {
+        "RA_LRU_CAP": "100000"
+    },
+    // "material-code.primaryColor": "#9FD2E0",
+    "git.autofetch": true,
+
+    // Terminal-Optimierung für das Fish-Shell-Design
+    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+    "terminal.integrated.gpuAcceleration": "on",
+    "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.letterSpacing": 0,
+    "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.smoothScrolling": true,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.external.linuxExec": "kitty"
+}
+
+// {
+//     // Editor
+//     "editor.mouseWheelZoom": true,
+//     "editor.cursorSmoothCaretAnimation": "on",
+//     "editor.smoothScrolling": true,
+//     "editor.guides.bracketPairs": true,
+//     "editor.occurrencesHighlight": "off",
+//     "editor.selectionHighlight": false,
+//     "editor.wordWrap": "off",
+//     "editor.tabSize": 4,
+//     "editor.insertSpaces": true,
+//     "editor.detectIndentation": true,
+//
+//     // Dateien
+//     "files.insertFinalNewline": true,
+//     "files.autoSave": "off",
+//
+//     // Suche
+//     "search.smartCase": true,
+//     "workbench.editor.enablePreview": false,
+//
+//     // VSCode Neovim
+//     "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+//
+//     // VS Code soll wichtige Tasten an Neovim weitergeben
+//     "vscode-neovim.handleKeys": {
+//         "<C-b>": false,
+//         "<C-f>": false,
+//         "<C-w>": false,
+//         "<C-h>": false,
+//         "<C-j>": false,
+//         "<C-k>": false,
+//         "<C-l>": false
+//     },
+//
+//     // Theme / UI
+//     "workbench.colorTheme": "Catppuccin Mocha",
+//     "workbench.activityBar.location": "top",
+//     "workbench.sideBar.location": "right",
+//     "window.menuBarVisibility": "compact",
+//     "window.commandCenter": false,
+//
+//     // Statusbar Farben
+//     "workbench.colorCustomizations": {
+//         "statusBar.background": "#C5AAF1",
+//         "statusBar.noFolderBackground": "#C5AAF1",
+//         "statusBar.debuggingBackground": "#C5AAF1",
+//         "statusBar.foreground": "#11111b",
+//         "statusBar.debuggingForeground": "#11111b"
+//     },
+//
+//     // Terminal
+//     "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+//     "terminal.integrated.gpuAcceleration": "on",
+//     "terminal.integrated.fontWeight": "normal",
+//     "terminal.integrated.letterSpacing": 0,
+//     "terminal.integrated.lineHeight": 1.2,
+//     "terminal.integrated.smoothScrolling": true,
+//     "terminal.integrated.cursorBlinking": true,
+//     "terminal.integrated.cursorStyle": "line",
+//     "terminal.external.linuxExec": "kitty",
+//
+//     // Rust Analyzer
+//     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+//     "rust-analyzer.procMacro.enable": true,
+//     "rust-analyzer.checkOnSave": true,
+//     "rust-analyzer.checkOnSave.command": "clippy",
+//     "rust-analyzer.checkOnSave.extraArgs": [
+//         "--",
+//         "-W",
+//         "clippy::all"
+//     ],
+//     "rust-analyzer.inlayHints.enable": true,
+//     "rust-analyzer.inlayHints.typeHints": true,
+//     "rust-analyzer.inlayHints.parameterHints": true,
+//     "rust-analyzer.lens.enable": true,
+//     "rust-analyzer.diagnostics.disabled": [
+//         "unresolved-proc-macro"
+//     ],
+//     "rust-analyzer.server.extraEnv": {
+//         "RA_LRU_CAP": "100000"
+//     },
+//
+//     // Git
+//     "git.autofetch": true,
+//     "gitlens.ai.enabled": false,
+//
+//     // Material Icon Theme / Colors
+//     "material-code.primaryColor": "#9FD2E0",
+//
+//     // Copilot deaktiviert
+//     "github.copilot.enable": {
+//         "*": false,
+//         "plaintext": false,
+//         "markdown": false,
+//         "scminput": false,
+//         "java": false
+//     }
+// }

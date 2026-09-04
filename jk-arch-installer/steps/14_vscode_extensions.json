@@ -1,0 +1,558 @@
+{
+    "id": "install_vscode_extensions",
+
+    "name": {
+        "de": "VS Code Erweiterungen installieren",
+        "en": "Install VS Code extensions"
+    },
+
+    "description": {
+        "de": "Installiert die konfigurierten Visual-Studio-Code-Erweiterungen für C/C++, Rust, Python, Java, Git und Markdown.",
+        "en": "Installs the configured Visual Studio Code extensions for C/C++, Rust, Python, Java, Git, and Markdown."
+    },
+
+    "question": {
+        "de": "Sollen die VS Code Erweiterungen jetzt installiert werden?",
+        "en": "Should the VS Code extensions be installed now?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die Assembly-Syntax-Erweiterung.",
+                "en": "Installs the assembly syntax extension."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "13xforever.language-x86-64-assembly"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert das Catppuccin-Theme.",
+                "en": "Installs the Catppuccin theme."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "catppuccin.catppuccin-vsc"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Markdownlint.",
+                "en": "Installs Markdownlint."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "davidanson.vscode-markdownlint"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert GitLens.",
+                "en": "Installs GitLens."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "eamodio.gitlens"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Clangd-Unterstützung.",
+                "en": "Installs Clangd support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "llvm-vs-code-extensions.vscode-clangd"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Git Graph.",
+                "en": "Installs Git Graph."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "mhutchie.git-graph"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Python-Debug-Unterstützung.",
+                "en": "Installs Python debugging support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-python.debugpy"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Python-Unterstützung.",
+                "en": "Installs Python support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-python.python"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Pylance.",
+                "en": "Installs Pylance."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-python.vscode-pylance"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Python-Umgebungsverwaltung.",
+                "en": "Installs Python environment management."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-python.vscode-python-envs"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die CMake-Tools.",
+                "en": "Installs CMake Tools."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-vscode.cmake-tools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die C/C++-Entwicklungswerkzeuge.",
+                "en": "Installs C/C++ development tools."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-vscode.cpp-devtools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die offizielle C/C++-Erweiterung.",
+                "en": "Installs the official C/C++ extension."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-vscode.cpptools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert den Hex-Editor.",
+                "en": "Installs the hex editor."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-vscode.hexeditor"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Makefile-Tools.",
+                "en": "Installs Makefile Tools."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "ms-vscode.makefile-tools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Java-Unterstützung.",
+                "en": "Installs Java support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "redhat.java"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Rust Analyzer.",
+                "en": "Installs Rust Analyzer."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "rust-lang.rust-analyzer"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert SonarLint.",
+                "en": "Installs SonarLint."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "sonarsource.sonarlint-vscode"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Error Lens.",
+                "en": "Installs Error Lens."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "usernamehw.errorlens"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert LLDB-Debugging-Unterstützung.",
+                "en": "Installs LLDB debugging support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vadimcn.vscode-lldb"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Gradle-Unterstützung für Java.",
+                "en": "Installs Gradle support for Java."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-gradle"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert den Java-Debugger.",
+                "en": "Installs the Java debugger."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-java-debug"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert die Java-Abhängigkeitsverwaltung.",
+                "en": "Installs Java dependency management."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-java-dependency"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert das Java Extension Pack.",
+                "en": "Installs the Java Extension Pack."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-java-pack"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Java-Testunterstützung.",
+                "en": "Installs Java testing support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-java-test"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Maven-Unterstützung.",
+                "en": "Installs Maven support."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscjava.vscode-maven"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Vim-Tastenbelegung für VS Code.",
+                "en": "Installs Vim keybindings for VS Code."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "vscodevim.vim"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+
+        {
+            "description": {
+                "de": "Installiert Markdown All in One.",
+                "en": "Installs Markdown All in One."
+            },
+
+            "command": [
+                "code",
+                "--install-extension",
+                "yzhang.markdown-all-in-one"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
