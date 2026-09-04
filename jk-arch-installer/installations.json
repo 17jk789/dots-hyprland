@@ -61,10 +61,38 @@
                 "en": "Enable firewall"
             },
             "description": {
-                "de": "Installiert UFW und aktiviert die Firewall dauerhaft mit sicheren Standardregeln.",
-                "en": "Installs UFW and permanently enables the firewall with secure default rules."
+                "de": "Wähle genau eine Firewall: UFW oder firewalld.",
+                "en": "Choose exactly one firewall: UFW or firewalld."
             },
-            "file": "05_enable_firewall.json"
+            "file": "05_enable_firewall.json",
+            "substeps": [
+                {
+                    "id": "enable_firewall_ufw",
+                    "variant": "ufw",
+                    "name": {
+                        "de": "Firewall mit UFW aktivieren",
+                        "en": "Enable firewall with UFW"
+                    },
+                    "description": {
+                        "de": "Installiert UFW und aktiviert die Firewall mit sicheren Standardregeln.",
+                        "en": "Installs UFW and enables the firewall with secure default rules."
+                    },
+                    "exclusive_group": "firewall_method"
+                },
+                {
+                    "id": "enable_firewall_firewalld",
+                    "variant": "firewalld",
+                    "name": {
+                        "de": "Firewall mit firewalld aktivieren",
+                        "en": "Enable firewall with firewalld"
+                    },
+                    "description": {
+                        "de": "Installiert firewalld und aktiviert die Firewall dauerhaft.",
+                        "en": "Installs firewalld and permanently enables the firewall."
+                    },
+                    "exclusive_group": "firewall_method"
+                }
+            ]
         },
         {
             "id": "install_yay",
@@ -153,14 +181,42 @@
         {
             "id": "install_r2ghidra",
             "name": {
-                "de": "r2ghidra für radare2 installieren",
-                "en": "Install r2ghidra for radare2"
+                "de": "r2ghidra über Pacman installieren",
+                "en": "Install r2ghidra with Pacman"
             },
             "description": {
-                "de": "Installiert radare2 und das r2ghidra-Decompilation-Plugin für Reverse Engineering.",
-                "en": "Installs radare2 and the r2ghidra decompilation plugin for reverse engineering."
+                "de": "Wähle genau eine Installationsmethode für r2ghidra.",
+                "en": "Choose exactly one installation method for r2ghidra."
             },
-            "file": "13_install_r2ghidra.json"
+            "file": "13_install_r2ghidra.json",
+            "substeps": [
+                {
+                    "id": "install_r2ghidra_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "r2ghidra über Pacman installieren",
+                        "en": "Install r2ghidra with Pacman"
+                    },
+                    "description": {
+                        "de": "Offizielle Arch-Pakete für radare2 und r2ghidra installieren.",
+                        "en": "Install the official Arch packages for radare2 and r2ghidra."
+                    },
+                    "exclusive_group": "r2ghidra_method"
+                },
+                {
+                    "id": "install_r2ghidra_r2pm",
+                    "variant": "r2pm",
+                    "name": {
+                        "de": "r2ghidra über r2pm installieren",
+                        "en": "Install r2ghidra with r2pm"
+                    },
+                    "description": {
+                        "de": "r2ghidra alternativ über den radare2 Package Manager installieren.",
+                        "en": "Install r2ghidra alternatively through radare2's package manager."
+                    },
+                    "exclusive_group": "r2ghidra_method"
+                }
+            ]
         },
         {
             "id": "install_vscode_extensions",

@@ -1,121 +1,259 @@
 {
     "id": "enable_firewall",
 
-    "name": {
-        "de": "Firewall aktivieren",
-        "en": "Enable firewall"
-    },
+    "variants": {
+        "ufw": {
+            "id": "enable_firewall_ufw",
 
-    "description": {
-        "de": "Installiert UFW und aktiviert die Firewall dauerhaft mit sicheren Standardregeln.",
-        "en": "Installs UFW and permanently enables the firewall with secure default rules."
-    },
-
-    "question": {
-        "de": "Soll die Firewall mit UFW installiert und sofort aktiviert werden?",
-        "en": "Do you want to install UFW and enable the firewall immediately?"
-    },
-
-    "optional": false,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert UFW.",
-                "en": "Installs UFW."
+            "name": {
+                "de": "Firewall mit UFW aktivieren",
+                "en": "Enable firewall with UFW"
             },
 
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "ufw"
-            ],
+            "description": {
+                "de": "Installiert UFW und aktiviert die Firewall dauerhaft mit sicheren Standardregeln.",
+                "en": "Installs UFW and permanently enables the firewall with secure default rules."
+            },
 
-            "requires_root": true,
+            "question": {
+                "de": "Soll UFW installiert und die Firewall sofort aktiviert werden?",
+                "en": "Should UFW be installed and the firewall enabled immediately?"
+            },
 
-            "distros": [
-                "arch_based"
+            "optional": false,
+
+            "exclusive_group": "firewall_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert UFW.",
+                        "en": "Installs UFW."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "ufw"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Aktiviert UFW dauerhaft und startet den Dienst sofort.",
+                        "en": "Enables UFW permanently and starts the service immediately."
+                    },
+
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "ufw"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Lehnt eingehende Verbindungen standardmäßig ab.",
+                        "en": "Denies incoming connections by default."
+                    },
+
+                    "command": [
+                        "ufw",
+                        "default",
+                        "deny",
+                        "incoming"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Erlaubt ausgehende Verbindungen standardmäßig.",
+                        "en": "Allows outgoing connections by default."
+                    },
+
+                    "command": [
+                        "ufw",
+                        "default",
+                        "allow",
+                        "outgoing"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Aktiviert die UFW-Firewall und wendet die konfigurierten Regeln an.",
+                        "en": "Enables the UFW firewall and applies the configured rules."
+                    },
+
+                    "command": [
+                        "ufw",
+                        "enable"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Zeigt den aktuellen Status der UFW-Firewall und ihre Regeln an.",
+                        "en": "Displays the current UFW firewall status and its rules."
+                    },
+
+                    "command": [
+                        "ufw",
+                        "status",
+                        "verbose"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         },
-        {
-            "description": {
-                "de": "Aktiviert UFW dauerhaft und startet den Dienst sofort.",
-                "en": "Enables UFW permanently and starts the service immediately."
+
+        "firewalld": {
+            "id": "enable_firewall_firewalld",
+
+            "name": {
+                "de": "Firewall mit firewalld aktivieren",
+                "en": "Enable firewall with firewalld"
             },
 
-            "command": [
-                "systemctl",
-                "enable",
-                "--now",
-                "ufw"
-            ],
-
-            "requires_root": true,
-
-            "distros": [
-                "arch_based"
-            ]
-        },
-        {
             "description": {
-                "de": "Lehnt eingehende Verbindungen standardmäßig ab.",
-                "en": "Denies incoming connections by default."
+                "de": "Installiert firewalld und aktiviert die Firewall dauerhaft.",
+                "en": "Installs firewalld and permanently enables the firewall."
             },
 
-            "command": [
-                "ufw",
-                "default",
-                "deny",
-                "incoming"
-            ],
-
-            "requires_root": true,
-
-            "distros": [
-                "arch_based"
-            ]
-        },
-        {
-            "description": {
-                "de": "Erlaubt ausgehende Verbindungen standardmäßig.",
-                "en": "Allows outgoing connections by default."
+            "question": {
+                "de": "Soll firewalld installiert und die Firewall sofort aktiviert werden?",
+                "en": "Should firewalld be installed and the firewall enabled immediately?"
             },
 
-            "command": [
-                "ufw",
-                "default",
-                "allow",
-                "outgoing"
-            ],
+            "optional": false,
 
-            "requires_root": true,
+            "exclusive_group": "firewall_method",
 
-            "distros": [
-                "arch_based"
-            ]
-        },
-        {
-            "description": {
-                "de": "Aktiviert die UFW-Firewall und wendet die festgelegten Regeln an.",
-                "en": "Enables the UFW firewall and applies the configured rules."
-            },
+            "continue_on_error": false,
 
-            "command": [
-                "ufw",
-                "enable"
-            ],
+            "checks": [],
 
-            "requires_root": true,
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert firewalld.",
+                        "en": "Installs firewalld."
+                    },
 
-            "distros": [
-                "arch_based"
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "firewalld"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Deaktiviert UFW, falls der Dienst vorhanden und aktiv ist.",
+                        "en": "Disables UFW if the service is present and active."
+                    },
+
+                    "command": [
+                        "bash",
+                        "-c",
+                        "if systemctl list-unit-files ufw.service --no-legend 2>/dev/null | grep -q '^ufw\\.service'; then systemctl disable --now ufw; fi"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Aktiviert firewalld dauerhaft und startet den Dienst sofort.",
+                        "en": "Enables firewalld permanently and starts the service immediately."
+                    },
+
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "firewalld"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+
+                {
+                    "description": {
+                        "de": "Zeigt den aktuellen Status von firewalld an.",
+                        "en": "Displays the current firewalld status."
+                    },
+
+                    "command": [
+                        "firewall-cmd",
+                        "--state"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

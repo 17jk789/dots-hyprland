@@ -117,6 +117,8 @@ TRANSLATIONS = {
         "step_selection_help": "Pfeile: bewegen | Leertaste: an/aus | Tab: Details | Bild hoch/runter: scrollen | a: alle | n: keine | Enter: bestätigen | q: abbrechen",
         "step_selection_count": "{selected}/{total} Schritte ausgewählt",
         "step_selection_empty": "Bitte mindestens einen Schritt auswählen.",
+        "exclusive_selection": "Nur eine Methode aus dieser Gruppe kann ausgewählt werden.",
+        "exclusive_marker": "exklusiv",
         "step_description": "Details:",
         "step_command": "Befehl",
         "step_question": "Rückfrage",
@@ -157,6 +159,8 @@ TRANSLATIONS = {
         "step_selection_help": "Arrows: move | Space: toggle | Tab: details | Page Up/Down: scroll | a: all | n: none | Enter: confirm | q: cancel",
         "step_selection_count": "{selected}/{total} steps selected",
         "step_selection_empty": "Please select at least one step.",
+        "exclusive_selection": "Only one method from this group can be selected.",
+        "exclusive_marker": "exclusive",
         "step_description": "Details:",
         "step_command": "Command",
         "step_question": "Prompt",
@@ -313,6 +317,7 @@ class InstallationStep:
     checks: list[dict[str, Any]]
     optional: bool
     continue_on_error: bool
+    exclusive_group: str | None
 
 
 # ============================================================
@@ -369,6 +374,7 @@ def load_installation_table() -> list[dict[str, Any]]:
 
 def load_step(
     filename: str,
+    variant: str | None = None,
 ) -> InstallationStep:
 
     candidate = (STEPS_DIR / filename).resolve()
@@ -381,6 +387,24 @@ def load_step(
 
     path = candidate
     data = load_json(path)
+
+    variants = data.get("variants")
+    if variants is not None:
+        if not isinstance(variants, dict) or not variants:
+            raise ConfigurationError(
+                f"{path}: 'variants' must be a non-empty object."
+            )
+        selected_variant = variant or next(iter(variants))
+        if selected_variant not in variants:
+            raise ConfigurationError(
+                f"{path}: unknown variant '{selected_variant}'."
+            )
+        variant_data = variants[selected_variant]
+        if not isinstance(variant_data, dict):
+            raise ConfigurationError(
+                f"{path}: variant '{selected_variant}' must be an object."
+            )
+        data = {**data, **variant_data}
 
     required = [
         "id",
@@ -495,6 +519,12 @@ def load_step(
             f"{path}: 'continue_on_error' must be boolean."
         )
 
+    exclusive_group = data.get("exclusive_group")
+    if exclusive_group is not None and not isinstance(exclusive_group, str):
+        raise ConfigurationError(
+            f"{path}: 'exclusive_group' must be a string."
+        )
+
     return InstallationStep(
         id=str(data["id"]),
         name=data["name"],
@@ -504,6 +534,7 @@ def load_step(
         checks=checks,
         optional=optional,
         continue_on_error=continue_on_error,
+        exclusive_group=exclusive_group,
     )
 
 
@@ -1415,8 +1446,12 @@ def show_installation_table(
         start=1,
     ):
 
+        display_number = installation.get(
+            "display_number",
+            f"{index:02d}",
+        )
         print(
-            f"{index:02d}. "
+            f"{display_number}. "
             f"{installation.get('id', '?'):<25} "
             f"{localized(installation.get('name', ''))}"
         )
@@ -1446,11 +1481,34 @@ def select_installations(
     import curses
     import textwrap
 
-    selected = [True] * len(installations)
+    expanded_installations: list[dict[str, Any]] = []
+    for index, installation in enumerate(installations, start=1):
+        substeps = installation.get("substeps", [])
+        if not substeps:
+            item = dict(installation)
+            item["display_number"] = f"{index:02d}"
+            expanded_installations.append(item)
+            continue
+        for subindex, substep in enumerate(substeps, start=1):
+            item = dict(installation)
+            item.update(substep)
+            item["file"] = installation["file"]
+            item["display_number"] = f"{index:02d}.{subindex}"
+            expanded_installations.append(item)
+
+    installations = expanded_installations
     step_details = [
-        load_step(str(installation["file"]))
+        load_step(str(installation["file"]), installation.get("variant"))
         for installation in installations
     ]
+    selected = [True] * len(installations)
+    exclusive_groups: dict[str, list[int]] = {}
+    for index, step in enumerate(step_details):
+        if step.exclusive_group:
+            exclusive_groups.setdefault(step.exclusive_group, []).append(index)
+    for indices in exclusive_groups.values():
+        for index in indices[1:]:
+            selected[index] = False
 
     def draw(
         screen: Any,
@@ -1486,7 +1544,9 @@ def select_installations(
                     installation.get("id", "?"),
                 )
             )
-            line = f"{marker} {index + 1:02d}. {name}"
+            line = f"{marker} {installation.get('display_number', f'{index + 1:02d}')}. {name}"
+            if step_details[index].exclusive_group:
+                line += f" ({tr('exclusive_marker')})"
 
             if index == cursor:
                 screen.attron(curses.A_REVERSE)
@@ -1582,6 +1642,12 @@ def select_installations(
                     cursor = (cursor + 1) % len(installations)
             elif key == ord(" "):
                 selected[cursor] = not selected[cursor]
+                if selected[cursor]:
+                    group = step_details[cursor].exclusive_group
+                    if group:
+                        for index in exclusive_groups[group]:
+                            if index != cursor:
+                                selected[index] = False
             elif key in (9, curses.KEY_BTAB):
                 show_description = not show_description
                 detail_scroll = 0
@@ -1591,6 +1657,9 @@ def select_installations(
                 detail_scroll += 4
             elif key in (ord("a"), ord("A")):
                 selected[:] = [True] * len(installations)
+                for indices in exclusive_groups.values():
+                    for index in indices[1:]:
+                        selected[index] = False
             elif key in (ord("n"), ord("N")):
                 selected[:] = [False] * len(installations)
             elif key in (10, 13, curses.KEY_ENTER):
@@ -1780,7 +1849,8 @@ def run_installer(
         try:
 
             step = load_step(
-                filename
+                filename,
+                installation.get("variant"),
             )
 
             result = execute_step(
