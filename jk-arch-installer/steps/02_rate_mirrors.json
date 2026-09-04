@@ -1,0 +1,43 @@
+{
+    "id": "rate_mirrors",
+
+    "name": {
+        "de": "Schnellste Mirrors finden",
+        "en": "Find fastest mirrors"
+    },
+
+    "description": {
+        "de": "Ermittelt die schnellsten CachyOS-Mirror-Server.",
+        "en": "Finds the fastest CachyOS mirror servers."
+    },
+
+    "question": {
+        "de": "Sollen die schnellsten CachyOS-Mirrors ermittelt werden?",
+        "en": "Do you want to find the fastest CachyOS mirrors?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": true,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Testet die verfügbaren CachyOS-Mirrors und wählt die schnellsten aus.",
+                "en": "Tests the available CachyOS mirrors and selects the fastest ones."
+            },
+
+            "command": [
+                "cachyos-rate-mirrors"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "cachyos"
+            ]
+        }
+    ]
+}

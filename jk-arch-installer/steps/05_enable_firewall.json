@@ -1,0 +1,121 @@
+{
+    "id": "enable_firewall",
+
+    "name": {
+        "de": "Firewall aktivieren",
+        "en": "Enable firewall"
+    },
+
+    "description": {
+        "de": "Installiert UFW und aktiviert die Firewall dauerhaft mit sicheren Standardregeln.",
+        "en": "Installs UFW and permanently enables the firewall with secure default rules."
+    },
+
+    "question": {
+        "de": "Soll die Firewall mit UFW installiert und sofort aktiviert werden?",
+        "en": "Do you want to install UFW and enable the firewall immediately?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert UFW.",
+                "en": "Installs UFW."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "ufw"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert UFW dauerhaft und startet den Dienst sofort.",
+                "en": "Enables UFW permanently and starts the service immediately."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "ufw"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Lehnt eingehende Verbindungen standardmäßig ab.",
+                "en": "Denies incoming connections by default."
+            },
+
+            "command": [
+                "ufw",
+                "default",
+                "deny",
+                "incoming"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Erlaubt ausgehende Verbindungen standardmäßig.",
+                "en": "Allows outgoing connections by default."
+            },
+
+            "command": [
+                "ufw",
+                "default",
+                "allow",
+                "outgoing"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert die UFW-Firewall und wendet die festgelegten Regeln an.",
+                "en": "Enables the UFW firewall and applies the configured rules."
+            },
+
+            "command": [
+                "ufw",
+                "enable"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

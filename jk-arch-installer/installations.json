@@ -1,0 +1,94 @@
+{
+    "version": 2,
+    "name": {
+        "de": "Arch Linux Installer",
+        "en": "Arch Linux Installer"
+    },
+
+    "installations": [
+        {
+            "id": "system_update",
+            "name": {
+                "de": "System aktualisieren",
+                "en": "Update system"
+            },
+            "description": {
+                "de": "Aktualisiert das komplette Arch-basierte System.",
+                "en": "Updates the complete Arch-based system."
+            },
+            "file": "01_update.json"
+        },
+        {
+            "id": "rate_mirrors",
+            "name": {
+                "de": "Schnellste Mirrors finden",
+                "en": "Find fastest mirrors"
+            },
+            "description": {
+                "de": "Ermittelt die schnellsten CachyOS-Mirror-Server.",
+                "en": "Finds the fastest CachyOS mirror servers."
+            },
+            "file": "02_rate_mirrors.json"
+        },
+        {
+            "id": "cloudflare_dns",
+            "name": {
+                "de": "DNS temporär auf Cloudflare setzen",
+                "en": "Temporarily set DNS to Cloudflare"
+            },
+            "description": {
+                "de": "Setzt den DNS-Server temporär auf Cloudflare (1.1.1.1).",
+                "en": "Temporarily sets the DNS server to Cloudflare (1.1.1.1)."
+            },
+            "file": "03_cloudflare_dns.json"
+        },
+        {
+            "id": "install_build_tools",
+            "name": {
+                "de": "Werkzeuge für den Softwarebau installieren",
+                "en": "Install software build tools"
+            },
+            "description": {
+                "de": "Installiert git und base-devel für das Klonen der JK-Arch Config sowie das Bauen und Installieren von Paketen.",
+                "en": "Installs git and base-devel for cloning the JK-Arch Config and building and installing packages."
+            },
+            "file": "04_build_tools.json"
+        },
+        {
+            "id": "enable_firewall",
+            "name": {
+                "de": "Firewall aktivieren",
+                "en": "Enable firewall"
+            },
+            "description": {
+                "de": "Installiert UFW und aktiviert die Firewall dauerhaft mit sicheren Standardregeln.",
+                "en": "Installs UFW and permanently enables the firewall with secure default rules."
+            },
+            "file": "05_enable_firewall.json"
+        },
+        {
+            "id": "install_yay",
+            "name": {
+                "de": "yay installieren",
+                "en": "Install yay"
+            },
+            "description": {
+                "de": "Lädt den Quellcode von yay aus dem AUR herunter, baut das Paket und installiert es.",
+                "en": "Downloads the yay source code from the AUR, builds the package, and installs it."
+            },
+            "file": "06_install_yay.json"
+        },
+        {
+            "id": "install_development_tools",
+            "name": {
+                "de": "Kern-Werkzeuge und Entwickler-Tools installieren",
+                "en": "Install core tools and developer tools"
+            },
+            "description": {
+                "de": "Installiert wichtige Werkzeuge für Entwicklung, Debugging, Reverse Engineering, Fuzzing, Security und Linux-GUI-Entwicklung.",
+                "en": "Installs essential tools for development, debugging, reverse engineering, fuzzing, security, and Linux GUI development."
+            },
+            "file": "07_development_tools.json"
+        }
+    ]
+}

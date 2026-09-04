@@ -1,0 +1,45 @@
+{
+    "id": "system_update",
+
+    "name": {
+        "de": "System aktualisieren",
+        "en": "Update system"
+    },
+
+    "description": {
+        "de": "Aktualisiert das Arch-basierte System mit pacman.",
+        "en": "Updates the Arch-based system using pacman."
+    },
+
+    "question": {
+        "de": "Soll das System jetzt aktualisiert werden?",
+        "en": "Should the system be updated now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Aktualisiert die Paketdatenbanken und installiert verfügbare Updates.",
+                "en": "Refreshes package databases and installs available updates."
+            },
+
+            "command": [
+                "pacman",
+                "-Syu",
+                "--noconfirm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

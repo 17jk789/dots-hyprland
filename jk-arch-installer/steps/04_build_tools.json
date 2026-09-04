@@ -1,0 +1,48 @@
+{
+    "id": "install_build_tools",
+
+    "name": {
+        "de": "Werkzeuge für den Softwarebau installieren",
+        "en": "Install software build tools"
+    },
+
+    "description": {
+        "de": "Installiert git und base-devel für das Klonen der JK-Arch Config sowie das Bauen und Installieren von Paketen.",
+        "en": "Installs git and base-devel for cloning the JK-Arch Config and building and installing packages."
+    },
+
+    "question": {
+        "de": "Sollen die benötigten Werkzeuge für den Softwarebau installiert werden?",
+        "en": "Do you want to install the required software build tools?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert git und base-devel mit pacman.",
+                "en": "Installs git and base-devel using pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "git",
+                "base-devel"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "id": "install_yay",
+
+    "name": {
+        "de": "yay installieren",
+        "en": "Install yay"
+    },
+
+    "description": {
+        "de": "Lädt den Quellcode von yay aus dem AUR herunter, baut das Paket und installiert es.",
+        "en": "Downloads the yay source code from the AUR, builds the package, and installs it."
+    },
+
+    "question": {
+        "de": "Soll yay aus dem AUR heruntergeladen, gebaut und installiert werden?",
+        "en": "Do you want to download, build, and install yay from the AUR?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Kloniert das offizielle yay-Repository aus dem AUR nach /tmp.",
+                "en": "Clones the official yay repository from the AUR into /tmp."
+            },
+
+            "command": [
+                "git",
+                "clone",
+                "https://aur.archlinux.org/yay.git",
+                "/tmp/yay"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Baut yay und installiert das erzeugte Paket mit den benötigten Abhängigkeiten.",
+                "en": "Builds yay and installs the resulting package with its required dependencies."
+            },
+
+            "command": [
+                "makepkg",
+                "-si"
+            ],
+
+            "requires_root": false,
+
+            "working_directory": "/tmp/yay",
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

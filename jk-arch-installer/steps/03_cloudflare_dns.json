@@ -1,0 +1,45 @@
+{
+    "id": "cloudflare_dns",
+
+    "name": {
+        "de": "DNS temporär auf Cloudflare setzen",
+        "en": "Temporarily set DNS to Cloudflare"
+    },
+
+    "description": {
+        "de": "Setzt den DNS-Server temporär auf Cloudflare (1.1.1.1).",
+        "en": "Temporarily sets the DNS server to Cloudflare (1.1.1.1)."
+    },
+
+    "question": {
+        "de": "Soll der DNS-Server temporär auf Cloudflare (1.1.1.1) gesetzt werden?",
+        "en": "Do you want to temporarily set the DNS server to Cloudflare (1.1.1.1)?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": true,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Setzt den DNS-Server temporär auf Cloudflare (1.1.1.1).",
+                "en": "Temporarily sets the DNS server to Cloudflare (1.1.1.1)."
+            },
+
+            "command": [
+                "sh",
+                "-c",
+                "echo \"nameserver 1.1.1.1\" | sudo tee /etc/resolv.conf"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

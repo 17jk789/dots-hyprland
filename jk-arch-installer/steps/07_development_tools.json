@@ -1,0 +1,218 @@
+{
+    "id": "install_development_tools",
+
+    "name": {
+        "de": "Kern-Werkzeuge und Entwickler-Tools installieren",
+        "en": "Install core tools and developer tools"
+    },
+
+    "description": {
+        "de": "Installiert wichtige Werkzeuge für Entwicklung, Debugging, Reverse Engineering, Fuzzing, Security und Linux-GUI-Entwicklung.",
+        "en": "Installs essential tools for development, debugging, reverse engineering, fuzzing, security, and Linux GUI development."
+    },
+
+    "question": {
+        "de": "Sollen die Kern-Werkzeuge und Entwickler-Tools installiert werden?",
+        "en": "Do you want to install the core tools and developer tools?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert grundlegende Werkzeuge für Netzwerkzugriff, Dateiverarbeitung, Git, Terminal-Suche, Markdown und Shell-Analyse.",
+                "en": "Installs basic tools for network access, file handling, Git, terminal search, Markdown, and shell analysis."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "curl",
+                "wget",
+                "unzip",
+                "git-delta",
+                "fzf",
+                "cmark",
+                "shellcheck"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Compiler, LLVM-Werkzeuge, Build-Systeme, Debugging- und Codeanalyse-Werkzeuge für C/C++.",
+                "en": "Installs compilers, LLVM tools, build systems, debugging, and code analysis tools for C/C++."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gcc",
+                "lib32-gcc-libs",
+                "llvm",
+                "clang",
+                "lldb",
+                "cmake",
+                "ninja",
+                "valgrind",
+                "clang-tools-extra",
+                "flawfinder",
+                "splint",
+                "bear"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Werkzeuge für klassisches GDB-Debugging, Binary Exploitation sowie die Analyse von System- und Library-Aufrufen.",
+                "en": "Installs tools for GDB debugging, binary exploitation, and analysis of system and library calls."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gdb",
+                "gef",
+                "pwndbg",
+                "strace",
+                "ltrace"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Werkzeuge für Reverse Engineering, Firmware- und Binäranalyse sowie die Prüfung von ELF-Dateien und Security-Eigenschaften.",
+                "en": "Installs tools for reverse engineering, firmware and binary analysis, ELF analysis, and security property inspection."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "rizin",
+                "binwalk",
+                "yara",
+                "elfutils",
+                "checksec"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Werkzeuge für automatisiertes Fuzzing, Performance-Analyse und statische C/C++-Codeanalyse.",
+                "en": "Installs tools for automated fuzzing, performance analysis, and static C/C++ code analysis."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "afl++",
+                "perf",
+                "cppcheck"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Bibliotheken und Themes für moderne Linux-GUIs auf Basis von GTK und libadwaita.",
+                "en": "Installs libraries and themes for modern Linux GUIs based on GTK and libadwaita."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gtk4",
+                "libadwaita",
+                "librsvg",
+                "adwaita-icon-theme"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Werkzeuge für NetworkManager und grafische Authentifizierungsdialoge.",
+                "en": "Installs tools for NetworkManager and graphical authentication dialogs."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "network-manager-applet",
+                "polkit-gnome"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert LuaRocks zur Verwaltung von Lua-Bibliotheken und Modulen.",
+                "en": "Installs LuaRocks for managing Lua libraries and modules."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "luarocks"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

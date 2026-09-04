@@ -1665,9 +1665,7 @@ def run_installer(
     installations = selected_installations
 
     print()
-    print("=" * 70)
     print(paint(tr("selected_plan"), Colors.BOLD + Colors.GREEN))
-    print("=" * 70)
     show_installation_table(installations)
     print()
 
