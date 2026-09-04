@@ -4,12 +4,12 @@ printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RST}"
 
 # shellcheck shell=bash
 
-install_neovim_lazyvim_nerdfont(){
+setup_jk_arch(){
   if [[ "$OS_GROUP_ID" == "arch" ]]; then
     local install_choice="y"
     if [[ "$ask" != "false" ]]; then
       while true; do
-        read -p "Install Neovim, LazyVim and JetBrainsMono Nerd Font? [Y/n] " install_choice
+        read -p "Do you want to run the jk-arch-installer to set up jk-arch? [Y/n] " install_choice
         case "$install_choice" in
           [yY]|[yY][eE][sS]|"") install_choice="y"; break ;;
           [nN]|[nN][oO]) install_choice="n"; break ;;
@@ -19,37 +19,19 @@ install_neovim_lazyvim_nerdfont(){
     fi
 
     if [[ "$install_choice" != "y" ]]; then
-      printf "${STY_YELLOW}[$0]: Skipping Neovim, LazyVim and Nerd Font installation.${STY_RST}\n"
+      printf "${STY_YELLOW}[$0]: Skipping jk-arch setup.${STY_RST}\n"
       return
     fi
 
-    printf "${STY_CYAN}[$0]: Installing Neovim, Vim, LazyVim and JetBrainsMono Nerd Font${STY_RST}\n"
-    x sudo pacman -S --needed --noconfirm neovim vim wget unzip
-
-    if [[ -e "$XDG_CONFIG_HOME/nvim" ]]; then
-      printf "${STY_BLUE}[$0]: $XDG_CONFIG_HOME/nvim already exists; keeping it.${STY_RST}\n"
-    else
-      x mkdir -p "$XDG_CONFIG_HOME"
-      x git clone https://github.com/LazyVim/starter "$XDG_CONFIG_HOME/nvim"
-      x rm -rf "$XDG_CONFIG_HOME/nvim/.git"
-    fi
-
-    if [[ -d "$XDG_DATA_HOME/fonts/JetBrainsMono" ]]; then
-      printf "${STY_BLUE}[$0]: $XDG_DATA_HOME/fonts/JetBrainsMono already exists; keeping it.${STY_RST}\n"
-    else
-      x mkdir -p "$XDG_DATA_HOME/fonts"
-      x cd "$XDG_DATA_HOME/fonts"
-      x wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-      x unzip JetBrainsMono.zip -d JetBrainsMono
-      x rm -f JetBrainsMono.zip
-      x fc-cache -fv
-      x cd "$REPO_ROOT"
-    fi
+    printf "${STY_CYAN}[$0]: Starting jk-arch-installer with root privileges...${STY_RST}\n"
+    
+    # Nutzt die im Skript definierte $REPO_ROOT Variable, um den Installer sicher zu finden
+    x sudo python3 "$REPO_ROOT/jk-arch-installer/installer.py"
   fi
 }
 
-showfun install_neovim_lazyvim_nerdfont
-v install_neovim_lazyvim_nerdfont
+showfun setup_jk_arch
+v setup_jk_arch
 
 function warning_overwrite(){
   printf "${STY_YELLOW}"
