@@ -113,6 +113,14 @@ TRANSLATIONS = {
         "not_allowed": "Dieser Command ist für die erkannte Distribution nicht freigegeben.",
         "command_success": "Befehl erfolgreich beendet",
         "command_failed": "Befehl fehlgeschlagen",
+        "step_selection": "Installationsschritte auswählen",
+        "step_selection_help": "Pfeile: bewegen | Leertaste: an/aus | Tab: Beschreibung | a: alle | n: keine | Enter: bestätigen | q: abbrechen",
+        "step_selection_count": "{selected}/{total} Schritte ausgewählt",
+        "step_selection_empty": "Bitte mindestens einen Schritt auswählen.",
+        "step_description": "Beschreibung:",
+        "selection_cancelled": "Auswahl abgebrochen.",
+        "selection_noninteractive": "Kein interaktives Terminal erkannt; alle Schritte werden ausgewählt.",
+        "selected_plan": "Folgende Installationsschritte werden jetzt ausgeführt:",
     },
 
     "en": {
@@ -139,6 +147,14 @@ TRANSLATIONS = {
         "not_allowed": "This command is not allowed for the detected distribution.",
         "command_success": "Command completed successfully",
         "command_failed": "Command failed",
+        "step_selection": "Select installation steps",
+        "step_selection_help": "Arrows: move | Space: toggle | Tab: description | a: all | n: none | Enter: confirm | q: cancel",
+        "step_selection_count": "{selected}/{total} steps selected",
+        "step_selection_empty": "Please select at least one step.",
+        "step_description": "Description:",
+        "selection_cancelled": "Selection cancelled.",
+        "selection_noninteractive": "No interactive terminal detected; all steps will be selected.",
+        "selected_plan": "The following installation steps will now be executed:",
     },
 }
 
@@ -228,6 +244,9 @@ def handle_signal(
     warning(
         "Abbruch angefordert. "
         "Der aktuelle Prozess darf sauber beendet werden."
+        if LANGUAGE == "de"
+        else "Abort requested. "
+        "The current process will be allowed to exit cleanly."
     )
 
     log(f"Received signal: {signum}")
@@ -340,8 +359,15 @@ def load_step(
     filename: str,
 ) -> InstallationStep:
 
-    path = STEPS_DIR / filename
+    candidate = (STEPS_DIR / filename).resolve()
+    steps_root = STEPS_DIR.resolve()
 
+    if candidate != steps_root and steps_root not in candidate.parents:
+        raise ConfigurationError(
+            f"Step file is outside the steps directory: {filename!r}"
+        )
+
+    path = candidate
     data = load_json(path)
 
     required = [
@@ -393,10 +419,12 @@ def load_step(
                 f"must be a non-empty string array."
             )
 
-        distros = raw.get(
-            "distros",
-            ["all"],
-        )
+        if "distros" not in raw:
+            raise ConfigurationError(
+                f"{path}: commands[{index}] is missing required 'distros' field."
+            )
+
+        distros = raw["distros"]
 
         if not isinstance(
             distros,
@@ -407,13 +435,19 @@ def load_step(
                 f"must be an array."
             )
 
-        if not all(
-            isinstance(x, str)
+        if not distros or not all(
+            isinstance(x, str) and x.strip()
             for x in distros
         ):
             raise ConfigurationError(
                 f"{path}: every distro target "
                 f"must be a string."
+            )
+
+        requires_root = raw.get("requires_root", True)
+        if not isinstance(requires_root, bool):
+            raise ConfigurationError(
+                f"{path}: commands[{index}].requires_root must be boolean."
             )
 
         commands.append(
@@ -423,17 +457,30 @@ def load_step(
                     "description",
                     "",
                 ),
-                requires_root=bool(
-                    raw.get(
-                        "requires_root",
-                        True,
-                    )
-                ),
+                requires_root=requires_root,
                 distros=[
                     x.lower()
                     for x in distros
                 ],
             )
+        )
+
+    checks = data.get("checks", [])
+    if not isinstance(checks, list):
+        raise ConfigurationError(
+            f"{path}: 'checks' must be an array."
+        )
+
+    optional = data.get("optional", False)
+    if not isinstance(optional, bool):
+        raise ConfigurationError(
+            f"{path}: 'optional' must be boolean."
+        )
+
+    continue_on_error = data.get("continue_on_error", False)
+    if not isinstance(continue_on_error, bool):
+        raise ConfigurationError(
+            f"{path}: 'continue_on_error' must be boolean."
         )
 
     return InstallationStep(
@@ -442,22 +489,9 @@ def load_step(
         description=data["description"],
         question=data["question"],
         commands=commands,
-        checks=data.get(
-            "checks",
-            [],
-        ),
-        optional=bool(
-            data.get(
-                "optional",
-                False,
-            )
-        ),
-        continue_on_error=bool(
-            data.get(
-                "continue_on_error",
-                False,
-            )
-        ),
+        checks=checks,
+        optional=optional,
+        continue_on_error=continue_on_error,
     )
 
 
@@ -670,14 +704,15 @@ def distribution_display_name(
 # DISTRIBUTION POLICY
 # ============================================================
 
-SUPPORTED_DISTRIBUTIONS = {
+EXACT_DISTRIBUTIONS = {
     "arch",
     "cachyos",
     "endeavouros",
     "garuda",
     "manjaro",
-    "arch_based",
 }
+
+SUPPORTED_DISTRIBUTIONS = EXACT_DISTRIBUTIONS | {"arch_based"}
 
 
 def command_allowed(
@@ -790,14 +825,7 @@ def command_allowed(
 
     if "arch_based" in targets:
 
-        if detected_distro in {
-            "arch",
-            "cachyos",
-            "endeavouros",
-            "garuda",
-            "manjaro",
-            "arch_based",
-        }:
+        if detected_distro in SUPPORTED_DISTRIBUTIONS:
 
             return True
 
@@ -829,12 +857,12 @@ def check_arch_family(
     distro: str,
 ) -> None:
 
-    if distro == "unknown":
+    if distro not in SUPPORTED_DISTRIBUTIONS:
         data = read_os_release()
 
         raise InstallerError(
-            "This installer only supports Arch-based "
-            f"distributions. Detected: "
+            "This installer only supports the configured "
+            "Arch-family distributions. Detected: "
             f"{data.get('PRETTY_NAME', 'unknown')}"
         )
 
@@ -1123,10 +1151,35 @@ def execute_command(
     start = time.monotonic()
 
     try:
-        result = subprocess.run(
+        process = subprocess.Popen(
             command.command,
-            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
         )
+
+        assert process.stdout is not None
+
+        for line in process.stdout:
+            line = line.rstrip("\\n")
+            print(line)
+            log(f"OUTPUT: {line}")
+
+        returncode = process.wait()
+
+    except KeyboardInterrupt:
+        try:
+            process.terminate()
+            process.wait(timeout=5)
+        except Exception:
+            try:
+                process.kill()
+            except Exception:
+                pass
+
+        log(f"COMMAND INTERRUPTED: {display}")
+        return False
 
     except FileNotFoundError:
         error(
@@ -1155,7 +1208,7 @@ def execute_command(
         time.monotonic() - start
     )
 
-    if result.returncode == 0:
+    if returncode == 0:
 
         success(
             f"{tr('command_success')} "
@@ -1171,11 +1224,11 @@ def execute_command(
 
     error(
         f"{tr('command_failed')}. "
-        f"Exit code: {result.returncode}"
+        f"Exit code: {returncode}"
     )
 
     log(
-        f"FAILED exit={result.returncode} "
+        f"FAILED exit={returncode} "
         f"time={duration:.2f}s"
     )
 
@@ -1224,20 +1277,6 @@ def execute_step(
                 tr("skip")
             )
             return True
-
-    if not ask_yes_no(
-        localized(step.question),
-        default=True,
-    ):
-        warning(
-            tr("skip")
-        )
-
-        log(
-            f"STEP SKIPPED: {step.id}"
-        )
-
-        return True
 
     for index, command in enumerate(
         step.commands,
@@ -1383,6 +1422,139 @@ def show_installation_table(
             )
 
 
+def select_installations(
+    installations: list[dict[str, Any]],
+) -> list[dict[str, Any]] | None:
+    """Let the user toggle the steps before starting the installation."""
+
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        warning(tr("selection_noninteractive"))
+        return installations
+
+    import curses
+    import textwrap
+
+    selected = [True] * len(installations)
+
+    def draw(screen: Any, cursor: int, show_description: bool) -> None:
+        screen.erase()
+        height, width = screen.getmaxyx()
+        screen.addstr(0, 0, tr("step_selection")[:width - 1], curses.A_BOLD)
+        screen.addstr(1, 0, tr("step_selection_help")[:width - 1])
+
+        footer_rows = 8 if show_description else 5
+        available_rows = max(height - footer_rows, 1)
+        first = max(
+            0,
+            min(
+                cursor - available_rows + 1,
+                len(installations) - available_rows,
+            ),
+        )
+
+        for row, index in enumerate(
+            range(first, min(first + available_rows, len(installations))),
+            start=3,
+        ):
+            installation = installations[index]
+            marker = "[x]" if selected[index] else "[ ]"
+            name = localized(
+                installation.get(
+                    "name",
+                    installation.get("id", "?"),
+                )
+            )
+            line = f"{marker} {index + 1:02d}. {name}"
+
+            if index == cursor:
+                screen.attron(curses.A_REVERSE)
+            screen.addstr(row, 0, line[:width - 1])
+            if index == cursor:
+                screen.attroff(curses.A_REVERSE)
+
+        if show_description:
+            description = localized(
+                installations[cursor].get("description", "")
+            )
+            description_lines = textwrap.wrap(
+                description,
+                width=max(width - 4, 1),
+            )[:3]
+            description_row = height - 6
+            screen.addstr(
+                description_row,
+                0,
+                tr("step_description")[:width - 1],
+                curses.A_BOLD,
+            )
+            for offset, line in enumerate(description_lines, start=1):
+                if description_row + offset < height - 3:
+                    screen.addstr(
+                        description_row + offset,
+                        2,
+                        line[:width - 3],
+                    )
+
+        count = tr("step_selection_count").format(
+            selected=sum(selected),
+            total=len(installations),
+        )
+        screen.addstr(height - 2, 0, count[:width - 1], curses.A_BOLD)
+        screen.addstr(height - 1, 0, tr("step_selection_empty")[:width - 1])
+        screen.refresh()
+
+    def choose(screen: Any) -> list[dict[str, Any]] | None:
+        curses.curs_set(0)
+        screen.keypad(True)
+        cursor = 0
+        show_description = False
+
+        while True:
+            draw(screen, cursor, show_description)
+            key = screen.getch()
+
+            if key in (curses.KEY_UP, ord("k")):
+                cursor = (cursor - 1) % len(installations)
+                show_description = False
+            elif key in (curses.KEY_DOWN, ord("j")):
+                cursor = (cursor + 1) % len(installations)
+                show_description = False
+            elif key == ord(" "):
+                selected[cursor] = not selected[cursor]
+            elif key in (9, curses.KEY_BTAB):
+                show_description = not show_description
+            elif key in (ord("a"), ord("A")):
+                selected[:] = [True] * len(installations)
+            elif key in (ord("n"), ord("N")):
+                selected[:] = [False] * len(installations)
+            elif key in (10, 13, curses.KEY_ENTER):
+                if any(selected):
+                    return [
+                        installation
+                        for index, installation in enumerate(installations)
+                        if selected[index]
+                    ]
+            elif key in (ord("q"), ord("Q"), 27):
+                return None
+
+    try:
+        result = curses.wrapper(choose)
+    except curses.error:
+        warning(tr("selection_noninteractive"))
+        return installations
+
+    if result is None:
+        warning(tr("selection_cancelled"))
+        log("STEP SELECTION CANCELLED")
+        return None
+
+    log(
+        "SELECTED STEPS: "
+        + ",".join(str(item["id"]) for item in result)
+    )
+    return result
+
+
 # ============================================================
 # MAIN
 # ============================================================
@@ -1428,11 +1600,12 @@ def run_installer(
             f"{distribution_display_name(detected_distro)}"
         )
 
-        require_root()
+        if not dry_run:
+            require_root()
 
-        success(
-            tr("root_ok")
-        )
+            success(
+                tr("root_ok")
+            )
 
         check_required_programs()
 
@@ -1476,11 +1649,26 @@ def run_installer(
         warning(
             tr("dry_run")
         )
+        info(
+            "Root check is skipped in DRY-RUN mode."
+            if LANGUAGE == "en"
+            else "Die Root-Prüfung wird im DRY-RUN-Modus übersprungen."
+        )
 
-    show_installation_table(
+    selected_installations = select_installations(
         installations
     )
 
+    if selected_installations is None:
+        return 0
+
+    installations = selected_installations
+
+    print()
+    print("=" * 70)
+    print(paint(tr("selected_plan"), Colors.BOLD + Colors.GREEN))
+    print("=" * 70)
+    show_installation_table(installations)
     print()
 
     if not ask_yes_no(
