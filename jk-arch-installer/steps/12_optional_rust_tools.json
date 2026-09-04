@@ -1,0 +1,141 @@
+{
+    "id": "install_optional_rust_tools",
+
+    "name": {
+        "de": "Optionale Rust-Tools installieren",
+        "en": "Install optional Rust tools"
+    },
+
+    "description": {
+        "de": "Installiert zusätzliche Rust-Tools für Embedded-Entwicklung, Binary-Analyse, Testing und Performance-Analyse.",
+        "en": "Installs additional Rust tools for embedded development, binary analysis, testing, and performance analysis."
+    },
+
+    "question": {
+        "de": "Sollen die optionalen Rust-Tools installiert werden?",
+        "en": "Do you want to install the optional Rust tools?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert rustfmt zur automatischen Formatierung von Rust-Code.",
+                "en": "Installs rustfmt for automatically formatting Rust code."
+            },
+
+            "command": [
+                "rustup",
+                "component",
+                "add",
+                "rustfmt"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert probe-rs-tools für Embedded- und Debugging-Workflows.",
+                "en": "Installs probe-rs-tools for embedded and debugging workflows."
+            },
+
+            "command": [
+                "cargo",
+                "install",
+                "--locked",
+                "probe-rs-tools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert cargo-auditable zur Erstellung überprüfbarer Dependency-Informationen in Rust-Binaries.",
+                "en": "Installs cargo-auditable for embedding auditable dependency information into Rust binaries."
+            },
+
+            "command": [
+                "cargo",
+                "install",
+                "--locked",
+                "cargo-auditable"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert cargo-watch zum automatischen Ausführen von Cargo-Commands bei Änderungen.",
+                "en": "Installs cargo-watch for automatically running Cargo commands when files change."
+            },
+
+            "command": [
+                "cargo",
+                "install",
+                "--locked",
+                "cargo-watch"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert cargo-bloat zur Analyse der Größe von Rust-Binaries.",
+                "en": "Installs cargo-bloat for analyzing the size of Rust binaries."
+            },
+
+            "command": [
+                "cargo",
+                "install",
+                "--locked",
+                "cargo-bloat"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert cargo-binutils für zusätzliche Binary-Analysewerkzeuge in Rust-Projekten.",
+                "en": "Installs cargo-binutils for additional binary analysis tools in Rust projects."
+            },
+
+            "command": [
+                "cargo",
+                "install",
+                "--locked",
+                "cargo-binutils"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

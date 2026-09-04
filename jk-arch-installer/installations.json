@@ -89,6 +89,78 @@
                 "en": "Installs essential tools for development, debugging, reverse engineering, fuzzing, security, and Linux GUI development."
             },
             "file": "07_development_tools.json"
+        },
+        {
+            "id": "install_lua51",
+            "name": {
+                "de": "Lua 5.1 installieren",
+                "en": "Install Lua 5.1"
+            },
+            "description": {
+                "de": "Installiert die Programmiersprache Lua in der Version 5.1 für ältere Lua-Module, Tools und bestimmte Neovim-Plugins.",
+                "en": "Installs the Lua 5.1 programming language for older Lua modules, tools, and certain Neovim plugins."
+            },
+            "file": "08_install_lua51.json"
+        },
+        {
+            "id": "enable_multilib",
+            "name": {
+                "de": "Multilib-Repository aktivieren",
+                "en": "Enable multilib repository"
+            },
+            "description": {
+                "de": "Aktiviert das Multilib-Repository und aktualisiert anschließend die Paketdatenbank.",
+                "en": "Enables the multilib repository and then refreshes the package database."
+            },
+            "file": "09_enable_multilib.json"
+        },
+        {
+            "id": "install_rust",
+            "name": {
+                "de": "Rust und Cargo installieren",
+                "en": "Install Rust and Cargo"
+            },
+            "description": {
+                "de": "Installiert rustup sowie die stabile Rust-Toolchain für Rust- und Cargo-Entwicklung.",
+                "en": "Installs rustup and the stable Rust toolchain for Rust and Cargo development."
+            },
+            "file": "10_install_rust.json"
+        },
+        {
+            "id": "install_cargo_tools",
+            "name": {
+                "de": "Wichtige Cargo-Tools installieren",
+                "en": "Install essential Cargo tools"
+            },
+            "description": {
+                "de": "Installiert wichtige Cargo-Werkzeuge für Testing, Security, Entwicklung und Performance-Analyse.",
+                "en": "Installs essential Cargo tools for testing, security, development, and performance analysis."
+            },
+            "file": "11_install_cargo_tools.json"
+        },
+        {
+            "id": "install_optional_rust_tools",
+            "name": {
+                "de": "Optionale Rust-Tools installieren",
+                "en": "Install optional Rust tools"
+            },
+            "description": {
+                "de": "Installiert zusätzliche Rust-Tools für Embedded-Entwicklung, Binary-Analyse, Testing und Performance-Analyse.",
+                "en": "Installs additional Rust tools for embedded development, binary analysis, testing, and performance analysis."
+            },
+            "file": "12_optional_rust_tools.json"
+        },
+        {
+            "id": "install_r2ghidra",
+            "name": {
+                "de": "r2ghidra für radare2 installieren",
+                "en": "Install r2ghidra for radare2"
+            },
+            "description": {
+                "de": "Installiert radare2 und das r2ghidra-Decompilation-Plugin für Reverse Engineering.",
+                "en": "Installs radare2 and the r2ghidra decompilation plugin for reverse engineering."
+            },
+            "file": "13_install_r2ghidra.json"
         }
     ]
 }

@@ -114,10 +114,16 @@ TRANSLATIONS = {
         "command_success": "Befehl erfolgreich beendet",
         "command_failed": "Befehl fehlgeschlagen",
         "step_selection": "Installationsschritte auswählen",
-        "step_selection_help": "Pfeile: bewegen | Leertaste: an/aus | Tab: Beschreibung | a: alle | n: keine | Enter: bestätigen | q: abbrechen",
+        "step_selection_help": "Pfeile: bewegen | Leertaste: an/aus | Tab: Details | Bild hoch/runter: scrollen | a: alle | n: keine | Enter: bestätigen | q: abbrechen",
         "step_selection_count": "{selected}/{total} Schritte ausgewählt",
         "step_selection_empty": "Bitte mindestens einen Schritt auswählen.",
-        "step_description": "Beschreibung:",
+        "step_description": "Details:",
+        "step_command": "Befehl",
+        "step_question": "Rückfrage",
+        "step_requires_root": "Benötigt Root",
+        "step_allowed_distros": "Erlaubte Distributionen",
+        "yes": "ja",
+        "no": "nein",
         "selection_cancelled": "Auswahl abgebrochen.",
         "selection_noninteractive": "Kein interaktives Terminal erkannt; alle Schritte werden ausgewählt.",
         "selected_plan": "Folgende Installationsschritte werden jetzt ausgeführt:",
@@ -148,10 +154,16 @@ TRANSLATIONS = {
         "command_success": "Command completed successfully",
         "command_failed": "Command failed",
         "step_selection": "Select installation steps",
-        "step_selection_help": "Arrows: move | Space: toggle | Tab: description | a: all | n: none | Enter: confirm | q: cancel",
+        "step_selection_help": "Arrows: move | Space: toggle | Tab: details | Page Up/Down: scroll | a: all | n: none | Enter: confirm | q: cancel",
         "step_selection_count": "{selected}/{total} steps selected",
         "step_selection_empty": "Please select at least one step.",
-        "step_description": "Description:",
+        "step_description": "Details:",
+        "step_command": "Command",
+        "step_question": "Prompt",
+        "step_requires_root": "Requires root",
+        "step_allowed_distros": "Allowed distributions",
+        "yes": "yes",
+        "no": "no",
         "selection_cancelled": "Selection cancelled.",
         "selection_noninteractive": "No interactive terminal detected; all steps will be selected.",
         "selected_plan": "The following installation steps will now be executed:",
@@ -1435,14 +1447,24 @@ def select_installations(
     import textwrap
 
     selected = [True] * len(installations)
+    step_details = [
+        load_step(str(installation["file"]))
+        for installation in installations
+    ]
 
-    def draw(screen: Any, cursor: int, show_description: bool) -> None:
+    def draw(
+        screen: Any,
+        cursor: int,
+        show_description: bool,
+        detail_scroll: int,
+    ) -> None:
         screen.erase()
         height, width = screen.getmaxyx()
         screen.addstr(0, 0, tr("step_selection")[:width - 1], curses.A_BOLD)
         screen.addstr(1, 0, tr("step_selection_help")[:width - 1])
 
-        footer_rows = 8 if show_description else 5
+        detail_height = min(12, max(height - 8, 4))
+        footer_rows = detail_height + 3 if show_description else 5
         available_rows = max(height - footer_rows, 1)
         first = max(
             0,
@@ -1473,26 +1495,57 @@ def select_installations(
                 screen.attroff(curses.A_REVERSE)
 
         if show_description:
-            description = localized(
-                installations[cursor].get("description", "")
+            step = step_details[cursor]
+            detail_lines = [
+                *textwrap.wrap(
+                    localized(step.description),
+                    width=max(width - 4, 1),
+                ),
+            ]
+            for command in step.commands:
+                detail_lines.extend([
+                    "",
+                    f"{tr('step_command')}: {format_command(command.command)}",
+                    f"{tr('step_requires_root')}: "
+                    f"{tr('yes') if command.requires_root else tr('no')}",
+                    f"{tr('step_allowed_distros')}: "
+                    f"{', '.join(command.distros)}",
+                ])
+                detail_lines.extend(textwrap.wrap(
+                    localized(command.description),
+                    width=max(width - 4, 1),
+                ))
+
+            visible_details = detail_lines[
+                detail_scroll:detail_scroll + detail_height - 1
+            ]
+            description_row = height - detail_height - 3
+            detail_attr = (
+                curses.color_pair(1)
+                if curses.has_colors()
+                else curses.A_DIM
             )
-            description_lines = textwrap.wrap(
-                description,
-                width=max(width - 4, 1),
-            )[:3]
-            description_row = height - 6
+            header_attr = detail_attr | curses.A_BOLD
+            for panel_row in range(description_row, height - 2):
+                screen.addstr(
+                    panel_row,
+                    0,
+                    " " * max(width - 1, 1),
+                    detail_attr,
+                )
             screen.addstr(
                 description_row,
                 0,
-                tr("step_description")[:width - 1],
-                curses.A_BOLD,
+                f" {tr('step_description')} "[:width - 1],
+                header_attr,
             )
-            for offset, line in enumerate(description_lines, start=1):
-                if description_row + offset < height - 3:
+            for offset, line in enumerate(visible_details, start=1):
+                if description_row + offset < height - 2:
                     screen.addstr(
                         description_row + offset,
-                        2,
-                        line[:width - 3],
+                        1,
+                        line[:width - 2],
+                        detail_attr,
                     )
 
         count = tr("step_selection_count").format(
@@ -1506,23 +1559,36 @@ def select_installations(
     def choose(screen: Any) -> list[dict[str, Any]] | None:
         curses.curs_set(0)
         screen.keypad(True)
+        if curses.has_colors():
+            curses.start_color()
+            curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
         cursor = 0
         show_description = False
+        detail_scroll = 0
 
         while True:
-            draw(screen, cursor, show_description)
+            draw(screen, cursor, show_description, detail_scroll)
             key = screen.getch()
 
             if key in (curses.KEY_UP, ord("k")):
-                cursor = (cursor - 1) % len(installations)
-                show_description = False
+                if show_description:
+                    detail_scroll = max(0, detail_scroll - 1)
+                else:
+                    cursor = (cursor - 1) % len(installations)
             elif key in (curses.KEY_DOWN, ord("j")):
-                cursor = (cursor + 1) % len(installations)
-                show_description = False
+                if show_description:
+                    detail_scroll += 1
+                else:
+                    cursor = (cursor + 1) % len(installations)
             elif key == ord(" "):
                 selected[cursor] = not selected[cursor]
             elif key in (9, curses.KEY_BTAB):
                 show_description = not show_description
+                detail_scroll = 0
+            elif key == curses.KEY_PPAGE:
+                detail_scroll = max(0, detail_scroll - 4)
+            elif key == curses.KEY_NPAGE:
+                detail_scroll += 4
             elif key in (ord("a"), ord("A")):
                 selected[:] = [True] * len(installations)
             elif key in (ord("n"), ord("N")):

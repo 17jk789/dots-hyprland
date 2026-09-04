@@ -1,0 +1,68 @@
+{
+    "id": "install_r2ghidra",
+
+    "name": {
+        "de": "r2ghidra für radare2 installieren",
+        "en": "Install r2ghidra for radare2"
+    },
+
+    "description": {
+        "de": "Installiert radare2 und das r2ghidra-Decompilation-Plugin für Reverse Engineering.",
+        "en": "Installs radare2 and the r2ghidra decompilation plugin for reverse engineering."
+    },
+
+    "question": {
+        "de": "Sollen radare2 und das r2ghidra-Decompilation-Plugin installiert werden?",
+        "en": "Do you want to install radare2 and the r2ghidra decompilation plugin?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert radare2 und das r2ghidra-Decompilation-Plugin.",
+                "en": "Installs radare2 and the r2ghidra decompilation plugin."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "radare2",
+                "r2ghidra"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert die optionalen Python-Bindings für r2pipe.",
+                "en": "Installs the optional Python bindings for r2pipe."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "python-r2pipe"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

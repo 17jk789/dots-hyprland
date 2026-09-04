@@ -1,0 +1,65 @@
+{
+    "id": "install_rust",
+
+    "name": {
+        "de": "Rust und Cargo installieren",
+        "en": "Install Rust and Cargo"
+    },
+
+    "description": {
+        "de": "Installiert rustup sowie die stabile Rust-Toolchain für Rust- und Cargo-Entwicklung.",
+        "en": "Installs rustup and the stable Rust toolchain for Rust and Cargo development."
+    },
+
+    "question": {
+        "de": "Sollen Rust, Cargo und die stabile Rust-Toolchain installiert werden?",
+        "en": "Do you want to install Rust, Cargo, and the stable Rust toolchain?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert rustup aus den offiziellen Arch-Linux-Paketquellen.",
+                "en": "Installs rustup from the official Arch Linux repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "rustup"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert und aktiviert die stabile Rust-Toolchain.",
+                "en": "Installs and activates the stable Rust toolchain."
+            },
+
+            "command": [
+                "rustup",
+                "default",
+                "stable"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_lua51",
+
+    "name": {
+        "de": "Lua 5.1 installieren",
+        "en": "Install Lua 5.1"
+    },
+
+    "description": {
+        "de": "Installiert die Programmiersprache Lua in der Version 5.1 für ältere Lua-Module, Tools und bestimmte Neovim-Plugins.",
+        "en": "Installs the Lua 5.1 programming language for older Lua modules, tools, and certain Neovim plugins."
+    },
+
+    "question": {
+        "de": "Soll Lua 5.1 installiert werden?",
+        "en": "Do you want to install Lua 5.1?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Lua 5.1 mit pacman.",
+                "en": "Installs Lua 5.1 using pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "lua51"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

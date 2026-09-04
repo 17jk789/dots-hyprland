@@ -1,0 +1,63 @@
+{
+    "id": "enable_multilib",
+
+    "name": {
+        "de": "Multilib-Repository aktivieren",
+        "en": "Enable multilib repository"
+    },
+
+    "description": {
+        "de": "Aktiviert das Multilib-Repository für 32-Bit-Bibliotheken und Programme auf 64-Bit-Arch-Systemen und aktualisiert anschließend die Paketdatenbank.",
+        "en": "Enables the multilib repository for 32-bit libraries and programs on 64-bit Arch-based systems and then refreshes the package database."
+    },
+
+    "question": {
+        "de": "Soll das Multilib-Repository aktiviert und die Paketdatenbank aktualisiert werden?",
+        "en": "Do you want to enable the multilib repository and refresh the package database?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Aktiviert das Multilib-Repository, sofern es noch nicht in pacman.conf eingetragen ist.",
+                "en": "Enables the multilib repository if it is not already configured in pacman.conf."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "grep -q '^\\[multilib\\]' /etc/pacman.conf || printf '\\n[multilib]\\nInclude = /etc/pacman.d/mirrorlist\\n' >> /etc/pacman.conf"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktualisiert die Paketdatenbank nach dem Aktivieren von Multilib.",
+                "en": "Refreshes the package database after enabling multilib."
+            },
+
+            "command": [
+                "pacman",
+                "-Sy",
+                "--noconfirm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
