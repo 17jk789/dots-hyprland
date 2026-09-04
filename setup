@@ -67,6 +67,61 @@ if [[ -f "${SUBCMD_DIR}/options.sh" ]];
 fi
 case ${SUBCMD_NAME} in
   install)
+
+    if [[ -f /etc/os-release ]] && [[ -d /run/systemd/system ]] && [[ ! -d /run/archiso ]]; then
+      ARCH_INSTALL_RECOMMENDATION="n"
+
+      printf "\n${STY_BOLD}${STY_CYAN}An existing Linux installation was detected.${STY_RST}\n"
+      printf "  ${STY_GREEN}Recommendation: No${STY_RST} - continue with the existing system.\n"
+    else
+      ARCH_INSTALL_RECOMMENDATION="y"
+
+      printf "\n${STY_BOLD}${STY_CYAN}No existing Linux installation was detected.${STY_RST}\n"
+      printf "  ${STY_YELLOW}Recommendation: Yes${STY_RST} - start the Arch Linux installer.\n"
+    fi
+
+    printf "\n"
+    printf "  ${STY_GREEN}y${STY_RST} = Yes, install Arch Linux ${STY_YELLOW}(Experimental — hopefully fixed before October 1, 2026)${STY_RST}\n"
+    printf "  ${STY_YELLOW}n${STY_RST} = No, continue with the existing system\n\n"
+
+    while true; do
+      read -r -p "Should Arch Linux be installed? [y/n] (recommended: ${ARCH_INSTALL_RECOMMENDATION}): " INSTALL_ARCH
+
+      case "${INSTALL_ARCH,,}" in
+
+        y|yes)
+          printf "${STY_YELLOW}[INFO] Starting the jk-arch Arch Linux installer...${STY_RST}\n\n"
+
+          sudo python3 "$REPO_ROOT/jk-arch-installer/arch-installer.py"
+
+          INSTALLER_EXIT_CODE=$?
+
+          if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
+            printf "${STY_RED}[ERROR] Arch Linux installer exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
+            exit "${INSTALLER_EXIT_CODE}"
+          fi
+
+          printf "\n${STY_GREEN}[ OK ] Arch Linux installer finished.${STY_RST}\n"
+          break
+          ;;
+
+        n|no)
+          printf "${STY_GREEN}[ OK ] Skipping Arch Linux installation.${STY_RST}\n"
+          printf "      Continuing with the existing system...\n\n"
+          break
+          ;;
+
+        "")
+          printf "${STY_YELLOW}[INFO] Please enter y or n.${STY_RST}\n"
+          ;;
+
+        *)
+          printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+          ;;
+
+      esac
+    done
+
     for function in ${print_os_group_id_functions[@]}; do
       $function
     done
