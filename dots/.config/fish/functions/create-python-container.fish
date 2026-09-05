@@ -7,7 +7,7 @@ function create-python-container --description "Create a secure Python developme
     end
 
     if test -z "$name"
-        echo "❌ Please provide a project name."
+        echo "Please provide a project name."
         return 1
     end
 
@@ -39,7 +39,7 @@ function create-python-container --description "Create a secure Python developme
     echo "*.pyc" >> .gitignore
     echo ".env" >> .gitignore
 
-    echo 'print("🔥 Secure Python Container Ready!")' > main.py
+    echo 'print("Secure Python Container Ready!")' > main.py
 
     echo "FROM python:3.12-alpine" > Dockerfile
 
@@ -74,7 +74,7 @@ function create-python-container --description "Create a secure Python developme
         return 1
     end
 
-    echo "🚀 Starting secure container..."
+    echo "Starting secure container..."
 
     sudo docker run -dit \
         --name $CONTAINER_NAME \
@@ -103,18 +103,18 @@ function create-python-container --description "Create a secure Python developme
     echo ""
     echo "✅ Secure Python project created!"
     echo ""
-    echo "📁 Project: $name"
-    echo "🐳 Container: $CONTAINER_NAME"
+    echo "Project:   $name"
+    echo "Container: $CONTAINER_NAME"
     echo ""
-    echo "👉 Enter container with:"
-    echo "   sudo docker exec -it $CONTAINER_NAME fish"
+    echo "Enter container:"
+    echo "  sudo docker exec -it $CONTAINER_NAME fish"
     echo ""
-    echo "👉 Activate venv:"
-    echo "   source venv/bin/activate.fish"
+    echo "Activate venv:"
+    echo "  source venv/bin/activate.fish"
     echo ""
-    echo "🛑 Stop container:"
-    echo "   sudo docker stop $CONTAINER_NAME"
+    echo "Stop container:"
+    echo "  sudo docker stop $CONTAINER_NAME"
     echo ""
-    echo "🔥 Done!"
+    echo "Done."
 
 end

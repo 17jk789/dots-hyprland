@@ -38,6 +38,6 @@ function create-python-jup-pro --description "Create a local Python 3.12 Jupyter
     chmod -R 700 "$HOME/.local/share/jupyter/runtime"
 
     echo "✅ Project $PROJECT_NAME created."
-    echo "💡 The virtual environment is active. Use 'deactivate' to exit."
+    echo "The virtual environment is active. Use 'deactivate' to exit."
 
 end

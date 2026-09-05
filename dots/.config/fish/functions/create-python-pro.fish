@@ -26,6 +26,6 @@ function create-python-pro --description "Create a local Python project with ven
     python -m pip install bandit black mypy pytest
 
     echo "✅ Project $name has been created!"
-    echo "💡 Virtual environment is active. (Deactivate with ‘deactivate’)"
+    echo "Virtual environment is active. (Deactivate with ‘deactivate’)"
 
 end

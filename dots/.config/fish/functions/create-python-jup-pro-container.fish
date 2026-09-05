@@ -7,7 +7,7 @@ function create-python-jup-pro-container --description "Create a secure Python J
     end
 
     if test -z "$name"
-        echo "❌ Please provide a project name."
+        echo "Please provide a project name."
         return 1
     end
 
@@ -40,7 +40,7 @@ function create-python-jup-pro-container --description "Create a secure Python J
     echo "*.pyc" >> .gitignore
     echo ".ipynb_checkpoints/" >> .gitignore
 
-    echo 'print("🚀 Jupyter Container Ready!")' > main.py
+    echo 'print("Jupyter Container Ready!")' > main.py
 
     echo "FROM python:3.12-alpine" > Dockerfile
 
@@ -78,7 +78,7 @@ function create-python-jup-pro-container --description "Create a secure Python J
         return 1
     end
 
-    echo "🚀 Starting container..."
+    echo "Starting container..."
 
     sudo docker run -dit \
         --name $CONTAINER_NAME \
@@ -128,24 +128,24 @@ function create-python-jup-pro-container --description "Create a secure Python J
     echo ""
     echo "✅ Jupyter Docker project created!"
     echo ""
-    echo "📁 Project: $PROJECT_NAME"
-    echo "🐳 Container: $CONTAINER_NAME"
+    echo "Project: $PROJECT_NAME"
+    echo "Container: $CONTAINER_NAME"
     echo ""
-    echo "👉 Enter:"
-    echo "   sudo docker exec -it $CONTAINER_NAME fish"
+    echo "Enter:"
+    echo "sudo docker exec -it $CONTAINER_NAME fish"
     echo ""
-    echo "👉 Activate venv:"
-    echo "   source venv/bin/activate.fish"
+    echo "Activate venv:"
+    echo "source venv/bin/activate.fish"
     echo ""
-    echo "👉 Jupyter start:"
-    echo "   jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser"
+    echo "Jupyter start:"
+    echo "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser"
     echo ""
-    echo "👉 Browser:"
-    echo "   http://localhost:8888"
+    echo "Browser:"
+    echo "http://localhost:8888"
     echo ""
-    echo "🛑 Stop container:"
-    echo "   sudo docker stop $CONTAINER_NAME"
+    echo "Stop container:"
+    echo "sudo docker stop $CONTAINER_NAME"
     echo ""
-    echo "🔥 Done!"
+    echo "Done!"
 
 end
