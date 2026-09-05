@@ -1,4 +1,5 @@
-function create-python-pro --argument-names action name
+function create-python-pro --description "Create a local Python project with venv and development tools" --argument-names action name
+
     if test "$action" != "new"; or test -z "$name"
         echo "Usage: create-python-pro new <projektname>"
         return 1
@@ -26,4 +27,5 @@ function create-python-pro --argument-names action name
 
     echo "✅ Project $name has been created!"
     echo "💡 Virtual environment is active. (Deactivate with ‘deactivate’)"
+
 end

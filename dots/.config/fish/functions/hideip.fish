@@ -1,6 +1,5 @@
-# ~/.config/fish/functions/hideip.fish
+function hideip --description "Hide local and public IP addresses by replacing them with placeholders"
 
-function hideip
     # Save real IPs to hidden variables if they don't exist yet
     if not set -q __HIDDEN_MY_IP
         set -g __HIDDEN_MY_IP (ip route get 1 2>/dev/null | sed -n 's/.*src \([^ ]*\).*/\1/p' | string trim)
@@ -15,4 +14,5 @@ function hideip
     set -gx PUB_IP "x.x.x.x"
 
     echo "IPs hidden (showing x.x.x.x)."
+
 end

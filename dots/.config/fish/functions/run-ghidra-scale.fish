@@ -31,6 +31,7 @@
 # end
 
 function run-ghidra-scale --description "Launch Ghidra optimized for Hyprland/Wayland on 4K"
+
     # 1. Systemprüfung (Schnelles Fail-Fast)
     if not type -q ghidra
         set_color red
@@ -62,4 +63,5 @@ function run-ghidra-scale --description "Launch Ghidra optimized for Hyprland/Wa
     # 3. Hintergrund-Start & Entkoppeln
     ghidra >/dev/null 2>&1 &
     disown
+
 end

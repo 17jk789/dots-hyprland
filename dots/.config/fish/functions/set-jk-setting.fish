@@ -1,4 +1,5 @@
 function set-jk-setting
+
     set -l config "$HOME/.config/illogical-impulse/config.json"
 
     mkdir -p (dirname "$config")
@@ -662,4 +663,5 @@ function set-jk-setting
     printf '%s\n' "$json" >"$config"
 
     echo "Config geschrieben: $config"
+
 end

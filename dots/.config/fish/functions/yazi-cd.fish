@@ -1,4 +1,5 @@
 function yazi-cd --description "Opens Yazi and changes directory to the selected folder upon exit"
+
     set -l tmp_file (mktemp -t "yazi-cwd.XXXXXX")
 
     yazi $argv --cwd-file="$tmp_file"
@@ -10,4 +11,5 @@ function yazi-cd --description "Opens Yazi and changes directory to the selected
     end
 
     rm -f -- "$tmp_file"
+
 end

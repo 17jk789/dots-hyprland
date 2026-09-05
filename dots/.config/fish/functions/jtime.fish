@@ -1,4 +1,5 @@
 function jtime --description "Modernes Benchmarking-, Profiling- und Tracing-Werkzeug"
+
     # Hilfe anzeigen, falls keine Argumente übergeben wurden
     if test (count $argv) -eq 0
         echo "Nutzung: jtime [OPTION] [BEFEHL]"
@@ -39,4 +40,5 @@ function jtime --description "Modernes Benchmarking-, Profiling- und Tracing-Wer
             # Standard-Fallback: Nutzt das Fish-eigene time-Builtin
             time $argv
     end
+
 end

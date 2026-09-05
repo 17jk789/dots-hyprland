@@ -2,7 +2,8 @@
 # Wenn Sie GitKraken über das AUR (z.B. mit 'yay -S gitkraken') installiert haben,
 # dürfen Sie dieses Skript NICHT verwenden.
 
-function update-gitkraken
+function update-gitkraken --description "Update GitKraken to the latest version"
+
     echo "Starting GitKraken update..."
 
     cd /tmp
@@ -28,6 +29,7 @@ function update-gitkraken
     rm -rf /tmp/gitkraken-update gitkraken-new.tar.gz
 
     echo "GitKraken was successfully updated."
+    
 end
 
 funcsave update-gitkraken

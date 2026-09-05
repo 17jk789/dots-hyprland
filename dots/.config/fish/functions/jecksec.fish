@@ -1,4 +1,4 @@
-function jecksec --description "Schöne checksec-Ausgabe"
+function jecksec --description "Checksec-Ausgabe übersichtlich und tabellarisch darstellen"
 
     if test (count $argv) -eq 0
         echo "Benutzung:"

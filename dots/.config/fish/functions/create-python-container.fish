@@ -1,4 +1,4 @@
-function create-python-container --argument-names action name
+function create-python-container --description "Create a secure Python development container with venv and security tools" --argument-names action name
 
     if test "$action" != "new"
         echo "Usage:"
@@ -116,4 +116,5 @@ function create-python-container --argument-names action name
     echo "   sudo docker stop $CONTAINER_NAME"
     echo ""
     echo "🔥 Done!"
+
 end

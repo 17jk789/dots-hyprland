@@ -1,4 +1,5 @@
-function create-python-jup-pro-container --argument-names action name
+function create-python-jup-pro-container --description "Create a secure Python Jupyter container with venv, notebooks and development tools" --argument-names action name
+
     if test "$action" != "new"
         echo "Usage:"
         echo "  create-python-jup-pro-container new <projektname>"
@@ -146,4 +147,5 @@ function create-python-jup-pro-container --argument-names action name
     echo "   sudo docker stop $CONTAINER_NAME"
     echo ""
     echo "🔥 Done!"
+
 end

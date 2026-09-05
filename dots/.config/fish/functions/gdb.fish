@@ -1,4 +1,5 @@
-function gdb
+function gdb --description "Launch GDB with optional Pwndbg or GEF, context settings, Intel syntax and styling"
+
     set -l args $argv
 
     set -l use_pwndbg 0
@@ -173,4 +174,5 @@ function gdb
     else
         command gdb $filtered_args
     end
+
 end

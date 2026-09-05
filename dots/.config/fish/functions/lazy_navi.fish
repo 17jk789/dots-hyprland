@@ -1,4 +1,5 @@
 function lazy_navi --description "Lazily loads and runs navi cheatsheets"
+
     # Check if navi has already been loaded
     if not functions -q __navi_loaded
         # Optionally ensure the repository is added
@@ -7,5 +8,7 @@ function lazy_navi --description "Lazily loads and runs navi cheatsheets"
         function __navi_loaded
         end
     end
+
     command navi $argv
+
 end

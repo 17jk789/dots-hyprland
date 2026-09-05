@@ -1,4 +1,5 @@
-function create-ss-pro --description 'Create a malware analysis environment with Python venv'
+function create-ss-pro --description "Create a Python virtual environment with malware analysis and reverse-engineering tools"
+
     if test (count $argv) -lt 2
         echo "Error: Please provide a command and folder name."
         echo "Usage: create-ss-pro new <project_name>"
@@ -64,5 +65,6 @@ function create-ss-pro --description 'Create a malware analysis environment with
         rich \
         hexdump
 
-    echo "Setup complete. Environment is active."
+    echo "✅ Setup complete. Environment is active."
+
 end

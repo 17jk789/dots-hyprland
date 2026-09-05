@@ -1,4 +1,4 @@
-function glasstoggle-full
+function glasstoggle-full --description "Toggle full glass mode for Hyprland window transparency"
 
     set file ~/.config/hypr/hyprland/rules.lua
     set general ~/.config/hypr/hyprland/general.lua

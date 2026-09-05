@@ -3,6 +3,7 @@
 # end
 
 function run-ghidra --description "Launch Ghidra optimized for Hyprland/Wayland"
+
     # 1. Systemprüfung (Schnelles Fail-Fast)
     if not type -q ghidra
         set_color red
@@ -32,4 +33,5 @@ function run-ghidra --description "Launch Ghidra optimized for Hyprland/Wayland"
     # 3. Hintergrund-Start & Entkoppeln
     ghidra >/dev/null 2>&1 &
     disown
+
 end

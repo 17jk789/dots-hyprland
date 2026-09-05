@@ -1,4 +1,4 @@
-function border-visible
+function border-visible --description "Toggle Hyprland border visibility and switch between default and lilac border styles"
 
     set colors ~/.config/hypr/hyprland/colors.lua
     set general ~/.config/hypr/hyprland/general.lua

@@ -1,6 +1,5 @@
-# ~/.config/fish/functions/showip.fish
-#
-function showip
+function showip --description "Restore and display the saved local and public IP addresses"
+
     # Check if real IPs are stored
     if set -q __HIDDEN_MY_IP
         set -gx MY_IP "$__HIDDEN_MY_IP"
@@ -17,4 +16,5 @@ function showip
     end
 
     echo "IPs restored."
+
 end

@@ -1,4 +1,4 @@
-function create-python-jup-pro --argument-names action name
+function create-python-jup-pro --description "Create a local Python 3.12 Jupyter project with venv and development tools" --argument-names action name
 
     if test "$action" != "new" -o -z "$name"
         echo "Usage: create-python-jup-pro new <projektname>"
@@ -39,4 +39,5 @@ function create-python-jup-pro --argument-names action name
 
     echo "✅ Project $PROJECT_NAME created."
     echo "💡 The virtual environment is active. Use 'deactivate' to exit."
+
 end
