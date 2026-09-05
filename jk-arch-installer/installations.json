@@ -870,6 +870,150 @@
                 "en": "Installs nwg-displays for graphical monitor and display configuration on Wayland."
             },
             "file": "64_install_nwg_displays.json"
+        },
+        {
+            "id": "install_imagemagick",
+            "name": {
+                "de": "ImageMagick installieren",
+                "en": "Install ImageMagick"
+            },
+            "description": {
+                "de": "Installiert ImageMagick zur Bearbeitung, Konvertierung und Erstellung von Bildern.",
+                "en": "Installs ImageMagick for editing, converting, and creating images."
+            },
+            "file": "65_install_imagemagick.json"
+        },
+        {
+            "id": "install_thefuck",
+            "name": {
+                "de": "✨ thefuck installieren",
+                "en": "✨ Install thefuck"
+            },
+            "description": {
+                "de": "Installiert thefuck zur Erkennung und automatischen Korrektur häufiger Tippfehler bei Terminal-Befehlen.",
+                "en": "Installs thefuck to detect and automatically correct common command-line mistakes."
+            },
+            "file": "66_install_thefuck.json"
+        },
+        {
+            "id": "install_vscode",
+            "name": {
+                "de": "Visual Studio Code installieren",
+                "en": "Install Visual Studio Code"
+            },
+            "description": {
+                "de": "Wähle genau eine Version von Visual Studio Code: die originale Microsoft-Version oder die quelloffene Code-OSS-Version.",
+                "en": "Choose exactly one version of Visual Studio Code: the original Microsoft version or the open-source Code - OSS version."
+            },
+            "file": "67_install_vscode.json",
+            "substeps": [
+                {
+                    "id": "install_vscode_microsoft",
+                    "variant": "microsoft",
+                    "name": {
+                        "de": "Microsoft Visual Studio Code installieren",
+                        "en": "Install Microsoft Visual Studio Code"
+                    },
+                    "description": {
+                        "de": "Installiert die originale Microsoft-Version von Visual Studio Code über das AUR.",
+                        "en": "Installs the original Microsoft version of Visual Studio Code from the AUR."
+                    },
+                    "exclusive_group": "vscode_variant"
+                },
+                {
+                    "id": "install_vscode_oss",
+                    "variant": "oss",
+                    "name": {
+                        "de": "Code - OSS installieren",
+                        "en": "Install Code - OSS"
+                    },
+                    "description": {
+                        "de": "Installiert die quelloffene Variante von Visual Studio Code aus den offiziellen Arch-Repositories.",
+                        "en": "Installs the open-source version of Visual Studio Code from the official Arch repositories."
+                    },
+                    "exclusive_group": "vscode_variant"
+                }
+            ]
+        },
+        {
+            "id": "install_gitkraken",
+            "name": {
+                "de": "GitKraken installieren",
+                "en": "Install GitKraken"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für GitKraken: über das AUR oder direkt über die offizielle Linux-Version.",
+                "en": "Choose exactly one installation method for GitKraken: through the AUR or directly using the official Linux version."
+            },
+            "file": "68_install_gitkraken.json",
+            "substeps": [
+                {
+                    "id": "install_gitkraken_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "GitKraken über yay installieren",
+                        "en": "Install GitKraken with yay"
+                    },
+                    "description": {
+                        "de": "Installiert GitKraken über das AUR mit yay.",
+                        "en": "Installs GitKraken from the AUR using yay."
+                    },
+                    "exclusive_group": "gitkraken_method"
+                },
+                {
+                    "id": "install_gitkraken_official",
+                    "variant": "official",
+                    "name": {
+                        "de": "Offizielle GitKraken-Version installieren",
+                        "en": "Install official GitKraken version"
+                    },
+                    "description": {
+                        "de": "Installiert die offizielle Linux-Version direkt vom Hersteller.",
+                        "en": "Installs the official Linux version directly from the vendor."
+                    },
+                    "exclusive_group": "gitkraken_method"
+                }
+            ]
+        },
+        {
+            "id": "install_discord_client",
+            "name": {
+                "de": "Discord-Client installieren",
+                "en": "Install Discord client"
+            },
+            "description": {
+                "de": "Wähle genau einen Discord-Client: Vesktop oder den originalen Discord-Client.",
+                "en": "Choose exactly one Discord client: Vesktop or the official Discord client."
+            },
+            "file": "69_install_discord_client.json",
+            "substeps": [
+                {
+                    "id": "install_vesktop",
+                    "variant": "vesktop",
+                    "name": {
+                        "de": "Vesktop installieren",
+                        "en": "Install Vesktop"
+                    },
+                    "description": {
+                        "de": "Installiert Vesktop als alternativen Discord-Client für Linux und Wayland.",
+                        "en": "Installs Vesktop as an alternative Discord client for Linux and Wayland."
+                    },
+                    "exclusive_group": "discord_client"
+                },
+                {
+                    "id": "install_discord",
+                    "variant": "discord",
+                    "name": {
+                        "de": "Originalen Discord-Client installieren",
+                        "en": "Install official Discord client"
+                    },
+                    "description": {
+                        "de": "Installiert den originalen Discord-Client über das AUR.",
+                        "en": "Installs the official Discord client from the AUR."
+                    },
+                    "exclusive_group": "discord_client"
+                }
+            ]
         }
     ]
 }

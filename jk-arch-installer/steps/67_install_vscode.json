@@ -1,0 +1,105 @@
+{
+    "id": "install_vscode",
+
+    "variants": {
+        "microsoft": {
+            "id": "install_vscode_microsoft",
+
+            "name": {
+                "de": "Microsoft Visual Studio Code installieren",
+                "en": "Install Microsoft Visual Studio Code"
+            },
+
+            "description": {
+                "de": "Installiert die originale Microsoft-Version von Visual Studio Code über das AUR.",
+                "en": "Installs the original Microsoft version of Visual Studio Code from the AUR."
+            },
+
+            "question": {
+                "de": "Soll die originale Microsoft-Version von Visual Studio Code installiert werden?",
+                "en": "Should the original Microsoft version of Visual Studio Code be installed?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "vscode_variant",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Visual Studio Code über das AUR mit yay.",
+                        "en": "Installs Visual Studio Code from the AUR using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "visual-studio-code-bin"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "oss": {
+            "id": "install_vscode_oss",
+
+            "name": {
+                "de": "Code - OSS installieren",
+                "en": "Install Code - OSS"
+            },
+
+            "description": {
+                "de": "Installiert die quelloffene Variante von Visual Studio Code aus den offiziellen Arch-Repositories.",
+                "en": "Installs the open-source version of Visual Studio Code from the official Arch repositories."
+            },
+
+            "question": {
+                "de": "Soll Code - OSS installiert werden?",
+                "en": "Should Code - OSS be installed?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "vscode_variant",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Code - OSS über Pacman.",
+                        "en": "Installs Code - OSS using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "code"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,177 @@
+{
+    "id": "install_gitkraken",
+
+    "variants": {
+        "yay": {
+            "id": "install_gitkraken_yay",
+
+            "name": {
+                "de": "GitKraken über yay installieren",
+                "en": "Install GitKraken with yay"
+            },
+
+            "description": {
+                "de": "Installiert GitKraken über das AUR mit yay.",
+                "en": "Installs GitKraken from the AUR using yay."
+            },
+
+            "question": {
+                "de": "Soll GitKraken über yay installiert werden?",
+                "en": "Should GitKraken be installed using yay?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "gitkraken_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GitKraken über yay.",
+                        "en": "Installs GitKraken using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gitkraken"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "official": {
+            "id": "install_gitkraken_official",
+
+            "name": {
+                "de": "Offizielle GitKraken-Version installieren",
+                "en": "Install official GitKraken version"
+            },
+
+            "description": {
+                "de": "Installiert die offizielle Linux-Version direkt von GitKraken.",
+                "en": "Installs the official Linux version directly from GitKraken."
+            },
+
+            "question": {
+                "de": "Soll die offizielle GitKraken-Version installiert werden?",
+                "en": "Should the official GitKraken version be installed?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "gitkraken_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Lädt das offizielle GitKraken-Linux-Archiv herunter.",
+                        "en": "Downloads the official GitKraken Linux archive."
+                    },
+
+                    "command": [
+                        "wget",
+                        "https://release.gitkraken.com/linux/gitkraken-amd64.tar.gz"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Entpackt GitKraken nach /opt.",
+                        "en": "Extracts GitKraken into /opt."
+                    },
+
+                    "command": [
+                        "tar",
+                        "-xvzf",
+                        "gitkraken-amd64.tar.gz",
+                        "-C",
+                        "/opt"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Erstellt einen systemweiten Symlink für den GitKraken-Befehl.",
+                        "en": "Creates a system-wide symlink for the GitKraken command."
+                    },
+
+                    "command": [
+                        "ln",
+                        "-s",
+                        "/opt/gitkraken/gitkraken",
+                        "/usr/local/bin/gitkraken"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Erstellt das Verzeichnis für Desktop-Anwendungen.",
+                        "en": "Creates the directory for desktop applications."
+                    },
+
+                    "command": [
+                        "mkdir",
+                        "-p",
+                        "$HOME/.local/share/applications"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Erstellt den Desktop-Eintrag für GitKraken.",
+                        "en": "Creates the desktop entry for GitKraken."
+                    },
+
+                    "command": [
+                        "bash",
+                        "-c",
+                        "printf '%s\\n' '[Desktop Entry]' 'Name=GitKraken' 'Comment=Git Client' 'Exec=/opt/gitkraken/gitkraken' 'Icon=/opt/gitkraken/gitkraken.png' 'Terminal=false' 'Type=Application' 'Categories=Development;' > \"$HOME/.local/share/applications/gitkraken.desktop\""
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

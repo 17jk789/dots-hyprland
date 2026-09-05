@@ -1,0 +1,105 @@
+{
+    "id": "install_discord_client",
+
+    "variants": {
+        "vesktop": {
+            "id": "install_vesktop",
+
+            "name": {
+                "de": "Vesktop installieren",
+                "en": "Install Vesktop"
+            },
+
+            "description": {
+                "de": "Installiert Vesktop als alternativen Discord-Client für Linux und Wayland.",
+                "en": "Installs Vesktop as an alternative Discord client for Linux and Wayland."
+            },
+
+            "question": {
+                "de": "Soll Vesktop installiert werden?",
+                "en": "Should Vesktop be installed?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "discord_client",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Vesktop über Pacman.",
+                        "en": "Installs Vesktop using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "vesktop"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "discord": {
+            "id": "install_discord",
+
+            "name": {
+                "de": "Originalen Discord-Client installieren",
+                "en": "Install official Discord client"
+            },
+
+            "description": {
+                "de": "Installiert den originalen Discord-Client über das AUR.",
+                "en": "Installs the official Discord client from the AUR."
+            },
+
+            "question": {
+                "de": "Soll der originale Discord-Client installiert werden?",
+                "en": "Should the official Discord client be installed?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "discord_client",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den originalen Discord-Client über yay.",
+                        "en": "Installs the official Discord client using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "discord"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}
