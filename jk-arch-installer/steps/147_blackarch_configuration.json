@@ -1,0 +1,115 @@
+{
+    "id": "install_blackarch",
+
+    "name": {
+        "de": "BlackArch installieren",
+        "en": "Install BlackArch"
+    },
+
+    "description": {
+        "de": "Lädt das offizielle BlackArch-strap-Skript herunter, überprüft dessen SHA1-Prüfsumme, führt es als Root aus und aktualisiert anschließend das System.",
+        "en": "Downloads the official BlackArch strap script, verifies its SHA1 checksum, runs it as root, and then updates the system."
+    },
+
+    "question": {
+        "de": "Soll BlackArch installiert werden?",
+        "en": "Should BlackArch be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Lädt das offizielle BlackArch-strap-Skript herunter.",
+                "en": "Downloads the official BlackArch strap script."
+            },
+
+            "command": [
+                "curl",
+                "-O",
+                "https://blackarch.org/strap.sh"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Überprüft die SHA1-Prüfsumme des heruntergeladenen strap.sh-Skripts.",
+                "en": "Verifies the SHA1 checksum of the downloaded strap.sh script."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "echo 00688950aaf5e5804d2abebb8d3d3ea1d28525ed strap.sh | sha1sum -c"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Macht das BlackArch-strap-Skript ausführbar.",
+                "en": "Makes the BlackArch strap script executable."
+            },
+
+            "command": [
+                "chmod",
+                "+x",
+                "strap.sh"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Führt das BlackArch-strap-Skript mit Root-Rechten aus.",
+                "en": "Runs the BlackArch strap script with root privileges."
+            },
+
+            "command": [
+                "./strap.sh"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktualisiert die Paketdatenbanken und installiert verfügbare Updates.",
+                "en": "Refreshes the package databases and installs available updates."
+            },
+
+            "command": [
+                "pacman",
+                "-Syu",
+                "--noconfirm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
