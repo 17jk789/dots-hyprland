@@ -1,0 +1,47 @@
+{
+    "id": "install_firefox_developer_edition",
+
+    "name": {
+        "de": "Firefox Developer Edition installieren",
+        "en": "Install Firefox Developer Edition"
+    },
+
+    "description": {
+        "de": "Installiert die speziell für Webentwickler optimierte Firefox Developer Edition.",
+        "en": "Installs the Firefox Developer Edition optimized for web developers."
+    },
+
+    "question": {
+        "de": "Soll die Firefox Developer Edition installiert werden?",
+        "en": "Should Firefox Developer Edition be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die Firefox Developer Edition über Pacman.",
+                "en": "Installs Firefox Developer Edition using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "firefox-developer-edition"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

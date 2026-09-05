@@ -1,0 +1,47 @@
+{
+    "id": "install_gimp",
+
+    "name": {
+        "de": "GIMP installieren",
+        "en": "Install GIMP"
+    },
+
+    "description": {
+        "de": "Installiert GIMP als leistungsfähiges Open-Source-Programm zur Bildbearbeitung, für Grafikdesign und digitale Kunst.",
+        "en": "Installs GIMP as a powerful open-source application for image editing, graphic design, and digital art."
+    },
+
+    "question": {
+        "de": "Soll GIMP installiert werden?",
+        "en": "Should GIMP be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert GIMP über Pacman.",
+                "en": "Installs GIMP using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gimp"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

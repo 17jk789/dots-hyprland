@@ -1,0 +1,47 @@
+{
+    "id": "install_librewolf",
+
+    "name": {
+        "de": "LibreWolf installieren",
+        "en": "Install LibreWolf"
+    },
+
+    "description": {
+        "de": "Installiert den datenschutzfokussierten LibreWolf Browser über das AUR.",
+        "en": "Installs the privacy-focused LibreWolf browser from the AUR."
+    },
+
+    "question": {
+        "de": "Soll LibreWolf installiert werden?",
+        "en": "Should LibreWolf be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert LibreWolf über yay.",
+                "en": "Installs LibreWolf using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "librewolf-bin"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

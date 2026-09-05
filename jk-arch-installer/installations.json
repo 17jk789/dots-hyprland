@@ -1014,6 +1014,419 @@
                     "exclusive_group": "discord_client"
                 }
             ]
+        },
+        {
+            "id": "install_signal",
+            "name": {
+                "de": "Signal Messenger installieren",
+                "en": "Install Signal Messenger"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für Signal: Pacman oder yay.",
+                "en": "Choose exactly one installation method for Signal: Pacman or yay."
+            },
+            "file": "70_install_signal.json",
+            "substeps": [
+                {
+                    "id": "install_signal_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Signal über Pacman installieren",
+                        "en": "Install Signal with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Signal über die offiziellen Arch-Repositories mit Pacman.",
+                        "en": "Installs Signal from the official Arch repositories using Pacman."
+                    },
+                    "exclusive_group": "signal_method"
+                },
+                {
+                    "id": "install_signal_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Signal über yay installieren",
+                        "en": "Install Signal with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Signal über das AUR mit yay.",
+                        "en": "Installs Signal from the AUR using yay."
+                    },
+                    "exclusive_group": "signal_method"
+                }
+            ]
+        },
+        {
+            "id": "install_firefox",
+            "name": {
+                "de": "Firefox installieren",
+                "en": "Install Firefox"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für Firefox: Pacman oder yay.",
+                "en": "Choose exactly one installation method for Firefox: Pacman or yay."
+            },
+            "file": "71_install_firefox.json",
+            "substeps": [
+                {
+                    "id": "install_firefox_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Firefox über Pacman installieren",
+                        "en": "Install Firefox with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Firefox über die offiziellen Arch-Repositories mit Pacman.",
+                        "en": "Installs Firefox from the official Arch repositories using Pacman."
+                    },
+                    "exclusive_group": "firefox_method"
+                },
+                {
+                    "id": "install_firefox_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Firefox über yay installieren",
+                        "en": "Install Firefox with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Firefox über das AUR mit yay.",
+                        "en": "Installs Firefox from the AUR using yay."
+                    },
+                    "exclusive_group": "firefox_method"
+                }
+            ]
+        },
+        {
+            "id": "install_brave",
+            "name": {
+                "de": "Brave installieren",
+                "en": "Install Brave"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für Brave: Pacman oder yay.",
+                "en": "Choose exactly one installation method for Brave: Pacman or yay."
+            },
+            "file": "72_install_brave.json",
+            "substeps": [
+                {
+                    "id": "install_brave_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Brave über Pacman installieren",
+                        "en": "Install Brave with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Brave über Pacman.",
+                        "en": "Installs Brave using Pacman."
+                    },
+                    "exclusive_group": "brave_method"
+                },
+                {
+                    "id": "install_brave_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Brave über yay installieren",
+                        "en": "Install Brave with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Brave über das AUR mit yay.",
+                        "en": "Installs Brave from the AUR using yay."
+                    },
+                    "exclusive_group": "brave_method"
+                }
+            ]
+        },
+        {
+            "id": "install_mullvad_browser",
+            "name": {
+                "de": "✨ Mullvad Browser installieren",
+                "en": "✨ Install Mullvad Browser"
+            },
+            "description": {
+                "de": "Installiert den datenschutzfokussierten Mullvad Browser über yay.",
+                "en": "Installs the privacy-focused Mullvad Browser using yay."
+            },
+            "file": "73_install_mullvad_browser.json"
+        },
+        {
+            "id": "install_google_chrome",
+            "name": {
+                "de": "✨ Google Chrome installieren",
+                "en": "✨ Install Google Chrome"
+            },
+            "description": {
+                "de": "Installiert Google Chrome über das AUR mit yay.",
+                "en": "Installs Google Chrome from the AUR using yay."
+            },
+            "file": "74_install_google_chrome.json"
+        },
+        {
+            "id": "install_librewolf",
+            "name": {
+                "de": "✨ LibreWolf installieren",
+                "en": "✨ Install LibreWolf"
+            },
+            "description": {
+                "de": "Installiert den datenschutzfokussierten LibreWolf Browser über das AUR mit yay.",
+                "en": "Installs the privacy-focused LibreWolf browser from the AUR using yay."
+            },
+            "file": "75_install_librewolf.json"
+        },
+        {
+            "id": "install_firefox_developer_edition",
+            "name": {
+                "de": "✨ Firefox Developer Edition installieren",
+                "en": "✨ Install Firefox Developer Edition"
+            },
+            "description": {
+                "de": "Installiert die Firefox Developer Edition über Pacman.",
+                "en": "Installs Firefox Developer Edition using Pacman."
+            },
+            "file": "76_install_firefox_developer_edition.json"
+        },
+        {
+            "id": "install_ark",
+            "name": {
+                "de": "Ark installieren",
+                "en": "Install Ark"
+            },
+            "description": {
+                "de": "Installiert das grafische Archivierungsprogramm Ark über Pacman.",
+                "en": "Installs the graphical archive manager Ark using Pacman."
+            },
+            "file": "77_install_ark.json"
+        },
+        {
+            "id": "install_kate",
+            "name": {
+                "de": "Kate installieren",
+                "en": "Install Kate"
+            },
+            "description": {
+                "de": "Installiert den erweiterten KDE-Texteditor Kate über Pacman.",
+                "en": "Installs the advanced KDE text editor Kate using Pacman."
+            },
+            "file": "78_install_kate.json"
+        },
+        {
+            "id": "install_gwenview",
+            "name": {
+                "de": "Gwenview installieren",
+                "en": "Install Gwenview"
+            },
+            "description": {
+                "de": "Installiert den grafischen KDE-Bildbetrachter Gwenview über Pacman.",
+                "en": "Installs the graphical KDE image viewer Gwenview using Pacman."
+            },
+            "file": "79_install_gwenview.json"
+        },
+        {
+            "id": "install_okular",
+            "name": {
+                "de": "Okular installieren",
+                "en": "Install Okular"
+            },
+            "description": {
+                "de": "Installiert den universellen KDE-Dokumentenbetrachter Okular über Pacman.",
+                "en": "Installs the universal KDE document viewer Okular using Pacman."
+            },
+            "file": "80_install_okular.json"
+        },
+        {
+            "id": "install_vlc",
+            "name": {
+                "de": "VLC installieren",
+                "en": "Install VLC"
+            },
+            "description": {
+                "de": "Installiert den universellen Medienplayer VLC über Pacman.",
+                "en": "Installs the universal media player VLC using Pacman."
+            },
+            "file": "81_install_vlc.json"
+        },
+        {
+            "id": "install_audacity",
+            "name": {
+                "de": "✨ Audacity installieren",
+                "en": "✨ Install Audacity"
+            },
+            "description": {
+                "de": "Installiert den leistungsstarken Audio-Editor Audacity über Pacman.",
+                "en": "Installs the powerful audio editor Audacity using Pacman."
+            },
+            "file": "82_install_audacity.json"
+        },
+        {
+            "id": "install_obsidian",
+            "name": {
+                "de": "✨ Obsidian installieren",
+                "en": "✨ Install Obsidian"
+            },
+            "description": {
+                "de": "Installiert die auf Markdown basierende Wissensdatenbank und Notiz-App Obsidian.",
+                "en": "Installs the Markdown-based knowledge base and note-taking app Obsidian."
+            },
+            "file": "83_install_obsidian.json"
+        },
+        {
+            "id": "install_plasma_systemmonitor",
+            "name": {
+                "de": "Plasma-Systemmonitor installieren",
+                "en": "Install Plasma System Monitor"
+            },
+            "description": {
+                "de": "Installiert den grafischen Plasma-Systemmonitor zur Überwachung von Systemressourcen und laufenden Prozessen.",
+                "en": "Installs the graphical Plasma System Monitor for monitoring system resources and running processes."
+            },
+            "file": "84_install_plasma_systemmonitor.json"
+        },
+        {
+            "id": "install_mission_center",
+            "name": {
+                "de": "✨ Mission Center installieren",
+                "en": "✨ Install Mission Center"
+            },
+            "description": {
+                "de": "Installiert den modernen grafischen Taskmanager und Systemmonitor Mission Center über yay.",
+                "en": "Installs the modern graphical task manager and system monitor Mission Center using yay."
+            },
+            "file": "85_install_mission_center.json"
+        },
+        {
+            "id": "install_krita",
+            "name": {
+                "de": "✨ Krita installieren",
+                "en": "✨ Install Krita"
+            },
+            "description": {
+                "de": "Installiert das professionelle digitale Mal- und Zeichenprogramm Krita.",
+                "en": "Installs the professional digital painting and drawing application Krita."
+            },
+            "file": "86_install_krita.json"
+        },
+        {
+            "id": "install_gimp",
+            "name": {
+                "de": "✨ GIMP installieren",
+                "en": "✨ Install GIMP"
+            },
+            "description": {
+                "de": "Installiert das leistungsfähige Open-Source-Bildbearbeitungsprogramm GIMP.",
+                "en": "Installs the powerful open-source image editing program GIMP."
+            },
+            "file": "87_install_gimp.json"
+        },
+        {
+            "id": "install_kdenlive",
+            "name": {
+                "de": "✨ Kdenlive installieren",
+                "en": "✨ Install Kdenlive"
+            },
+            "description": {
+                "de": "Installiert das professionelle Videoschnittprogramm Kdenlive über Pacman.",
+                "en": "Installs the professional video editing application Kdenlive using Pacman."
+            },
+            "file": "88_install_kdenlive.json"
+        },
+        {
+            "id": "install_davinci_resolve",
+            "name": {
+                "de": "✨ DaVinci Resolve installieren",
+                "en": "✨ Install DaVinci Resolve"
+            },
+            "description": {
+                "de": "Installiert DaVinci Resolve für professionelle Videobearbeitung, Farbkorrektur, visuelle Effekte und Audio-Postproduktion.",
+                "en": "Installs DaVinci Resolve for professional video editing, color grading, visual effects, and audio post-production."
+            },
+            "file": "89_install_davinci_resolve.json",
+            "substeps": [
+                {
+                    "id": "install_davinci_resolve_cachyos",
+                    "variant": "cachyos",
+                    "name": {
+                        "de": "✨ DaVinci Resolve auf CachyOS installieren",
+                        "en": "✨ Install DaVinci Resolve on CachyOS"
+                    },
+                    "description": {
+                        "de": "Installiert DaVinci Resolve auf CachyOS ohne zusätzliche Compute-Treiber.",
+                        "en": "Installs DaVinci Resolve on CachyOS without additional compute drivers."
+                    },
+                    "exclusive_group": "davinci_resolve_gpu"
+                },
+                {
+                    "id": "install_davinci_resolve_nvidia",
+                    "variant": "nvidia",
+                    "name": {
+                        "de": "✨ DaVinci Resolve mit NVIDIA-Unterstützung installieren",
+                        "en": "✨ Install DaVinci Resolve with NVIDIA support"
+                    },
+                    "description": {
+                        "de": "Installiert DaVinci Resolve mit den benötigten NVIDIA-Compute-Treibern.",
+                        "en": "Installs DaVinci Resolve with the required NVIDIA compute drivers."
+                    },
+                    "exclusive_group": "davinci_resolve_gpu"
+                },
+                {
+                    "id": "install_davinci_resolve_amd",
+                    "variant": "amd",
+                    "name": {
+                        "de": "✨ DaVinci Resolve mit AMD-Unterstützung installieren",
+                        "en": "✨ Install DaVinci Resolve with AMD support"
+                    },
+                    "description": {
+                        "de": "Installiert DaVinci Resolve mit dem benötigten AMD-Compute-Treiber.",
+                        "en": "Installs DaVinci Resolve with the required AMD compute driver."
+                    },
+                    "exclusive_group": "davinci_resolve_gpu"
+                }
+            ]
+        },
+        {
+            "id": "install_shotcut",
+            "name": {
+                "de": "✨ Shotcut installieren",
+                "en": "✨ Install Shotcut"
+            },
+            "description": {
+                "de": "Installiert das plattformübergreifende Videoschnittprogramm Shotcut über Pacman.",
+                "en": "Installs the cross-platform video editing application Shotcut using Pacman."
+            },
+            "file": "90_install_shotcut.json"
+        },
+        {
+            "id": "install_blender",
+            "name": {
+                "de": "Blender installieren",
+                "en": "Install Blender"
+            },
+            "description": {
+                "de": "Installiert die leistungsstarke Open-Source-3D-Grafik- und Animations-Suite Blender über Pacman.",
+                "en": "Installs the powerful open-source 3D graphics and animation suite Blender using Pacman."
+            },
+            "file": "91_install_blender.json"
+        },
+        {
+            "id": "install_thunderbird",
+            "name": {
+                "de": "✨ Thunderbird installieren",
+                "en": "✨ Install Thunderbird"
+            },
+            "description": {
+                "de": "Installiert den freien und quelloffenen E-Mail- und Kalender-Client Thunderbird.",
+                "en": "Installs the free and open-source Thunderbird email and calendar client."
+            },
+            "file": "92_install_thunderbird.json"
+        },
+        {
+            "id": "install_qalculate",
+            "name": {
+                "de": "Qalculate! installieren",
+                "en": "Install Qalculate!"
+            },
+            "description": {
+                "de": "Installiert den leistungsfähigen wissenschaftlichen Taschenrechner Qalculate!.",
+                "en": "Installs the powerful scientific calculator Qalculate!."
+            },
+            "file": "93_install_qalculate.json"
         }
     ]
 }

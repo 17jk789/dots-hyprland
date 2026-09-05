@@ -1,0 +1,47 @@
+{
+    "id": "install_obsidian",
+
+    "name": {
+        "de": "Obsidian installieren",
+        "en": "Install Obsidian"
+    },
+
+    "description": {
+        "de": "Installiert Obsidian als leistungsstarke, auf Markdown basierende Wissensdatenbank und Notiz-App.",
+        "en": "Installs Obsidian as a powerful Markdown-based knowledge base and note-taking app."
+    },
+
+    "question": {
+        "de": "Soll Obsidian installiert werden?",
+        "en": "Should Obsidian be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Obsidian über Pacman.",
+                "en": "Installs Obsidian using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "obsidian"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

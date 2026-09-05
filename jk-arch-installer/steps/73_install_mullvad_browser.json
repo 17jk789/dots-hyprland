@@ -1,0 +1,47 @@
+{
+    "id": "install_mullvad_browser",
+
+    "name": {
+        "de": "Mullvad Browser installieren",
+        "en": "Install Mullvad Browser"
+    },
+
+    "description": {
+        "de": "Installiert den datenschutzfokussierten Mullvad Browser über das AUR.",
+        "en": "Installs the privacy-focused Mullvad Browser from the AUR."
+    },
+
+    "question": {
+        "de": "Soll der Mullvad Browser installiert werden?",
+        "en": "Should the Mullvad Browser be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert den Mullvad Browser über yay.",
+                "en": "Installs the Mullvad Browser using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "mullvad-browser-bin"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

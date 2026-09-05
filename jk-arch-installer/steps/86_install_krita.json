@@ -1,0 +1,47 @@
+{
+    "id": "install_krita",
+
+    "name": {
+        "de": "Krita installieren",
+        "en": "Install Krita"
+    },
+
+    "description": {
+        "de": "Installiert Krita als professionelles digitales Mal- und Zeichenprogramm für Illustrationen und digitale Kunst.",
+        "en": "Installs Krita as a professional digital painting and drawing application for illustrations and digital art."
+    },
+
+    "question": {
+        "de": "Soll Krita installiert werden?",
+        "en": "Should Krita be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Krita über Pacman.",
+                "en": "Installs Krita using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "krita"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,105 @@
+{
+    "id": "install_signal",
+
+    "variants": {
+        "pacman": {
+            "id": "install_signal_pacman",
+
+            "name": {
+                "de": "Signal über Pacman installieren",
+                "en": "Install Signal with Pacman"
+            },
+
+            "description": {
+                "de": "Installiert Signal über die offiziellen Arch-Repositories mit Pacman.",
+                "en": "Installs Signal from the official Arch repositories using Pacman."
+            },
+
+            "question": {
+                "de": "Soll Signal über Pacman installiert werden?",
+                "en": "Should Signal be installed using Pacman?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "signal_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Signal Desktop über Pacman.",
+                        "en": "Installs Signal Desktop using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "signal-desktop"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "yay": {
+            "id": "install_signal_yay",
+
+            "name": {
+                "de": "Signal über yay installieren",
+                "en": "Install Signal with yay"
+            },
+
+            "description": {
+                "de": "Installiert Signal über das AUR mit yay.",
+                "en": "Installs Signal from the AUR using yay."
+            },
+
+            "question": {
+                "de": "Soll Signal über yay installiert werden?",
+                "en": "Should Signal be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "signal_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Signal Desktop über yay.",
+                        "en": "Installs Signal Desktop using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "signal-desktop"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_google_chrome",
+
+    "name": {
+        "de": "Google Chrome installieren",
+        "en": "Install Google Chrome"
+    },
+
+    "description": {
+        "de": "Installiert Google Chrome über das AUR mit yay.",
+        "en": "Installs Google Chrome from the AUR using yay."
+    },
+
+    "question": {
+        "de": "Soll Google Chrome installiert werden?",
+        "en": "Should Google Chrome be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Google Chrome über yay.",
+                "en": "Installs Google Chrome using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "google-chrome"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

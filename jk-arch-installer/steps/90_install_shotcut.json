@@ -1,0 +1,47 @@
+{
+    "id": "install_shotcut",
+
+    "name": {
+        "de": "Shotcut installieren",
+        "en": "Install Shotcut"
+    },
+
+    "description": {
+        "de": "Installiert Shotcut als plattformübergreifendes Videoschnittprogramm mit Unterstützung für mehrere Spuren, Effekte und Übergänge.",
+        "en": "Installs Shotcut as a cross-platform video editor with support for multiple tracks, effects, and transitions."
+    },
+
+    "question": {
+        "de": "Soll Shotcut installiert werden?",
+        "en": "Should Shotcut be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Shotcut über Pacman.",
+                "en": "Installs Shotcut using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "shotcut"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

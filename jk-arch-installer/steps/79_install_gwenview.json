@@ -1,0 +1,47 @@
+{
+    "id": "install_gwenview",
+
+    "name": {
+        "de": "Gwenview installieren",
+        "en": "Install Gwenview"
+    },
+
+    "description": {
+        "de": "Installiert Gwenview als schnellen und benutzerfreundlichen Bildbetrachter für KDE.",
+        "en": "Installs Gwenview as a fast and user-friendly image viewer for KDE."
+    },
+
+    "question": {
+        "de": "Soll Gwenview installiert werden?",
+        "en": "Should Gwenview be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Gwenview über Pacman.",
+                "en": "Installs Gwenview using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gwenview"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

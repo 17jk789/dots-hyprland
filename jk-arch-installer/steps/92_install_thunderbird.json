@@ -1,0 +1,47 @@
+{
+    "id": "install_thunderbird",
+
+    "name": {
+        "de": "Thunderbird installieren",
+        "en": "Install Thunderbird"
+    },
+
+    "description": {
+        "de": "Installiert Thunderbird zur Verwaltung von E-Mails, Kalendern und Aufgaben.",
+        "en": "Installs Thunderbird for managing emails, calendars, and tasks."
+    },
+
+    "question": {
+        "de": "Soll Thunderbird installiert werden?",
+        "en": "Should Thunderbird be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Thunderbird über Pacman.",
+                "en": "Installs Thunderbird using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "thunderbird"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

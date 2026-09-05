@@ -1,0 +1,47 @@
+{
+    "id": "install_mission_center",
+
+    "name": {
+        "de": "Mission Center installieren",
+        "en": "Install Mission Center"
+    },
+
+    "description": {
+        "de": "Installiert Mission Center als modernen grafischen Taskmanager und Systemmonitor.",
+        "en": "Installs Mission Center as a modern graphical task manager and system monitor."
+    },
+
+    "question": {
+        "de": "Soll Mission Center installiert werden?",
+        "en": "Should Mission Center be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Mission Center über yay aus dem AUR.",
+                "en": "Installs Mission Center from the AUR using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "mission-center"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,105 @@
+{
+    "id": "install_brave",
+
+    "variants": {
+        "pacman": {
+            "id": "install_brave_pacman",
+
+            "name": {
+                "de": "Brave über Pacman installieren",
+                "en": "Install Brave with Pacman"
+            },
+
+            "description": {
+                "de": "Installiert Brave über Pacman.",
+                "en": "Installs Brave using Pacman."
+            },
+
+            "question": {
+                "de": "Soll Brave über Pacman installiert werden?",
+                "en": "Should Brave be installed using Pacman?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "brave_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Brave über Pacman.",
+                        "en": "Installs Brave using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "brave-bin"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "yay": {
+            "id": "install_brave_yay",
+
+            "name": {
+                "de": "Brave über yay installieren",
+                "en": "Install Brave with yay"
+            },
+
+            "description": {
+                "de": "Installiert Brave über das AUR mit yay.",
+                "en": "Installs Brave from the AUR using yay."
+            },
+
+            "question": {
+                "de": "Soll Brave über yay installiert werden?",
+                "en": "Should Brave be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "brave_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Brave über yay.",
+                        "en": "Installs Brave using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "brave-bin"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

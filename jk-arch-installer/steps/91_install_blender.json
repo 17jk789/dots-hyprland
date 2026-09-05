@@ -1,0 +1,47 @@
+{
+    "id": "install_blender",
+
+    "name": {
+        "de": "Blender installieren",
+        "en": "Install Blender"
+    },
+
+    "description": {
+        "de": "Installiert Blender für 3D-Modellierung, Animation, Rendering und Simulation.",
+        "en": "Installs Blender for 3D modeling, animation, rendering, and simulation."
+    },
+
+    "question": {
+        "de": "Soll Blender installiert werden?",
+        "en": "Should Blender be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Blender über Pacman.",
+                "en": "Installs Blender using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "blender"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

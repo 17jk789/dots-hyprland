@@ -1,0 +1,196 @@
+{
+    "id": "install_davinci_resolve",
+
+    "variants": {
+        "cachyos": {
+            "id": "install_davinci_resolve_cachyos",
+
+            "name": {
+                "de": "DaVinci Resolve auf CachyOS installieren",
+                "en": "Install DaVinci Resolve on CachyOS"
+            },
+
+            "description": {
+                "de": "Installiert DaVinci Resolve auf CachyOS, wo die benötigten Abhängigkeiten in der Regel bereits passend eingerichtet sind.",
+                "en": "Installs DaVinci Resolve on CachyOS, where the required dependencies are generally already configured appropriately."
+            },
+
+            "question": {
+                "de": "Soll DaVinci Resolve auf CachyOS installiert werden?",
+                "en": "Should DaVinci Resolve be installed on CachyOS?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "davinci_resolve_gpu",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert DaVinci Resolve über Pacman.",
+                        "en": "Installs DaVinci Resolve using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "davinci-resolve"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+
+        "nvidia": {
+            "id": "install_davinci_resolve_nvidia",
+
+            "name": {
+                "de": "DaVinci Resolve mit NVIDIA-Unterstützung installieren",
+                "en": "Install DaVinci Resolve with NVIDIA support"
+            },
+
+            "description": {
+                "de": "Installiert DaVinci Resolve zusammen mit CUDA und OpenCL-Unterstützung für NVIDIA-Grafikkarten.",
+                "en": "Installs DaVinci Resolve together with CUDA and OpenCL support for NVIDIA graphics cards."
+            },
+
+            "question": {
+                "de": "Soll DaVinci Resolve mit NVIDIA-Unterstützung installiert werden?",
+                "en": "Should DaVinci Resolve be installed with NVIDIA support?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "davinci_resolve_gpu",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert DaVinci Resolve über Pacman.",
+                        "en": "Installs DaVinci Resolve using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "davinci-resolve"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert CUDA und den NVIDIA-OpenCL-Treiber für hardwarebeschleunigte Verarbeitung und Rendering.",
+                        "en": "Installs CUDA and the NVIDIA OpenCL driver for hardware-accelerated processing and rendering."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "cuda",
+                        "opencl-nvidia"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "amd": {
+            "id": "install_davinci_resolve_amd",
+
+            "name": {
+                "de": "DaVinci Resolve mit AMD-Unterstützung installieren",
+                "en": "Install DaVinci Resolve with AMD support"
+            },
+
+            "description": {
+                "de": "Installiert DaVinci Resolve zusammen mit der ROCm-OpenCL-Unterstützung für AMD-Grafikkarten.",
+                "en": "Installs DaVinci Resolve together with ROCm OpenCL support for AMD graphics cards."
+            },
+
+            "question": {
+                "de": "Soll DaVinci Resolve mit AMD-Unterstützung installiert werden?",
+                "en": "Should DaVinci Resolve be installed with AMD support?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "davinci_resolve_gpu",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert DaVinci Resolve über Pacman.",
+                        "en": "Installs DaVinci Resolve using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "davinci-resolve"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert die ROCm-OpenCL-Laufzeit für AMD-Grafikkarten.",
+                        "en": "Installs the ROCm OpenCL runtime for AMD graphics cards."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "rocm-opencl-runtime"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

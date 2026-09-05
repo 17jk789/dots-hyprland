@@ -1,0 +1,47 @@
+{
+    "id": "install_kdenlive",
+
+    "name": {
+        "de": "Kdenlive installieren",
+        "en": "Install Kdenlive"
+    },
+
+    "description": {
+        "de": "Installiert Kdenlive als professionelles Videoschnittprogramm mit Unterstützung für mehrere Spuren, Effekte und Übergänge.",
+        "en": "Installs Kdenlive as a professional video editor with support for multiple tracks, effects, and transitions."
+    },
+
+    "question": {
+        "de": "Soll Kdenlive installiert werden?",
+        "en": "Should Kdenlive be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Kdenlive über Pacman.",
+                "en": "Installs Kdenlive using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "kdenlive"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

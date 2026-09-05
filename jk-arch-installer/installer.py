@@ -90,7 +90,7 @@ def command_output(text: str) -> None:
 
 TRANSLATIONS = {
     "de": {
-        "title": "ARCH LINUX INSTALLER",
+        "title": "JK-ARCH LINUX INSTALLER",
         "subtitle": "Sicherer, modularer JSON-basierter Installationsmanager",
         "language": "Sprache auswählen",
         "german": "Deutsch",
@@ -132,7 +132,7 @@ TRANSLATIONS = {
     },
 
     "en": {
-        "title": "ARCH LINUX INSTALLER",
+        "title": "JK-ARCH LINUX INSTALLER",
         "subtitle": "Secure, modular JSON-based installation manager",
         "language": "Select language",
         "german": "German",

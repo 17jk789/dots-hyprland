@@ -1,0 +1,47 @@
+{
+    "id": "install_audacity",
+
+    "name": {
+        "de": "Audacity installieren",
+        "en": "Install Audacity"
+    },
+
+    "description": {
+        "de": "Installiert Audacity als leistungsstarken Audio-Editor zum Aufnehmen, Schneiden und Bearbeiten von Audiodateien.",
+        "en": "Installs Audacity as a powerful audio editor for recording, cutting, and editing audio files."
+    },
+
+    "question": {
+        "de": "Soll Audacity installiert werden?",
+        "en": "Should Audacity be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Audacity über Pacman.",
+                "en": "Installs Audacity using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "audacity"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
