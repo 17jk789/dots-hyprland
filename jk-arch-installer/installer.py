@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import platform
+import pwd
 import shlex
 import shutil
 import signal
@@ -305,6 +306,7 @@ class Command:
     description: Any
     requires_root: bool
     distros: list[str]
+    working_directory: str | None
 
 
 @dataclass
@@ -498,6 +500,11 @@ def load_step(
                     x.lower()
                     for x in distros
                 ],
+                working_directory=(
+                    raw.get("working_directory")
+                    if isinstance(raw.get("working_directory"), str)
+                    else None
+                ),
             )
         )
 
@@ -1125,6 +1132,94 @@ def format_command(
     return shlex.join(command)
 
 
+def installer_user() -> pwd.struct_passwd | None:
+    """Return the interactive user when the installer was started via sudo."""
+
+    username = (
+        os.environ.get("SUDO_USER")
+        or os.environ.get("PKEXEC_UID")
+    )
+
+    if username and username.isdigit():
+        try:
+            return pwd.getpwuid(int(username))
+        except KeyError:
+            return None
+
+    if username:
+        try:
+            return pwd.getpwnam(username)
+        except KeyError:
+            return None
+
+    if os.geteuid() != 0:
+        return pwd.getpwuid(os.geteuid())
+
+    return None
+
+
+def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], str | None]:
+    """Run user commands as the invoking user, even when the installer is root."""
+
+    executable = list(command.command)
+    environment = os.environ.copy()
+    working_directory = command.working_directory
+
+    if command.requires_root or os.geteuid() != 0:
+        return executable, environment, working_directory
+
+    user = installer_user()
+    if user is None:
+        raise CommandError(
+            "A non-root command requires the original user, but none was detected."
+        )
+
+    executable = [
+        user.pw_name if argument == "__INSTALLER_USER__" else argument
+        for argument in executable
+    ]
+    environment.update({
+        "HOME": user.pw_dir,
+        "USER": user.pw_name,
+        "LOGNAME": user.pw_name,
+        "XDG_RUNTIME_DIR": f"/run/user/{user.pw_uid}",
+    })
+
+    dbus_socket = f"/run/user/{user.pw_uid}/bus"
+    if Path(dbus_socket).exists():
+        environment["DBUS_SESSION_BUS_ADDRESS"] = f"unix:path={dbus_socket}"
+
+    user_environment = [
+        f"HOME={user.pw_dir}",
+        f"USER={user.pw_name}",
+        f"LOGNAME={user.pw_name}",
+        f"XDG_RUNTIME_DIR=/run/user/{user.pw_uid}",
+    ]
+    for key in (
+        "DBUS_SESSION_BUS_ADDRESS",
+        "DISPLAY",
+        "WAYLAND_DISPLAY",
+        "XAUTHORITY",
+    ):
+        value = environment.get(key)
+        if value:
+            user_environment.append(f"{key}={value}")
+
+    return (
+        [
+            "runuser",
+            "-u",
+            user.pw_name,
+            "--",
+            "env",
+            *user_environment,
+            *executable,
+        ],
+        environment,
+        working_directory,
+    )
+
+
 def execute_command(
     command: Command,
     detected_distro: str,
@@ -1154,9 +1249,7 @@ def execute_command(
 
         return False
 
-    display = format_command(
-        command.command
-    )
+    display = format_command(command.command)
 
     print()
     command_output(display)
@@ -1194,12 +1287,15 @@ def execute_command(
     start = time.monotonic()
 
     try:
+        executable, environment, working_directory = command_for_execution(command)
         process = subprocess.Popen(
-            command.command,
+            executable,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
             bufsize=1,
+            cwd=working_directory,
+            env=environment,
         )
 
         assert process.stdout is not None

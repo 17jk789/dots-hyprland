@@ -33,7 +33,7 @@
                 "usermod",
                 "-aG",
                 "libvirt,kvm",
-                "$(whoami)"
+                "__INSTALLER_USER__"
             ],
 
             "requires_root": true,

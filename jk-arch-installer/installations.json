@@ -219,18 +219,6 @@
             ]
         },
         {
-            "id": "install_vscode_extensions",
-            "name": {
-                "de": "VS Code Erweiterungen installieren",
-                "en": "Install VS Code extensions"
-            },
-            "description": {
-                "de": "Installiert die benötigten Erweiterungen für Visual Studio Code.",
-                "en": "Installs the required extensions for Visual Studio Code."
-            },
-            "file": "14_vscode_extensions.json"
-        },
-        {
             "id": "install_go_make",
             "name": {
                 "de": "Go und Make installieren",
@@ -934,6 +922,18 @@
                     "exclusive_group": "vscode_variant"
                 }
             ]
+        },
+        {
+            "id": "install_vscode_extensions",
+            "name": {
+                "de": "VS Code Erweiterungen installieren",
+                "en": "Install VS Code extensions"
+            },
+            "description": {
+                "de": "Installiert die benötigten Erweiterungen für Visual Studio Code.",
+                "en": "Installs the required extensions for Visual Studio Code."
+            },
+            "file": "14_vscode_extensions.json"
         },
         {
             "id": "install_gitkraken",

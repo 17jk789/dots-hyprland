@@ -33,7 +33,7 @@
                 "usermod",
                 "-aG",
                 "docker",
-                "$USER"
+                "__INSTALLER_USER__"
             ],
 
             "requires_root": true,

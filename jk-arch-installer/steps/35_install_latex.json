@@ -35,7 +35,6 @@
                 "--needed",
                 "--noconfirm",
                 "texlive-meta",
-                "latexmk",
                 "texlive-latexextra",
                 "texlive-pictures",
                 "texlive-langgerman",
