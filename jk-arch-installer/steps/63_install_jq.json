@@ -1,0 +1,47 @@
+{
+    "id": "install_jq",
+
+    "name": {
+        "de": "jq installieren",
+        "en": "Install jq"
+    },
+
+    "description": {
+        "de": "Installiert jq zur Verarbeitung, Filterung und Manipulation von JSON-Daten.",
+        "en": "Installs jq for processing, filtering, and manipulating JSON data."
+    },
+
+    "question": {
+        "de": "Soll jq installiert werden?",
+        "en": "Should jq be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert jq über Pacman.",
+                "en": "Installs jq using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "jq"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

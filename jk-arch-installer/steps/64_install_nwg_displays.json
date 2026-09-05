@@ -1,0 +1,47 @@
+{
+    "id": "install_nwg_displays",
+
+    "name": {
+        "de": "nwg-displays installieren",
+        "en": "Install nwg-displays"
+    },
+
+    "description": {
+        "de": "Installiert nwg-displays zur grafischen Konfiguration von Monitoren und Displays unter Wayland.",
+        "en": "Installs nwg-displays for graphical monitor and display configuration on Wayland."
+    },
+
+    "question": {
+        "de": "Soll nwg-displays installiert werden?",
+        "en": "Should nwg-displays be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert nwg-displays über Pacman.",
+                "en": "Installs nwg-displays using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "nwg-displays"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

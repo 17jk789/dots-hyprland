@@ -1,0 +1,47 @@
+{
+    "id": "install_tmux",
+
+    "name": {
+        "de": "tmux installieren",
+        "en": "Install tmux"
+    },
+
+    "description": {
+        "de": "Installiert tmux als optionalen Terminal-Multiplexer für mehrere Shell-Sitzungen, Fenster und Splits.",
+        "en": "Installs tmux as an optional terminal multiplexer for managing multiple shell sessions, windows, and splits."
+    },
+
+    "question": {
+        "de": "Soll tmux installiert werden?",
+        "en": "Should tmux be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert tmux über Pacman.",
+                "en": "Installs tmux using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tmux"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

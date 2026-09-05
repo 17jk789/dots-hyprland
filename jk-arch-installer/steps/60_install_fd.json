@@ -1,0 +1,47 @@
+{
+    "id": "install_fd",
+
+    "name": {
+        "de": "fd installieren",
+        "en": "Install fd"
+    },
+
+    "description": {
+        "de": "Installiert fd als moderne, schnelle und benutzerfreundliche Alternative zu find.",
+        "en": "Installs fd as a modern, fast, and user-friendly alternative to find."
+    },
+
+    "question": {
+        "de": "Soll fd installiert werden?",
+        "en": "Should fd be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert fd über Pacman.",
+                "en": "Installs fd using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "fd"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

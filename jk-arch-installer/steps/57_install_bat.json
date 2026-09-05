@@ -1,0 +1,47 @@
+{
+    "id": "install_bat",
+
+    "name": {
+        "de": "bat installieren",
+        "en": "Install bat"
+    },
+
+    "description": {
+        "de": "Installiert bat als moderne Alternative zu cat für die übersichtliche Darstellung von Text- und Codedateien.",
+        "en": "Installs bat as a modern alternative to cat for displaying text and code files."
+    },
+
+    "question": {
+        "de": "Soll bat installiert werden?",
+        "en": "Should bat be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert bat über Pacman.",
+                "en": "Installs bat using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "bat"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

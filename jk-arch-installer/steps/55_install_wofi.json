@@ -1,0 +1,47 @@
+{
+    "id": "install_wofi",
+
+    "name": {
+        "de": "Wofi installieren",
+        "en": "Install Wofi"
+    },
+
+    "description": {
+        "de": "Installiert Wofi als schnellen und einfachen Anwendungsstarter für Wayland.",
+        "en": "Installs Wofi as a fast and simple application launcher for Wayland."
+    },
+
+    "question": {
+        "de": "Soll Wofi installiert werden?",
+        "en": "Should Wofi be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Wofi über Pacman.",
+                "en": "Installs Wofi using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "wofi"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_tree",
+
+    "name": {
+        "de": "tree installieren",
+        "en": "Install tree"
+    },
+
+    "description": {
+        "de": "Installiert tree zur übersichtlichen Darstellung von Verzeichnisstrukturen in einer Baumansicht.",
+        "en": "Installs tree for displaying directory structures in a clear tree-like view."
+    },
+
+    "question": {
+        "de": "Soll tree installiert werden?",
+        "en": "Should tree be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert tree über Pacman.",
+                "en": "Installs tree using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tree"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_tldr",
+
+    "name": {
+        "de": "tldr installieren",
+        "en": "Install tldr"
+    },
+
+    "description": {
+        "de": "Installiert tldr für kurze und verständliche Handbücher mit praktischen Befehlsbeispielen.",
+        "en": "Installs tldr for concise and easy-to-understand command documentation with practical examples."
+    },
+
+    "question": {
+        "de": "Soll tldr installiert werden?",
+        "en": "Should tldr be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert tldr über Pacman.",
+                "en": "Installs tldr using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tldr"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

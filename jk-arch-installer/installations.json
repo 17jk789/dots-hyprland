@@ -738,6 +738,138 @@
                 "en": "Installs Hyperfine for precise and statistically meaningful benchmarks of programs and commands."
             },
             "file": "53_install_hyperfine.json"
+        },
+        {
+            "id": "install_tmux",
+            "name": {
+                "de": "✨ tmux installieren",
+                "en": "✨ Install tmux"
+            },
+            "description": {
+                "de": "Installiert tmux als optionalen Terminal-Multiplexer für mehrere Shell-Sitzungen, Fenster und Splits.",
+                "en": "Installs tmux as an optional terminal multiplexer for managing multiple shell sessions, windows, and splits."
+            },
+            "file": "54_install_tmux.json"
+        },
+        {
+            "id": "install_wofi",
+            "name": {
+                "de": "✨ Wofi installieren",
+                "en": "✨ Install Wofi"
+            },
+            "description": {
+                "de": "Installiert Wofi als modernen Anwendungsstarter für Wayland und Hyprland.",
+                "en": "Installs Wofi as a modern application launcher for Wayland and Hyprland."
+            },
+            "file": "55_install_wofi.json"
+        },
+        {
+            "id": "install_ghex",
+            "name": {
+                "de": "GHex installieren",
+                "en": "Install GHex"
+            },
+            "description": {
+                "de": "Installiert GHex als grafischen Hex-Editor zum Bearbeiten von Binärdateien.",
+                "en": "Installs GHex as a graphical hex editor for editing binary files."
+            },
+            "file": "56_install_ghex.json"
+        },
+        {
+            "id": "install_bat",
+            "name": {
+                "de": "bat installieren",
+                "en": "Install bat"
+            },
+            "description": {
+                "de": "Installiert bat als moderne Alternative zu cat mit Syntax-Highlighting und Zeilennummern.",
+                "en": "Installs bat as a modern alternative to cat with syntax highlighting and line numbers."
+            },
+            "file": "57_install_bat.json"
+        },
+        {
+            "id": "install_lazygit",
+            "name": {
+                "de": "LazyGit installieren",
+                "en": "Install LazyGit"
+            },
+            "description": {
+                "de": "Installiert LazyGit als interaktives Terminal-Frontend für Git.",
+                "en": "Installs LazyGit as an interactive terminal frontend for Git."
+            },
+            "file": "58_install_lazygit.json"
+        },
+        {
+            "id": "install_tree",
+            "name": {
+                "de": "tree installieren",
+                "en": "Install tree"
+            },
+            "description": {
+                "de": "Installiert tree zur übersichtlichen Darstellung von Verzeichnisstrukturen.",
+                "en": "Installs tree for displaying directory structures in a tree-like format."
+            },
+            "file": "59_install_tree.json"
+        },
+        {
+            "id": "install_fd",
+            "name": {
+                "de": "fd installieren",
+                "en": "Install fd"
+            },
+            "description": {
+                "de": "Installiert fd als moderne und schnelle Alternative zu find.",
+                "en": "Installs fd as a modern and fast alternative to find."
+            },
+            "file": "60_install_fd.json"
+        },
+        {
+            "id": "install_eza",
+            "name": {
+                "de": "eza installieren",
+                "en": "Install eza"
+            },
+            "description": {
+                "de": "Installiert eza als moderne und farbenfrohe Alternative zu ls.",
+                "en": "Installs eza as a modern and colorful alternative to ls."
+            },
+            "file": "61_install_eza.json"
+        },
+        {
+            "id": "install_tldr",
+            "name": {
+                "de": "✨ tldr installieren",
+                "en": "✨ Install tldr"
+            },
+            "description": {
+                "de": "Installiert tldr für kurze und verständliche Handbücher mit praktischen Befehlsbeispielen.",
+                "en": "Installs tldr for concise and easy-to-understand command documentation with practical examples."
+            },
+            "file": "62_install_tldr.json"
+        },
+        {
+            "id": "install_jq",
+            "name": {
+                "de": "jq installieren",
+                "en": "Install jq"
+            },
+            "description": {
+                "de": "Installiert jq zur Verarbeitung, Filterung und Manipulation von JSON-Daten.",
+                "en": "Installs jq for processing, filtering, and manipulating JSON data."
+            },
+            "file": "63_install_jq.json"
+        },
+        {
+            "id": "install_nwg_displays",
+            "name": {
+                "de": "nwg-displays installieren",
+                "en": "Install nwg-displays"
+            },
+            "description": {
+                "de": "Installiert nwg-displays zur grafischen Konfiguration von Monitoren und Displays unter Wayland.",
+                "en": "Installs nwg-displays for graphical monitor and display configuration on Wayland."
+            },
+            "file": "64_install_nwg_displays.json"
         }
     ]
 }
