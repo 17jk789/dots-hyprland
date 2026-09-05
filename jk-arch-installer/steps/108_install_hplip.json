@@ -1,0 +1,47 @@
+{
+    "id": "install_hplip",
+
+    "name": {
+        "de": "HPLIP installieren",
+        "en": "Install HPLIP"
+    },
+
+    "description": {
+        "de": "Installiert HPLIP für zusätzliche Druck-, Scan- und Verwaltungsfunktionen von HP-Druckern und Multifunktionsgeräten.",
+        "en": "Installs HPLIP for additional printing, scanning, and management features for HP printers and multifunction devices."
+    },
+
+    "question": {
+        "de": "Soll HPLIP installiert werden?",
+        "en": "Should HPLIP be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert HPLIP über Pacman.",
+                "en": "Installs HPLIP using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "hplip"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

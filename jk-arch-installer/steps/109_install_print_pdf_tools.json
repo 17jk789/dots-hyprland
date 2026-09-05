@@ -1,0 +1,48 @@
+{
+    "id": "install_print_pdf_tools",
+
+    "name": {
+        "de": "Zusätzliche Druck- und PDF-Werkzeuge installieren",
+        "en": "Install additional printing and PDF tools"
+    },
+
+    "description": {
+        "de": "Installiert Enscript zur Umwandlung von Textdateien in PostScript sowie Ghostscript zur Verarbeitung und Konvertierung von PostScript- und PDF-Dokumenten.",
+        "en": "Installs Enscript for converting text files to PostScript and Ghostscript for processing and converting PostScript and PDF documents."
+    },
+
+    "question": {
+        "de": "Sollen zusätzliche Druck- und PDF-Werkzeuge installiert werden?",
+        "en": "Should additional printing and PDF tools be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Enscript und Ghostscript über Pacman.",
+                "en": "Installs Enscript and Ghostscript using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "enscript",
+                "ghostscript"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

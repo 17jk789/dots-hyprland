@@ -1,0 +1,120 @@
+{
+    "id": "install_ghidra",
+
+    "name": {
+        "de": "Ghidra installieren",
+        "en": "Install Ghidra"
+    },
+
+    "description": {
+        "de": "Installiert Ghidra zur Analyse von Binärdateien und für Software-Reverse-Engineering.",
+        "en": "Installs Ghidra for binary analysis and software reverse engineering."
+    },
+
+    "question": {
+        "de": "Wie soll Ghidra installiert werden?",
+        "en": "How should Ghidra be installed?"
+    },
+
+    "variants": {
+        "pacman": {
+            "id": "ghidra_pacman",
+
+            "name": {
+                "de": "Ghidra mit Pacman installieren",
+                "en": "Install Ghidra with Pacman"
+            },
+
+            "description": {
+                "de": "Installiert Ghidra aus den offiziellen Arch-Repositories.",
+                "en": "Installs Ghidra from the official Arch repositories."
+            },
+
+            "question": {
+                "de": "Soll Ghidra über Pacman installiert werden?",
+                "en": "Should Ghidra be installed using Pacman?"
+            },
+
+            "optional": false,
+
+            "exclusive_group": "ghidra_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Ghidra über Pacman.",
+                        "en": "Installs Ghidra using Pacman."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "ghidra"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+        "yay": {
+            "id": "ghidra_yay",
+
+            "name": {
+                "de": "Ghidra mit yay installieren",
+                "en": "Install Ghidra with yay"
+            },
+
+            "description": {
+                "de": "Installiert Ghidra über den AUR-Helper yay.",
+                "en": "Installs Ghidra using the AUR helper yay."
+            },
+
+            "question": {
+                "de": "Soll Ghidra über yay installiert werden?",
+                "en": "Should Ghidra be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "ghidra_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Ghidra über yay.",
+                        "en": "Installs Ghidra using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "ghidra"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

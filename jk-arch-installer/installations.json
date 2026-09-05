@@ -1559,6 +1559,394 @@
                 "en": "Installs the Firejail sandbox security tool for running applications in isolation."
             },
             "file": "104_install_firejail.json"
+        },
+        {
+            "id": "install_cups",
+            "name": {
+                "de": "✨ CUPS-Drucksystem installieren",
+                "en": "✨ Install CUPS Printing System"
+            },
+            "description": {
+                "de": "Installiert das vollständige CUPS-Drucksystem mit Druckfiltern, Treibern, Netzwerkdrucker-Erkennung und KDE-Druckverwaltung.",
+                "en": "Installs the complete CUPS printing system with print filters, drivers, network printer discovery, and KDE print management."
+            },
+            "file": "105_install_cups.json"
+        },
+        {
+            "id": "enable_cups",
+            "name": {
+                "de": "✨ CUPS-Dienst aktivieren",
+                "en": "✨ Enable CUPS service"
+            },
+            "description": {
+                "de": "Aktiviert und startet den CUPS-Druckdienst.",
+                "en": "Enables and starts the CUPS printing service."
+            },
+            "file": "106_enable_cups.json"
+        },
+        {
+            "id": "enable_avahi",
+            "name": {
+                "de": "✨ Netzwerkdrucker-Erkennung aktivieren",
+                "en": "✨ Enable network printer discovery"
+            },
+            "description": {
+                "de": "Aktiviert den Avahi-Dienst zur automatischen Erkennung von Netzwerkdruckern.",
+                "en": "Enables the Avahi service for automatic network printer discovery."
+            },
+            "file": "107_enable_avahi.json"
+        },
+        {
+            "id": "install_hplip",
+            "name": {
+                "de": "✨ HPLIP installieren",
+                "en": "✨ Install HPLIP"
+            },
+            "description": {
+                "de": "Installiert die offizielle HP-Druckerunterstützung HPLIP für CUPS.",
+                "en": "Installs the official HP printer support package HPLIP for CUPS."
+            },
+            "file": "108_install_hplip.json"
+        },
+        {
+            "id": "install_print_pdf_tools",
+            "name": {
+                "de": "✨ Zusätzliche Druck- und PDF-Werkzeuge installieren",
+                "en": "✨ Install additional printing and PDF tools"
+            },
+            "description": {
+                "de": "Installiert zusätzliche Werkzeuge zur Verarbeitung von Text-, PostScript- und PDF-Dateien.",
+                "en": "Installs additional tools for processing text, PostScript, and PDF files."
+            },
+            "file": "109_install_print_pdf_tools.json"
+        },
+        {
+            "id": "use_kde_print_manager",
+            "name": {
+                "de": "✨ KDE-Druckverwaltung unter Hyprland verwenden",
+                "en": "✨ Use KDE print management under Hyprland"
+            },
+            "description": {
+                "de": "Ermöglicht die grafische Verwaltung von Druckern unter Hyprland mit der KDE-Druckverwaltung.",
+                "en": "Enables graphical printer management under Hyprland using KDE print management."
+            },
+            "file": "110_use_kde_print_manager.json"
+        },
+        {
+            "id": "install_tectonic_pandoc",
+            "name": {
+                "de": "✨ Tectonic und Pandoc einrichten",
+                "en": "✨ Set up Tectonic and Pandoc"
+            },
+            "description": {
+                "de": "Installiert Tectonic als moderne LaTeX-Alternative und Pandoc zur Konvertierung von Dokumenten.",
+                "en": "Installs Tectonic as a modern LaTeX alternative and Pandoc for document conversion."
+            },
+            "file": "111_install_tectonic_pandoc.json"
+        },
+        {
+            "id": "install_sudo_rs",
+            "name": {
+                "de": "✨ sudo-rs installieren",
+                "en": "✨ Install sudo-rs"
+            },
+            "description": {
+                "de": "Installiert sudo-rs als moderne Rust-Alternative zum klassischen sudo-Befehl.",
+                "en": "Installs sudo-rs as a modern Rust alternative to the traditional sudo command."
+            },
+            "file": "112_install_sudo_rs.json"
+        },
+        {
+            "id": "install_libheif",
+            "name": {
+                "de": "libheif installieren",
+                "en": "Install libheif"
+            },
+            "description": {
+                "de": "Installiert die Bibliothek zur Verarbeitung von HEIF- und AVIF-Bildern.",
+                "en": "Installs the library for processing HEIF and AVIF images."
+            },
+            "file": "113_install_libheif.json"
+        },
+        {
+            "id": "install_kimageformats",
+            "name": {
+                "de": "KDE-Bildformat-Plugins installieren",
+                "en": "Install KDE image format plugins"
+            },
+            "description": {
+                "de": "Installiert zusätzliche Bildformat-Plugins für KDE-Anwendungen.",
+                "en": "Installs additional image format plugins for KDE applications."
+            },
+            "file": "114_install_kimageformats.json"
+        },
+        {
+            "id": "install_bandwhich",
+            "name": {
+                "de": "bandwhich installieren",
+                "en": "Install bandwhich"
+            },
+            "description": {
+                "de": "Installiert bandwhich zur Überwachung der aktuellen Netzwerkbandbreitennutzung.",
+                "en": "Installs bandwhich for monitoring current network bandwidth usage."
+            },
+            "file": "115_install_bandwhich.json"
+        },
+        {
+            "id": "install_wireshark",
+            "name": {
+                "de": "Wireshark installieren",
+                "en": "Install Wireshark"
+            },
+            "description": {
+                "de": "Installiert Wireshark zur Überwachung und Analyse von Netzwerkverkehr.",
+                "en": "Installs Wireshark for monitoring and analyzing network traffic."
+            },
+            "file": "116_install_wireshark.json"
+        },
+        {
+            "id": "install_krusader",
+            "name": {
+                "de": "Krusader installieren",
+                "en": "Install Krusader"
+            },
+            "description": {
+                "de": "Installiert den zweispaltigen Dateimanager Krusader für KDE.",
+                "en": "Installs the dual-pane file manager Krusader for KDE."
+            },
+            "file": "117_install_krusader.json"
+        },
+        {
+            "id": "install_7zip",
+            "name": {
+                "de": "7-Zip installieren",
+                "en": "Install 7-Zip"
+            },
+            "description": {
+                "de": "Installiert das offizielle 7-Zip-Kompressionswerkzeug zur Erstellung und Verwaltung von Archiven.",
+                "en": "Installs the official 7-Zip compression tool for creating and managing archives."
+            },
+            "file": "118_install_7zip.json"
+        },
+        {
+            "id": "install_qemu_kvm_virt_manager",
+            "name": {
+                "de": "QEMU, KVM und Virt-Manager installieren",
+                "en": "Install QEMU, KVM, and Virt-Manager"
+            },
+            "description": {
+                "de": "Installiert QEMU/KVM, libvirt und Virt-Manager mit zusätzlicher Grafik-, Audio- und SPICE-Unterstützung.",
+                "en": "Installs QEMU/KVM, libvirt, and Virt-Manager with additional graphics, audio, and SPICE support."
+            },
+            "file": "119_install_qemu_kvm_virt_manager.json"
+        },
+        {
+            "id": "enable_libvirtd",
+            "name": {
+                "de": "Virtualisierungsdienst aktivieren",
+                "en": "Enable virtualization service"
+            },
+            "description": {
+                "de": "Aktiviert und startet den libvirtd-Dienst für QEMU/KVM und Virt-Manager.",
+                "en": "Enables and starts the libvirtd service for QEMU/KVM and Virt-Manager."
+            },
+            "file": "120_enable_libvirtd.json"
+        },
+        {
+            "id": "setup_kvm_libvirt_user_permissions",
+            "name": {
+                "de": "Benutzerrechte für KVM und libvirt einrichten",
+                "en": "Set up user permissions for KVM and libvirt"
+            },
+            "description": {
+                "de": "Fügt den aktuellen Benutzer den Gruppen libvirt und kvm hinzu, damit virtuelle Maschinen ohne ständige Root-Rechte verwaltet werden können.",
+                "en": "Adds the current user to the libvirt and kvm groups so virtual machines can be managed without constant root privileges."
+            },
+            "file": "121_setup_kvm_libvirt_user_permissions.json"
+        },
+        {
+            "id": "check_hardware_virtualization",
+            "name": {
+                "de": "✨ Hardware-Virtualisierung prüfen",
+                "en": "✨ Check hardware virtualization"
+            },
+            "description": {
+                "de": "Prüft, ob der Prozessor Hardware-Virtualisierung unterstützt und die erforderlichen KVM-Kernelmodule geladen sind.",
+                "en": "Checks whether the processor supports hardware virtualization and whether the required KVM kernel modules are loaded."
+            },
+            "file": "122_check_hardware_virtualization.json"
+        },
+        {
+            "id": "setup_libvirt_network",
+            "name": {
+                "de": "Netzwerkverwaltung für virtuelle Maschinen einrichten",
+                "en": "Set up networking for virtual machines"
+            },
+            "description": {
+                "de": "Prüft das standardmäßige libvirt-NAT-Netzwerk und aktiviert es bei Bedarf.",
+                "en": "Checks the default libvirt NAT network and enables it if necessary."
+            },
+            "file": "123_setup_libvirt_network.json"
+        },
+        {
+            "id": "install_smartmontools",
+            "name": {
+                "de": "Festplatten-Diagnosewerkzeuge installieren",
+                "en": "Install disk diagnostic tools"
+            },
+            "description": {
+                "de": "Installiert smartmontools zur Diagnose von Festplatten und SSDs mit SMART.",
+                "en": "Installs smartmontools for diagnosing hard drives and SSDs using SMART."
+            },
+            "file": "124_install_smartmontools.json"
+        },
+        {
+            "id": "install_vagrant_libvirt",
+            "name": {
+                "de": "✨ Vagrant mit Libvirt-Unterstützung installieren",
+                "en": "✨ Install Vagrant with Libvirt support"
+            },
+            "description": {
+                "de": "Installiert Vagrant und das vagrant-libvirt-Plugin für QEMU/KVM und libvirt.",
+                "en": "Installs Vagrant and the vagrant-libvirt plugin for QEMU/KVM and libvirt."
+            },
+            "file": "125_install_vagrant_libvirt.json"
+        },
+        {
+            "id": "install_pwvucontrol",
+            "name": {
+                "de": "✨ Grafischen Audio-Mixer pwvucontrol installieren",
+                "en": "✨ Install graphical audio mixer pwvucontrol"
+            },
+            "description": {
+                "de": "Installiert pwvucontrol als grafisches Frontend für PipeWire.",
+                "en": "Installs pwvucontrol as a graphical frontend for PipeWire."
+            },
+            "file": "126_install_pwvucontrol.json"
+        },
+        {
+            "id": "install_qpwgraph",
+            "name": {
+                "de": "✨ Grafischen Audio-Verkabelungs-Manager qpwgraph installieren",
+                "en": "✨ Install graphical audio routing manager qpwgraph"
+            },
+            "description": {
+                "de": "Installiert qpwgraph zur visuellen Verwaltung von Audioverbindungen in PipeWire.",
+                "en": "Installs qpwgraph for visually managing audio connections in PipeWire."
+            },
+            "file": "127_install_qpwgraph.json"
+        },
+        {
+            "id": "install_ollama",
+            "name": {
+                "de": "✨ Lokale KI-Laufzeitumgebung Ollama installieren",
+                "en": "✨ Install local AI runtime Ollama"
+            },
+            "description": {
+                "de": "Installiert Ollama zum lokalen Ausführen von KI-Modellen.",
+                "en": "Installs Ollama for running AI models locally."
+            },
+            "file": "128_install_ollama.json"
+        },
+        {
+            "id": "install_krdc",
+            "name": {
+                "de": "✨ Remote-Desktop-Client KRDC installieren",
+                "en": "✨ Install KRDC remote desktop client"
+            },
+            "description": {
+                "de": "Installiert KRDC zur Verbindung mit und Fernsteuerung anderer Computer über das Netzwerk.",
+                "en": "Installs KRDC for connecting to and remotely controlling other computers over the network."
+            },
+            "file": "129_install_krdc.json"
+        },
+        {
+            "id": "install_aria2",
+            "name": {
+                "de": "✨ Ultraschnellen Download-Manager aria2 installieren",
+                "en": "✨ Install the high-speed download manager aria2"
+            },
+            "description": {
+                "de": "Installiert aria2 als vielseitigen Download-Manager mit Unterstützung für mehrere Protokolle und parallele Downloads.",
+                "en": "Installs aria2 as a versatile download manager supporting multiple protocols and parallel downloads."
+            },
+            "file": "130_install_aria2.json"
+        },
+        {
+            "id": "install_difftastic",
+            "name": {
+                "de": "✨ Strukturelles Diff-Werkzeug Difftastic installieren",
+                "en": "✨ Install the structural diff tool Difftastic"
+            },
+            "description": {
+                "de": "Installiert Difftastic zur strukturellen Analyse von Unterschieden in Code und Text.",
+                "en": "Installs Difftastic for structural analysis of differences in code and text."
+            },
+            "file": "131_install_difftastic.json"
+        },
+        {
+            "id": "install_github_cli",
+            "name": {
+                "de": "✨ GitHub CLI installieren",
+                "en": "✨ Install GitHub CLI"
+            },
+            "description": {
+                "de": "Installiert das offizielle Kommandozeilenwerkzeug GitHub CLI für die Verwaltung von GitHub direkt über das Terminal.",
+                "en": "Installs the official GitHub CLI tool for managing GitHub directly from the terminal."
+            },
+            "file": "132_install_github_cli.json"
+        },
+        {
+            "id": "install_ghidra",
+            "name": {
+                "de": "Ghidra installieren",
+                "en": "Install Ghidra"
+            },
+            "description": {
+                "de": "Wähle die Installationsmethode für Ghidra: Pacman oder yay.",
+                "en": "Choose the installation method for Ghidra: Pacman or yay."
+            },
+            "file": "133_install_ghidra.json",
+            "substeps": [
+                {
+                    "id": "ghidra_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Ghidra mit Pacman installieren",
+                        "en": "Install Ghidra with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Ghidra aus den offiziellen Arch-Repositories.",
+                        "en": "Installs Ghidra from the official Arch repositories."
+                    },
+                    "exclusive_group": "ghidra_method"
+                },
+                {
+                    "id": "ghidra_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Ghidra mit yay installieren",
+                        "en": "Install Ghidra with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Ghidra über den AUR-Helper yay.",
+                        "en": "Installs Ghidra using the AUR helper yay."
+                    },
+                    "exclusive_group": "ghidra_method"
+                }
+            ]
+        },
+        {
+            "id": "setup_eduroam",
+            "name": {
+                "de": "✨ Universitäres WLAN (eduroam) einrichten",
+                "en": "✨ Set up university Wi-Fi (eduroam)"
+            },
+            "description": {
+                "de": "Installiert die benötigten Netzwerkkomponenten und die grafische geteduroam-Anwendung zur Einrichtung von eduroam.",
+                "en": "Installs the required network components and the graphical geteduroam application for setting up eduroam."
+            },
+            "file": "134_setup_eduroam.json"
         }
     ]
 }

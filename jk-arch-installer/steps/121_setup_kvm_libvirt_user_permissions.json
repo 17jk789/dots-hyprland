@@ -1,0 +1,46 @@
+{
+    "id": "setup_kvm_libvirt_user_permissions",
+
+    "name": {
+        "de": "Benutzerrechte für KVM und libvirt einrichten",
+        "en": "Set up user permissions for KVM and libvirt"
+    },
+
+    "description": {
+        "de": "Fügt den aktuellen Benutzer den Gruppen libvirt und kvm hinzu, damit Virt-Manager virtuelle Maschinen ohne ständige Root-Rechte verwalten kann.",
+        "en": "Adds the current user to the libvirt and kvm groups so Virt-Manager can manage virtual machines without constant root privileges."
+    },
+
+    "question": {
+        "de": "Sollen die Benutzerrechte für KVM und libvirt eingerichtet werden?",
+        "en": "Should user permissions for KVM and libvirt be configured?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Fügt den aktuellen Benutzer den Gruppen libvirt und kvm hinzu.",
+                "en": "Adds the current user to the libvirt and kvm groups."
+            },
+
+            "command": [
+                "usermod",
+                "-aG",
+                "libvirt,kvm",
+                "$(whoami)"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "id": "install_tectonic_pandoc",
+
+    "name": {
+        "de": "Tectonic und Pandoc einrichten",
+        "en": "Set up Tectonic and Pandoc"
+    },
+
+    "description": {
+        "de": "Installiert Tectonic zum Erstellen von PDF-Dokumenten aus LaTeX-Quelltexten sowie Pandoc zur Konvertierung zwischen verschiedenen Dokumentformaten.",
+        "en": "Installs Tectonic for creating PDF documents from LaTeX source files and Pandoc for converting between different document formats."
+    },
+
+    "question": {
+        "de": "Sollen Tectonic und Pandoc installiert werden?",
+        "en": "Should Tectonic and Pandoc be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Pandoc und Tectonic über Pacman.",
+                "en": "Installs Pandoc and Tectonic using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "pandoc",
+                "tectonic"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

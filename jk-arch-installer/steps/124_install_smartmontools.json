@@ -1,0 +1,64 @@
+{
+    "id": "install_smartmontools",
+
+    "name": {
+        "de": "Festplatten-Diagnosewerkzeuge installieren",
+        "en": "Install disk diagnostic tools"
+    },
+
+    "description": {
+        "de": "Installiert smartmontools und erkennt anschließend verfügbare Festplatten und SSDs mit smartctl.",
+        "en": "Installs smartmontools and then detects available hard drives and SSDs using smartctl."
+    },
+
+    "question": {
+        "de": "Sollen die Festplatten-Diagnosewerkzeuge installiert und die Laufwerke erkannt werden?",
+        "en": "Should the disk diagnostic tools be installed and the drives detected?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert smartmontools über Pacman.",
+                "en": "Installs smartmontools using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "smartmontools"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Erkennt verfügbare Festplatten und SSDs für die SMART-Diagnose.",
+                "en": "Detects available hard drives and SSDs for SMART diagnostics."
+            },
+
+            "command": [
+                "smartctl",
+                "--scan"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_krusader",
+
+    "name": {
+        "de": "Krusader installieren",
+        "en": "Install Krusader"
+    },
+
+    "description": {
+        "de": "Installiert Krusader, einen leistungsstarken zweispaltigen Dateimanager für KDE.",
+        "en": "Installs Krusader, a powerful dual-pane file manager for KDE."
+    },
+
+    "question": {
+        "de": "Soll Krusader installiert werden?",
+        "en": "Should Krusader be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Krusader über Pacman.",
+                "en": "Installs Krusader using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "krusader"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

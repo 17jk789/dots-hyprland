@@ -1,0 +1,47 @@
+{
+    "id": "install_kimageformats",
+
+    "name": {
+        "de": "KDE-Bildformat-Plugins installieren",
+        "en": "Install KDE image format plugins"
+    },
+
+    "description": {
+        "de": "Installiert kimageformats und erweitert damit die Unterstützung zusätzlicher Bildformate in KDE-Anwendungen wie Gwenview und Krita.",
+        "en": "Installs kimageformats to extend support for additional image formats in KDE applications such as Gwenview and Krita."
+    },
+
+    "question": {
+        "de": "Sollen die erweiterten KDE-Bildformat-Plugins installiert werden?",
+        "en": "Should the extended KDE image format plugins be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert kimageformats über Pacman.",
+                "en": "Installs kimageformats using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "kimageformats"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

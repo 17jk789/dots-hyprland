@@ -1,0 +1,64 @@
+{
+    "id": "enable_libvirtd",
+
+    "name": {
+        "de": "Virtualisierungsdienst aktivieren",
+        "en": "Enable virtualization service"
+    },
+
+    "description": {
+        "de": "Aktiviert und startet den libvirtd-Dienst für die Verwaltung von QEMU/KVM-VMs.",
+        "en": "Enables and starts the libvirtd service for managing QEMU/KVM virtual machines."
+    },
+
+    "question": {
+        "de": "Soll der Virtualisierungsdienst für QEMU/KVM aktiviert werden?",
+        "en": "Should the virtualization service for QEMU/KVM be enabled?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Aktiviert und startet den libvirtd-Dienst.",
+                "en": "Enables and starts the libvirtd service."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "libvirtd.service"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Zeigt den aktuellen Status des libvirtd-Dienstes an.",
+                "en": "Displays the current status of the libvirtd service."
+            },
+
+            "command": [
+                "systemctl",
+                "status",
+                "libvirtd.service"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

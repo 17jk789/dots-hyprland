@@ -1,0 +1,59 @@
+{
+    "id": "install_qemu_kvm_virt_manager",
+
+    "name": {
+        "de": "QEMU, KVM und Virt-Manager installieren",
+        "en": "Install QEMU, KVM, and Virt-Manager"
+    },
+
+    "description": {
+        "de": "Installiert QEMU/KVM, libvirt und Virt-Manager sowie zusätzliche Komponenten für Grafik-, Audio-, SPICE- und Netzwerkunterstützung virtueller Maschinen.",
+        "en": "Installs QEMU/KVM, libvirt, and Virt-Manager along with additional components for graphics, audio, SPICE, and network support for virtual machines."
+    },
+
+    "question": {
+        "de": "Sollen QEMU, KVM und Virt-Manager installiert werden?",
+        "en": "Should QEMU, KVM, and Virt-Manager be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert QEMU, libvirt, Virt-Manager und zusätzliche Virtualisierungskomponenten.",
+                "en": "Installs QEMU, libvirt, Virt-Manager, and additional virtualization components."
+            },
+
+            "command": [
+                "pacman",
+                "-Syu",
+                "--needed",
+                "--noconfirm",
+                "qemu-full",
+                "virt-manager",
+                "libvirt",
+                "virt-viewer",
+                "dnsmasq",
+                "qemu-ui-gtk",
+                "qemu-ui-sdl",
+                "qemu-audio-pa",
+                "spice-gtk",
+                "virglrenderer",
+                "libvdpau",
+                "libva-mesa-driver",
+                "spice-vdagent"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

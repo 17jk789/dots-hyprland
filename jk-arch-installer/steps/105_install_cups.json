@@ -1,0 +1,53 @@
+{
+    "id": "install_cups",
+
+    "name": {
+        "de": "CUPS-Drucksystem installieren",
+        "en": "Install CUPS Printing System"
+    },
+
+    "description": {
+        "de": "Installiert CUPS mit Druckfiltern, PostScript-Unterstützung, zusätzlichen Druckertreibern, mDNS-Netzwerkdrucker-Erkennung und KDE Print Manager.",
+        "en": "Installs CUPS with print filters, PostScript support, additional printer drivers, mDNS network printer discovery, and KDE Print Manager."
+    },
+
+    "question": {
+        "de": "Soll das vollständige CUPS-Drucksystem installiert werden?",
+        "en": "Should the complete CUPS printing system be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert CUPS, Druckfilter, PostScript-Unterstützung, zusätzliche Druckertreiber, Netzwerkdrucker-Erkennung und KDE-Druckverwaltung über Pacman.",
+                "en": "Installs CUPS, print filters, PostScript support, additional printer drivers, network printer discovery, and KDE print management using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "cups",
+                "cups-filters",
+                "ghostscript",
+                "gutenprint",
+                "avahi",
+                "nss-mdns",
+                "print-manager"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

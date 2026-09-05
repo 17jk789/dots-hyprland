@@ -1,0 +1,47 @@
+{
+    "id": "install_qpwgraph",
+
+    "name": {
+        "de": "Grafischen Audio-Verkabelungs-Manager qpwgraph installieren",
+        "en": "Install graphical audio routing manager qpwgraph"
+    },
+
+    "description": {
+        "de": "Installiert qpwgraph zur visuellen Verwaltung und Verbindung von Audioquellen und -senken in PipeWire.",
+        "en": "Installs qpwgraph for visually managing and connecting audio sources and sinks in PipeWire."
+    },
+
+    "question": {
+        "de": "Soll der grafische Audio-Verkabelungs-Manager qpwgraph installiert werden?",
+        "en": "Should the graphical audio routing manager qpwgraph be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert qpwgraph über Pacman.",
+                "en": "Installs qpwgraph using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "qpwgraph"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

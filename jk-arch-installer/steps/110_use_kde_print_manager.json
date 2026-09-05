@@ -1,0 +1,64 @@
+{
+    "id": "use_kde_print_manager",
+
+    "name": {
+        "de": "KDE-Druckverwaltung unter Hyprland verwenden",
+        "en": "Use KDE print management under Hyprland"
+    },
+
+    "description": {
+        "de": "Verwendet die KDE-Druckverwaltung zur grafischen Verwaltung von Druckern unter Hyprland. Falls die KDE-Systemeinstellungen fehlen, werden diese zuvor installiert.",
+        "en": "Uses KDE print management for graphical printer management under Hyprland. If KDE System Settings are missing, they are installed first."
+    },
+
+    "question": {
+        "de": "Soll die KDE-Druckverwaltung unter Hyprland eingerichtet werden?",
+        "en": "Should KDE print management be set up under Hyprland?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die KDE-Systemeinstellungen für die Druckerverwaltung.",
+                "en": "Installs KDE System Settings for printer management."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "systemsettings"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Öffnet die KDE-Druckverwaltung.",
+                "en": "Opens KDE print management."
+            },
+
+            "command": [
+                "systemsettings",
+                "kcm_printer_manager"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

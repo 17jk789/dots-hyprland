@@ -1,0 +1,47 @@
+{
+    "id": "install_bandwhich",
+
+    "name": {
+        "de": "bandwhich installieren",
+        "en": "Install bandwhich"
+    },
+
+    "description": {
+        "de": "Installiert bandwhich, ein Kommandozeilenwerkzeug zur Anzeige der von Prozessen und Verbindungen verwendeten Netzwerkbandbreite.",
+        "en": "Installs bandwhich, a command-line tool for displaying network bandwidth usage by processes and connections."
+    },
+
+    "question": {
+        "de": "Soll bandwhich installiert werden?",
+        "en": "Should bandwhich be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert bandwhich über Pacman.",
+                "en": "Installs bandwhich using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "bandwhich"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

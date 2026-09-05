@@ -1,0 +1,46 @@
+{
+    "id": "enable_avahi",
+
+    "name": {
+        "de": "Netzwerkdrucker-Erkennung aktivieren",
+        "en": "Enable network printer discovery"
+    },
+
+    "description": {
+        "de": "Aktiviert und startet den Avahi-Dienst zur automatischen Erkennung von IPP-, WLAN- und AirPrint-kompatiblen Druckern.",
+        "en": "Enables and starts the Avahi service for automatic discovery of IPP, Wi-Fi, and AirPrint-compatible printers."
+    },
+
+    "question": {
+        "de": "Soll die Netzwerkdrucker-Erkennung aktiviert werden?",
+        "en": "Should network printer discovery be enabled?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Aktiviert und startet den Avahi-Dienst.",
+                "en": "Enables and starts the Avahi service."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "avahi-daemon.service"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

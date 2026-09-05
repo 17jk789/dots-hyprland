@@ -1,0 +1,47 @@
+{
+    "id": "install_krdc",
+
+    "name": {
+        "de": "Remote-Desktop-Client KRDC installieren",
+        "en": "Install KRDC remote desktop client"
+    },
+
+    "description": {
+        "de": "Installiert KRDC als Remote-Desktop-Client für Netzwerkverbindungen und die Fernsteuerung anderer Computer.",
+        "en": "Installs KRDC as a remote desktop client for network connections and remote control of other computers."
+    },
+
+    "question": {
+        "de": "Soll der Remote-Desktop-Client KRDC installiert werden?",
+        "en": "Should the KRDC remote desktop client be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert KRDC über Pacman.",
+                "en": "Installs KRDC using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "krdc"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

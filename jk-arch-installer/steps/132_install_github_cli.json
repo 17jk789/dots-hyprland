@@ -1,0 +1,47 @@
+{
+    "id": "install_github_cli",
+
+    "name": {
+        "de": "GitHub CLI installieren",
+        "en": "Install GitHub CLI"
+    },
+
+    "description": {
+        "de": "Installiert das offizielle Kommandozeilenwerkzeug GitHub CLI für GitHub-Operationen direkt über das Terminal.",
+        "en": "Installs the official GitHub CLI tool for performing GitHub operations directly from the terminal."
+    },
+
+    "question": {
+        "de": "Soll das GitHub CLI installiert werden?",
+        "en": "Should GitHub CLI be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert GitHub CLI über Pacman.",
+                "en": "Installs GitHub CLI using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "github-cli"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

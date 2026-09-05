@@ -1,0 +1,63 @@
+{
+    "id": "check_hardware_virtualization",
+
+    "name": {
+        "de": "Hardware-Virtualisierung prüfen",
+        "en": "Check hardware virtualization"
+    },
+
+    "description": {
+        "de": "Prüft die Verfügbarkeit von Intel VT-x oder AMD-V sowie der geladenen KVM-Kernelmodule.",
+        "en": "Checks for Intel VT-x or AMD-V support and loaded KVM kernel modules."
+    },
+
+    "question": {
+        "de": "Soll geprüft werden, ob Hardware-Virtualisierung verfügbar ist?",
+        "en": "Should hardware virtualization availability be checked?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": true,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Prüft, welche Virtualisierungserweiterung der Prozessor bereitstellt.",
+                "en": "Checks which virtualization extension is provided by the processor."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "LC_ALL=C lscpu | grep Virtualization"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Prüft, ob KVM-Kernelmodule geladen sind.",
+                "en": "Checks whether KVM kernel modules are loaded."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "lsmod | grep kvm"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

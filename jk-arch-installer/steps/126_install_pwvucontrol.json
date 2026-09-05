@@ -1,0 +1,47 @@
+{
+    "id": "install_pwvucontrol",
+
+    "name": {
+        "de": "Grafischen Audio-Mixer pwvucontrol installieren",
+        "en": "Install graphical audio mixer pwvucontrol"
+    },
+
+    "description": {
+        "de": "Installiert pwvucontrol als grafisches Frontend für PipeWire zur Verwaltung von Audioeingängen, -ausgängen und -geräten.",
+        "en": "Installs pwvucontrol as a graphical frontend for PipeWire to manage audio inputs, outputs, and devices."
+    },
+
+    "question": {
+        "de": "Soll der grafische Audio-Mixer pwvucontrol installiert werden?",
+        "en": "Should the graphical audio mixer pwvucontrol be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert pwvucontrol über Pacman.",
+                "en": "Installs pwvucontrol using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "pwvucontrol"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_sudo_rs",
+
+    "name": {
+        "de": "sudo-rs installieren",
+        "en": "Install sudo-rs"
+    },
+
+    "description": {
+        "de": "Installiert sudo-rs, eine moderne in Rust geschriebene Implementierung des sudo-Befehls.",
+        "en": "Installs sudo-rs, a modern implementation of the sudo command written in Rust."
+    },
+
+    "question": {
+        "de": "Soll sudo-rs installiert werden?",
+        "en": "Should sudo-rs be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert sudo-rs über Pacman.",
+                "en": "Installs sudo-rs using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "sudo-rs"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

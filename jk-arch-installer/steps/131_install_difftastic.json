@@ -1,0 +1,47 @@
+{
+    "id": "install_difftastic",
+
+    "name": {
+        "de": "Strukturelles Diff-Werkzeug Difftastic installieren",
+        "en": "Install the structural diff tool Difftastic"
+    },
+
+    "description": {
+        "de": "Installiert Difftastic zur strukturellen Analyse von Unterschieden in Code und Text.",
+        "en": "Installs Difftastic for structural analysis of differences in code and text."
+    },
+
+    "question": {
+        "de": "Soll das strukturelle Diff-Werkzeug Difftastic installiert werden?",
+        "en": "Should the structural diff tool Difftastic be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Difftastic über Pacman.",
+                "en": "Installs Difftastic using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "difftastic"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+{
+    "id": "setup_eduroam",
+
+    "name": {
+        "de": "Universitäres WLAN (eduroam) einrichten",
+        "en": "Set up university Wi-Fi (eduroam)"
+    },
+
+    "description": {
+        "de": "Installiert NetworkManager, Python-D-Bus, CA-Zertifikate und die grafische geteduroam-Anwendung zur sicheren Einrichtung von eduroam.",
+        "en": "Installs NetworkManager, Python D-Bus, CA certificates, and the graphical geteduroam application for secure eduroam setup."
+    },
+
+    "question": {
+        "de": "Soll eduroam eingerichtet und die benötigte Software installiert werden?",
+        "en": "Should eduroam be set up and the required software installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert NetworkManager, Python-D-Bus und CA-Zertifikate.",
+                "en": "Installs NetworkManager, Python D-Bus, and CA certificates."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "networkmanager",
+                "python-dbus",
+                "ca-certificates"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert die grafische geteduroam-Anwendung über den AUR-Helper yay.",
+                "en": "Installs the graphical geteduroam application using the AUR helper yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "geteduroam-gui"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

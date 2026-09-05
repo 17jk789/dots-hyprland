@@ -1,0 +1,66 @@
+{
+    "id": "install_vagrant_libvirt",
+
+    "name": {
+        "de": "Vagrant mit Libvirt-Unterstützung installieren",
+        "en": "Install Vagrant with Libvirt support"
+    },
+
+    "description": {
+        "de": "Installiert Vagrant über AUR und richtet das vagrant-libvirt-Plugin für den Betrieb virtueller Maschinen mit QEMU/KVM und libvirt ein.",
+        "en": "Installs Vagrant from the AUR and sets up the vagrant-libvirt plugin for running virtual machines with QEMU/KVM and libvirt."
+    },
+
+    "question": {
+        "de": "Soll Vagrant mit Libvirt-Unterstützung installiert werden?",
+        "en": "Should Vagrant with Libvirt support be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Vagrant über den AUR-Helper yay.",
+                "en": "Installs Vagrant using the AUR helper yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "vagrant"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert das vagrant-libvirt-Plugin für die Libvirt-Unterstützung.",
+                "en": "Installs the vagrant-libvirt plugin for Libvirt support."
+            },
+
+            "command": [
+                "vagrant",
+                "plugin",
+                "install",
+                "vagrant-libvirt"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

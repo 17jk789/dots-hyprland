@@ -1,0 +1,64 @@
+{
+    "id": "enable_cups",
+
+    "name": {
+        "de": "CUPS-Dienst aktivieren",
+        "en": "Enable CUPS service"
+    },
+
+    "description": {
+        "de": "Aktiviert den CUPS-Druckdienst beim Systemstart und startet ihn sofort.",
+        "en": "Enables the CUPS printing service at system startup and starts it immediately."
+    },
+
+    "question": {
+        "de": "Soll der CUPS-Dienst aktiviert und gestartet werden?",
+        "en": "Should the CUPS service be enabled and started?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Aktiviert und startet den CUPS-Dienst.",
+                "en": "Enables and starts the CUPS service."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "cups.service"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Prüft den Status des CUPS-Dienstes.",
+                "en": "Checks the status of the CUPS service."
+            },
+
+            "command": [
+                "systemctl",
+                "status",
+                "cups.service"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

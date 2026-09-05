@@ -1,0 +1,81 @@
+{
+    "id": "setup_libvirt_network",
+
+    "name": {
+        "de": "Netzwerkverwaltung für virtuelle Maschinen einrichten",
+        "en": "Set up networking for virtual machines"
+    },
+
+    "description": {
+        "de": "Prüft das standardmäßige libvirt-NAT-Netzwerk und startet es bei Bedarf automatisch.",
+        "en": "Checks the default libvirt NAT network and starts it automatically if needed."
+    },
+
+    "question": {
+        "de": "Soll das Netzwerk für virtuelle Maschinen eingerichtet werden?",
+        "en": "Should networking for virtual machines be configured?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Zeigt den Status aller libvirt-Netzwerke an.",
+                "en": "Displays the status of all libvirt networks."
+            },
+
+            "command": [
+                "virsh",
+                "net-list",
+                "--all"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Startet das Standard-Netzwerk von libvirt.",
+                "en": "Starts the default libvirt network."
+            },
+
+            "command": [
+                "virsh",
+                "net-start",
+                "default"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert den automatischen Start des Standard-Netzwerks.",
+                "en": "Enables automatic startup of the default network."
+            },
+
+            "command": [
+                "virsh",
+                "net-autostart",
+                "default"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
