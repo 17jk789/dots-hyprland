@@ -1,0 +1,47 @@
+{
+    "id": "install_just",
+
+    "name": {
+        "de": "just installieren",
+        "en": "Install just"
+    },
+
+    "description": {
+        "de": "Installiert just als praktisches Befehls-Ausführungswerkzeug für wiederkehrende Aufgaben und Justfiles.",
+        "en": "Installs just as a practical command runner for recurring tasks and Justfiles."
+    },
+
+    "question": {
+        "de": "Soll just installiert werden?",
+        "en": "Should just be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert just aus den Arch-Repositories.",
+                "en": "Installs just from the Arch repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "just"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

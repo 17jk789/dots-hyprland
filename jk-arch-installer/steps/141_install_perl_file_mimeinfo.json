@@ -1,0 +1,47 @@
+{
+    "id": "install_perl_file_mimeinfo",
+
+    "name": {
+        "de": "perl-file-mimeinfo für yazi installieren",
+        "en": "Install perl-file-mimeinfo for yazi"
+    },
+
+    "description": {
+        "de": "Installiert perl-file-mimeinfo zur MIME-Typ-Erkennung von Dateien.",
+        "en": "Installs perl-file-mimeinfo for MIME type detection of files."
+    },
+
+    "question": {
+        "de": "Soll perl-file-mimeinfo für yazi installiert werden?",
+        "en": "Should perl-file-mimeinfo be installed for yazi?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert perl-file-mimeinfo aus den Arch-Repositories.",
+                "en": "Installs perl-file-mimeinfo from the Arch repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "perl-file-mimeinfo"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

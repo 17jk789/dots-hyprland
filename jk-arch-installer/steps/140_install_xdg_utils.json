@@ -1,0 +1,47 @@
+{
+    "id": "install_xdg_utils",
+
+    "name": {
+        "de": "xdg-utils für yazi installieren",
+        "en": "Install xdg-utils for yazi"
+    },
+
+    "description": {
+        "de": "Installiert xdg-utils für die Desktop-Integration und insbesondere xdg-open.",
+        "en": "Installs xdg-utils for desktop integration, especially xdg-open."
+    },
+
+    "question": {
+        "de": "Soll xdg-utils für die Desktop-Integration von yazi installiert werden?",
+        "en": "Should xdg-utils be installed for yazi desktop integration?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert xdg-utils aus den Arch-Repositories.",
+                "en": "Installs xdg-utils from the Arch repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "xdg-utils"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "id": "add_cachyos_navi_cheats",
+
+    "name": {
+        "de": "CachyOS-Spickzettel für navi hinzufügen",
+        "en": "Add CachyOS cheatsheets for navi"
+    },
+
+    "description": {
+        "de": "Fügt die CachyOS-spezifische Cheatsheet-Sammlung von cachyos/cheats hinzu.",
+        "en": "Adds the CachyOS-specific cheatsheet collection from cachyos/cheats."
+    },
+
+    "question": {
+        "de": "Sollen die CachyOS-spezifischen Spickzettel für navi hinzugefügt werden?",
+        "en": "Should the CachyOS-specific navi cheatsheets be added?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Fügt die CachyOS-spezifische Cheatsheet-Datenbank für navi hinzu.",
+                "en": "Adds the CachyOS-specific cheatsheet repository for navi."
+            },
+
+            "command": [
+                "navi",
+                "repo",
+                "add",
+                "cachyos/cheats"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "cachyos"
+            ]
+        }
+    ]
+}

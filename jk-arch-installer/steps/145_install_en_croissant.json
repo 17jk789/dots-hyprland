@@ -1,0 +1,68 @@
+{
+    "id": "install_en_croissant",
+
+    "name": {
+        "de": "En Croissant installieren",
+        "en": "Install En Croissant"
+    },
+
+    "description": {
+        "de": "Installiert En Croissant aus dem AUR sowie die benötigten WebKit- und GStreamer-Komponenten. Optional kann Stockfish für die Schachanalyse installiert werden.",
+        "en": "Installs En Croissant from the AUR together with the required WebKit and GStreamer components. Stockfish can optionally be installed for chess analysis."
+    },
+
+    "question": {
+        "de": "Soll En Croissant mit den benötigten Komponenten installiert werden?",
+        "en": "Should En Croissant and its required components be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert En Croissant über yay.",
+                "en": "Installs En Croissant using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "en-croissant-bin"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert WebKit und die benötigten GStreamer-Plugins für die grafische Oberfläche.",
+                "en": "Installs WebKit and the required GStreamer plugins for the graphical interface."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "webkit2gtk-4.1",
+                "gst-plugins-good"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "id": "add_navi_cheats",
+
+    "name": {
+        "de": "Offizielle navi-Spickzettel-Datenbank hinzufügen",
+        "en": "Add the official navi cheatsheet repository"
+    },
+
+    "description": {
+        "de": "Fügt die offizielle navi-Cheatsheet-Sammlung von denisidoro/cheats hinzu.",
+        "en": "Adds the official navi cheatsheet collection from denisidoro/cheats."
+    },
+
+    "question": {
+        "de": "Soll die offizielle Spickzettel-Datenbank für navi hinzugefügt werden?",
+        "en": "Should the official navi cheatsheet repository be added?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Fügt die offizielle Cheatsheet-Datenbank von navi hinzu.",
+                "en": "Adds the official navi cheatsheet repository."
+            },
+
+            "command": [
+                "navi",
+                "repo",
+                "add",
+                "denisidoro/cheats"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

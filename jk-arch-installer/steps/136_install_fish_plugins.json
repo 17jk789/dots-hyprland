@@ -1,0 +1,63 @@
+{
+    "id": "install_fish_plugins",
+
+    "name": {
+        "de": "Nützliche Fish-Plugins installieren",
+        "en": "Install useful Fish plugins"
+    },
+
+    "description": {
+        "de": "Installiert den Fisher Plugin-Manager und nützliche Plugins für Fish.",
+        "en": "Installs the Fisher plugin manager and useful plugins for Fish."
+    },
+
+    "question": {
+        "de": "Sollen Fisher und die nützlichen Fish-Plugins installiert werden?",
+        "en": "Should Fisher and the useful Fish plugins be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Lädt Fisher aus dem offiziellen GitHub-Repository und installiert es in Fish.",
+                "en": "Loads Fisher from the official GitHub repository and installs it in Fish."
+            },
+
+            "command": [
+                "fish",
+                "-c",
+                "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Autopair, Fish-Vim, Bass und die fzf-Integration für Fish.",
+                "en": "Installs Autopair, Fish-Vim, Bass, and the fzf integration for Fish."
+            },
+
+            "command": [
+                "fish",
+                "-c",
+                "fisher install jorgebucaran/autopair.fish nickeb96/fish-vim edc/bass PatrickF1/fzf.fish"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

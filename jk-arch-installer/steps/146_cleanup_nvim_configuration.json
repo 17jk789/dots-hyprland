@@ -1,0 +1,141 @@
+{
+    "id": "cleanup_nvim_configuration",
+
+    "name": {
+        "de": "Nach der Neovim-Konfiguration",
+        "en": "After the Neovim configuration"
+    },
+
+    "description": {
+        "de": "Führt optionale Bereinigungen und Anpassungen für C/C++, Java, ASM, Rust und Markdown Preview in Neovim durch.",
+        "en": "Performs optional cleanup and configuration tasks for C/C++, Java, ASM, Rust, and Markdown Preview in Neovim."
+    },
+
+    "question": {
+        "de": "Sollen die zusätzlichen Anpassungen für die Neovim-Konfiguration durchgeführt werden?",
+        "en": "Should the additional adjustments for the Neovim configuration be performed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Sucht nach .clang-format-Dateien im Neovim-Cache und löscht sie.",
+                "en": "Searches for .clang-format files in the Neovim cache and deletes them."
+            },
+
+            "command": [
+                "find",
+                "~",
+                "-name",
+                ".clang-format",
+                "-path",
+                "*/.cache/nvim/*",
+                "-delete"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Erstellt das Verzeichnis für zusätzliche Neovim-Sprachserver- und Konfigurationsdateien.",
+                "en": "Creates the directory for additional Neovim language server and configuration files."
+            },
+
+            "command": [
+                "mkdir",
+                "-p",
+                "~/.config/nvim/lang-servers"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Lädt die offizielle Google-Java-Style-Konfiguration für Neovim herunter.",
+                "en": "Downloads the official Google Java Style configuration for Neovim."
+            },
+
+            "command": [
+                "curl",
+                "-fL",
+                "https://raw.githubusercontent.com/google/styleguide/gh-pages/intellij-java-google-style.xml",
+                "-o",
+                "~/.config/nvim/lang-servers/intellij-java-google-style.xml"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Erstellt das Konfigurationsverzeichnis für den Assembly Language Server.",
+                "en": "Creates the configuration directory for the Assembly Language Server."
+            },
+
+            "command": [
+                "mkdir",
+                "-p",
+                "~/.config/asm-lsp/"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Entfernt eine zuvor über Cargo installierte rust-analyzer-Binary.",
+                "en": "Removes a rust-analyzer binary previously installed through Cargo."
+            },
+
+            "command": [
+                "rm",
+                "-f",
+                "~/.cargo/bin/rust-analyzer"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Setzt die yarn.lock-Datei des markdown-preview.nvim-Plugins auf den Stand des Git-Repositories zurück.",
+                "en": "Resets the markdown-preview.nvim plugin's yarn.lock file to the state from the Git repository."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "cd ~/.local/share/nvim/lazy/markdown-preview.nvim && git checkout -- app/yarn.lock"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

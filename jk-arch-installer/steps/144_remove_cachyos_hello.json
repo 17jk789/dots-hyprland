@@ -1,0 +1,64 @@
+{
+    "id": "remove_cachyos_hello",
+
+    "name": {
+        "de": "CachyOS-Begrüßungsprogramm entfernen",
+        "en": "Remove CachyOS welcome application"
+    },
+
+    "description": {
+        "de": "Entfernt cachyos-hello und den zugehörigen Autostart-Eintrag aus der Benutzerkonfiguration.",
+        "en": "Removes cachyos-hello and its associated autostart entry from the user configuration."
+    },
+
+    "question": {
+        "de": "Soll das CachyOS-Begrüßungsprogramm entfernt werden?",
+        "en": "Should the CachyOS welcome application be removed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Entfernt das CachyOS-Begrüßungsprogramm.",
+                "en": "Removes the CachyOS welcome application."
+            },
+
+            "command": [
+                "pacman",
+                "-R",
+                "--noconfirm",
+                "cachyos-hello"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "cachyos"
+            ]
+        },
+        {
+            "description": {
+                "de": "Entfernt den Autostart-Eintrag von cachyos-hello.",
+                "en": "Removes the autostart entry for cachyos-hello."
+            },
+
+            "command": [
+                "rm",
+                "-f",
+                "~/.config/autostart/cachyos-hello.desktop"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "cachyos"
+            ]
+        }
+    ]
+}

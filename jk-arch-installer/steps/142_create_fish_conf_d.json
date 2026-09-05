@@ -1,0 +1,45 @@
+{
+    "id": "create_fish_conf_d",
+
+    "name": {
+        "de": "Modularen Fish-Konfigurationsordner erstellen",
+        "en": "Create modular Fish configuration directory"
+    },
+
+    "description": {
+        "de": "Erstellt den conf.d-Ordner im Fish-Konfigurationsverzeichnis für modulare Konfigurationsdateien.",
+        "en": "Creates the conf.d directory in the Fish configuration directory for modular configuration files."
+    },
+
+    "question": {
+        "de": "Soll der modulare Fish-Konfigurationsordner erstellt werden?",
+        "en": "Should the modular Fish configuration directory be created?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Erstellt den Fish-Konfigurationsordner conf.d einschließlich aller benötigten übergeordneten Verzeichnisse.",
+                "en": "Creates the Fish conf.d configuration directory including all required parent directories."
+            },
+
+            "command": [
+                "mkdir",
+                "-p",
+                "~/.config/fish/conf.d"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

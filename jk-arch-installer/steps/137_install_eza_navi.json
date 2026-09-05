@@ -1,0 +1,48 @@
+{
+    "id": "install_eza_navi",
+
+    "name": {
+        "de": "eza und navi installieren",
+        "en": "Install eza and navi"
+    },
+
+    "description": {
+        "de": "Installiert eza für modernes Datei-Listing und navi für interaktive Kommandozeilen-Spickzettel.",
+        "en": "Installs eza for modern file listing and navi for interactive command-line cheatsheets."
+    },
+
+    "question": {
+        "de": "Sollen eza und navi installiert werden?",
+        "en": "Should eza and navi be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert eza und navi aus den Arch-Repositories.",
+                "en": "Installs eza and navi from the Arch repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "eza",
+                "navi"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

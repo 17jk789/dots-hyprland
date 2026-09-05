@@ -1947,6 +1947,150 @@
                 "en": "Installs the required network components and the graphical geteduroam application for setting up eduroam."
             },
             "file": "134_setup_eduroam.json"
+        },
+        {
+            "id": "install_globalprotect_openconnect",
+            "name": {
+                "de": "✨ GlobalProtect Open-Source-Alternative installieren",
+                "en": "✨ Install GlobalProtect Open-Source Alternative"
+            },
+            "description": {
+                "de": "Installiert die Open-Source-Alternative globalprotect-openconnect für Universitäts-VPNs.",
+                "en": "Installs the open-source globalprotect-openconnect alternative for university VPNs."
+            },
+            "file": "135_install_globalprotect_openconnect.json"
+        },
+        {
+            "id": "install_fish_plugins",
+            "name": {
+                "de": "Nützliche Fish-Plugins installieren",
+                "en": "Install useful Fish plugins"
+            },
+            "description": {
+                "de": "Installiert Fisher und nützliche Fish-Plugins für automatische Klammern, Vim-Tastenkürzel, Bash-Umgebungsvariablen und fzf.",
+                "en": "Installs Fisher and useful Fish plugins for automatic brackets, Vim keybindings, Bash environment variables, and fzf."
+            },
+            "file": "136_install_fish_plugins.json"
+        },
+        {
+            "id": "install_eza_navi",
+            "name": {
+                "de": "eza und navi installieren",
+                "en": "Install eza and navi"
+            },
+            "description": {
+                "de": "Installiert eza als modernes Datei-Listing und navi als interaktiven Terminal-Spickzettel.",
+                "en": "Installs eza as a modern file listing tool and navi as an interactive terminal cheatsheet."
+            },
+            "file": "137_install_eza_navi.json"
+        },
+        {
+            "id": "add_navi_cheats",
+            "name": {
+                "de": "Offizielle navi-Spickzettel-Datenbank hinzufügen",
+                "en": "Add the official navi cheatsheet repository"
+            },
+            "description": {
+                "de": "Fügt die offizielle Cheatsheet-Sammlung von navi hinzu.",
+                "en": "Adds the official navi cheatsheet collection."
+            },
+            "file": "138_add_navi_cheats.json"
+        },
+        {
+            "id": "add_cachyos_navi_cheats",
+            "name": {
+                "de": "✨ CachyOS-Spickzettel für navi hinzufügen",
+                "en": "✨ Add CachyOS cheatsheets for navi"
+            },
+            "description": {
+                "de": "Fügt die CachyOS-spezifische Cheatsheet-Sammlung für navi hinzu.",
+                "en": "Adds the CachyOS-specific cheatsheet collection for navi."
+            },
+            "file": "139_add_cachyos_navi_cheats.json"
+        },
+        {
+            "id": "install_xdg_utils",
+            "name": {
+                "de": "xdg-utils für yazi installieren",
+                "en": "Install xdg-utils for yazi"
+            },
+            "description": {
+                "de": "Installiert xdg-utils für die Desktop-Integration und das Öffnen von Dateien, Verzeichnissen und URLs mit den Standardanwendungen.",
+                "en": "Installs xdg-utils for desktop integration and opening files, directories, and URLs with the system's default applications."
+            },
+            "file": "140_install_xdg_utils.json"
+        },
+        {
+            "id": "install_perl_file_mimeinfo",
+            "name": {
+                "de": "perl-file-mimeinfo für yazi installieren",
+                "en": "Install perl-file-mimeinfo for yazi"
+            },
+            "description": {
+                "de": "Installiert perl-file-mimeinfo zur Erkennung von MIME-Typen für Dateien.",
+                "en": "Installs perl-file-mimeinfo for detecting MIME types of files."
+            },
+            "file": "141_install_perl_file_mimeinfo.json"
+        },
+        {
+            "id": "create_fish_conf_d",
+            "name": {
+                "de": "Modularen Fish-Konfigurationsordner erstellen",
+                "en": "Create modular Fish configuration directory"
+            },
+            "description": {
+                "de": "Erstellt den conf.d-Ordner für eine modulare Fish-Konfiguration.",
+                "en": "Creates the conf.d directory for a modular Fish configuration."
+            },
+            "file": "142_create_fish_conf_d.json"
+        },
+        {
+            "id": "install_just",
+            "name": {
+                "de": "just installieren",
+                "en": "Install just"
+            },
+            "description": {
+                "de": "Installiert just zur Organisation und Ausführung wiederkehrender Befehle über Justfiles.",
+                "en": "Installs just for organizing and executing recurring commands through Justfiles."
+            },
+            "file": "143_install_just.json"
+        },
+        {
+            "id": "remove_cachyos_hello",
+            "name": {
+                "de": "✨ CachyOS-Begrüßungsprogramm entfernen",
+                "en": "✨ Remove CachyOS welcome application"
+            },
+            "description": {
+                "de": "Entfernt cachyos-hello und den zugehörigen Autostart-Eintrag.",
+                "en": "Removes cachyos-hello and its associated autostart entry."
+            },
+            "file": "144_remove_cachyos_hello.json"
+        },
+        {
+            "id": "install_en_croissant",
+            "name": {
+                "de": "✨ En Croissant installieren",
+                "en": "✨ Install En Croissant"
+            },
+            "description": {
+                "de": "Installiert En Croissant mit den benötigten WebKit- und GStreamer-Komponenten sowie optional Stockfish für die Schachanalyse.",
+                "en": "Installs En Croissant with the required WebKit and GStreamer components and optionally Stockfish for chess analysis."
+            },
+            "file": "145_install_en_croissant.json"
+        },
+        {
+            "id": "cleanup_nvim_configuration",
+            "name": {
+                "de": "Nach der Neovim-Konfiguration",
+                "en": "After the Neovim configuration"
+            },
+            "description": {
+                "de": "Führt optionale Bereinigungen und Anpassungen für C/C++, Java, ASM, Rust und Markdown Preview in Neovim durch.",
+                "en": "Performs optional cleanup and configuration tasks for C/C++, Java, ASM, Rust, and Markdown Preview in Neovim."
+            },
+            "file": "146_cleanup_nvim_configuration.json"
         }
     ]
 }

@@ -1,0 +1,64 @@
+{
+    "id": "install_globalprotect_openconnect",
+
+    "name": {
+        "de": "GlobalProtect Open-Source-Alternative installieren",
+        "en": "Install GlobalProtect Open-Source Alternative"
+    },
+
+    "description": {
+        "de": "Installiert globalprotect-openconnect und startet anschließend die grafische VPN-Oberfläche.",
+        "en": "Installs globalprotect-openconnect and then launches the graphical VPN interface."
+    },
+
+    "question": {
+        "de": "Soll die Open-Source-Alternative für GlobalProtect installiert werden?",
+        "en": "Should the open-source GlobalProtect alternative be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert globalprotect-openconnect aus den Arch-Repositories.",
+                "en": "Installs globalprotect-openconnect from the Arch repositories."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "globalprotect-openconnect"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Startet die grafische Oberfläche des GlobalProtect-Clients.",
+                "en": "Launches the graphical interface of the GlobalProtect client."
+            },
+
+            "command": [
+                "gpclient",
+                "launch-gui"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
