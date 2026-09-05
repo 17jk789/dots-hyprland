@@ -630,6 +630,114 @@
                 "en": "Installs the JetBrains Mono Nerd Font for symbols and icons in NeoVim."
             },
             "file": "44_install_jetbrains_mono_nerd_font.json"
+        },
+        {
+            "id": "install_fastfetch",
+            "name": {
+                "de": "Fastfetch installieren",
+                "en": "Install Fastfetch"
+            },
+            "description": {
+                "de": "Installiert Fastfetch zur Anzeige wichtiger Systeminformationen im Terminal.",
+                "en": "Installs Fastfetch for displaying important system information in the terminal."
+            },
+            "file": "45_install_fastfetch.json"
+        },
+        {
+            "id": "install_htop",
+            "name": {
+                "de": "htop installieren",
+                "en": "Install htop"
+            },
+            "description": {
+                "de": "Installiert htop zur interaktiven Anzeige und Verwaltung laufender Prozesse.",
+                "en": "Installs htop for interactive viewing and management of running processes."
+            },
+            "file": "46_install_htop.json"
+        },
+        {
+            "id": "install_btop",
+            "name": {
+                "de": "btop installieren",
+                "en": "Install btop"
+            },
+            "description": {
+                "de": "Installiert btop zur detaillierten Überwachung von CPU, RAM, Netzwerk und Prozessen.",
+                "en": "Installs btop for detailed monitoring of CPU, RAM, network, and processes."
+            },
+            "file": "47_install_btop.json"
+        },
+        {
+            "id": "install_nvtop",
+            "name": {
+                "de": "✨ nvtop installieren",
+                "en": "✨ Install nvtop"
+            },
+            "description": {
+                "de": "Installiert nvtop zur interaktiven Überwachung von GPU-Prozessen und GPU-Ressourcen.",
+                "en": "Installs nvtop for interactive monitoring of GPU processes and GPU resources."
+            },
+            "file": "48_install_nvtop.json"
+        },
+        {
+            "id": "install_yazi",
+            "name": {
+                "de": "Yazi installieren",
+                "en": "Install Yazi"
+            },
+            "description": {
+                "de": "Installiert Yazi als schnellen, modernen Terminal-Dateimanager für einen tastaturzentrierten Workflow.",
+                "en": "Installs Yazi as a fast, modern terminal file manager for a keyboard-centered workflow."
+            },
+            "file": "49_install_yazi.json"
+        },
+        {
+            "id": "install_ranger_w3m",
+            "name": {
+                "de": "✨ Ranger und w3m installieren",
+                "en": "✨ Install Ranger and w3m"
+            },
+            "description": {
+                "de": "Installiert Ranger als alternativen Terminal-Dateimanager und w3m für Bildvorschauen im Terminal.",
+                "en": "Installs Ranger as an alternative terminal file manager and w3m for image previews in the terminal."
+            },
+            "file": "50_install_ranger_w3m.json"
+        },
+        {
+            "id": "install_time",
+            "name": {
+                "de": "time installieren",
+                "en": "Install time"
+            },
+            "description": {
+                "de": "Installiert time zur Messung der Ausführungszeit von Programmen und Skripten.",
+                "en": "Installs time for measuring the execution time of programs and scripts."
+            },
+            "file": "51_install_time.json"
+        },
+        {
+            "id": "install_radare2",
+            "name": {
+                "de": "Radare2 installieren",
+                "en": "Install Radare2"
+            },
+            "description": {
+                "de": "Installiert Radare2 für Reverse Engineering, Binary-Analyse und Debugging.",
+                "en": "Installs Radare2 for reverse engineering, binary analysis, and debugging."
+            },
+            "file": "52_install_radare2.json"
+        },
+        {
+            "id": "install_hyperfine",
+            "name": {
+                "de": "Hyperfine installieren",
+                "en": "Install Hyperfine"
+            },
+            "description": {
+                "de": "Installiert Hyperfine für präzise und statistisch auswertbare Benchmarks von Programmen und Befehlen.",
+                "en": "Installs Hyperfine for precise and statistically meaningful benchmarks of programs and commands."
+            },
+            "file": "53_install_hyperfine.json"
         }
     ]
 }

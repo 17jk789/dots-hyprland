@@ -1,0 +1,47 @@
+{
+    "id": "install_nvtop",
+
+    "name": {
+        "de": "nvtop installieren",
+        "en": "Install nvtop"
+    },
+
+    "description": {
+        "de": "Installiert nvtop als interaktiven GPU-Prozess-Monitor zur Überwachung von GPU-Ressourcen.",
+        "en": "Installs nvtop as an interactive GPU process monitor for monitoring GPU resources."
+    },
+
+    "question": {
+        "de": "Soll nvtop installiert werden?",
+        "en": "Should nvtop be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert nvtop über Pacman.",
+                "en": "Installs nvtop using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "nvtop"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

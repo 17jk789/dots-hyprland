@@ -1,0 +1,47 @@
+{
+    "id": "install_time",
+
+    "name": {
+        "de": "time installieren",
+        "en": "Install time"
+    },
+
+    "description": {
+        "de": "Installiert time zur Messung der Ausführungszeit von Programmen und Skripten und zur Analyse von Performance-Engpässen.",
+        "en": "Installs time for measuring the execution time of programs and scripts and analyzing performance bottlenecks."
+    },
+
+    "question": {
+        "de": "Soll time installiert werden?",
+        "en": "Should time be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert time über Pacman.",
+                "en": "Installs time using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "time"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
