@@ -1,0 +1,47 @@
+{
+    "id": "install_java_runtime",
+
+    "name": {
+        "de": "Java-Laufzeitumgebung installieren",
+        "en": "Install Java Runtime Environment"
+    },
+
+    "description": {
+        "de": "Installiert jre-openjdk zum Ausführen fertiger Java-Programme ohne vollständiges JDK.",
+        "en": "Installs jre-openjdk for running Java applications without the full JDK."
+    },
+
+    "question": {
+        "de": "Soll die Java-Laufzeitumgebung installiert werden?",
+        "en": "Should the Java Runtime Environment be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die OpenJDK-Java-Laufzeitumgebung.",
+                "en": "Installs the OpenJDK Java Runtime Environment."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "jre-openjdk"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

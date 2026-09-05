@@ -1,0 +1,86 @@
+{
+    "id": "install_dotnet",
+
+    "name": {
+        "de": ".NET SDK installieren",
+        "en": "Install .NET SDK"
+    },
+
+    "description": {
+        "de": "Installiert das .NET SDK, die .NET-Laufzeit und die ASP.NET-Laufzeit für die Entwicklung und Ausführung von .NET-Anwendungen.",
+        "en": "Installs the .NET SDK, .NET runtime, and ASP.NET runtime for developing and running .NET applications."
+    },
+
+    "question": {
+        "de": "Soll das .NET SDK jetzt installiert werden?",
+        "en": "Should the .NET SDK be installed now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert das .NET SDK über Pacman.",
+                "en": "Installs the .NET SDK using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "dotnet-sdk"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert die .NET- und ASP.NET-Laufzeitumgebungen.",
+                "en": "Installs the .NET and ASP.NET runtimes."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "dotnet-runtime",
+                "aspnet-runtime"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Fügt das Verzeichnis für globale .NET-Tools zum Fish-Pfad hinzu.",
+                "en": "Adds the global .NET tools directory to the Fish path."
+            },
+
+            "command": [
+                "fish",
+                "-c",
+                "fish_add_path $HOME/.dotnet/tools"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

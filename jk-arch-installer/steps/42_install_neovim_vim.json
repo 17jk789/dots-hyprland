@@ -1,0 +1,48 @@
+{
+    "id": "install_neovim_vim",
+
+    "name": {
+        "de": "NeoVim und Vim installieren",
+        "en": "Install NeoVim and Vim"
+    },
+
+    "description": {
+        "de": "Installiert NeoVim und Vim als Grundlage für die Entwicklungsumgebung.",
+        "en": "Installs NeoVim and Vim as the foundation of the development environment."
+    },
+
+    "question": {
+        "de": "Sollen NeoVim und Vim installiert werden?",
+        "en": "Should NeoVim and Vim be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert NeoVim und Vim über Pacman.",
+                "en": "Installs NeoVim and Vim using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "neovim",
+                "vim"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

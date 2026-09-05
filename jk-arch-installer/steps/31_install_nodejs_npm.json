@@ -1,0 +1,48 @@
+{
+    "id": "install_nodejs_npm",
+
+    "name": {
+        "de": "Node.js und npm installieren",
+        "en": "Install Node.js and npm"
+    },
+
+    "description": {
+        "de": "Installiert Node.js und npm für JavaScript-Entwicklung, Build-Systeme und NeoVim-Tools.",
+        "en": "Installs Node.js and npm for JavaScript development, build systems, and NeoVim tools."
+    },
+
+    "question": {
+        "de": "Sollen Node.js und npm jetzt installiert werden?",
+        "en": "Should Node.js and npm be installed now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Node.js und npm über Pacman.",
+                "en": "Installs Node.js and npm using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "nodejs",
+                "npm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

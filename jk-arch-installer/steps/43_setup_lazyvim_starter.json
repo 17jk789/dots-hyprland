@@ -1,0 +1,64 @@
+{
+    "id": "setup_lazyvim_starter",
+
+    "name": {
+        "de": "LazyVim Starter-Konfiguration einrichten",
+        "en": "Set up LazyVim starter configuration"
+    },
+
+    "description": {
+        "de": "Lädt die LazyVim Starter-Konfiguration als Grundlage für die NeoVim-Umgebung herunter und trennt sie von ihrem ursprünglichen Git-Repository.",
+        "en": "Downloads the LazyVim starter configuration as the foundation for the NeoVim environment and disconnects it from its original Git repository."
+    },
+
+    "question": {
+        "de": "Soll die LazyVim Starter-Konfiguration eingerichtet werden?",
+        "en": "Should the LazyVim starter configuration be set up?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Lädt die LazyVim Starter-Konfiguration nach ~/.config/nvim herunter.",
+                "en": "Clones the LazyVim starter configuration into ~/.config/nvim."
+            },
+
+            "command": [
+                "git",
+                "clone",
+                "https://github.com/LazyVim/starter",
+                "~/.config/nvim"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Entfernt die Git-Historie des LazyVim Starter-Repositories.",
+                "en": "Removes the Git history of the LazyVim starter repository."
+            },
+
+            "command": [
+                "rm",
+                "-rf",
+                "~/.config/nvim/.git"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

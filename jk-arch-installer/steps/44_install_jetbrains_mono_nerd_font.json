@@ -1,0 +1,96 @@
+{
+    "id": "install_jetbrains_mono_nerd_font",
+
+    "name": {
+        "de": "JetBrains Mono Nerd Font installieren",
+        "en": "Install JetBrains Mono Nerd Font"
+    },
+
+    "description": {
+        "de": "Installiert die JetBrains Mono Nerd Font und aktualisiert den Font-Cache für die Verwendung mit NeoVim.",
+        "en": "Installs the JetBrains Mono Nerd Font and updates the font cache for use with NeoVim."
+    },
+
+    "question": {
+        "de": "Soll die JetBrains Mono Nerd Font installiert werden?",
+        "en": "Should the JetBrains Mono Nerd Font be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Erstellt das lokale Font-Verzeichnis und wechselt dorthin.",
+                "en": "Creates the local font directory and changes into it."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "mkdir -p \"$HOME/.local/share/fonts\" && cd \"$HOME/.local/share/fonts\""
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Lädt die aktuelle JetBrains Mono Nerd Font herunter und entpackt sie.",
+                "en": "Downloads the latest JetBrains Mono Nerd Font and extracts it."
+            },
+
+            "command": [
+                "bash",
+                "-c",
+                "cd \"$HOME/.local/share/fonts\" && wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip JetBrainsMono.zip -d JetBrainsMono"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktualisiert den Font-Cache, damit die neue Schriftart erkannt wird.",
+                "en": "Updates the font cache so the new font is recognized."
+            },
+
+            "command": [
+                "fc-cache",
+                "-fv"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Startet NeoVim, wodurch LazyVim beim ersten Start automatisch die benötigten Plugins einrichten kann.",
+                "en": "Starts NeoVim, allowing LazyVim to automatically set up the required plugins on first launch."
+            },
+
+            "command": [
+                "nvim"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

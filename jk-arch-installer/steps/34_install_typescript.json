@@ -1,0 +1,46 @@
+{
+    "id": "install_typescript",
+
+    "name": {
+        "de": "TypeScript installieren",
+        "en": "Install TypeScript"
+    },
+
+    "description": {
+        "de": "Installiert den TypeScript-Compiler global über npm.",
+        "en": "Installs the TypeScript compiler globally using npm."
+    },
+
+    "question": {
+        "de": "Soll TypeScript jetzt installiert werden?",
+        "en": "Should TypeScript be installed now?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert TypeScript global über npm.",
+                "en": "Installs TypeScript globally using npm."
+            },
+
+            "command": [
+                "npm",
+                "install",
+                "-g",
+                "typescript"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

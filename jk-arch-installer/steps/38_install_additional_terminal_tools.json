@@ -1,0 +1,87 @@
+{
+    "id": "install_additional_terminal_tools",
+
+    "name": {
+        "de": "Zusätzliche Terminal-Tools installieren",
+        "en": "Install additional terminal tools"
+    },
+
+    "description": {
+        "de": "Installiert WezTerm, Terminator und GNOME Terminal als optionale zusätzliche Terminal-Emulatoren.",
+        "en": "Installs WezTerm, Terminator, and GNOME Terminal as optional additional terminal emulators."
+    },
+
+    "question": {
+        "de": "Sollen die zusätzlichen Terminal-Tools jetzt installiert werden?",
+        "en": "Should the additional terminal tools be installed now?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert WezTerm, einen modernen Terminal-Emulator mit umfangreichen Konfigurationsmöglichkeiten und Multiplexing.",
+                "en": "Installs WezTerm, a modern terminal emulator with extensive configuration options and multiplexing."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "wezterm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert Terminator mit integrierten Splits und mehreren Terminal-Fenstern.",
+                "en": "Installs Terminator with built-in splits and multiple terminal windows."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "terminator"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Installiert GNOME Terminal als klassischen Terminal-Emulator der GNOME-Desktopumgebung.",
+                "en": "Installs GNOME Terminal as the classic terminal emulator of the GNOME desktop environment."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "gnome-terminal"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

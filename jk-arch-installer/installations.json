@@ -462,6 +462,174 @@
                 "en": "Installs zoxide for intelligent and fast directory navigation."
             },
             "file": "30_install_zoxide.json"
+        },
+        {
+            "id": "install_nodejs_npm",
+            "name": {
+                "de": "Node.js und npm installieren",
+                "en": "Install Node.js and npm"
+            },
+            "description": {
+                "de": "Installiert Node.js als JavaScript-Laufzeitumgebung und npm als Paketmanager.",
+                "en": "Installs Node.js as a JavaScript runtime and npm as a package manager."
+            },
+            "file": "31_install_nodejs_npm.json"
+        },
+        {
+            "id": "install_dotnet",
+            "name": {
+                "de": ".NET SDK installieren",
+                "en": "Install .NET SDK"
+            },
+            "description": {
+                "de": "Installiert das .NET SDK sowie die benötigten Laufzeitumgebungen für .NET- und ASP.NET-Anwendungen.",
+                "en": "Installs the .NET SDK and the required runtimes for .NET and ASP.NET applications."
+            },
+            "file": "32_install_dotnet.json"
+        },
+        {
+            "id": "install_gzip",
+            "name": {
+                "de": "Gzip installieren",
+                "en": "Install gzip"
+            },
+            "description": {
+                "de": "Installiert gzip zum Komprimieren und Entpacken von Dateien im .gz-Format.",
+                "en": "Installs gzip for compressing and extracting files in the .gz format."
+            },
+            "file": "33_install_gzip.json"
+        },
+        {
+            "id": "install_typescript",
+            "name": {
+                "de": "✨ TypeScript installieren",
+                "en": "✨ Install TypeScript"
+            },
+            "description": {
+                "de": "Installiert TypeScript und stellt den TypeScript-Compiler tsc bereit.",
+                "en": "Installs TypeScript and provides the TypeScript compiler tsc."
+            },
+            "file": "34_install_typescript.json"
+        },
+        {
+            "id": "install_latex",
+            "name": {
+                "de": "LaTeX-Umgebung installieren",
+                "en": "Install LaTeX environment"
+            },
+            "description": {
+                "de": "Installiert eine vollständige LaTeX-Umgebung mit Compilern, Paketen, PDF-Viewer und NeoVim-Unterstützung.",
+                "en": "Installs a complete LaTeX environment with compilers, packages, PDF viewer, and NeoVim support."
+            },
+            "file": "35_install_latex.json"
+        },
+        {
+            "id": "install_hunspell",
+            "name": {
+                "de": "Deutsche und englische Rechtschreibprüfung installieren",
+                "en": "Install German and English spell checking"
+            },
+            "description": {
+                "de": "Installiert Hunspell sowie deutsche und US-englische Wörterbücher für die Rechtschreibprüfung.",
+                "en": "Installs Hunspell and German and US English dictionaries for spell checking."
+            },
+            "file": "36_install_hunspell.json"
+        },
+        {
+            "id": "install_terminal_emulators",
+            "name": {
+                "de": "Moderne Terminal-Emulatoren installieren",
+                "en": "Install modern terminal emulators"
+            },
+            "description": {
+                "de": "Installiert Kitty als Standard-Terminal sowie weitere moderne Terminal-Emulatoren als Alternativen.",
+                "en": "Installs Kitty as the default terminal and additional modern terminal emulators as alternatives."
+            },
+            "file": "37_install_terminal_emulators.json"
+        },
+        {
+            "id": "install_additional_terminal_tools",
+            "name": {
+                "de": "✨ Zusätzliche Terminal-Tools installieren",
+                "en": "✨ Install additional terminal tools"
+            },
+            "description": {
+                "de": "Installiert optionale Terminal-Emulatoren als zusätzliche Alternativen.",
+                "en": "Installs optional terminal emulators as additional alternatives."
+            },
+            "file": "38_install_additional_terminal_tools.json"
+        },
+        {
+            "id": "install_acpi",
+            "name": {
+                "de": "✨ Akku- und Hardware-Informationen installieren",
+                "en": "✨ Install battery and hardware information tools"
+            },
+            "description": {
+                "de": "Installiert acpi zum Auslesen von Akku- und Hardware-Informationen über ACPI.",
+                "en": "Installs acpi for reading battery and hardware information through ACPI."
+            },
+            "file": "39_install_acpi.json"
+        },
+        {
+            "id": "install_java_runtime",
+            "name": {
+                "de": "✨ Java-Laufzeitumgebung installieren",
+                "en": "✨ Install Java Runtime Environment"
+            },
+            "description": {
+                "de": "Installiert die Java-Laufzeitumgebung (JRE) zum Ausführen fertiger Java-Programme.",
+                "en": "Installs the Java Runtime Environment (JRE) for running Java applications."
+            },
+            "file": "40_install_java_runtime.json"
+        },
+        {
+            "id": "install_languagetool",
+            "name": {
+                "de": "✨ LanguageTool installieren",
+                "en": "✨ Install LanguageTool"
+            },
+            "description": {
+                "de": "Installiert LanguageTool für erweiterte Grammatik-, Rechtschreib- und Stilprüfung.",
+                "en": "Installs LanguageTool for advanced grammar, spelling, and style checking."
+            },
+            "file": "41_install_languagetool.json"
+        },
+        {
+            "id": "install_neovim_vim",
+            "name": {
+                "de": "NeoVim und Vim installieren",
+                "en": "Install NeoVim and Vim"
+            },
+            "description": {
+                "de": "Installiert NeoVim und Vim als Grundlage für die Entwicklungsumgebung.",
+                "en": "Installs NeoVim and Vim as the foundation of the development environment."
+            },
+            "file": "42_install_neovim_vim.json"
+        },
+        {
+            "id": "setup_lazyvim_starter",
+            "name": {
+                "de": "LazyVim Starter-Konfiguration einrichten",
+                "en": "Set up LazyVim starter configuration"
+            },
+            "description": {
+                "de": "Lädt die LazyVim Starter-Konfiguration herunter und entfernt anschließend deren Git-Historie.",
+                "en": "Downloads the LazyVim starter configuration and then removes its Git history."
+            },
+            "file": "43_setup_lazyvim_starter.json"
+        },
+        {
+            "id": "install_jetbrains_mono_nerd_font",
+            "name": {
+                "de": "JetBrains Mono Nerd Font installieren",
+                "en": "Install JetBrains Mono Nerd Font"
+            },
+            "description": {
+                "de": "Installiert die JetBrains Mono Nerd Font für Symbole und Icons in NeoVim.",
+                "en": "Installs the JetBrains Mono Nerd Font for symbols and icons in NeoVim."
+            },
+            "file": "44_install_jetbrains_mono_nerd_font.json"
         }
     ]
 }

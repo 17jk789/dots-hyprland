@@ -1,0 +1,58 @@
+{
+    "id": "install_latex",
+
+    "name": {
+        "de": "LaTeX-Umgebung installieren",
+        "en": "Install LaTeX environment"
+    },
+
+    "description": {
+        "de": "Installiert LaTeX, zusätzliche Pakete, Literaturverwaltung, PDF-Viewer, Texlab und Tectonic.",
+        "en": "Installs LaTeX, additional packages, bibliography tools, PDF viewer, Texlab, and Tectonic."
+    },
+
+    "question": {
+        "de": "Soll die vollständige LaTeX-Umgebung jetzt installiert werden?",
+        "en": "Should the complete LaTeX environment be installed now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die vollständige LaTeX-Umgebung mit zusätzlichen Paketen, Sprachunterstützung, Biber, Zathura, Texlab und Tectonic.",
+                "en": "Installs the complete LaTeX environment with additional packages, language support, Biber, Zathura, Texlab, and Tectonic."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "texlive-meta",
+                "latexmk",
+                "texlive-latexextra",
+                "texlive-pictures",
+                "texlive-langgerman",
+                "texlive-langenglish",
+                "texlive-langgreek",
+                "biber",
+                "zathura",
+                "zathura-pdf-poppler",
+                "texlab",
+                "tectonic"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

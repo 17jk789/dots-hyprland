@@ -1,0 +1,47 @@
+{
+    "id": "install_languagetool",
+
+    "name": {
+        "de": "LanguageTool installieren",
+        "en": "Install LanguageTool"
+    },
+
+    "description": {
+        "de": "Installiert LanguageTool für erweiterte Grammatik-, Rechtschreib- und Stilprüfung in verschiedenen Sprachen.",
+        "en": "Installs LanguageTool for advanced grammar, spelling, and style checking in multiple languages."
+    },
+
+    "question": {
+        "de": "Soll LanguageTool installiert werden?",
+        "en": "Should LanguageTool be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert LanguageTool über Pacman.",
+                "en": "Installs LanguageTool using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "languagetool"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

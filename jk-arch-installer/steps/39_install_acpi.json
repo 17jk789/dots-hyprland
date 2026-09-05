@@ -1,0 +1,47 @@
+{
+    "id": "install_acpi",
+
+    "name": {
+        "de": "Akku- und Hardware-Informationen installieren",
+        "en": "Install battery and hardware information tools"
+    },
+
+    "description": {
+        "de": "Installiert acpi zum Auslesen von Akku- und Hardware-Informationen über die ACPI-Schnittstelle.",
+        "en": "Installs acpi for reading battery and hardware information through the ACPI interface."
+    },
+
+    "question": {
+        "de": "Soll acpi für Akku- und Hardware-Informationen installiert werden?",
+        "en": "Should acpi be installed for battery and hardware information?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert acpi zum Auslesen von Akku- und Hardware-Informationen.",
+                "en": "Installs acpi for reading battery and hardware information."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "acpi"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

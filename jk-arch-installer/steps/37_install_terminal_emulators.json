@@ -1,0 +1,51 @@
+{
+    "id": "install_terminal_emulators",
+
+    "name": {
+        "de": "Moderne Terminal-Emulatoren installieren",
+        "en": "Install modern terminal emulators"
+    },
+
+    "description": {
+        "de": "Installiert Kitty, Ghostty, Foot, Alacritty und Konsole als moderne Terminal-Emulatoren.",
+        "en": "Installs Kitty, Ghostty, Foot, Alacritty, and Konsole as modern terminal emulators."
+    },
+
+    "question": {
+        "de": "Sollen die Terminal-Emulatoren jetzt installiert werden?",
+        "en": "Should the terminal emulators be installed now?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Kitty, Ghostty, Foot, Alacritty und Konsole über Pacman.",
+                "en": "Installs Kitty, Ghostty, Foot, Alacritty, and Konsole using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "ghostty",
+                "foot",
+                "alacritty",
+                "kitty",
+                "konsole"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
