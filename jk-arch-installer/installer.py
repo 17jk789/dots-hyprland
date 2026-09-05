@@ -1202,11 +1202,28 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
     executable = list(command.command)
     environment = os.environ.copy()
     working_directory = command.working_directory
+    user = installer_user()
+    needs_user = any(
+        argument == "__INSTALLER_USER__"
+        for argument in executable
+    )
 
     if command.requires_root:
+        if needs_user:
+            if user is None:
+                raise CommandError(
+                    "A root command requires the original user, but none was detected."
+                )
+
+            executable = [
+                user.pw_name
+                if argument == "__INSTALLER_USER__"
+                else argument
+                for argument in executable
+            ]
+
         return executable, environment, working_directory
 
-    user = installer_user()
     if user is None:
         raise CommandError(
             "A non-root command requires the original user, but none was detected."
