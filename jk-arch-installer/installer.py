@@ -1158,6 +1158,44 @@ def installer_user() -> pwd.struct_passwd | None:
     return None
 
 
+def user_path(user: pwd.struct_passwd, current_path: str) -> str:
+    """Build a PATH containing common user-installed tool directories."""
+
+    path_entries = [
+        str(Path(user.pw_dir) / ".cargo/bin"),
+        str(Path(user.pw_dir) / ".local/bin"),
+        str(Path(user.pw_dir) / "go/bin"),
+        str(Path(user.pw_dir) / ".dotnet/tools"),
+    ]
+
+    sdkman_root = Path(user.pw_dir) / ".sdkman/candidates"
+    if sdkman_root.exists():
+        path_entries.extend(
+            str(path)
+            for path in sdkman_root.glob("*/current/bin")
+            if path.is_dir()
+        )
+
+    path_entries.extend(current_path.split(os.pathsep))
+
+    return os.pathsep.join(dict.fromkeys(
+        entry for entry in path_entries if entry
+    ))
+
+
+def expand_user_argument(argument: str, user: pwd.struct_passwd) -> str:
+    """Expand user-home syntax without invoking a shell."""
+
+    return (
+        argument
+        .replace("${HOME}", user.pw_dir)
+        .replace("$HOME", user.pw_dir)
+        .replace("${USER}", user.pw_name)
+        .replace("$USER", user.pw_name)
+        .replace("~/", f"{user.pw_dir}/")
+    )
+
+
 def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], str | None]:
     """Run user commands as the invoking user, even when the installer is root."""
 
@@ -1165,7 +1203,7 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
     environment = os.environ.copy()
     working_directory = command.working_directory
 
-    if command.requires_root or os.geteuid() != 0:
+    if command.requires_root:
         return executable, environment, working_directory
 
     user = installer_user()
@@ -1175,9 +1213,18 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
         )
 
     executable = [
-        user.pw_name if argument == "__INSTALLER_USER__" else argument
+        user.pw_name
+        if argument == "__INSTALLER_USER__"
+        else expand_user_argument(argument, user)
         for argument in executable
     ]
+    if working_directory:
+        working_directory = expand_user_argument(working_directory, user)
+
+    environment["PATH"] = user_path(
+        user,
+        environment.get("PATH", ""),
+    )
     environment.update({
         "HOME": user.pw_dir,
         "USER": user.pw_name,
@@ -1194,6 +1241,7 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
         f"USER={user.pw_name}",
         f"LOGNAME={user.pw_name}",
         f"XDG_RUNTIME_DIR=/run/user/{user.pw_uid}",
+        f"PATH={environment['PATH']}",
     ]
     for key in (
         "DBUS_SESSION_BUS_ADDRESS",

@@ -73,7 +73,7 @@
             "command": [
                 "fish",
                 "-c",
-                "fish_add_path $HOME/.dotnet/tools"
+                "mkdir -p \"$HOME/.dotnet/tools\" && fish_add_path --append \"$HOME/.dotnet/tools\""
             ],
 
             "requires_root": false,

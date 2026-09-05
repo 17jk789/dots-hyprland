@@ -97,12 +97,12 @@
         {
             "id": "install_yay",
             "name": {
-                "de": "yay installieren",
-                "en": "Install yay"
+                "de": "✨ yay installieren",
+                "en": "✨ Install yay"
             },
             "description": {
-                "de": "Lädt den Quellcode von yay aus dem AUR herunter, baut das Paket und installiert es.",
-                "en": "Downloads the yay source code from the AUR, builds the package, and installs it."
+                "de": "Lädt den Quellcode von yay aus dem AUR herunter, baut das Paket und installiert es. yay wurde bereits durch das vorherige end-4-Skript installiert und muss daher normalerweise nicht erneut ausgeführt werden.",
+                "en": "Downloads the yay source code from the AUR, builds the package, and installs it. yay was already installed by the previous end-4 script and therefore normally does not need to be installed again."
             },
             "file": "06_install_yay.json"
         },

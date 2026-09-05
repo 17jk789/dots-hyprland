@@ -44,31 +44,15 @@
         },
         {
             "description": {
-                "de": "Lädt die Docker-Gruppenmitgliedschaft für die aktuelle Shell neu.",
-                "en": "Reloads Docker group membership for the current shell."
+                "de": "Testet Docker mit der neuen Docker-Gruppenzugehörigkeit.",
+                "en": "Tests Docker with the new Docker group membership."
             },
 
             "command": [
-                "newgrp",
-                "docker"
-            ],
-
-            "requires_root": false,
-
-            "distros": [
-                "arch_based"
-            ]
-        },
-        {
-            "description": {
-                "de": "Testet Docker ohne sudo mit dem Hello-World-Container.",
-                "en": "Tests Docker without sudo using the Hello-World container."
-            },
-
-            "command": [
+                "sg",
                 "docker",
-                "run",
-                "hello-world"
+                "-c",
+                "docker run hello-world"
             ],
 
             "requires_root": false,
