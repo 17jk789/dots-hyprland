@@ -218,7 +218,8 @@ for pattern in "${patterns[@]}"; do
     "sync")
       if [[ -d "$from" ]]; then
         warning_overwrite
-        v rsync -av --delete "${excludes[@]}" "$from/" "$to/"
+        # Merge only: update repository files and keep user-only destination files.
+        v rsync -av "${excludes[@]}" "$from/" "$to/"
       else
         warning_overwrite
         # For files, don't use trailing slash and don't use --delete
@@ -228,6 +229,7 @@ for pattern in "${patterns[@]}"; do
     "soft")
       warning_overwrite
       if [[ -d "$from" ]]; then
+        # Merge only: update repository files and keep user-only destination files.
         v rsync -av "${excludes[@]}" "$from/" "$to/"
       else
         # For files, don't use trailing slash

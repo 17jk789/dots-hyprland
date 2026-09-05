@@ -95,17 +95,17 @@ rsync_dir__ignore_existing(){
 }
 rsync_dir__sync(){
   # NOTE: This function is only for using in other functions
-  # `--delete' for rsync to make sure that
-  # original dotfiles and new ones in the SAME DIRECTORY
-  # (eg. in ~/.config/hypr) won't be mixed together
+  # Merge repository files without deleting user-owned destination files.
+  # Do not add --delete: files absent from dots must remain in the destination.
   x mkdir -p "$2"
   local dest="$(realpath -se $2)"
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  rsync -a --delete --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+  rsync -a --out-format='%i %n' "$1"/ "$2"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 rsync_dir__sync_exclude(){
   # NOTE: This function is only for using in other functions
-  # Same as rsync_dir__sync but with exclude patterns support
+  # Merge with exclude patterns without deleting user-owned files.
+  # Do not add --delete: files absent from dots must remain in the destination.
   # Usage: rsync_dir__sync_exclude <src> <dest> <exclude_pattern1> [<exclude_pattern2> ...]
   local src="$1"
   local dest_dir="$2"
@@ -117,7 +117,7 @@ rsync_dir__sync_exclude(){
   x mkdir -p "$dest_dir"
   local dest="$(realpath -se $dest_dir)"
   x mkdir -p "$(dirname ${INSTALLED_LISTFILE})"
-  rsync -a --delete "${excludes[@]}" --out-format='%i %n' "$src"/ "$dest_dir"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
+  rsync -a "${excludes[@]}" --out-format='%i %n' "$src"/ "$dest_dir"/ | awk -v d="$dest" '$1 ~ /^>/{ sub(/^[^ ]+ /,""); printf d "/" $0 "\n" }' >> "${INSTALLED_LISTFILE}"
 }
 function install_file(){
   # NOTE: Do not add prefix `v` or `x` when using this function

@@ -1,5 +1,5 @@
 # The possible values of `mode`: (by default `sync`)
-# - `sync`: Make the destination completely the same as the source.
+# - `sync`: Merge source into destination. Replace matching files, but keep extra destination files.
 # - `soft`: Skip existing files when copying
 # - `hard`: Overwrite existing files when copying
 # - `soft-backup`: If target file exists, copy source file to `*.new`. Do not create `*.new` but skip coyping when source and target HASH values are exactly the same.
