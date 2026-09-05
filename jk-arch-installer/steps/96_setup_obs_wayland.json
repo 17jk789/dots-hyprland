@@ -1,0 +1,92 @@
+{
+    "id": "setup_obs_wayland",
+
+    "name": {
+        "de": "OBS Wayland-Unterstützung einrichten",
+        "en": "Set up OBS Wayland support"
+    },
+
+    "description": {
+        "de": "Installiert und startet die benötigten Desktop-Portale und PipeWire-Dienste für OBS Studio unter Wayland und Hyprland.",
+        "en": "Installs and restarts the required desktop portals and PipeWire services for OBS Studio on Wayland and Hyprland."
+    },
+
+    "question": {
+        "de": "Soll die Wayland- und Hyprland-Unterstützung für OBS Studio eingerichtet werden?",
+        "en": "Should Wayland and Hyprland support for OBS Studio be configured?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die benötigten Desktop-Portale und PipeWire-Dienste.",
+                "en": "Installs the required desktop portals and PipeWire services."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "xdg-desktop-portal",
+                "xdg-desktop-portal-hyprland",
+                "pipewire",
+                "wireplumber"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Prüft den Status der Desktop-Portale.",
+                "en": "Checks the status of the desktop portals."
+            },
+
+            "command": [
+                "systemctl",
+                "--user",
+                "status",
+                "xdg-desktop-portal",
+                "xdg-desktop-portal-hyprland"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Startet die Desktop-Portale und PipeWire-Dienste neu.",
+                "en": "Restarts the desktop portals and PipeWire services."
+            },
+
+            "command": [
+                "systemctl",
+                "--user",
+                "restart",
+                "xdg-desktop-portal",
+                "xdg-desktop-portal-hyprland",
+                "pipewire",
+                "wireplumber"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

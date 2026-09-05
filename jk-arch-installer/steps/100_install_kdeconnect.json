@@ -1,0 +1,47 @@
+{
+    "id": "install_kdeconnect",
+
+    "name": {
+        "de": "KDE Connect installieren",
+        "en": "Install KDE Connect"
+    },
+
+    "description": {
+        "de": "Installiert KDE Connect zur Integration des Linux-Desktops mit Smartphones.",
+        "en": "Installs KDE Connect for integrating the Linux desktop with smartphones."
+    },
+
+    "question": {
+        "de": "Soll KDE Connect installiert werden?",
+        "en": "Should KDE Connect be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert KDE Connect über Pacman.",
+                "en": "Installs KDE Connect using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "kdeconnect"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

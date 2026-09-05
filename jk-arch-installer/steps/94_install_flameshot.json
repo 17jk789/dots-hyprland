@@ -1,0 +1,49 @@
+{
+    "id": "install_flameshot",
+
+    "name": {
+        "de": "Flameshot installieren",
+        "en": "Install Flameshot"
+    },
+
+    "description": {
+        "de": "Installiert Flameshot zum Erstellen, Bearbeiten und Teilen von Screenshots sowie Grim und das Hyprland Desktop Portal.",
+        "en": "Installs Flameshot for creating, editing, and sharing screenshots, along with Grim and the Hyprland desktop portal."
+    },
+
+    "question": {
+        "de": "Soll Flameshot installiert werden?",
+        "en": "Should Flameshot be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Flameshot, Grim und das Hyprland Desktop Portal über Pacman.",
+                "en": "Installs Flameshot, Grim, and the Hyprland desktop portal using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "flameshot",
+                "grim",
+                "xdg-desktop-portal-hyprland"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

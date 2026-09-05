@@ -1427,6 +1427,138 @@
                 "en": "Installs the powerful scientific calculator Qalculate!."
             },
             "file": "93_install_qalculate.json"
+        },
+        {
+            "id": "install_flameshot",
+            "name": {
+                "de": "✨ Flameshot installieren",
+                "en": "✨ Install Flameshot"
+            },
+            "description": {
+                "de": "Installiert Flameshot sowie die benötigten Werkzeuge für Screenshots und Bildschirmaufnahmen unter Hyprland.",
+                "en": "Installs Flameshot and the required tools for screenshots and screen capture under Hyprland."
+            },
+            "file": "94_install_flameshot.json"
+        },
+        {
+            "id": "install_obs_studio",
+            "name": {
+                "de": "OBS Studio installieren",
+                "en": "Install OBS Studio"
+            },
+            "description": {
+                "de": "Installiert OBS Studio für Bildschirmaufnahmen und Livestreaming.",
+                "en": "Installs OBS Studio for screen recording and livestreaming."
+            },
+            "file": "95_install_obs_studio.json"
+        },
+        {
+            "id": "setup_obs_wayland",
+            "name": {
+                "de": "✨ OBS Wayland-Unterstützung einrichten",
+                "en": "✨ Set up OBS Wayland support"
+            },
+            "description": {
+                "de": "Richtet die Wayland- und Hyprland-Unterstützung für OBS Studio ein.",
+                "en": "Sets up Wayland and Hyprland support for OBS Studio."
+            },
+            "file": "96_setup_obs_wayland.json"
+        },
+        {
+            "id": "install_discover_flatpak",
+            "name": {
+                "de": "Discover und Flatpak installieren",
+                "en": "Install Discover and Flatpak"
+            },
+            "description": {
+                "de": "Installiert das KDE-Software-Zentrum Discover und das Flatpak-System.",
+                "en": "Installs the KDE software center Discover and the Flatpak system."
+            },
+            "file": "97_install_discover_flatpak.json"
+        },
+        {
+            "id": "install_kclock",
+            "name": {
+                "de": "KClock installieren",
+                "en": "Install KClock"
+            },
+            "description": {
+                "de": "Installiert die Desktop-Uhr KClock für KDE Plasma.",
+                "en": "Installs the KClock desktop clock for KDE Plasma."
+            },
+            "file": "98_install_kclock.json"
+        },
+        {
+            "id": "install_morgen",
+            "name": {
+                "de": "✨ Morgen Calendar installieren",
+                "en": "✨ Install Morgen Calendar"
+            },
+            "description": {
+                "de": "Installiert den modernen Kalender-Client Morgen.",
+                "en": "Installs the modern Morgen calendar client."
+            },
+            "file": "99_install_morgen.json"
+        },
+        {
+            "id": "install_kdeconnect",
+            "name": {
+                "de": "KDE Connect installieren",
+                "en": "Install KDE Connect"
+            },
+            "description": {
+                "de": "Installiert KDE Connect zur Integration von Linux-Desktop und Smartphone.",
+                "en": "Installs KDE Connect for Linux desktop and smartphone integration."
+            },
+            "file": "100_install_kdeconnect.json"
+        },
+        {
+            "id": "install_python312",
+            "name": {
+                "de": "✨ Python 3.12 installieren",
+                "en": "✨ Install Python 3.12"
+            },
+            "description": {
+                "de": "Installiert Python 3.12 für Anwendungen mit älteren Python-Kompatibilitätsanforderungen.",
+                "en": "Installs Python 3.12 for applications requiring compatibility with an older Python version."
+            },
+            "file": "101_install_python312.json"
+        },
+        {
+            "id": "install_libreoffice",
+            "name": {
+                "de": "LibreOffice installieren",
+                "en": "Install LibreOffice"
+            },
+            "description": {
+                "de": "Installiert die freie und quelloffene Office-Suite LibreOffice.",
+                "en": "Installs the free and open-source LibreOffice office suite."
+            },
+            "file": "102_install_libreoffice.json"
+        },
+        {
+            "id": "install_liberation_fonts",
+            "name": {
+                "de": "✨ Liberation-Schriftarten installieren",
+                "en": "✨ Install Liberation Fonts"
+            },
+            "description": {
+                "de": "Installiert Microsoft-kompatible Liberation-Schriftarten für eine bessere Darstellung und den Austausch von Dokumenten.",
+                "en": "Installs Microsoft-compatible Liberation Fonts for improved document rendering and compatibility."
+            },
+            "file": "103_install_liberation_fonts.json"
+        },
+        {
+            "id": "install_firejail",
+            "name": {
+                "de": "✨ Firejail installieren",
+                "en": "✨ Install Firejail"
+            },
+            "description": {
+                "de": "Installiert das Sandbox-Sicherheitswerkzeug Firejail zur isolierten Ausführung von Anwendungen.",
+                "en": "Installs the Firejail sandbox security tool for running applications in isolation."
+            },
+            "file": "104_install_firejail.json"
         }
     ]
 }

@@ -1,0 +1,47 @@
+{
+    "id": "install_firejail",
+
+    "name": {
+        "de": "Firejail installieren",
+        "en": "Install Firejail"
+    },
+
+    "description": {
+        "de": "Installiert Firejail zur Ausführung von Anwendungen in isolierten Sandboxes.",
+        "en": "Installs Firejail for running applications in isolated sandboxes."
+    },
+
+    "question": {
+        "de": "Soll Firejail installiert werden?",
+        "en": "Should Firejail be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Firejail über Pacman.",
+                "en": "Installs Firejail using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "firejail"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

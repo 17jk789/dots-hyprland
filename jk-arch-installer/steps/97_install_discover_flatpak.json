@@ -1,0 +1,48 @@
+{
+    "id": "install_discover_flatpak",
+
+    "name": {
+        "de": "Discover und Flatpak installieren",
+        "en": "Install Discover and Flatpak"
+    },
+
+    "description": {
+        "de": "Installiert Discover zur grafischen Verwaltung von Anwendungen sowie Flatpak für zusätzliche Softwarepakete.",
+        "en": "Installs Discover for graphical application management and Flatpak for additional software packages."
+    },
+
+    "question": {
+        "de": "Sollen Discover und Flatpak installiert werden?",
+        "en": "Should Discover and Flatpak be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Discover und Flatpak über Pacman.",
+                "en": "Installs Discover and Flatpak using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "discover",
+                "flatpak"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

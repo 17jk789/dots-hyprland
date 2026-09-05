@@ -1,0 +1,48 @@
+{
+    "id": "install_libreoffice",
+
+    "name": {
+        "de": "LibreOffice installieren",
+        "en": "Install LibreOffice"
+    },
+
+    "description": {
+        "de": "Installiert LibreOffice für Textverarbeitung, Tabellenkalkulation, Präsentationen und weitere Büroanwendungen.",
+        "en": "Installs LibreOffice for word processing, spreadsheets, presentations, and other office applications."
+    },
+
+    "question": {
+        "de": "Soll LibreOffice installiert werden?",
+        "en": "Should LibreOffice be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert LibreOffice und die deutsche Sprachunterstützung über Pacman.",
+                "en": "Installs LibreOffice and German language support using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "libreoffice-fresh",
+                "libreoffice-fresh-de"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

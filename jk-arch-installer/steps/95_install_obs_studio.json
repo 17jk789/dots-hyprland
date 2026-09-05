@@ -1,0 +1,47 @@
+{
+    "id": "install_obs_studio",
+
+    "name": {
+        "de": "OBS Studio installieren",
+        "en": "Install OBS Studio"
+    },
+
+    "description": {
+        "de": "Installiert OBS Studio für Bildschirmaufnahmen, Livestreaming und Videoaufzeichnungen.",
+        "en": "Installs OBS Studio for screen recording, livestreaming, and video recording."
+    },
+
+    "question": {
+        "de": "Soll OBS Studio installiert werden?",
+        "en": "Should OBS Studio be installed?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert OBS Studio über Pacman.",
+                "en": "Installs OBS Studio using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "obs-studio"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

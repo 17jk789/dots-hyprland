@@ -1,0 +1,47 @@
+{
+    "id": "install_morgen",
+
+    "name": {
+        "de": "Morgen Calendar installieren",
+        "en": "Install Morgen Calendar"
+    },
+
+    "description": {
+        "de": "Installiert den modernen Kalender-Client Morgen für Termine, Aufgaben und Erinnerungen.",
+        "en": "Installs the modern Morgen calendar client for events, tasks, and reminders."
+    },
+
+    "question": {
+        "de": "Soll Morgen Calendar installiert werden?",
+        "en": "Should Morgen Calendar be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Morgen Calendar über yay.",
+                "en": "Installs Morgen Calendar using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "morgen-bin"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "install_liberation_fonts",
+
+    "name": {
+        "de": "Liberation-Schriftarten installieren",
+        "en": "Install Liberation Fonts"
+    },
+
+    "description": {
+        "de": "Installiert freie, metrisch kompatible Schriftarten als Ersatz für Arial, Times New Roman und Courier New.",
+        "en": "Installs free, metrically compatible fonts as replacements for Arial, Times New Roman, and Courier New."
+    },
+
+    "question": {
+        "de": "Sollen die Liberation-Schriftarten installiert werden?",
+        "en": "Should the Liberation Fonts be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die Liberation-Schriftarten über Pacman.",
+                "en": "Installs the Liberation Fonts using Pacman."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "ttf-liberation"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

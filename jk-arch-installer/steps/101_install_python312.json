@@ -1,0 +1,47 @@
+{
+    "id": "install_python312",
+
+    "name": {
+        "de": "Python 3.12 installieren",
+        "en": "Install Python 3.12"
+    },
+
+    "description": {
+        "de": "Installiert Python 3.12 für Anwendungen, die eine ältere Python-Version benötigen.",
+        "en": "Installs Python 3.12 for applications that require an older Python version."
+    },
+
+    "question": {
+        "de": "Soll Python 3.12 installiert werden?",
+        "en": "Should Python 3.12 be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Python 3.12 über yay.",
+                "en": "Installs Python 3.12 using yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "python312"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
