@@ -1,2380 +1,1081 @@
 #!/usr/bin/env python3
+"""
+Arch Linux + Hyprland unattended installer.
+
+Run ONLY from the official Arch Linux ISO as root.
+
+The installer asks for exactly:
+  1. Language
+  2. Keyboard layout
+  3. Target disk
+  4. Username
+  5. Password twice
+
+After that it runs unattended.
+
+The Python file is already part of the user's existing dotfiles checkout.
+This script does not clone, download, or install another dotfiles repository.
+
+Architecture:
+  - Python collects the five answers.
+  - Python installs/updates archinstall in the live ISO.
+  - Python generates a current archinstall guided configuration.
+  - archinstall performs the complete disk partitioning, filesystem creation,
+    Btrfs subvolume creation, base installation, fstab, bootloader, users,
+    locale, kernel and package installation.
+  - archinstall custom_commands finish the installed Hyprland system.
+"""
 
 from __future__ import annotations
 
-import argparse
-import curses
+import getpass
 import json
 import os
 import platform
-import shlex
-import shutil
-import signal
+import re
 import socket
 import subprocess
 import sys
 import time
-
-from dataclasses import dataclass
-from datetime import datetime
+import uuid
 from pathlib import Path
-from typing import Any
-
-
-# ============================================================
-# ARCH LINUX + HYPRLAND ULTIMATE INSTALLER
-# ============================================================
-#
-# Designed for:
-#
-#     Official Arch Linux ISO
-#
-# Main purpose:
-#
-#     1. Check live environment
-#     2. Install archinstall if missing
-#     3. Generate an archinstall configuration
-#     4. Launch official archinstall
-#     5. Install Arch Linux
-#     6. Install ONLY the Hyprland desktop/compositor stack
-#
-# NO:
-#
-#     GNOME
-#     KDE Plasma
-#     XFCE
-#     Cinnamon
-#     MATE
-#     LXQt
-#     Other desktop environments
-#
-# Hyprland is installed using official Arch packages.
-#
-# IMPORTANT:
-#
-# Partitioning is intentionally left to archinstall's UI.
-# The Python launcher never guesses which disk the user wants.
-#
-# ============================================================
-
-
-# ============================================================
-# PATHS
-# ============================================================
-
-BASE_DIR = Path(__file__).resolve().parent
-
-LOG_DIR = BASE_DIR / "logs"
-
-CONFIG_DIR = BASE_DIR / "generated"
-
-LOG_DIR.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
-CONFIG_DIR.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
-TIMESTAMP = datetime.now().strftime(
-    "%Y-%m-%d_%H-%M-%S"
-)
-
-LOG_FILE = (
-    LOG_DIR
-    / f"arch_hyprland_{TIMESTAMP}.log"
-)
-
-ARCHINSTALL_CONFIG = (
-    CONFIG_DIR
-    / f"archinstall_hyprland_{TIMESTAMP}.json"
-)
-
-
-# ============================================================
-# GLOBAL STATE
-# ============================================================
-
-STOP_REQUESTED = False
-
-LANGUAGE = "de"
-
-
-# ============================================================
-# COLORS
-# ============================================================
-
-class Colors:
-
-    RESET = "\033[0m"
-
-    BOLD = "\033[1m"
-
-    RED = "\033[31m"
-    GREEN = "\033[32m"
-    YELLOW = "\033[33m"
-    BLUE = "\033[34m"
-    CYAN = "\033[36m"
-    MAGENTA = "\033[35m"
-    WHITE = "\033[37m"
-
-
-def paint(
-    text: str,
-    color: str,
-) -> str:
-
-    if not sys.stdout.isatty():
-
-        return text
-
-    return (
-        f"{color}"
-        f"{text}"
-        f"{Colors.RESET}"
-    )
-
-
-def info(text: str) -> None:
-
-    print(
-        paint(
-            f"[INFO] {text}",
-            Colors.BLUE,
-        )
-    )
-
-
-def success(text: str) -> None:
-
-    print(
-        paint(
-            f"[ OK ] {text}",
-            Colors.GREEN,
-        )
-    )
-
-
-def warning(text: str) -> None:
-
-    print(
-        paint(
-            f"[WARN] {text}",
-            Colors.YELLOW,
-        )
-    )
-
-
-def error(text: str) -> None:
-
-    print(
-        paint(
-            f"[ERROR] {text}",
-            Colors.RED,
-        ),
-        file=sys.stderr,
-    )
-
-
-def command_output(text: str) -> None:
-
-    print(
-        paint(
-            f"[CMD ] {text}",
-            Colors.CYAN,
-        )
-    )
-
-
-# ============================================================
-# TRANSLATIONS
-# ============================================================
-
-TRANSLATIONS = {
-
-    "de": {
-
-        "title":
-            "ARCH LINUX + HYPRLAND INSTALLER",
-
-        "subtitle":
-            "Automatisierter Archinstall-Launcher mit reinem Hyprland-Profil",
-
-        "language":
-            "Sprache auswählen",
-
-        "language_invalid":
-            "Bitte 1 oder 2 auswählen.",
-
-        "system_check":
-            "SYSTEMPRÜFUNG",
-
-        "environment":
-            "Umgebung",
-
-        "distribution":
-            "Distribution",
-
-        "kernel":
-            "Kernel",
-
-        "architecture":
-            "Architektur",
-
-        "machine":
-            "Hardware",
-
-        "firmware":
-            "Firmware",
-
-        "uefi":
-            "UEFI",
-
-        "bios":
-            "Legacy BIOS",
-
-        "root":
-            "Root-Rechte vorhanden.",
-
-        "root_required":
-            "Dieses Programm muss als root ausgeführt werden.",
-
-        "pacman":
-            "pacman verfügbar.",
-
-        "python":
-            "Python verfügbar.",
-
-        "archinstall":
-            "archinstall verfügbar.",
-
-        "archinstall_missing":
-            "archinstall wurde nicht gefunden.",
-
-        "install_archinstall":
-            "archinstall jetzt über pacman installieren?",
-
-        "network":
-            "Netzwerk",
-
-        "network_ok":
-            "Internetverbindung scheint verfügbar zu sein.",
-
-        "network_failed":
-            "Internetverbindung konnte nicht geprüft werden.",
-
-        "arch_warning":
-            "Das System sieht nicht wie das offizielle Arch-Linux-ISO aus.",
-
-        "continue":
-            "Trotzdem fortfahren?",
-
-        "profile":
-            "INSTALLATIONSPROFIL",
-
-        "profile_arch":
-            "Arch Linux",
-
-        "profile_hyprland":
-            "Hyprland",
-
-        "profile_only":
-            "Nur Arch Linux + Hyprland",
-
-        "profile_no_other":
-            "Keine GNOME-, KDE-, XFCE- oder andere Desktop-Umgebung.",
-
-        "packages":
-            "Hyprland-Pakete",
-
-        "mode":
-            "STARTMODUS",
-
-        "guided":
-            "Archinstall Guided",
-
-        "guided_description":
-            "Normale Archinstall-Oberfläche mit automatisch vorbereitetem Hyprland-Profil.",
-
-        "dry_run":
-            "Dry-Run",
-
-        "dry_description":
-            "Konfiguration prüfen, ohne die Installation auszuführen.",
-
-        "start":
-            "Installation starten?",
-
-        "security":
-            "SICHERHEITSHINWEIS",
-
-        "disk_warning":
-            "Die von dir in archinstall ausgewählte Festplatte kann gelöscht/formatiert werden.",
-
-        "backup":
-            "Stelle sicher, dass wichtige Daten gesichert sind.",
-
-        "generated":
-            "Konfiguration erzeugt.",
-
-        "launch":
-            "Archinstall wird gestartet.",
-
-        "finished":
-            "Archinstall wurde beendet.",
-
-        "exit_code":
-            "Exit-Code",
-
-        "log":
-            "Log",
-
-        "cancelled":
-            "Abgebrochen.",
-
-        "failed":
-            "Fehlgeschlagen.",
-
-        "ready":
-            "System ist bereit.",
-
-        "hyprland_only":
-            "DESKTOP: HYPRLAND ONLY",
-
-        "selection_help":
-            "↑↓ bewegen | ENTER auswählen | Q abbrechen",
-
-        "yes":
-            "ja",
-
-        "no":
-            "nein",
-
-        "invalid":
-            "Bitte j/n eingeben.",
-
-        "post_install":
-            "Hyprland wird als Teil der Archinstall-Konfiguration installiert.",
-
-    },
-
-    "en": {
-
-        "title":
-            "ARCH LINUX + HYPRLAND INSTALLER",
-
-        "subtitle":
-            "Automated archinstall launcher with a Hyprland-only profile",
-
-        "language":
-            "Select language",
-
-        "language_invalid":
-            "Please select 1 or 2.",
-
-        "system_check":
-            "SYSTEM CHECK",
-
-        "environment":
-            "Environment",
-
-        "distribution":
-            "Distribution",
-
-        "kernel":
-            "Kernel",
-
-        "architecture":
-            "Architecture",
-
-        "machine":
-            "Hardware",
-
-        "firmware":
-            "Firmware",
-
-        "uefi":
-            "UEFI",
-
-        "bios":
-            "Legacy BIOS",
-
-        "root":
-            "Root privileges available.",
-
-        "root_required":
-            "This program must be executed as root.",
-
-        "pacman":
-            "pacman available.",
-
-        "python":
-            "Python available.",
-
-        "archinstall":
-            "archinstall available.",
-
-        "archinstall_missing":
-            "archinstall was not found.",
-
-        "install_archinstall":
-            "Install archinstall using pacman now?",
-
-        "network":
-            "Network",
-
-        "network_ok":
-            "Internet connection appears to be available.",
-
-        "network_failed":
-            "Internet connection could not be verified.",
-
-        "arch_warning":
-            "The environment does not look like the official Arch Linux ISO.",
-
-        "continue":
-            "Continue anyway?",
-
-        "profile":
-            "INSTALLATION PROFILE",
-
-        "profile_arch":
-            "Arch Linux",
-
-        "profile_hyprland":
-            "Hyprland",
-
-        "profile_only":
-            "Arch Linux + Hyprland only",
-
-        "profile_no_other":
-            "No GNOME, KDE, XFCE or other desktop environment.",
-
-        "packages":
-            "Hyprland packages",
-
-        "mode":
-            "START MODE",
-
-        "guided":
-            "Archinstall Guided",
-
-        "guided_description":
-            "Normal Archinstall interface with a prepared Hyprland profile.",
-
-        "dry_run":
-            "Dry-Run",
-
-        "dry_description":
-            "Validate the configuration without performing installation.",
-
-        "start":
-            "Start installation?",
-
-        "security":
-            "SECURITY WARNING",
-
-        "disk_warning":
-            "The disk selected inside archinstall may be erased/formatted.",
-
-        "backup":
-            "Make sure important data is backed up.",
-
-        "generated":
-            "Configuration generated.",
-
-        "launch":
-            "Starting archinstall.",
-
-        "finished":
-            "Archinstall has exited.",
-
-        "exit_code":
-            "Exit code",
-
-        "log":
-            "Log",
-
-        "cancelled":
-            "Cancelled.",
-
-        "failed":
-            "Failed.",
-
-        "ready":
-            "System is ready.",
-
-        "hyprland_only":
-            "DESKTOP: HYPRLAND ONLY",
-
-        "selection_help":
-            "↑↓ move | ENTER select | Q cancel",
-
-        "yes":
-            "yes",
-
-        "no":
-            "no",
-
-        "invalid":
-            "Please enter y/n.",
-
-        "post_install":
-            "Hyprland will be installed as part of the archinstall configuration.",
-
-    },
+from typing import NoReturn
+
+
+WORK = Path("/root/arch-hyprland-installer")
+CONFIG = WORK / "user_configuration.json"
+CREDS = WORK / "user_credentials.json"
+LOG = WORK / "installer.log"
+
+LANGUAGES = [
+    ("de", "Deutsch", "de_DE.UTF-8"),
+    ("en", "English", "en_US.UTF-8"),
+]
+
+KEYBOARDS = [
+    ("de", "Deutsch (DE)"),
+    ("us", "English (US)"),
+    ("gb", "English (UK)"),
+    ("fr", "Français (FR)"),
+    ("es", "Español (ES)"),
+    ("it", "Italiano (IT)"),
+]
+
+CORE_PACKAGES = [
+    # Complete Arch base / administration
+    "base",
+    "base-devel",
+    "linux",
+    "linux-firmware",
+    "btrfs-progs",
+    "dosfstools",
+    "sudo",
+    "networkmanager",
+    "git",
+    "curl",
+    "wget",
+    "openssh",
+    "vim",
+    "nano",
+    "bash-completion",
+    "man-db",
+    "man-pages",
+    "texinfo",
+    "which",
+    "polkit",
+    "polkit-gnome",
+
+    # Audio / Bluetooth
+    "pipewire",
+    "pipewire-audio",
+    "pipewire-pulse",
+    "wireplumber",
+    "bluez",
+    "bluez-utils",
+
+    # XDG / Wayland
+    "xdg-utils",
+    "xdg-user-dirs",
+    "xdg-user-dirs-gtk",
+    "xdg-desktop-portal",
+    "xdg-desktop-portal-hyprland",
+
+    # Hyprland stack
+    "hyprland",
+    "hyprpaper",
+    "hyprlock",
+    "hypridle",
+    "hyprpicker",
+    "hyprcursor",
+    "hyprpolkitagent",
+    "quickshell",
+
+    # Desktop applications / utilities
+    "kitty",
+    "waybar",
+    "wofi",
+    "mako",
+    "grim",
+    "slurp",
+    "wl-clipboard",
+    "qt5-wayland",
+    "qt6-wayland",
+    "qt6ct",
+    "brightnessctl",
+    "playerctl",
+    "pavucontrol",
+    "network-manager-applet",
+    "blueman",
+    "thunar",
+    "file-roller",
+    "unzip",
+    "unrar",
+    "tar",
+    "gzip",
+    "btop",
+    "fastfetch",
+    "jq",
+    "firefox",
+
+    # Python / build tooling
+    "python",
+    "python-pip",
+    "python-gobject",
+    "python-pywal",
+    "meson",
+    "ninja",
+    "cmake",
+    "gcc",
+    "make",
+    "pkgconf",
+
+    # Fonts
+    "ttf-dejavu",
+    "ttf-liberation",
+    "noto-fonts",
+    "noto-fonts-emoji",
+    "otf-font-awesome",
+
+    # zram
+    "zram-generator",
+]
+
+GPU_PACKAGES = {
+    "amd": [
+        "mesa",
+        "vulkan-radeon",
+        "lib32-mesa",
+        "lib32-vulkan-radeon",
+    ],
+    "intel": [
+        "mesa",
+        "vulkan-intel",
+        "lib32-mesa",
+        "lib32-vulkan-intel",
+    ],
+    "nvidia": [
+        "nvidia",
+        "nvidia-utils",
+        "lib32-nvidia-utils",
+    ],
+}
+
+MICROCODE = {
+    "AuthenticAMD": "amd-ucode",
+    "GenuineIntel": "intel-ucode",
 }
 
 
-def tr(
-    key: str,
-) -> str:
-
-    return TRANSLATIONS[
-        LANGUAGE
-    ].get(
-        key,
-        key,
-    )
+def die(message: str, code: int = 1) -> NoReturn:
+    print(f"\n\033[1;31m[ERROR]\033[0m {message}", file=sys.stderr)
+    raise SystemExit(code)
 
 
-# ============================================================
-# LOGGER
-# ============================================================
+def info(message: str) -> None:
+    print(f"\033[36m[INFO]\033[0m {message}")
 
-class Logger:
 
-    def __init__(
-        self,
-        path: Path,
-    ) -> None:
+def ok(message: str) -> None:
+    print(f"\033[32m[ OK ]\033[0m {message}")
 
-        self.path = path
 
-    def write(
-        self,
-        message: str,
-    ) -> None:
+def warn(message: str) -> None:
+    print(f"\033[33m[WARN]\033[0m {message}")
 
-        timestamp = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
+
+def run(
+    cmd: list[str],
+    *,
+    check: bool = True,
+    capture: bool = False,
+    input_text: str | None = None,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    shown = " ".join(cmd)
+    print(f"\033[90m$ {shown}\033[0m")
+
+    with LOG.open("a", encoding="utf-8") as log:
+        log.write(f"$ {shown}\n")
+        proc = subprocess.run(
+            cmd,
+            check=False,
+            text=True,
+            input=input_text,
+            stdout=subprocess.PIPE if capture else None,
+            stderr=subprocess.STDOUT if capture else None,
+            env=env,
         )
 
-        with self.path.open(
-            "a",
-            encoding="utf-8",
-        ) as file:
+        if capture and proc.stdout:
+            log.write(proc.stdout)
 
-            file.write(
-                f"[{timestamp}] "
-                f"{message}\n"
-            )
+    if check and proc.returncode != 0:
+        die(f"Befehl fehlgeschlagen ({proc.returncode}): {shown}")
+
+    return proc
 
 
-LOGGER = Logger(
-    LOG_FILE
-)
+def require_root() -> None:
+    if os.geteuid() != 0:
+        die("Bitte im offiziellen Arch-ISO-Terminal als root ausführen.")
 
-
-def log(
-    message: str,
-) -> None:
-
-    LOGGER.write(
-        message
-    )
-
-
-# ============================================================
-# SIGNALS
-# ============================================================
-
-def handle_signal(
-    signum: int,
-    frame: Any,
-) -> None:
-
-    global STOP_REQUESTED
-
-    STOP_REQUESTED = True
-
-    warning(
-        (
-            "Abbruch angefordert."
-            if LANGUAGE == "de"
-            else
-            "Abort requested."
-        )
-    )
-
-    log(
-        f"Received signal {signum}"
-    )
-
-
-signal.signal(
-    signal.SIGINT,
-    handle_signal,
-)
-
-signal.signal(
-    signal.SIGTERM,
-    handle_signal,
-)
-
-
-# ============================================================
-# SYSTEM DETECTION
-# ============================================================
 
 def read_os_release() -> dict[str, str]:
-
     result: dict[str, str] = {}
 
-    path = Path(
-        "/etc/os-release"
-    )
-
-    if not path.exists():
-
-        return result
-
     try:
-
-        lines = path.read_text(
-            encoding="utf-8",
-            errors="replace",
-        ).splitlines()
-
+        for line in Path("/etc/os-release").read_text(
+            encoding="utf-8"
+        ).splitlines():
+            if "=" in line:
+                key, value = line.split("=", 1)
+                result[key] = value.strip().strip('"')
     except OSError:
-
-        return result
-
-    for line in lines:
-
-        if "=" not in line:
-
-            continue
-
-        key, value = line.split(
-            "=",
-            1,
-        )
-
-        value = value.strip()
-
-        if (
-            len(value) >= 2
-            and value.startswith('"')
-            and value.endswith('"')
-        ):
-
-            value = value[1:-1]
-
-        result[key] = value
+        pass
 
     return result
 
 
-def distribution_id() -> str:
+def check_arch_iso() -> None:
+    os_release = read_os_release()
 
-    return read_os_release().get(
-        "ID",
-        "unknown",
-    ).lower()
-
-
-def pretty_distribution() -> str:
-
-    return read_os_release().get(
-        "PRETTY_NAME",
-        "Unknown Linux",
+    looks_like_arch = (
+        os_release.get("ID") in {"arch", "archiso"}
+        or Path("/run/archiso").exists()
+        or Path("/etc/arch-release").exists()
     )
 
+    if not looks_like_arch:
+        die("Dies sieht nicht wie das offizielle Arch-Linux-ISO aus.")
 
-def architecture() -> str:
-
-    return platform.machine()
-
-
-def kernel() -> str:
-
-    return platform.release()
+    if platform.machine() != "x86_64":
+        die("Dieser Installer unterstützt derzeit nur x86_64.")
 
 
-def hardware() -> str:
-
-    return platform.platform()
-
-
-def uefi_available() -> bool:
-
-    return Path(
-        "/sys/firmware/efi"
-    ).exists()
-
-
-# ============================================================
-# COMMAND UTILITIES
-# ============================================================
-
-def command_exists(
-    command: str,
-) -> bool:
-
-    return shutil.which(
-        command
-    ) is not None
-
-
-def run_quiet(
-    command: list[str],
-    timeout: int = 10,
-) -> bool:
-
-    try:
-
-        result = subprocess.run(
-            command,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            timeout=timeout,
-            check=False,
-        )
-
-        return result.returncode == 0
-
-    except (
-        OSError,
-        subprocess.SubprocessError,
-    ):
-
-        return False
-
-
-# ============================================================
-# NETWORK
-# ============================================================
-
-def network_available() -> bool:
-
-    if command_exists("ping"):
-
-        if run_quiet(
-            [
-                "ping",
-                "-c",
-                "1",
-                "-W",
-                "3",
-                "archlinux.org",
-            ],
-            timeout=6,
-        ):
-
-            return True
-
-    if command_exists("curl"):
-
-        if run_quiet(
-            [
-                "curl",
-                "-fsS",
-                "--max-time",
-                "5",
-                "https://archlinux.org/",
-            ],
-            timeout=7,
-        ):
-
-            return True
+def network_ok() -> bool:
+    for host in ("archlinux.org", "github.com"):
+        try:
+            with socket.create_connection((host, 443), timeout=5):
+                return True
+        except OSError:
+            continue
 
     return False
 
 
-# ============================================================
-# LANGUAGE
-# ============================================================
+def select_language() -> tuple[str, str]:
+    print("\n=== SPRACHE / LANGUAGE ===")
 
-def select_language() -> None:
-
-    global LANGUAGE
-
-    print()
-
-    print(
-        "=" * 70
-    )
-
-    print(
-        "ARCH LINUX + HYPRLAND INSTALLER"
-    )
-
-    print(
-        "Select language / Sprache auswählen"
-    )
-
-    print(
-        "=" * 70
-    )
-
-    print()
-
-    print(
-        "1. Deutsch"
-    )
-
-    print(
-        "2. English"
-    )
-
-    print()
+    for index, (_, name, _) in enumerate(LANGUAGES, 1):
+        print(f"  {index}) {name}")
 
     while True:
+        answer = input("Auswahl [1-2]: ").strip()
 
-        try:
+        if answer in {"1", "2"}:
+            code, _, locale = LANGUAGES[int(answer) - 1]
+            return code, locale
 
-            choice = input(
-                "Auswahl / Choice [1/2]: "
-            ).strip()
-
-        except EOFError:
-
-            LANGUAGE = "de"
-
-            return
-
-        if choice == "1":
-
-            LANGUAGE = "de"
-
-            return
-
-        if choice == "2":
-
-            LANGUAGE = "en"
-
-            return
-
-        warning(
-            tr("language_invalid")
-        )
+        warn("Ungültige Auswahl.")
 
 
-# ============================================================
-# YES / NO
-# ============================================================
+def select_keyboard() -> str:
+    print("\n=== TASTATUR / KEYBOARD ===")
 
-def ask_yes_no(
-    question: str,
-    default: bool = False,
-) -> bool:
-
-    if LANGUAGE == "de":
-
-        suffix = (
-            "[J/n]"
-            if default
-            else
-            "[j/N]"
-        )
-
-    else:
-
-        suffix = (
-            "[Y/n]"
-            if default
-            else
-            "[y/N]"
-        )
+    for index, (_, name) in enumerate(KEYBOARDS, 1):
+        print(f"  {index}) {name}")
 
     while True:
+        answer = input(f"Auswahl [1-{len(KEYBOARDS)}]: ").strip()
 
-        try:
+        if answer.isdigit() and 1 <= int(answer) <= len(KEYBOARDS):
+            return KEYBOARDS[int(answer) - 1][0]
 
-            answer = input(
-                f"{question} {suffix}: "
-            ).strip().lower()
-
-        except EOFError:
-
-            return default
-
-        if not answer:
-
-            return default
-
-        if answer in {
-            "j",
-            "ja",
-            "y",
-            "yes",
-        }:
-
-            return True
-
-        if answer in {
-            "n",
-            "nein",
-            "no",
-        }:
-
-            return False
-
-        warning(
-            tr("invalid")
-        )
+        warn("Ungültige Auswahl.")
 
 
-# ============================================================
-# HEADER
-# ============================================================
-
-def clear_screen() -> None:
-
-    if sys.stdout.isatty():
-
-        print(
-            "\033[2J\033[H",
-            end="",
-        )
-
-
-def header() -> None:
-
-    print()
-
-    print(
-        paint(
-            "=" * 70,
-            Colors.CYAN,
-        )
-    )
-
-    print(
-        paint(
-            tr("title"),
-            Colors.BOLD + Colors.CYAN,
-        )
-    )
-
-    print(
-        tr("subtitle")
-    )
-
-    print()
-
-    print(
-        paint(
-            tr("hyprland_only"),
-            Colors.BOLD + Colors.MAGENTA,
-        )
-    )
-
-    print(
-        paint(
-            "=" * 70,
-            Colors.CYAN,
-        )
-    )
-
-
-# ============================================================
-# SYSTEM INFORMATION
-# ============================================================
-
-def show_system_information() -> None:
-
-    print()
-
-    print(
-        paint(
-            tr("environment"),
-            Colors.BOLD + Colors.MAGENTA,
-        )
-    )
-
-    print(
-        "-" * 70
-    )
-
-    print(
-        f"{tr('distribution'):<18}: "
-        f"{pretty_distribution()}"
-    )
-
-    print(
-        f"{tr('kernel'):<18}: "
-        f"{kernel()}"
-    )
-
-    print(
-        f"{tr('architecture'):<18}: "
-        f"{architecture()}"
-    )
-
-    print(
-        f"{tr('machine'):<18}: "
-        f"{hardware()}"
-    )
-
-    firmware = (
-        tr("uefi")
-        if uefi_available()
-        else
-        tr("bios")
-    )
-
-    print(
-        f"{tr('firmware'):<18}: "
-        f"{firmware}"
-    )
-
-
-# ============================================================
-# ARCHINSTALL PACKAGE INSTALL
-# ============================================================
-
-def install_archinstall() -> bool:
-
-    print()
-
-    command_output(
-        "pacman -Sy --needed archinstall"
-    )
-
-    log(
-        "Installing archinstall."
+def get_block_devices() -> list[dict]:
+    proc = run(
+        [
+            "lsblk",
+            "-J",
+            "-b",
+            "-o",
+            "NAME,KNAME,PATH,SIZE,TYPE,MODEL,TRAN,RM,RO,MOUNTPOINTS",
+        ],
+        capture=True,
     )
 
     try:
+        return json.loads(proc.stdout)["blockdevices"]
+    except Exception as exc:
+        die(f"lsblk-Ausgabe konnte nicht verarbeitet werden: {exc}")
 
-        process = subprocess.Popen(
-            [
-                "pacman",
-                "-Sy",
-                "--needed",
-                "archinstall",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
+
+def human_size(size: int) -> str:
+    value = float(size)
+
+    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if value < 1024 or unit == "TiB":
+            return f"{value:.1f} {unit}"
+        value /= 1024
+
+    return str(size)
+
+
+def select_disk() -> str:
+    devices = [
+        device
+        for device in get_block_devices()
+        if device.get("type") == "disk"
+        and device.get("path")
+        and str(device.get("rm", 0)) == "0"
+        and str(device.get("ro", 0)) == "0"
+        and not str(device.get("path", "")).startswith("/dev/loop")
+    ]
+
+    if not devices:
+        die("Kein geeignetes internes Laufwerk gefunden.")
+
+    print("\n=== ZIELFESTPLATTE / TARGET DISK ===")
+
+    for index, device in enumerate(devices, 1):
+        print(
+            f"  {index}) "
+            f"{device['path']:<18} "
+            f"{human_size(int(device.get('size', 0))):>10}  "
+            f"{str(device.get('tran') or '?'):<5} "
+            f"{device.get('model') or 'unbekannt'}"
         )
 
-        assert process.stdout is not None
+    while True:
+        answer = input(f"Auswahl [1-{len(devices)}]: ").strip()
 
-        for line in process.stdout:
+        if answer.isdigit() and 1 <= int(answer) <= len(devices):
+            selected = devices[int(answer) - 1]
+            path = str(selected["path"])
+            size = int(selected.get("size", 0))
 
-            line = line.rstrip()
+            if size < 32 * 1024**3:
+                die(
+                    f"{path} ist mit {human_size(size)} zu klein. "
+                    "Mindestens 32 GiB werden empfohlen."
+                )
 
-            print(line)
-
-            log(
-                f"PACMAN: {line}"
+            print(
+                f"\n\033[1;31m"
+                f"ACHTUNG: {path} ({human_size(size)}) wird "
+                f"vollständig gelöscht.\033[0m"
             )
+            print("Ab hier erfolgt keine weitere Eingabe.")
 
-        code = process.wait()
+            return path
 
-        if code == 0:
+        warn("Ungültige Auswahl.")
 
-            success(
-                tr("archinstall")
-            )
 
-            return True
+def validate_username(username: str) -> bool:
+    return bool(re.fullmatch(r"[a-z_][a-z0-9_-]{0,31}", username))
 
-        error(
-            f"pacman exited with code {code}"
+
+def select_user() -> tuple[str, str]:
+    print("\n=== BENUTZER ===")
+
+    while True:
+        username = input("Benutzername: ").strip().lower()
+
+        if validate_username(username):
+            break
+
+        warn(
+            "Ungültiger Benutzername. Erlaubt sind a-z, 0-9, _ und -. "
+            "Er muss mit a-z oder _ beginnen."
         )
 
-        return False
+    while True:
+        password1 = getpass.getpass("Passwort: ")
+        password2 = getpass.getpass("Passwort wiederholen: ")
 
-    except KeyboardInterrupt:
+        if not password1:
+            warn("Das Passwort darf nicht leer sein.")
+            continue
 
-        try:
-            process.terminate()
-        except Exception:
-            pass
+        if password1 != password2:
+            warn("Die Passwörter stimmen nicht überein.")
+            continue
 
-        return False
-
-    except OSError as exc:
-
-        error(
-            str(exc)
-        )
-
-        return False
+        return username, password1
 
 
-# ============================================================
-# SYSTEM CHECK
-# ============================================================
+def detect_cpu_vendor() -> str:
+    try:
+        cpuinfo = Path("/proc/cpuinfo").read_text(errors="ignore")
+    except OSError:
+        return ""
 
-def system_check() -> bool:
+    if "AuthenticAMD" in cpuinfo:
+        return "AuthenticAMD"
 
-    print()
+    if "GenuineIntel" in cpuinfo:
+        return "GenuineIntel"
 
-    print(
-        paint(
-            tr("system_check"),
-            Colors.BOLD + Colors.MAGENTA,
-        )
+    return ""
+
+
+def detect_gpu() -> str:
+    proc = run(["lspci"], capture=True, check=False)
+    text = (proc.stdout or "").lower()
+
+    if "nvidia" in text:
+        return "nvidia"
+
+    if (
+        "amd" in text
+        or "advanced micro devices" in text
+        or "radeon" in text
+    ):
+        return "amd"
+
+    if "intel" in text:
+        return "intel"
+
+    return "unknown"
+
+
+def get_disk_size_bytes(disk: str) -> int:
+    for device in get_block_devices():
+        if device.get("path") == disk and device.get("type") == "disk":
+            return int(device.get("size", 0))
+
+    die(f"Größe von {disk} konnte nicht ermittelt werden.")
+
+
+def package_exists(package: str) -> bool:
+    return (
+        run(
+            ["pacman", "-Si", package],
+            capture=True,
+            check=False,
+        ).returncode
+        == 0
     )
 
-    print(
-        "-" * 70
+
+def available_packages(packages: list[str]) -> list[str]:
+    available: list[str] = []
+
+    for package in packages:
+        if package_exists(package):
+            available.append(package)
+        else:
+            warn(f"Paket im aktuellen Repo nicht gefunden: {package}")
+
+    return available
+
+
+def install_archinstall_live() -> None:
+    info("Aktualisiere die Paketdatenbank des Arch-ISO …")
+    run(["pacman", "-Sy", "--noconfirm"])
+
+    info("Installiere archinstall und die benötigten Live-Werkzeuge …")
+    run(
+        [
+            "pacman",
+            "-S",
+            "--noconfirm",
+            "--needed",
+            "archinstall",
+            "gptfdisk",
+            "btrfs-progs",
+            "dosfstools",
+            "util-linux",
+            "openssl",
+        ]
     )
 
-    distro = distribution_id()
 
-    log(
-        f"Detected distro: {distro}"
+def archinstall_version() -> str:
+    proc = run(
+        ["archinstall", "--version"],
+        capture=True,
+        check=False,
     )
 
-    # --------------------------------------------------------
-    # Root
-    # --------------------------------------------------------
-
-    if os.geteuid() == 0:
-
-        success(
-            tr("root")
-        )
-
-    else:
-
-        error(
-            tr("root_required")
-        )
-
-        return False
-
-    # --------------------------------------------------------
-    # Python
-    # --------------------------------------------------------
-
-    if command_exists("python"):
-
-        success(
-            tr("python")
-        )
-
-    else:
-
-        error(
-            tr("python")
-        )
-
-        return False
-
-    # --------------------------------------------------------
-    # pacman
-    # --------------------------------------------------------
-
-    if command_exists("pacman"):
-
-        success(
-            tr("pacman")
-        )
-
-    else:
-
-        error(
-            tr("pacman")
-        )
-
-        return False
-
-    # --------------------------------------------------------
-    # Environment
-    # --------------------------------------------------------
-
-    if distro in {
-        "arch",
-        "archiso",
-    }:
-
-        success(
-            "Arch Linux ISO environment detected."
-            if LANGUAGE == "en"
-            else
-            "Arch-Linux-ISO-Umgebung erkannt."
-        )
-
-    else:
-
-        warning(
-            tr("arch_warning")
-        )
-
-        if not ask_yes_no(
-            tr("continue"),
-            default=False,
-        ):
-
-            return False
-
-    # --------------------------------------------------------
-    # Network
-    # --------------------------------------------------------
-
-    info(
-        tr("network")
+    match = re.search(
+        r"(\d+\.\d+(?:\.\d+)?)",
+        proc.stdout or "",
     )
 
-    if network_available():
+    if match:
+        return match.group(1)
 
-        success(
-            tr("network_ok")
-        )
+    return "3.0.10"
 
-    else:
 
-        warning(
-            tr("network_failed")
-        )
+def uuid_string() -> str:
+    return str(uuid.uuid4())
 
-        if not ask_yes_no(
-            tr("continue"),
-            default=False,
-        ):
 
-            return False
-
-    # --------------------------------------------------------
-    # archinstall
-    # --------------------------------------------------------
-
-    if command_exists("archinstall"):
-
-        success(
-            tr("archinstall")
-        )
-
-    else:
-
-        warning(
-            tr("archinstall_missing")
-        )
-
-        if not ask_yes_no(
-            tr("install_archinstall"),
-            default=True,
-        ):
-
-            return False
-
-        if not install_archinstall():
-
-            return False
-
-    return True
-
-
-# ============================================================
-# HYPRLAND PACKAGE PROFILE
-# ============================================================
-#
-# These are normal Arch repository packages.
-#
-# The core Hyprland package is the desktop/compositor.
-#
-# Supporting components are intentionally limited to the
-# Hyprland session itself and essential desktop integration.
-#
-# No GNOME.
-# No KDE.
-# No XFCE.
-# No alternative desktop.
-#
-# ============================================================
-
-HYPRLAND_PACKAGES = [
-
-    # --------------------------------------------------------
-    # Core
-    # --------------------------------------------------------
-
-    "hyprland",
-
-    # --------------------------------------------------------
-    # Hyprland ecosystem
-    # --------------------------------------------------------
-
-    "hyprpaper",
-
-    "hyprlock",
-
-    "hypridle",
-
-    "hyprpicker",
-
-    "hyprcursor",
-
-    "hyprpolkitagent",
-
-    # --------------------------------------------------------
-    # Wayland / portals
-    # --------------------------------------------------------
-
-    "xdg-desktop-portal",
-
-    "xdg-desktop-portal-hyprland",
-
-    # --------------------------------------------------------
-    # Authentication / session
-    # --------------------------------------------------------
-
-    "polkit",
-
-    "polkit-gnome",
-
-    # --------------------------------------------------------
-    # Terminal
-    #
-    # Kitty is a terminal emulator, NOT a desktop environment.
-    # --------------------------------------------------------
-
-    "kitty",
-
-    # --------------------------------------------------------
-    # Status bar
-    # --------------------------------------------------------
-
-    "waybar",
-
-    # --------------------------------------------------------
-    # Application launcher
-    # --------------------------------------------------------
-
-    "wofi",
-
-    # --------------------------------------------------------
-    # Notifications
-    # --------------------------------------------------------
-
-    "mako",
-
-    # --------------------------------------------------------
-    # Wallpaper / screenshots / clipboard
-    # --------------------------------------------------------
-
-    "grim",
-
-    "slurp",
-
-    "wl-clipboard",
-
-    # --------------------------------------------------------
-    # Audio
-    # --------------------------------------------------------
-
-    "pipewire",
-
-    "pipewire-audio",
-
-    "pipewire-pulse",
-
-    "wireplumber",
-
-    # --------------------------------------------------------
-    # Network
-    # --------------------------------------------------------
-
-    "networkmanager",
-
-    # --------------------------------------------------------
-    # Bluetooth
-    # --------------------------------------------------------
-
-    "bluez",
-
-    "bluez-utils",
-
-    # --------------------------------------------------------
-    # File / desktop integration
-    # --------------------------------------------------------
-
-    "xdg-utils",
-
-    "xdg-user-dirs",
-
-    # --------------------------------------------------------
-    # Polkit / session dependencies
-    # --------------------------------------------------------
-
-    "seatd",
-
-    # --------------------------------------------------------
-    # Fonts
-    # --------------------------------------------------------
-
-    "ttf-dejavu",
-
-    "ttf-liberation",
-
-]
-
-
-# ============================================================
-# EXPLICITLY FORBIDDEN DESKTOP PACKAGES
-# ============================================================
-
-FORBIDDEN_DESKTOPS = {
-
-    "gnome",
-
-    "gnome-shell",
-
-    "gnome-session",
-
-    "gdm",
-
-    "plasma",
-
-    "plasma-desktop",
-
-    "plasma-meta",
-
-    "sddm",
-
-    "xfce4",
-
-    "xfce4-goodies",
-
-    "lightdm",
-
-    "cinnamon",
-
-    "cinnamon-desktop",
-
-    "mate",
-
-    "mate-desktop",
-
-    "lxqt",
-
-    "lxqt-session",
-
-}
-
-
-# ============================================================
-# PROFILE VALIDATION
-# ============================================================
-
-def validate_hyprland_profile() -> None:
-
-    normalized = {
-        package.lower()
-        for package in HYPRLAND_PACKAGES
+def size_spec_bytes(value: int) -> dict:
+    return {
+        "sector_size": {
+            "unit": "B",
+            "value": 512,
+        },
+        "unit": "B",
+        "value": value,
     }
 
-    conflicts = (
-        normalized
-        & FORBIDDEN_DESKTOPS
-    )
 
-    if conflicts:
-
-        raise RuntimeError(
-            "Hyprland-only profile contains forbidden "
-            f"desktop packages: {sorted(conflicts)}"
-        )
-
-    if "hyprland" not in normalized:
-
-        raise RuntimeError(
-            "Hyprland package missing from profile."
-        )
-
-
-# ============================================================
-# ARCHINSTALL CONFIG
-# ============================================================
-
-def create_archinstall_config(
-    dry_run: bool = False,
-) -> Path:
-
-    validate_hyprland_profile()
-
-    # --------------------------------------------------------
-    # Important:
-    #
-    # We intentionally DO NOT define disk_config.
-    #
-    # This means archinstall keeps its normal disk selection
-    # UI instead of this launcher guessing a disk.
-    #
-    # --------------------------------------------------------
-
-    config: dict[str, Any] = {
-
-        "script":
-            "guided",
-
-        "archinstall-language":
-            (
-                "German"
-                if LANGUAGE == "de"
-                else
-                "English"
-            ),
-
-        "audio_config":
-            "pipewire",
-
-        "bootloader_config":
-            {
-                "bootloader":
-                    (
-                        "Systemd-boot"
-                        if uefi_available()
-                        else
-                        "Grub"
-                    ),
-                "uki":
-                    False,
-                "removable":
-                    False,
-            },
-
-        "bootloader":
-            (
-                "Systemd-boot"
-                if uefi_available()
-                else
-                "Grub"
-            ),
-
-        "debug":
-            False,
-
-        "hostname":
-            "archlinux",
-
-        "kernels":
-            [
-                "linux",
-            ],
-
-        "locale_config":
-            {
-                "kb_layout":
-                    "de"
-                    if LANGUAGE == "de"
-                    else
-                    "us",
-
-                "sys_enc":
-                    "UTF-8",
-
-                "sys_lang":
-                    (
-                        "de_DE.UTF-8"
-                        if LANGUAGE == "de"
-                        else
-                        "en_US.UTF-8"
-                    ),
-            },
-
-        "network_config":
-            {},
-
-        "no_pkg_lookups":
-            False,
-
-        "ntp":
-            True,
-
-        "offline":
-            False,
-
-        "packages":
-            HYPRLAND_PACKAGES,
-
-        "parallel downloads":
-            0,
-
-        # ----------------------------------------------------
-        # IMPORTANT:
-        #
-        # No GNOME/KDE/XFCE profile.
-        # Hyprland is installed through packages.
-        # ----------------------------------------------------
-
-        "profile_config":
-            None,
-
-        "save_config":
-            str(
-                ARCHINSTALL_CONFIG
-            ),
-
-        "silent":
-            False,
-
-        "swap":
-            True,
-
-        "timezone":
-            "Europe/Berlin",
-
+def start_spec_mib(value: int) -> dict:
+    return {
+        "sector_size": {
+            "unit": "B",
+            "value": 512,
+        },
+        "unit": "MiB",
+        "value": value,
     }
 
-    # --------------------------------------------------------
-    # Dry-run information
-    # --------------------------------------------------------
 
-    if dry_run:
+def make_partition(
+    *,
+    fs_type: str,
+    mountpoint: str | None,
+    flags: list[str],
+    start_mib: int,
+    size_bytes: int,
+    btrfs: list[dict] | None = None,
+    mount_options: list[str] | None = None,
+) -> dict:
+    return {
+        "btrfs": btrfs or [],
+        "dev_path": None,
+        "flags": flags,
+        "fs_type": fs_type,
+        "mount_options": mount_options or [],
+        "mountpoint": mountpoint,
+        "obj_id": uuid_string(),
+        "size": size_spec_bytes(size_bytes),
+        "start": start_spec_mib(start_mib),
+        "status": "create",
+        "type": "primary",
+    }
 
-        config[
-            "silent"
-        ] = False
 
-    # --------------------------------------------------------
-    # Write JSON
-    # --------------------------------------------------------
+def build_disk_config(
+    disk: str,
+    uefi: bool,
+) -> dict:
+    total_bytes = get_disk_size_bytes(disk)
 
-    with ARCHINSTALL_CONFIG.open(
-        "w",
+    # Keep a small alignment reserve at the end of the device.
+    usable_bytes = total_bytes - 4 * 1024**2
+
+    if usable_bytes < 32 * 1024**3:
+        die("Die Zielfestplatte ist zu klein für diese Installation.")
+
+    partitions: list[dict] = []
+
+    if uefi:
+        # GPT + 1 MiB alignment + 1 GiB EFI System Partition.
+        efi_size = 1 * 1024**3
+        root_start_mib = 1025
+
+        partitions.append(
+            make_partition(
+                fs_type="fat32",
+                mountpoint="/boot",
+                flags=["boot", "esp"],
+                start_mib=1,
+                size_bytes=efi_size,
+            )
+        )
+    else:
+        # GPT BIOS boot partition for GRUB.
+        bios_size = 2 * 1024**2
+        root_start_mib = 3
+
+        partitions.append(
+            make_partition(
+                fs_type="fat32",
+                mountpoint=None,
+                flags=["bios_grub"],
+                start_mib=1,
+                size_bytes=bios_size,
+            )
+        )
+
+    root_start_bytes = root_start_mib * 1024**2
+    root_size = usable_bytes - root_start_bytes
+
+    if root_size < 30 * 1024**3:
+        die("Nach der Boot-Partition bleibt zu wenig Platz für Arch Linux.")
+
+    subvolumes = [
+        {"mountpoint": "/", "name": "@"},
+        {"mountpoint": "/home", "name": "@home"},
+        {"mountpoint": "/var/log", "name": "@log"},
+        {"mountpoint": "/var/cache/pacman/pkg", "name": "@cache"},
+        {"mountpoint": "/.snapshots", "name": "@snapshots"},
+        {"mountpoint": "/tmp", "name": "@tmp"},
+    ]
+
+    partitions.append(
+        make_partition(
+            fs_type="btrfs",
+            mountpoint=None,
+            flags=[],
+            start_mib=root_start_mib,
+            size_bytes=root_size,
+            btrfs=subvolumes,
+            mount_options=[
+                "compress=zstd:3",
+                "noatime",
+            ],
+        )
+    )
+
+    return {
+        "config_type": "manual_partitioning",
+        "device_modifications": [
+            {
+                "device": disk,
+                "partitions": partitions,
+                "wipe": True,
+            }
+        ],
+    }
+
+
+def crypt_password(password: str) -> str:
+    proc = subprocess.run(
+        ["openssl", "passwd", "-6", "-stdin"],
+        input=password + "\n",
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+
+    if proc.returncode != 0 or not proc.stdout.strip():
+        die("Das Passwort konnte nicht gehasht werden.")
+
+    return proc.stdout.strip()
+
+
+def shell_quote(value: str) -> str:
+    return "'" + value.replace("'", "'\"'\"'") + "'"
+
+
+def build_custom_commands(
+    username: str,
+    locale: str,
+    keyboard: str,
+) -> list[str]:
+    profile = (
+        "if [ -z \"${DISPLAY:-}\" ] && "
+        "[ -z \"${WAYLAND_DISPLAY:-}\" ] && "
+        "[ \"$(tty 2>/dev/null)\" = \"/dev/tty1\" ]; then "
+        "exec Hyprland; "
+        "fi"
+    )
+
+    profile_command = (
+        "bash -c "
+        + shell_quote(
+            "PROFILE=/home/"
+            + username
+            + "/.bash_profile; "
+            "touch \"$PROFILE\"; "
+            "grep -qxF "
+            + shell_quote(profile)
+            + " \"$PROFILE\" || "
+            "printf '%s\\n' "
+            + shell_quote(profile)
+            + " >> \"$PROFILE\"; "
+            "chown "
+            + username
+            + ":"
+            + username
+            + " \"$PROFILE\""
+        )
+    )
+
+    zram_command = (
+        "bash -c "
+        + shell_quote(
+            "install -d -m 0755 /etc/systemd; "
+            "printf '%s\\n' "
+            "'[zram0]' "
+            "'zram-size = ram / 2' "
+            "'compression-algorithm = zstd' "
+            "> /etc/systemd/zram-generator.conf"
+        )
+    )
+
+    getty_command = (
+        "bash -c "
+        + shell_quote(
+            "install -d -m 0755 "
+            "/etc/systemd/system/getty@tty1.service.d; "
+            "printf '%s\\n' "
+            "'[Service]' "
+            "'ExecStart=' "
+            + f"'ExecStart=-/sbin/agetty --autologin {username} --noclear %I $TERM' "
+            + "> /etc/systemd/system/getty@tty1.service.d/autologin.conf"
+        )
+    )
+
+    locale_command = (
+        "bash -c "
+        + shell_quote(
+            "printf 'LANG=%s\\n' "
+            + shell_quote(locale)
+            + " > /etc/locale.conf; "
+            "printf 'KEYMAP=%s\\n' "
+            + shell_quote(keyboard)
+            + " > /etc/vconsole.conf; "
+            "locale-gen"
+        )
+    )
+
+    xdg_command = (
+        "bash -c "
+        + shell_quote(
+            "su - "
+            + username
+            + " -c 'xdg-user-dirs-update'"
+        )
+    )
+
+    return [
+        "systemctl enable NetworkManager.service",
+        "systemctl enable bluetooth.service",
+        "systemctl enable systemd-timesyncd.service",
+        zram_command,
+        "systemctl enable systemd-zram-setup@zram0.service",
+        locale_command,
+        getty_command,
+        profile_command,
+        xdg_command,
+        "mkinitcpio -P",
+    ]
+
+
+def build_configuration(
+    *,
+    disk: str,
+    uefi: bool,
+    language: str,
+    locale: str,
+    keyboard: str,
+    username: str,
+    packages: list[str],
+) -> dict:
+    version = archinstall_version()
+    bootloader = "Systemd-boot" if uefi else "Grub"
+
+    return {
+        "additional-repositories": ["multilib"],
+        "app_config": {
+            "audio_config": {
+                "audio": "pipewire",
+            },
+            "bluetooth_config": {
+                "enabled": True,
+            },
+        },
+        "archinstall-language": (
+            "German" if language == "de" else "English"
+        ),
+        "auth_config": {},
+        "bootloader": bootloader,
+        "bootloader_config": {
+            "bootloader": bootloader,
+            "uki": False,
+            "removable": False,
+        },
+        "config_version": version,
+        "custom_commands": build_custom_commands(
+            username,
+            locale,
+            keyboard,
+        ),
+        "debug": False,
+        "disk_config": build_disk_config(disk, uefi),
+        "disk_encryption": None,
+        "hostname": "archlinux",
+        "kernels": ["linux"],
+        "locale_config": {
+            "kb_layout": keyboard,
+            "sys_enc": "UTF-8",
+            "sys_lang": locale,
+        },
+        "network_config": {
+            "type": "nm",
+        },
+        "no_pkg_lookups": False,
+        "ntp": True,
+        "offline": False,
+        "packages": packages,
+        "parallel_downloads": 0,
+        "profile_config": {
+            "gfx_driver": None,
+            "greeter": None,
+            "profile": {
+                "custom_settings": {},
+                "details": [],
+                "main": "Minimal",
+            },
+        },
+        "save_config": None,
+        "script": "guided",
+        "silent": True,
+        "skip_ntp": False,
+        "skip_version_check": False,
+        "swap": False,
+        "timezone": "Europe/Berlin",
+        "uki": False,
+        "version": version,
+    }
+
+
+def write_configuration(
+    config: dict,
+    username: str,
+    password: str,
+) -> None:
+    WORK.mkdir(parents=True, exist_ok=True)
+
+    CONFIG.write_text(
+        json.dumps(config, indent=2),
         encoding="utf-8",
-    ) as file:
-
-        json.dump(
-            config,
-            file,
-            indent=4,
-            ensure_ascii=False,
-        )
-
-    log(
-        f"Generated archinstall config: "
-        f"{ARCHINSTALL_CONFIG}"
     )
 
-    return ARCHINSTALL_CONFIG
-
-
-# ============================================================
-# CONFIGURATION PREVIEW
-# ============================================================
-
-def show_profile() -> None:
-
-    print()
-
-    print(
-        paint(
-            tr("profile"),
-            Colors.BOLD + Colors.MAGENTA,
-        )
-    )
-
-    print(
-        "-" * 70
-    )
-
-    print(
-        f"{tr('profile_arch'):<25}: "
-        "YES"
-    )
-
-    print(
-        f"{tr('profile_hyprland'):<25}: "
-        "YES"
-    )
-
-    print(
-        f"{tr('profile_only'):<25}: "
-        "YES"
-    )
-
-    print()
-
-    print(
-        paint(
-            tr("profile_no_other"),
-            Colors.GREEN,
-        )
-    )
-
-    print()
-
-    print(
-        paint(
-            tr("packages"),
-            Colors.BOLD + Colors.CYAN,
-        )
-    )
-
-    print(
-        "-" * 70
-    )
-
-    for package in HYPRLAND_PACKAGES:
-
-        print(
-            f"  • {package}"
-        )
-
-
-# ============================================================
-# START MODE
-# ============================================================
-
-class StartMode:
-
-    GUIDED = "guided"
-
-    DRY_RUN = "dry"
-
-
-def select_start_mode() -> str | None:
-
-    options = [
-
-        (
-            StartMode.GUIDED,
-            tr("guided"),
-            tr("guided_description"),
+    CREDS.write_text(
+        json.dumps(
+            {
+                "users": [
+                    {
+                        "username": username,
+                        "enc_password": crypt_password(password),
+                        "sudo": True,
+                    }
+                ]
+            },
+            indent=2,
         ),
+        encoding="utf-8",
+    )
 
-        (
-            StartMode.DRY_RUN,
-            tr("dry_run"),
-            tr("dry_description"),
-        ),
+    os.chmod(CREDS, 0o600)
+    os.chmod(CONFIG, 0o600)
 
-    ]
 
-    selected = 0
+def validate_configuration() -> None:
+    if not CONFIG.exists():
+        die("Die archinstall-Konfiguration wurde nicht erzeugt.")
 
-    def draw(
-        screen: Any,
-    ) -> None:
-
-        screen.erase()
-
-        height, width = screen.getmaxyx()
-
-        screen.addstr(
-            0,
-            0,
-            tr("mode")[
-                :max(width - 1, 1)
-            ],
-            curses.A_BOLD,
-        )
-
-        screen.addstr(
-            1,
-            0,
-            tr("selection_help")[
-                :max(width - 1, 1)
-            ],
-        )
-
-        for index, (
-            key,
-            title,
-            description,
-        ) in enumerate(options):
-
-            row = 4 + index * 4
-
-            if index == selected:
-
-                screen.attron(
-                    curses.A_REVERSE
-                )
-
-            screen.addstr(
-                row,
-                2,
-                f"> {title}"[
-                    :max(width - 3, 1)
-                ],
-            )
-
-            if index == selected:
-
-                screen.attroff(
-                    curses.A_REVERSE
-                )
-
-            screen.addstr(
-                row + 1,
-                6,
-                description[
-                    :max(width - 7, 1)
-                ],
-            )
-
-        screen.refresh()
-
-    def menu(
-        screen: Any,
-    ) -> str | None:
-
-        nonlocal selected
-
-        curses.curs_set(0)
-
-        screen.keypad(True)
-
-        while True:
-
-            draw(screen)
-
-            key = screen.getch()
-
-            if key in (
-                curses.KEY_UP,
-                ord("k"),
-            ):
-
-                selected = (
-                    selected - 1
-                ) % len(options)
-
-            elif key in (
-                curses.KEY_DOWN,
-                ord("j"),
-            ):
-
-                selected = (
-                    selected + 1
-                ) % len(options)
-
-            elif key in (
-                10,
-                13,
-                curses.KEY_ENTER,
-            ):
-
-                return options[
-                    selected
-                ][0]
-
-            elif key in (
-                ord("q"),
-                ord("Q"),
-                27,
-            ):
-
-                return None
+    if not CREDS.exists():
+        die("Die archinstall-Credentials wurden nicht erzeugt.")
 
     try:
+        config = json.loads(CONFIG.read_text(encoding="utf-8"))
+        creds = json.loads(CREDS.read_text(encoding="utf-8"))
+    except Exception as exc:
+        die(f"Konfigurationsdateien sind kein gültiges JSON: {exc}")
 
-        return curses.wrapper(
-            menu
-        )
-
-    except curses.error:
-
-        return StartMode.GUIDED
-
-
-# ============================================================
-# ARCHINSTALL LAUNCH
-# ============================================================
-
-def launch_archinstall(
-    config: Path,
-    dry_run: bool,
-) -> int:
-
-    command = [
-        "archinstall",
-        "--config",
-        str(config),
+    required = [
+        "disk_config",
+        "kernels",
+        "locale_config",
+        "packages",
+        "silent",
+        "bootloader",
     ]
 
-    if dry_run:
+    missing = [key for key in required if key not in config]
+    if missing:
+        die(f"Fehlende archinstall-Konfigurationsfelder: {missing}")
 
-        command.append(
-            "--dry-run"
-        )
+    if config["silent"] is not True:
+        die("Die archinstall-Konfiguration ist nicht silent.")
 
-    print()
+    if not creds.get("users"):
+        die("Kein Benutzer in den archinstall-Credentials.")
 
-    print(
-        paint(
-            "=" * 70,
-            Colors.CYAN,
-        )
-    )
 
-    print(
-        paint(
-            tr("launch"),
-            Colors.BOLD + Colors.GREEN,
-        )
-    )
-
-    print()
-
-    command_output(
-        shlex.join(command)
-    )
-
-    print()
+def run_archinstall() -> None:
+    info("Starte jetzt archinstall vollständig automatisiert …")
 
     print(
-        paint(
-            tr("post_install"),
-            Colors.CYAN,
-        )
+        "\n\033[1;32m"
+        "AB HIER KEINE BENUTZEREINGABE MEHR.\n"
+        "archinstall übernimmt Partitionierung, Dateisystem,\n"
+        "Btrfs-Subvolumes, Arch-Installation und Bootloader.\n"
+        "\033[0m"
     )
 
-    print(
-        paint(
-            "=" * 70,
-            Colors.CYAN,
-        )
+    run(
+        [
+            "archinstall",
+            "--config",
+            str(CONFIG),
+            "--creds",
+            str(CREDS),
+            "--silent",
+        ]
     )
 
-    log(
-        "Launching archinstall:"
-    )
 
-    log(
-        shlex.join(command)
-    )
-
-    try:
-
-        start = time.monotonic()
-
-        process = subprocess.Popen(
-            command
-        )
-
-        code = process.wait()
-
-        duration = (
-            time.monotonic()
-            - start
-        )
-
-        log(
-            f"archinstall exited "
-            f"code={code} "
-            f"duration={duration:.2f}s"
-        )
-
-        print()
-
-        print(
-            paint(
-                "=" * 70,
-                Colors.CYAN,
-            )
-        )
-
-        print(
-            paint(
-                tr("finished"),
-                Colors.BOLD + Colors.GREEN,
-            )
-        )
-
-        print()
-
-        print(
-            f"{tr('exit_code')}: "
-            f"{code}"
-        )
-
-        print(
-            f"{tr('log')}: "
-            f"{LOGGER.path}"
-        )
-
-        print(
-            paint(
-                "=" * 70,
-                Colors.CYAN,
-            )
-        )
-
-        return code
-
-    except KeyboardInterrupt:
-
-        warning(
-            (
-                "Archinstall wurde unterbrochen."
-                if LANGUAGE == "de"
-                else
-                "Archinstall was interrupted."
-            )
-        )
-
+def cleanup() -> None:
+    for path in (CREDS, CONFIG):
         try:
-
-            process.terminate()
-
-        except Exception:
+            path.unlink()
+        except FileNotFoundError:
             pass
 
-        return 130
-
-    except FileNotFoundError:
-
-        error(
-            tr("archinstall_missing")
-        )
-
-        return 1
-
-    except OSError as exc:
-
-        error(
-            str(exc)
-        )
-
-        log(
-            f"Launch error: {exc}"
-        )
-
-        return 1
+    run(["sync"], check=False)
 
 
-# ============================================================
-# MAIN INSTALLATION
-# ============================================================
+def unmount_target() -> None:
+    for mountpoint in (
+        "/mnt/archinstall",
+        "/mnt",
+    ):
+        if os.path.ismount(mountpoint):
+            run(["umount", "-R", mountpoint], check=False)
 
-def run_installer(
-    mode_override: str | None = None,
-    force_english: bool = False,
-) -> int:
 
-    global LANGUAGE
+def main() -> None:
+    require_root()
 
-    if force_english:
-
-        LANGUAGE = "en"
-
-    else:
-
-        select_language()
-
-    clear_screen()
-
-    header()
-
-    log(
-        "============================================================"
+    WORK.mkdir(parents=True, exist_ok=True)
+    LOG.write_text(
+        f"Arch Linux + Hyprland installer started: {time.ctime()}\n",
+        encoding="utf-8",
     )
 
-    log(
-        "ARCH LINUX + HYPRLAND INSTALLER"
+    print(
+        """
+\033[1;36m============================================================
+       ARCH LINUX + HYPRLAND ULTIMATE INSTALLER
+============================================================\033[0m
+
+Dieser Installer ersetzt die manuelle archinstall-Bedienung.
+
+Eingabe:
+  1. Sprache
+  2. Tastatur
+  3. Zielfestplatte
+  4. Benutzername
+  5. Passwort zweimal
+
+Danach läuft die komplette Installation automatisch.
+"""
     )
 
-    log(
-        f"Language={LANGUAGE}"
-    )
+    check_arch_iso()
 
-    # --------------------------------------------------------
-    # System info
-    # --------------------------------------------------------
-
-    show_system_information()
-
-    # --------------------------------------------------------
-    # System check
-    # --------------------------------------------------------
-
-    if not system_check():
-
-        print()
-
-        error(
-            tr("failed")
+    if not network_ok():
+        die(
+            "Keine Internetverbindung. "
+            "Verbinde das offizielle Arch-ISO zuerst mit dem Internet."
         )
 
-        return 1
+    language, locale = select_language()
+    keyboard = select_keyboard()
+    disk = select_disk()
+    username, password = select_user()
 
-    # --------------------------------------------------------
-    # Profile
-    # --------------------------------------------------------
+    uefi = Path("/sys/firmware/efi").exists()
+    cpu = detect_cpu_vendor()
+    gpu = detect_gpu()
 
-    show_profile()
-
-    # --------------------------------------------------------
-    # Validate
-    # --------------------------------------------------------
-
-    try:
-
-        validate_hyprland_profile()
-
-    except RuntimeError as exc:
-
-        error(
-            str(exc)
-        )
-
-        log(
-            str(exc)
-        )
-
-        return 1
-
-    # --------------------------------------------------------
-    # Start mode
-    # --------------------------------------------------------
-
-    if mode_override:
-
-        mode = mode_override
-
-    else:
-
-        mode = select_start_mode()
-
-    if mode is None:
-
-        warning(
-            tr("cancelled")
-        )
-
-        return 0
-
-    dry_run = (
-        mode == StartMode.DRY_RUN
-    )
-
-    # --------------------------------------------------------
-    # Generate configuration
-    # --------------------------------------------------------
-
-    try:
-
-        config = (
-            create_archinstall_config(
-                dry_run=dry_run
-            )
-        )
-
-        success(
-            tr("generated")
-        )
-
-    except Exception as exc:
-
-        error(
-            f"Could not generate configuration: "
-            f"{exc}"
-        )
-
-        log(
-            f"Configuration error: {exc}"
-        )
-
-        return 1
-
-    # --------------------------------------------------------
-    # Show config path
-    # --------------------------------------------------------
-
+    print("\n=== AUTOMATISCHE HARDWARE-ERKENNUNG ===")
+    print(f"CPU      : {cpu or 'unbekannt'}")
+    print(f"GPU      : {gpu}")
+    print(f"Firmware : {'UEFI' if uefi else 'BIOS'}")
+    print(f"Disk     : {disk}")
+    print(f"User     : {username}")
     print()
 
-    info(
-        f"Config: {config}"
+    install_archinstall_live()
+
+    packages = list(CORE_PACKAGES)
+
+    if cpu in MICROCODE:
+        packages.append(MICROCODE[cpu])
+
+    if gpu in GPU_PACKAGES:
+        packages.extend(GPU_PACKAGES[gpu])
+
+    packages = list(dict.fromkeys(packages))
+
+    info("Prüfe die Paketnamen des aktuellen Arch-Repositories …")
+    packages = available_packages(packages)
+
+    if "base" not in packages or "linux" not in packages:
+        die(
+            "Die erforderlichen Arch-Basispakete sind nicht verfügbar. "
+            "Installation wird aus Sicherheitsgründen abgebrochen."
+        )
+
+    config = build_configuration(
+        disk=disk,
+        uefi=uefi,
+        language=language,
+        locale=locale,
+        keyboard=keyboard,
+        username=username,
+        packages=packages,
     )
 
-    # --------------------------------------------------------
-    # Security warning
-    # --------------------------------------------------------
+    write_configuration(config, username, password)
+    validate_configuration()
 
-    if not dry_run:
+    # The password is no longer needed by Python after the credentials file
+    # has been written. It is deliberately not logged.
+    password = ""
 
-        print()
+    run_archinstall()
 
-        print(
-            paint(
-                "!" * 70,
-                Colors.RED,
-            )
-        )
+    cleanup()
+    unmount_target()
 
-        print(
-            paint(
-                tr("security"),
-                Colors.BOLD + Colors.RED,
-            )
-        )
-
-        print()
-
-        print(
-            paint(
-                tr("disk_warning"),
-                Colors.BOLD + Colors.RED,
-            )
-        )
-
-        print(
-            paint(
-                tr("backup"),
-                Colors.YELLOW,
-            )
-        )
-
-        print()
-
-        print(
-            paint(
-                "WICHTIG: Die Festplatte wird NICHT "
-                "von diesem Python-Skript ausgewählt."
-                if LANGUAGE == "de"
-                else
-                "IMPORTANT: This Python script does NOT "
-                "choose the disk for you.",
-                Colors.BOLD,
-            )
-        )
-
-        print(
-            paint(
-                "Du wählst das Ziellaufwerk innerhalb von archinstall."
-                if LANGUAGE == "de"
-                else
-                "You choose the target disk inside archinstall.",
-                Colors.BOLD,
-            )
-        )
-
-        print()
-
-        print(
-            paint(
-                "!" * 70,
-                Colors.RED,
-            )
-        )
-
-        if not ask_yes_no(
-            tr("start"),
-            default=False,
-        ):
-
-            warning(
-                tr("cancelled")
-            )
-
-            return 0
-
-    else:
-
-        warning(
-            (
-                "DRY-RUN: Keine Installation wird durchgeführt."
-                if LANGUAGE == "de"
-                else
-                "DRY-RUN: No installation will be performed."
-            )
-        )
-
-    # --------------------------------------------------------
-    # Launch
-    # --------------------------------------------------------
-
-    return launch_archinstall(
-        config=config,
-        dry_run=dry_run,
+    ok("Arch Linux + Hyprland wurde vollständig installiert.")
+    print(
+        "\nDas System startet jetzt neu. "
+        "Entferne danach den Arch-USB-Stick."
     )
 
-
-# ============================================================
-# CLI
-# ============================================================
-
-def parse_arguments() -> argparse.Namespace:
-
-    parser = argparse.ArgumentParser(
-        description=(
-            "Arch Linux + Hyprland installer frontend"
-        )
-    )
-
-    parser.add_argument(
-        "--english",
-        action="store_true",
-        help="Start in English.",
-    )
-
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Run archinstall in dry-run mode.",
-    )
-
-    return parser.parse_args()
-
-
-# ============================================================
-# ENTRY POINT
-# ============================================================
-
-def main() -> int:
-
-    args = parse_arguments()
-
-    mode_override = None
-
-    if args.dry_run:
-
-        mode_override = StartMode.DRY_RUN
-
-    try:
-
-        return run_installer(
-            mode_override=mode_override,
-            force_english=args.english,
-        )
-
-    except KeyboardInterrupt:
-
-        print()
-
-        error(
-            (
-                "Installation interrupted."
-                if LANGUAGE == "en"
-                else
-                "Installation wurde unterbrochen."
-            )
-        )
-
-        return 130
-
-    except Exception as exc:
-
-        print()
-
-        error(
-            f"{type(exc).__name__}: {exc}"
-        )
-
-        log(
-            f"FATAL: "
-            f"{type(exc).__name__}: {exc}"
-        )
-
-        return 1
+    time.sleep(3)
+    run(["reboot", "now"], check=False)
 
 
 if __name__ == "__main__":
-
-    sys.exit(
+    try:
         main()
-    )
+    except KeyboardInterrupt:
+        die("Installation abgebrochen.")
