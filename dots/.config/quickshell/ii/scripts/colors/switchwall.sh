@@ -40,8 +40,6 @@ handle_catppuccin_theme() {
     local konsole_scheme_file konsole_scheme_name
 
     mkdir -p "$XDG_CONFIG_HOME/gtk-3.0" "$XDG_CONFIG_HOME/gtk-4.0"
-    cp "$SCRIPT_DIR/catppuccin-mocha-gtk3.css" "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
-    cp "$SCRIPT_DIR/catppuccin-mocha-gtk4.css" "$XDG_CONFIG_HOME/gtk-4.0/gtk.css"
 
     if command -v gsettings >/dev/null 2>&1; then
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
@@ -56,6 +54,10 @@ handle_catppuccin_theme() {
             echo "[switchwall] Catppuccin GTK theme not found in ~/.themes or /usr/share/themes" >&2
         fi
     fi
+
+    # Keep theme assets, but make the repository's color overrides authoritative.
+    cp "$SCRIPT_DIR/catppuccin-mocha-gtk3.css" "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
+    cp "$SCRIPT_DIR/catppuccin-mocha-gtk4.css" "$XDG_CONFIG_HOME/gtk-4.0/gtk.css"
 
     kde_scheme_file="$(find "$XDG_DATA_HOME/color-schemes" "$HOME/.local/share/color-schemes" /usr/share/color-schemes -type f -name 'MaterialCatppuccinMocha.colors' -print -quit 2>/dev/null)"
     if [[ -n "$kde_scheme_file" ]]; then

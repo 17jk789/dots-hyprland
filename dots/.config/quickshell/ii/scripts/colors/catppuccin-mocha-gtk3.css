@@ -1,32 +1,300 @@
 @define-color accent_color #cba6f7;
-@define-color accent_fg_color #1e1e2e;
 @define-color accent_bg_color #cba6f7;
+@define-color accent_fg_color #1e1e2e;
+
+@define-color destructive_color #f38ba8;
 @define-color destructive_bg_color #f38ba8;
 @define-color destructive_fg_color #1e1e2e;
-@define-color destructive_color #f38ba8;
+
+@define-color error_color #f38ba8;
+@define-color error_bg_color #f38ba8;
+@define-color error_fg_color #1e1e2e;
+
+@define-color warning_color #f9e2af;
+@define-color warning_bg_color #f9e2af;
+@define-color warning_fg_color #1e1e2e;
+
+@define-color success_color #a6e3a1;
 @define-color success_bg_color #a6e3a1;
 @define-color success_fg_color #1e1e2e;
-@define-color success_color #a6e3a1;
+
+
+/* GTK 3 WINDOW */
+
 @define-color window_bg_color #1e1e2e;
 @define-color window_fg_color #cdd6f4;
-@define-color headerbar_bg_color #1e1e2e;
-@define-color headerbar_backdrop_color #181825;
-@define-color headerbar_fg_color #cdd6f4;
-@define-color card_bg_color #313244;
-@define-color card_fg_color #cdd6f4;
-@define-color sidebar_bg_color #1e1e2e;
-@define-color sidebar_fg_color #cdd6f4;
+
+@define-color theme_bg_color #1e1e2e;
+@define-color theme_fg_color #cdd6f4;
+
+@define-color theme_base_color #1e1e2e;
+@define-color theme_text_color #cdd6f4;
+@define-color theme_text_aa_color #a6adc8;
+
+
+/* GTK 3 VIEW */
+
 @define-color view_bg_color #1e1e2e;
 @define-color view_fg_color #cdd6f4;
+
+@define-color content_view_bg #1e1e2e;
+@define-color text_view_bg #1e1e2e;
+
+
+/* HEADERBAR */
+
+@define-color headerbar_bg_color #1e1e2e;
+@define-color headerbar_fg_color #cdd6f4;
+@define-color headerbar_backdrop_color #181825;
+
+
+/* SIDEBAR */
+
+@define-color sidebar_bg_color #1e1e2e;
+@define-color sidebar_fg_color #cdd6f4;
+
+@define-color secondary_sidebar_bg_color #181825;
+@define-color secondary_sidebar_fg_color #bac2de;
+
+
+/* CARD */
+
+@define-color card_bg_color #313244;
+@define-color card_fg_color #cdd6f4;
+
+
+/* POPOVER */
+
 @define-color popover_bg_color #313244;
 @define-color popover_fg_color #cdd6f4;
+
+
+/* DIALOG */
+
 @define-color dialog_bg_color #313244;
 @define-color dialog_fg_color #cdd6f4;
+
+
+/* MENU */
+
+@define-color menu_bg_color #313244;
+@define-color menu_fg_color #cdd6f4;
+
+
+/* TOOLTIP */
+
+@define-color tooltip_bg_color #11111b;
+@define-color tooltip_fg_color #cdd6f4;
+
+
+/* SELECTION */
+
+@define-color theme_selected_bg_color #cba6f7;
+@define-color theme_selected_fg_color #1e1e2e;
+
+@define-color selected_bg_color #cba6f7;
+@define-color selected_fg_color #1e1e2e;
+
+
+/* INSENSITIVE / DISABLED */
+
+@define-color insensitive_bg_color #181825;
+@define-color insensitive_fg_color #6c7086;
+@define-color insensitive_base_color #181825;
+
+
+/* BORDERS */
+
+@define-color borders #45475a;
+@define-color unfocused_borders #313244;
+
+@define-color border_color #45475a;
+@define-color border_color_active #cba6f7;
+
+
+/* SURFACES */
+
 @define-color surface_container_lowest #11111b;
 @define-color surface_container_low #181825;
 @define-color surface_container #1e1e2e;
 @define-color surface_container_high #313244;
-@define-color surface_container_highest #313244;
+@define-color surface_container_highest #45475a;
+
 @define-color surface_variant #45475a;
 @define-color on_surface_variant #a6adc8;
-@define-color outline #7f849c;
+
+@define-color outline #6c7086;
+@define-color outline_variant #45475a;
+
+
+/* TEXT */
+
+@define-color text_color #cdd6f4;
+@define-color secondary_text_color #bac2de;
+@define-color muted_text_color #a6adc8;
+@define-color placeholder_text_color #6c7086;
+
+
+/* LINKS */
+
+@define-color link_color #89b4fa;
+@define-color link_visited_color #b4befe;
+
+
+/* SCROLLBARS */
+
+@define-color scrollbar_bg_color #181825;
+@define-color scrollbar_slider_color #45475a;
+@define-color scrollbar_slider_hover_color #585b70;
+@define-color scrollbar_slider_active_color #cba6f7;
+
+
+/* ENTRY / INPUT */
+
+@define-color entry_bg_color #313244;
+@define-color entry_fg_color #cdd6f4;
+@define-color entry_border_color #45475a;
+@define-color entry_focus_color #cba6f7;
+
+
+/* BUTTONS */
+
+@define-color button_bg_color #313244;
+@define-color button_fg_color #cdd6f4;
+@define-color button_hover_color #45475a;
+@define-color button_active_color #585b70;
+@define-color button_checked_color #cba6f7;
+
+
+/* CHECK / RADIO */
+
+@define-color check_bg_color #313244;
+@define-color check_fg_color #cdd6f4;
+@define-color check_checked_color #cba6f7;
+
+
+/* PROGRESS */
+
+@define-color progress_bg_color #45475a;
+@define-color progress_color #cba6f7;
+
+
+/* SCALE */
+
+@define-color scale_bg_color #45475a;
+@define-color scale_fill_color #cba6f7;
+@define-color scale_slider_color #cdd6f4;
+
+
+/* SWITCH */
+
+@define-color switch_bg_color #45475a;
+@define-color switch_active_color #cba6f7;
+@define-color switch_slider_color #cdd6f4;
+
+
+/* NOTEBOOK / TABS */
+
+@define-color notebook_bg_color #1e1e2e;
+@define-color notebook_tab_color #313244;
+@define-color notebook_tab_active_color #cba6f7;
+@define-color notebook_fg_color #cdd6f4;
+
+
+/* COMPLETE CATPPUCCIN MOCHA PALETTE */
+
+@define-color crust #11111b;
+@define-color mantle #181825;
+@define-color base #1e1e2e;
+
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+
+@define-color overlay0 #6c7086;
+@define-color overlay1 #7f849c;
+@define-color overlay2 #9399b2;
+
+@define-color subtext0 #a6adc8;
+@define-color subtext1 #bac2de;
+@define-color text #cdd6f4;
+
+@define-color rosewater #f5e0e5;
+@define-color flamingo #f2cdcd;
+@define-color pink #f5c2e7;
+@define-color mauve #cba6f7;
+
+@define-color red #f38ba8;
+@define-color maroon #eba0ac;
+@define-color peach #fab387;
+@define-color yellow #f9e2af;
+
+@define-color green #a6e3a1;
+@define-color teal #94e2d5;
+@define-color sky #89dceb;
+@define-color sapphire #74c7ec;
+
+@define-color blue #89b4fa;
+@define-color lavender #b4befe;
+
+
+/* DESCRIPTIVE ALIASES */
+
+@define-color red_color #f38ba8;
+@define-color maroon_color #eba0ac;
+@define-color orange_color #fab387;
+@define-color peach_color #fab387;
+@define-color yellow_color #f9e2af;
+@define-color green_color #a6e3a1;
+@define-color teal_color #94e2d5;
+@define-color sky_color #89dceb;
+@define-color sapphire_color #74c7ec;
+@define-color blue_color #89b4fa;
+@define-color lavender_color #b4befe;
+@define-color mauve_color #cba6f7;
+@define-color pink_color #f5c2e7;
+@define-color flamingo_color #f2cdcd;
+@define-color rosewater_color #f5e0e5;
+
+
+/* LEGACY GTK NAMES */
+
+@define-color theme_selected_bg_color #cba6f7;
+@define-color theme_selected_fg_color #1e1e2e;
+
+@define-color fg_color #cdd6f4;
+@define-color bg_color #1e1e2e;
+
+@define-color base_color #1e1e2e;
+@define-color text_color #cdd6f4;
+
+@define-color selected_bg_color #cba6f7;
+@define-color selected_fg_color #1e1e2e;
+
+@define-color insensitive_fg_color #6c7086;
+@define-color insensitive_bg_color #181825;
+
+@define-color borders #45475a;
+@define-color unfocused_borders #313244;
+
+
+/* GTK COLOR VARIANTS */
+
+@define-color light_color #cdd6f4;
+@define-color dark_color #11111b;
+
+@define-color shade_color #181825;
+@define-color shadow_color #11111b;
+
+@define-color highlight_color #45475a;
+@define-color hover_color #45475a;
+@define-color active_color #585b70;
+@define-color focus_color #cba6f7;
+
+
+/* RGBA */
+
+@define-color accent_color_rgba rgba(203,166,247,1);
+@define-color accent_bg_color_rgba rgba(203,166,247,1);
+
+@define-color transparent rgba(0,0,0,0);
