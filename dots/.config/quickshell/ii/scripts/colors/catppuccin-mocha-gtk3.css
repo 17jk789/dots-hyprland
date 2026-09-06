@@ -1,118 +1,323 @@
+/*
+ * ============================================================
+ * CATPPUCCIN MOCHA — GTK 3
+ * ============================================================
+ *
+ * Target:
+ *   GTK 3.x
+ *   GDK 3.x
+ *
+ * Recommended location:
+ *   ~/.config/gtk-3.0/gtk.css
+ *
+ * Design:
+ *   Catppuccin Mocha
+ *
+ * Primary:
+ *   Mauve #cba6f7
+ *
+ * Text:
+ *   Text #cdd6f4
+ *
+ * Background:
+ *   Base #1e1e2e
+ *
+ * Surface:
+ *   Surface0 #313244
+ *
+ * Border:
+ *   Surface1 #45475a
+ *
+ * IMPORTANT:
+ *   This file contains GTK 3 compatible @define-color
+ *   definitions only. No GTK 4 color syntax is required.
+ *
+ * BACKDROP:
+ *   Backdrop colors intentionally match their normal colors.
+ *   This keeps the application visually stable when focus
+ *   moves to another window.
+ *
+ * ============================================================
+ */
+
+/* ============================================================
+ * CORE GTK COLORS
+ * ============================================================ */
+
+@define-color theme_fg_color #cdd6f4;
+@define-color theme_text_color #cdd6f4;
+@define-color theme_bg_color #1e1e2e;
+@define-color theme_base_color #1e1e2e;
+@define-color theme_text_aa_color #a6adc8;
+
+@define-color fg_color #cdd6f4;
+@define-color bg_color #1e1e2e;
+@define-color base_color #1e1e2e;
+@define-color text_color #cdd6f4;
+
+@define-color foreground_color #cdd6f4;
+@define-color background_color #1e1e2e;
+
+@define-color primary_color #cba6f7;
+@define-color primary_bg_color #cba6f7;
+@define-color primary_fg_color #1e1e2e;
+
+@define-color secondary_color #bac2de;
+@define-color secondary_bg_color #45475a;
+@define-color secondary_fg_color #1e1e2e;
+
+@define-color tertiary_color #94e2d5;
+@define-color tertiary_bg_color #94e2d5;
+@define-color tertiary_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * ACCENT COLORS
+ * ============================================================ */
+
 @define-color accent_color #cba6f7;
 @define-color accent_bg_color #cba6f7;
 @define-color accent_fg_color #1e1e2e;
+
+@define-color accent_hover_color rgba(203,166,247,0.08);
+@define-color accent_active_color rgba(203,166,247,0.12);
+@define-color accent_vibrant_hover_color rgba(203,166,247,0.18);
+@define-color accent_vibrant_active_color rgba(203,166,247,0.26);
+
+@define-color accent_rgba rgba(203,166,247,1);
+@define-color accent_color_rgba rgba(203,166,247,1);
+@define-color accent_bg_color_rgba rgba(203,166,247,1);
+
+@define-color accent_hover_rgba rgba(203,166,247,0.08);
+@define-color accent_active_rgba rgba(203,166,247,0.16);
+@define-color accent_selected_rgba rgba(203,166,247,0.30);
+@define-color accent_focus_rgba rgba(203,166,247,0.55);
+
+
+/* ============================================================
+ * DESTRUCTIVE COLORS
+ * ============================================================ */
 
 @define-color destructive_color #f38ba8;
 @define-color destructive_bg_color #f38ba8;
 @define-color destructive_fg_color #1e1e2e;
 
+@define-color destructive #f38ba8;
+@define-color destructive_rgba rgba(243,139,168,1);
+@define-color destructive_color_mocha #f38ba8;
+
+
+/* ============================================================
+ * ERROR COLORS
+ * ============================================================ */
+
 @define-color error_color #f38ba8;
 @define-color error_bg_color #f38ba8;
 @define-color error_fg_color #1e1e2e;
+
+@define-color error #f38ba8;
+@define-color error_rgba rgba(243,139,168,1);
+@define-color error_color_mocha #f38ba8;
+
+
+/* ============================================================
+ * WARNING COLORS
+ * ============================================================ */
 
 @define-color warning_color #f9e2af;
 @define-color warning_bg_color #f9e2af;
 @define-color warning_fg_color #1e1e2e;
 
+@define-color warning #f9e2af;
+@define-color warning_rgba rgba(249,226,175,1);
+@define-color warning_color_mocha #f9e2af;
+
+
+/* ============================================================
+ * SUCCESS COLORS
+ * ============================================================ */
+
 @define-color success_color #a6e3a1;
 @define-color success_bg_color #a6e3a1;
 @define-color success_fg_color #1e1e2e;
 
-
-/* GTK 3 WINDOW */
-
-@define-color window_bg_color #1e1e2e;
-@define-color window_fg_color #cdd6f4;
-
-@define-color theme_bg_color #1e1e2e;
-@define-color theme_fg_color #cdd6f4;
-
-@define-color theme_base_color #1e1e2e;
-@define-color theme_text_color #cdd6f4;
-@define-color theme_text_aa_color #a6adc8;
+@define-color success #a6e3a1;
+@define-color success_rgba rgba(166,227,161,1);
+@define-color success_color_mocha #a6e3a1;
 
 
-/* GTK 3 VIEW */
+/* ============================================================
+ * INFORMATION COLORS
+ * ============================================================ */
 
-@define-color view_bg_color #1e1e2e;
-@define-color view_fg_color #cdd6f4;
+@define-color info_color #89dceb;
+@define-color info_bg_color #89dceb;
+@define-color info_fg_color #1e1e2e;
 
-@define-color content_view_bg #1e1e2e;
-@define-color text_view_bg #1e1e2e;
-
-
-/* HEADERBAR */
-
-@define-color headerbar_bg_color #1e1e2e;
-@define-color headerbar_fg_color #cdd6f4;
-@define-color headerbar_backdrop_color #181825;
+@define-color info #89dceb;
+@define-color info_rgba rgba(137,220,235,1);
+@define-color info_color_mocha #89dceb;
 
 
-/* SIDEBAR */
+/* ============================================================
+ * QUESTION COLORS
+ * ============================================================ */
 
-@define-color sidebar_bg_color #1e1e2e;
-@define-color sidebar_fg_color #cdd6f4;
-
-@define-color secondary_sidebar_bg_color #181825;
-@define-color secondary_sidebar_fg_color #bac2de;
-
-
-/* CARD */
-
-@define-color card_bg_color #313244;
-@define-color card_fg_color #cdd6f4;
+@define-color question_color #89b4fa;
+@define-color question_bg_color #89b4fa;
+@define-color question_fg_color #1e1e2e;
 
 
-/* POPOVER */
-
-@define-color popover_bg_color #313244;
-@define-color popover_fg_color #cdd6f4;
-
-
-/* DIALOG */
-
-@define-color dialog_bg_color #313244;
-@define-color dialog_fg_color #cdd6f4;
-
-
-/* MENU */
-
-@define-color menu_bg_color #313244;
-@define-color menu_fg_color #cdd6f4;
-
-
-/* TOOLTIP */
-
-@define-color tooltip_bg_color #11111b;
-@define-color tooltip_fg_color #cdd6f4;
-
-
-/* SELECTION */
-
-@define-color theme_selected_bg_color #cba6f7;
-@define-color theme_selected_fg_color #1e1e2e;
+/* ============================================================
+ * SELECTION
+ * ============================================================ */
 
 @define-color selected_bg_color #cba6f7;
 @define-color selected_fg_color #1e1e2e;
 
+@define-color selection_bg_color #cba6f7;
+@define-color selection_fg_color #1e1e2e;
 
-/* INSENSITIVE / DISABLED */
+@define-color theme_selected_bg_color #cba6f7;
+@define-color theme_selected_fg_color #1e1e2e;
+
+@define-color selection_rgba rgba(203,166,247,0.30);
+@define-color selection_hover_rgba rgba(203,166,247,0.20);
+@define-color selection_active_rgba rgba(203,166,247,0.40);
+
+
+/* ============================================================
+ * INSENSITIVE AND DISABLED
+ * ============================================================ */
 
 @define-color insensitive_bg_color #181825;
 @define-color insensitive_fg_color #6c7086;
 @define-color insensitive_base_color #181825;
+@define-color insensitive_border_color #313244;
+
+@define-color disabled_bg_color #181825;
+@define-color disabled_fg_color #6c7086;
+@define-color disabled_base_color #181825;
+@define-color disabled_border_color #313244;
+@define-color disabled_text_color #6c7086;
 
 
-/* BORDERS */
+/* ============================================================
+ * WINDOW
+ * ============================================================ */
 
-@define-color borders #45475a;
-@define-color unfocused_borders #313244;
+@define-color window_bg_color #1e1e2e;
+@define-color window_fg_color #cdd6f4;
 
-@define-color border_color #45475a;
-@define-color border_color_active #cba6f7;
+@define-color window_backdrop_color #1e1e2e;
+@define-color window_backdrop_fg_color #cdd6f4;
 
 
-/* SURFACES */
+/* ============================================================
+ * VIEW
+ * ============================================================ */
+
+@define-color view_bg_color #1e1e2e;
+@define-color view_fg_color #cdd6f4;
+
+@define-color view_backdrop_color #1e1e2e;
+@define-color view_backdrop_fg_color #cdd6f4;
+
+@define-color content_view_bg #1e1e2e;
+@define-color content_view_fg #cdd6f4;
+
+@define-color text_view_bg #1e1e2e;
+@define-color text_view_fg #cdd6f4;
+
+
+/* ============================================================
+ * HEADERBAR
+ * ============================================================ */
+
+@define-color headerbar_bg_color #1e1e2e;
+@define-color headerbar_fg_color #cdd6f4;
+
+@define-color headerbar_backdrop_color #1e1e2e;
+@define-color headerbar_backdrop_fg_color #cdd6f4;
+
+@define-color headerbar_border_color #45475a;
+
+
+/* ============================================================
+ * TITLEBAR
+ * ============================================================ */
+
+@define-color titlebar_bg_color #1e1e2e;
+@define-color titlebar_fg_color #cdd6f4;
+
+@define-color titlebar_backdrop_color #1e1e2e;
+@define-color titlebar_backdrop_fg_color #cdd6f4;
+
+@define-color titlebar_border_color #45475a;
+
+
+/* ============================================================
+ * SIDEBAR
+ * ============================================================ */
+
+@define-color sidebar_bg_color #181825;
+@define-color sidebar_fg_color #cdd6f4;
+
+@define-color sidebar_backdrop_color #181825;
+@define-color sidebar_backdrop_fg_color #cdd6f4;
+
+@define-color sidebar_border_color #45475a;
+
+@define-color sidebar_row_active_bg_color #cba6f7;
+@define-color sidebar_row_active_fg_color #1e1e2e;
+
+@define-color sidebar_row_hover_color #313244;
+@define-color sidebar_row_active_hover_color #d2b4f9;
+
+
+/* ============================================================
+ * SECONDARY SIDEBAR
+ * ============================================================ */
+
+@define-color secondary_sidebar_bg_color #11111b;
+@define-color secondary_sidebar_fg_color #bac2de;
+
+@define-color secondary_sidebar_backdrop_color #11111b;
+@define-color secondary_sidebar_backdrop_fg_color #bac2de;
+
+@define-color secondary_sidebar_border_color #313244;
+
+
+/* ============================================================
+ * OVERVIEW
+ * ============================================================ */
+
+@define-color overview_bg_color #11111b;
+@define-color overview_fg_color #cdd6f4;
+
+
+/* ============================================================
+ * CARDS
+ * ============================================================ */
+
+@define-color card_bg_color #313244;
+@define-color card_fg_color #cdd6f4;
+
+@define-color card_border_color #45475a;
+@define-color card_hover_color #45475a;
+@define-color card_active_color #585b70;
+
+
+/* ============================================================
+ * SURFACES
+ * ============================================================ */
+
+@define-color surface_color #313244;
+@define-color surface_fg_color #cdd6f4;
+
+@define-color surface0_color #313244;
+@define-color surface1_color #45475a;
+@define-color surface2_color #585b70;
 
 @define-color surface_container_lowest #11111b;
 @define-color surface_container_low #181825;
@@ -123,85 +328,417 @@
 @define-color surface_variant #45475a;
 @define-color on_surface_variant #a6adc8;
 
-@define-color outline #6c7086;
-@define-color outline_variant #45475a;
+
+/* ============================================================
+ * POPOVERS
+ * ============================================================ */
+
+@define-color popover_bg_color #313244;
+@define-color popover_fg_color #cdd6f4;
+
+@define-color popover_border_color #45475a;
+
+@define-color popover_hover_color #45475a;
+@define-color popover_active_color #585b70;
+
+@define-color popover_fg_hover_color rgba(205,214,244,0.08);
 
 
-/* TEXT */
+/* ============================================================
+ * MENUS
+ * ============================================================ */
 
-@define-color text_color #cdd6f4;
+@define-color menu_bg_color #313244;
+@define-color menu_fg_color #cdd6f4;
+
+@define-color menu_border_color #45475a;
+
+@define-color menu_hover_color #45475a;
+@define-color menu_active_color #585b70;
+
+@define-color menu_selected_bg_color #cba6f7;
+@define-color menu_selected_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * DIALOGS
+ * ============================================================ */
+
+@define-color dialog_bg_color #313244;
+@define-color dialog_fg_color #cdd6f4;
+
+@define-color dialog_border_color #45475a;
+
+
+/* ============================================================
+ * TOOLTIPS
+ * ============================================================ */
+
+@define-color tooltip_bg_color #11111b;
+@define-color tooltip_fg_color #cdd6f4;
+
+@define-color tooltip_border_color #45475a;
+
+
+/* ============================================================
+ * ENTRY
+ * ============================================================ */
+
+@define-color entry_bg_color #313244;
+@define-color entry_fg_color #cdd6f4;
+
+@define-color entry_border_color #45475a;
+@define-color entry_focus_color #cba6f7;
+
+@define-color entry_hover_color #45475a;
+@define-color entry_active_color #585b70;
+
+@define-color entry_selection_bg_color #cba6f7;
+@define-color entry_selection_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * TEXT
+ * ============================================================ */
+
 @define-color secondary_text_color #bac2de;
 @define-color muted_text_color #a6adc8;
 @define-color placeholder_text_color #6c7086;
 
+@define-color text_primary_color #cdd6f4;
+@define-color text_secondary_color #bac2de;
+@define-color text_tertiary_color #a6adc8;
+@define-color text_disabled_color #6c7086;
 
-/* LINKS */
+@define-color text_primary_rgba rgba(205,214,244,1);
+@define-color text_secondary_rgba rgba(186,194,222,1);
+@define-color text_muted_rgba rgba(166,173,200,1);
+@define-color text_disabled_rgba rgba(108,112,134,1);
+
+
+/* ============================================================
+ * BUTTON
+ * ============================================================ */
+
+@define-color button_bg_color #313244;
+@define-color button_fg_color #cdd6f4;
+
+@define-color button_border_color #45475a;
+
+@define-color button_hover_color #45475a;
+@define-color button_active_color #585b70;
+
+@define-color button_checked_color #cba6f7;
+@define-color button_checked_fg_color #1e1e2e;
+
+@define-color button_focus_color #cba6f7;
+
+@define-color button_insensitive_bg_color #181825;
+@define-color button_insensitive_fg_color #6c7086;
+
+
+/* ============================================================
+ * CHECK BUTTON
+ * ============================================================ */
+
+@define-color check_bg_color #313244;
+@define-color check_fg_color #cdd6f4;
+
+@define-color check_border_color #6c7086;
+
+@define-color check_checked_color #cba6f7;
+@define-color check_checked_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * RADIO BUTTON
+ * ============================================================ */
+
+@define-color radio_bg_color #313244;
+@define-color radio_fg_color #cdd6f4;
+
+@define-color radio_border_color #6c7086;
+
+@define-color radio_checked_color #cba6f7;
+@define-color radio_checked_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * SWITCH
+ * ============================================================ */
+
+@define-color switch_bg_color #45475a;
+@define-color switch_fg_color #cdd6f4;
+
+@define-color switch_active_color #cba6f7;
+@define-color switch_active_fg_color #1e1e2e;
+
+@define-color switch_slider_color #cdd6f4;
+@define-color switch_slider_active_color #1e1e2e;
+
+@define-color switch_disabled_color #313244;
+
+
+/* ============================================================
+ * SCALE
+ * ============================================================ */
+
+@define-color scale_bg_color #45475a;
+@define-color scale_fill_color #cba6f7;
+
+@define-color scale_slider_color #cdd6f4;
+@define-color scale_slider_hover_color #ffffff;
+@define-color scale_slider_active_color #cba6f7;
+
+@define-color scale_trough_color #313244;
+
+
+/* ============================================================
+ * SLIDER AND RANGE
+ * ============================================================ */
+
+@define-color slider_color #45475a;
+@define-color slider_hover_color #585b70;
+@define-color slider_active_color #cba6f7;
+
+@define-color trough_bg_color #181825;
+@define-color trough_border_color #313244;
+
+
+/* ============================================================
+ * PROGRESS
+ * ============================================================ */
+
+@define-color progress_bg_color #45475a;
+@define-color progress_color #cba6f7;
+@define-color progress_border_color #45475a;
+
+@define-color progress_success_color #a6e3a1;
+@define-color progress_error_color #f38ba8;
+
+
+/* ============================================================
+ * SPINBUTTON
+ * ============================================================ */
+
+@define-color spinbutton_bg_color #313244;
+@define-color spinbutton_fg_color #cdd6f4;
+@define-color spinbutton_border_color #45475a;
+@define-color spinbutton_focus_color #cba6f7;
+
+
+/* ============================================================
+ * NOTEBOOK AND TABS
+ * ============================================================ */
+
+@define-color notebook_bg_color #1e1e2e;
+@define-color notebook_fg_color #cdd6f4;
+
+@define-color notebook_tab_color #313244;
+@define-color notebook_tab_active_color #cba6f7;
+@define-color notebook_tab_active_fg_color #1e1e2e;
+
+@define-color notebook_tab_hover_color #45475a;
+@define-color notebook_border_color #45475a;
+
+
+/* ============================================================
+ * SCROLLBAR
+ * ============================================================ */
+
+@define-color scrollbar_bg_color #181825;
+@define-color scrollbar_slider_color #45475a;
+
+@define-color scrollbar_slider_hover_color #585b70;
+@define-color scrollbar_slider_active_color #cba6f7;
+
+@define-color scrollbar_insensitive_color #313244;
+
+
+/* ============================================================
+ * TOOLBAR
+ * ============================================================ */
+
+@define-color toolbar_bg_color #181825;
+@define-color toolbar_fg_color #cdd6f4;
+@define-color toolbar_border_color #45475a;
+
+
+/* ============================================================
+ * STATUSBAR
+ * ============================================================ */
+
+@define-color statusbar_bg_color #181825;
+@define-color statusbar_fg_color #a6adc8;
+@define-color statusbar_border_color #313244;
+
+
+/* ============================================================
+ * MENUBAR
+ * ============================================================ */
+
+@define-color menubar_bg_color #181825;
+@define-color menubar_fg_color #cdd6f4;
+
+@define-color menubar_hover_color #313244;
+@define-color menubar_active_color #45475a;
+
+
+/* ============================================================
+ * BORDERS
+ * ============================================================ */
+
+@define-color borders #45475a;
+@define-color border_color #45475a;
+
+@define-color border_color_active #cba6f7;
+@define-color border_color_hover #585b70;
+@define-color border_color_focus #cba6f7;
+@define-color border_color_disabled #313244;
+
+@define-color unfocused_borders #313244;
+
+@define-color border_rgba rgba(69,71,90,1);
+@define-color border_soft_rgba rgba(69,71,90,0.65);
+@define-color border_strong_rgba rgba(88,91,112,1);
+
+
+/* ============================================================
+ * OUTLINES
+ * ============================================================ */
+
+@define-color outline #6c7086;
+@define-color outline_variant #45475a;
+
+@define-color outline_rgba rgba(108,112,134,1);
+@define-color outline_soft_rgba rgba(108,112,134,0.55);
+
+
+/* ============================================================
+ * SEPARATORS
+ * ============================================================ */
+
+@define-color separator_color #45475a;
+@define-color separator_color_light #313244;
+@define-color separator_color_strong #585b70;
+
+
+/* ============================================================
+ * FOCUS
+ * ============================================================ */
+
+@define-color focus_color #cba6f7;
+@define-color focus_border_color #cba6f7;
+
+@define-color focus_ring_color rgba(203,166,247,0.55);
+@define-color focus_ring_soft_color rgba(203,166,247,0.20);
+
+
+/* ============================================================
+ * LINKS
+ * ============================================================ */
 
 @define-color link_color #89b4fa;
 @define-color link_visited_color #b4befe;
 
-
-/* SCROLLBARS */
-
-@define-color scrollbar_bg_color #181825;
-@define-color scrollbar_slider_color #45475a;
-@define-color scrollbar_slider_hover_color #585b70;
-@define-color scrollbar_slider_active_color #cba6f7;
+@define-color link_hover_color #74c7ec;
+@define-color link_active_color #cba6f7;
 
 
-/* ENTRY / INPUT */
+/* ============================================================
+ * THUMBNAILS
+ * ============================================================ */
 
-@define-color entry_bg_color #313244;
-@define-color entry_fg_color #cdd6f4;
-@define-color entry_border_color #45475a;
-@define-color entry_focus_color #cba6f7;
-
-
-/* BUTTONS */
-
-@define-color button_bg_color #313244;
-@define-color button_fg_color #cdd6f4;
-@define-color button_hover_color #45475a;
-@define-color button_active_color #585b70;
-@define-color button_checked_color #cba6f7;
+@define-color thumbnail_bg_color #313244;
+@define-color thumbnail_fg_color #cdd6f4;
+@define-color thumbnail_border_color #45475a;
 
 
-/* CHECK / RADIO */
+/* ============================================================
+ * ICONS AND SYMBOLIC ICONS
+ * ============================================================ */
 
-@define-color check_bg_color #313244;
-@define-color check_fg_color #cdd6f4;
-@define-color check_checked_color #cba6f7;
+@define-color icon_color #cdd6f4;
+@define-color icon_secondary_color #bac2de;
+@define-color icon_muted_color #a6adc8;
+@define-color icon_disabled_color #6c7086;
 
-
-/* PROGRESS */
-
-@define-color progress_bg_color #45475a;
-@define-color progress_color #cba6f7;
-
-
-/* SCALE */
-
-@define-color scale_bg_color #45475a;
-@define-color scale_fill_color #cba6f7;
-@define-color scale_slider_color #cdd6f4;
+@define-color icon_accent_color #cba6f7;
+@define-color icon_success_color #a6e3a1;
+@define-color icon_warning_color #f9e2af;
+@define-color icon_error_color #f38ba8;
 
 
-/* SWITCH */
+/* ============================================================
+ * LIGHT / DARK / SHADE / SHADOW
+ * ============================================================ */
 
-@define-color switch_bg_color #45475a;
-@define-color switch_active_color #cba6f7;
-@define-color switch_slider_color #cdd6f4;
+@define-color light_color #cdd6f4;
+@define-color dark_color #11111b;
+
+@define-color shade_color #181825;
+@define-color shadow_color #11111b;
+
+@define-color highlight_color #45475a;
+@define-color hover_color #45475a;
+@define-color active_color #585b70;
 
 
-/* NOTEBOOK / TABS */
+/* ============================================================
+ * STATE COLORS
+ * ============================================================ */
 
-@define-color notebook_bg_color #1e1e2e;
-@define-color notebook_tab_color #313244;
-@define-color notebook_tab_active_color #cba6f7;
-@define-color notebook_fg_color #cdd6f4;
+@define-color state_hover_color #45475a;
+@define-color state_active_color #585b70;
+
+@define-color state_selected_color #cba6f7;
+@define-color state_selected_fg_color #1e1e2e;
+
+@define-color state_focus_color #cba6f7;
+
+@define-color state_disabled_color #181825;
+@define-color state_disabled_fg_color #6c7086;
 
 
-/* COMPLETE CATPPUCCIN MOCHA PALETTE */
+/* ============================================================
+ * BACKDROP COLORS
+ * ============================================================ */
+
+@define-color backdrop_bg_color #1e1e2e;
+@define-color backdrop_fg_color #cdd6f4;
+
+@define-color backdrop_base_color #1e1e2e;
+@define-color backdrop_text_color #cdd6f4;
+
+@define-color backdrop_headerbar_color #1e1e2e;
+@define-color backdrop_headerbar_fg_color #cdd6f4;
+
+@define-color backdrop_sidebar_color #181825;
+@define-color backdrop_sidebar_fg_color #cdd6f4;
+
+@define-color backdrop_view_bg_color #1e1e2e;
+@define-color backdrop_view_fg_color #cdd6f4;
+
+@define-color backdrop_window_bg_color #1e1e2e;
+@define-color backdrop_window_fg_color #cdd6f4;
+
+
+/* ============================================================
+ * CONTAINER COLORS
+ * ============================================================ */
+
+@define-color container_bg_color #1e1e2e;
+@define-color container_fg_color #cdd6f4;
+
+@define-color container_lowest_color #11111b;
+@define-color container_low_color #181825;
+@define-color container_high_color #313244;
+@define-color container_highest_color #45475a;
+
+
+/* ============================================================
+ * CATPPUCCIN MOCHA PALETTE
+ * ============================================================ */
 
 @define-color crust #11111b;
 @define-color mantle #181825;
@@ -238,63 +775,331 @@
 @define-color lavender #b4befe;
 
 
-/* DESCRIPTIVE ALIASES */
+/* ============================================================
+ * CATPPUCCIN COLOR ALIASES
+ * ============================================================ */
+
+@define-color crust_color #11111b;
+@define-color mantle_color #181825;
+@define-color base_color_mocha #1e1e2e;
+
+@define-color surface0_color #313244;
+@define-color surface1_color #45475a;
+@define-color surface2_color #585b70;
+
+@define-color overlay0_color #6c7086;
+@define-color overlay1_color #7f849c;
+@define-color overlay2_color #9399b2;
+
+@define-color subtext0_color #a6adc8;
+@define-color subtext1_color #bac2de;
+@define-color text_color_mocha #cdd6f4;
 
 @define-color red_color #f38ba8;
 @define-color maroon_color #eba0ac;
 @define-color orange_color #fab387;
 @define-color peach_color #fab387;
 @define-color yellow_color #f9e2af;
+
 @define-color green_color #a6e3a1;
 @define-color teal_color #94e2d5;
 @define-color sky_color #89dceb;
 @define-color sapphire_color #74c7ec;
+
 @define-color blue_color #89b4fa;
 @define-color lavender_color #b4befe;
 @define-color mauve_color #cba6f7;
 @define-color pink_color #f5c2e7;
+
 @define-color flamingo_color #f2cdcd;
 @define-color rosewater_color #f5e0e5;
 
 
-/* LEGACY GTK NAMES */
+/* ============================================================
+ * STATUS ALIASES
+ * ============================================================ */
 
-@define-color theme_selected_bg_color #cba6f7;
-@define-color theme_selected_fg_color #1e1e2e;
-
-@define-color fg_color #cdd6f4;
-@define-color bg_color #1e1e2e;
-
-@define-color base_color #1e1e2e;
-@define-color text_color #cdd6f4;
-
-@define-color selected_bg_color #cba6f7;
-@define-color selected_fg_color #1e1e2e;
-
-@define-color insensitive_fg_color #6c7086;
-@define-color insensitive_bg_color #181825;
-
-@define-color borders #45475a;
-@define-color unfocused_borders #313244;
+@define-color success_color_mocha #a6e3a1;
+@define-color warning_color_mocha #f9e2af;
+@define-color error_color_mocha #f38ba8;
+@define-color destructive_color_mocha #f38ba8;
+@define-color info_color_mocha #89dceb;
 
 
-/* GTK COLOR VARIANTS */
+/* ============================================================
+ * SURFACE RGBA
+ * ============================================================ */
 
-@define-color light_color #cdd6f4;
-@define-color dark_color #11111b;
+@define-color surface0_rgba rgba(49,50,68,1);
+@define-color surface1_rgba rgba(69,71,90,1);
+@define-color surface2_rgba rgba(88,91,112,1);
 
-@define-color shade_color #181825;
-@define-color shadow_color #11111b;
-
-@define-color highlight_color #45475a;
-@define-color hover_color #45475a;
-@define-color active_color #585b70;
-@define-color focus_color #cba6f7;
+@define-color mantle_rgba rgba(24,24,37,1);
+@define-color crust_rgba rgba(17,17,27,1);
+@define-color base_rgba rgba(30,30,46,1);
 
 
-/* RGBA */
+/* ============================================================
+ * HOVER AND ACTIVE RGBA
+ * ============================================================ */
 
-@define-color accent_color_rgba rgba(203,166,247,1);
-@define-color accent_bg_color_rgba rgba(203,166,247,1);
+@define-color hover_rgba rgba(69,71,90,1);
+@define-color hover_soft_rgba rgba(69,71,90,0.65);
+
+@define-color active_rgba rgba(88,91,112,1);
+@define-color active_soft_rgba rgba(88,91,112,0.75);
+
+
+/* ============================================================
+ * TRANSPARENCY
+ * ============================================================ */
 
 @define-color transparent rgba(0,0,0,0);
+@define-color transparent_white rgba(255,255,255,0);
+@define-color transparent_black rgba(0,0,0,0);
+
+
+/* ============================================================
+ * GENERIC GTK COMPATIBILITY ALIASES
+ * ============================================================ */
+
+@define-color primary #cba6f7;
+@define-color primary_foreground #1e1e2e;
+
+@define-color secondary #bac2de;
+@define-color secondary_foreground #1e1e2e;
+
+@define-color tertiary #94e2d5;
+@define-color tertiary_foreground #1e1e2e;
+
+@define-color background #1e1e2e;
+@define-color foreground #cdd6f4;
+
+@define-color surface #313244;
+@define-color surface_foreground #cdd6f4;
+
+@define-color border #45475a;
+@define-color focus #cba6f7;
+@define-color hover #45475a;
+@define-color active #585b70;
+
+@define-color selected #cba6f7;
+@define-color selected_foreground #1e1e2e;
+
+
+/* ============================================================
+ * GTK 3 ADDITIONAL COLOR ROLES
+ * ============================================================ */
+
+@define-color gtk_bg_color #1e1e2e;
+@define-color gtk_fg_color #cdd6f4;
+@define-color gtk_base_color #1e1e2e;
+@define-color gtk_text_color #cdd6f4;
+
+@define-color gtk_selected_bg_color #cba6f7;
+@define-color gtk_selected_fg_color #1e1e2e;
+
+@define-color gtk_insensitive_bg_color #181825;
+@define-color gtk_insensitive_fg_color #6c7086;
+
+@define-color gtk_border_color #45475a;
+@define-color gtk_focus_color #cba6f7;
+
+@define-color gtk_hover_color #45475a;
+@define-color gtk_active_color #585b70;
+
+
+/* ============================================================
+ * LEGACY COLOR ROLES
+ * ============================================================ */
+
+@define-color theme_button_background_normal #313244;
+@define-color theme_button_foreground_normal #cdd6f4;
+
+@define-color theme_button_background_hover #45475a;
+@define-color theme_button_foreground_hover #cdd6f4;
+
+@define-color theme_button_background_active #585b70;
+@define-color theme_button_foreground_active #cdd6f4;
+
+@define-color theme_button_background_checked #cba6f7;
+@define-color theme_button_foreground_checked #1e1e2e;
+
+@define-color theme_entry_background #313244;
+@define-color theme_entry_foreground #cdd6f4;
+
+@define-color theme_entry_border #45475a;
+@define-color theme_entry_focus #cba6f7;
+
+@define-color theme_view_background #1e1e2e;
+@define-color theme_view_foreground #cdd6f4;
+
+@define-color theme_sidebar_background #181825;
+@define-color theme_sidebar_foreground #cdd6f4;
+
+@define-color theme_popover_background #313244;
+@define-color theme_popover_foreground #cdd6f4;
+
+@define-color theme_menu_background #313244;
+@define-color theme_menu_foreground #cdd6f4;
+
+
+/* ============================================================
+ * GTK 3 SELECTION AND CARET COLORS
+ * ============================================================ */
+
+@define-color caret_color #cba6f7;
+@define-color cursor_color #cba6f7;
+
+@define-color selection_color #cba6f7;
+@define-color selection_text_color #1e1e2e;
+
+@define-color selected_color #cba6f7;
+@define-color selected_text_color #1e1e2e;
+
+
+/* ============================================================
+ * GTK 3 FRAME COLORS
+ * ============================================================ */
+
+@define-color frame_color #45475a;
+@define-color frame_active_color #cba6f7;
+@define-color frame_focus_color #cba6f7;
+@define-color frame_hover_color #585b70;
+
+@define-color frame_insensitive_color #313244;
+
+
+/* ============================================================
+ * GTK 3 TREEVIEW COLORS
+ * ============================================================ */
+
+@define-color treeview_bg_color #1e1e2e;
+@define-color treeview_fg_color #cdd6f4;
+
+@define-color treeview_selected_bg_color #cba6f7;
+@define-color treeview_selected_fg_color #1e1e2e;
+
+@define-color treeview_hover_color #313244;
+@define-color treeview_active_color #45475a;
+
+@define-color treeview_insensitive_bg_color #181825;
+@define-color treeview_insensitive_fg_color #6c7086;
+
+
+/* ============================================================
+ * GTK 3 NOTEBOOK COLORS
+ * ============================================================ */
+
+@define-color tab_bg_color #313244;
+@define-color tab_fg_color #cdd6f4;
+
+@define-color tab_hover_color #45475a;
+@define-color tab_active_color #cba6f7;
+@define-color tab_active_fg_color #1e1e2e;
+
+@define-color tab_border_color #45475a;
+
+@define-color tab_insensitive_bg_color #181825;
+@define-color tab_insensitive_fg_color #6c7086;
+
+
+/* ============================================================
+ * GTK 3 PROGRESS AND LEVEL COLORS
+ * ============================================================ */
+
+@define-color level_bar_bg_color #181825;
+@define-color level_bar_fill_color #cba6f7;
+@define-color level_bar_border_color #45475a;
+
+@define-color level_bar_success_color #a6e3a1;
+@define-color level_bar_warning_color #f9e2af;
+@define-color level_bar_error_color #f38ba8;
+
+
+/* ============================================================
+ * GTK 3 SPINNER COLORS
+ * ============================================================ */
+
+@define-color spinner_color #cba6f7;
+@define-color spinner_bg_color #45475a;
+@define-color spinner_disabled_color #6c7086;
+
+
+/* ============================================================
+ * GTK 3 CALENDAR COLORS
+ * ============================================================ */
+
+@define-color calendar_bg_color #313244;
+@define-color calendar_fg_color #cdd6f4;
+
+@define-color calendar_header_bg_color #1e1e2e;
+@define-color calendar_header_fg_color #cdd6f4;
+
+@define-color calendar_selected_bg_color #cba6f7;
+@define-color calendar_selected_fg_color #1e1e2e;
+
+@define-color calendar_today_color #cba6f7;
+@define-color calendar_hover_color #45475a;
+
+@define-color calendar_insensitive_color #6c7086;
+
+
+/* ============================================================
+ * GTK 3 TOOLTIP AND INFO COLORS
+ * ============================================================ */
+
+@define-color info_background #313244;
+@define-color info_foreground #cdd6f4;
+
+@define-color question_background #313244;
+@define-color question_foreground #cdd6f4;
+
+@define-color warning_background #f9e2af;
+@define-color warning_foreground #1e1e2e;
+
+@define-color error_background #f38ba8;
+@define-color error_foreground #1e1e2e;
+
+@define-color success_background #a6e3a1;
+@define-color success_foreground #1e1e2e;
+
+
+/* ============================================================
+ * GTK 3 HIGH CONTRAST SUPPORT COLORS
+ * ============================================================ */
+
+@define-color contrast_fg_color #cdd6f4;
+@define-color contrast_bg_color #1e1e2e;
+@define-color contrast_base_color #11111b;
+@define-color contrast_text_color #cdd6f4;
+
+@define-color contrast_border_color #6c7086;
+@define-color contrast_focus_color #cba6f7;
+@define-color contrast_selected_color #cba6f7;
+@define-color contrast_selected_fg_color #1e1e2e;
+
+
+/* ============================================================
+ * GTK 3 COMPLETE SEMANTIC SURFACE MAP
+ * ============================================================ */
+
+@define-color surface_lowest #11111b;
+@define-color surface_low #181825;
+@define-color surface_base #1e1e2e;
+@define-color surface_high #313244;
+@define-color surface_highest #45475a;
+
+@define-color surface_on_color #cdd6f4;
+@define-color surface_secondary_text #bac2de;
+@define-color surface_muted_text #a6adc8;
+
+@define-color surface_hover #45475a;
+@define-color surface_active #585b70;
+@define-color surface_selected #cba6f7;
+@define-color surface_selected_fg #1e1e2e;
+
+
+/* ============================================================
+ * GTK 3 COMPLETE COLOR END
+ * ============================================================ */
