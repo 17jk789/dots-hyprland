@@ -1,0 +1,52 @@
+{
+  "manifest_version": 2,
+  "name": "Catppuccin Mocha",
+  "version": "1.0.0",
+  "description": "Catppuccin Mocha dark theme for Firefox.",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "catppuccin-mocha@local"
+    }
+  },
+
+  "theme": {
+    "colors": {
+      "frame": "#1E1E2E",
+      "frame_inactive": "#181825",
+      "toolbar": "#1E1E2E",
+      "toolbar_text": "#CDD6F4",
+      "tab_text": "#CDD6F4",
+      "tab_background_text": "#BAC2DE",
+      "tab_line": "#CBA6F7",
+      "toolbar_field": "#181825",
+      "toolbar_field_text": "#CDD6F4",
+      "toolbar_field_border": "#45475A",
+      "button_background_hover": "#313244",
+      "button_background_active": "#45475A",
+      "icons": "#BAC2DE",
+      "icons_attention": "#F5E0DC",
+      "popup": "#1E1E2E",
+      "popup_text": "#CDD6F4",
+      "popup_border": "#45475A",
+      "popup_highlight": "#313244",
+      "popup_highlight_text": "#CDD6F4",
+      "sidebar": "#181825",
+      "sidebar_text": "#CDD6F4",
+      "sidebar_highlight": "#313244",
+      "sidebar_highlight_text": "#CDD6F4",
+      "sidebar_border": "#45475A",
+      "ntp_background": "#1E1E2E",
+      "ntp_text": "#CDD6F4",
+      "bookmark_text": "#CDD6F4",
+      "toolbar_top_separator": "#11111B",
+      "toolbar_bottom_separator": "#11111B",
+      "toolbar_vertical_separator": "#45475A"
+    },
+
+    "properties": {
+      "color_scheme": "dark",
+      "content_color_scheme": "dark"
+    }
+  }
+}

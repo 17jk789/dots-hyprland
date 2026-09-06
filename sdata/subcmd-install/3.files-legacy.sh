@@ -3,6 +3,8 @@
 
 # shellcheck shell=bash
 
+install_dir__sync dots/home "$HOME"
+
 #####################################################################################
 # MISC (For dots/.config/* but not quickshell, not fish, not Hyprland, not fontconfig)
 case "${SKIP_MISCCONF}" in

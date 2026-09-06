@@ -12,6 +12,10 @@ user_preferences:
   terminal: "foot" # kitty | foot
   keybindings: "default" # default | vim
 patterns:
+  # Home-directory files (for example dots/home/.gitconfig -> ~/.gitconfig)
+  - from: "dots/home"
+    to: "$HOME"
+    mode: "sync"
   # Always install these files
   - from: "dots/.config/quickshell/ii"
     to: "$XDG_CONFIG_HOME/quickshell/ii"

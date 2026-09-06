@@ -1,0 +1,181 @@
+# [user]
+#     name = Your Name
+#     email = you@example.com
+
+[core]
+    pager = delta
+    editor = nvim
+    autocrlf = input
+    whitespace = trailing-space,space-before-tab
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+
+    # Navigation
+    navigate = true
+
+    # Layout
+    side-by-side = true
+    line-numbers = true
+
+    # Links
+    hyperlinks = true
+    hyperlinks-file-link-format = "lazygit-edit://{path}:{line}"
+
+    # Catppuccin
+    syntax-theme = Catppuccin Mocha
+
+    # File headers
+    file-style = "bold yellow"
+    file-decoration-style = "yellow ul"
+
+    # Hunk headers
+    hunk-header-style = "file line-number syntax"
+    hunk-header-decoration-style = "blue box"
+
+    # Commits
+    commit-style = "bold magenta"
+    commit-decoration-style = "magenta"
+
+    # Added / removed lines
+    plus-style = "syntax #364144"
+    minus-style = "syntax #443245"
+
+    # Keep +/- markers visible in side-by-side mode
+    keep-plus-minus-markers = true
+
+    # Whitespace errors
+    whitespace-error-style = "reverse red"
+
+    # Blame
+    blame-format = "{author:<18} │ {commit:<8} │ {timestamp}"
+
+[diff]
+    colorMoved = zebra
+    algorithm = histogram
+    renames = true
+
+[merge]
+    conflictstyle = zdiff3
+
+[pull]
+    rebase = true
+    autoStash = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    showForcedUpdates = true
+
+[rebase]
+    autosquash = true
+    autostash = true
+    updateRefs = true
+
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+[status]
+    showUntrackedFiles = all
+    branch = true
+
+[mergetool]
+    prompt = false
+
+[rerere]
+    enabled = true
+    autoupdate = true
+
+[help]
+    autocorrect = prompt
+
+[alias]
+
+    # Status / inspection
+    s = status -sb
+    st = status
+    br = branch -vv
+    branches = branch -a -vv
+
+    # Logs
+    lg = log --graph --decorate --pretty=format:'%C(auto)%h%d %s %C(dim)%C(blue)(%cr)%C(reset) %C(cyan)<%an>%C(reset)'
+    ll = log --stat --oneline
+    last = log -1 HEAD --stat
+    recent = log --oneline --decorate -20
+
+    # Pretty graph
+    graph = log --graph --oneline --decorate --all
+
+    # Diff
+    d = diff
+    ds = diff --staged
+    dc = diff --cached
+    dw = diff --word-diff
+
+    # Commit
+    ci = commit
+    amend = commit --amend --no-edit
+    fixup = commit --fixup
+    squash = commit --squash
+
+    # Undo
+    unstage = restore --staged
+    discard = restore
+    undo = reset --soft HEAD~1
+
+    # Branching
+    co = switch
+    cb = switch -c
+
+    # Fetch / remote
+    f = fetch --all --prune
+    fa = fetch --all --prune
+    remotes = remote -v
+
+    # Cleanup
+    gone = "!git fetch --prune && git branch -vv | awk '/: gone]/{print $1}'"
+    cleanup = "!git branch --merged | grep -vE '(^\\*|main|master|develop)' | xargs -r git branch -d"
+
+    # Workflows
+    wip = !git add -A && git commit -m "WIP"
+    uncommit = reset --soft HEAD~1
+
+    # Show current branch
+    current = branch --show-current
+
+    # Root of repository
+    root = rev-parse --show-toplevel
+
+    # Recent branches
+    recent-branches = for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short) %(committerdate:relative)'
+
+    # Show aliases
+    aliases = config --get-regexp '^alias\\.'
+
+[url]
+    # GitHub can use SSH automatically when desired.
+    # Uncomment and adjust if this is your preferred workflow.
+    #
+    # insteadOf = https://github.com/
+
+[commit]
+    verbose = true
+    cleanup = strip
+
+
+[gc]
+    auto = 256
+
+
+[init]
+    defaultBranch = main

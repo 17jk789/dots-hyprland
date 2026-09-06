@@ -1,0 +1,309 @@
+// Ghidra Catppuccin Mocha Theme
+//
+// Based on:
+// Catppuccin Mocha color palette
+// https://github.com/catppuccin/catppuccin
+//
+// Catppuccin is licensed under the MIT License.
+// This Ghidra theme configuration is released under the GPL-3.0-or-later.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// -----------------------------------------------------------------------------
+// General Theme
+// -----------------------------------------------------------------------------
+
+name = Catppuccin Mocha
+lookAndFeel = Flat Dark
+useDarkDefaults = true
+
+// -----------------------------------------------------------------------------
+// Catppuccin Mocha Palette
+// Matches Kitty Catppuccin-Mocha
+// -----------------------------------------------------------------------------
+
+color.catppuccin.rosewater = #F5E0DC
+color.catppuccin.flamingo = #F2CDCD
+color.catppuccin.pink = #F5C2E7
+color.catppuccin.mauve = #CBA6F7
+color.catppuccin.red = #F38BA8
+color.catppuccin.maroon = #EBA0AC
+color.catppuccin.peach = #FAB387
+color.catppuccin.yellow = #F9E2AF
+color.catppuccin.green = #A6E3A1
+color.catppuccin.teal = #94E2D5
+color.catppuccin.sky = #89DCEB
+color.catppuccin.sapphire = #74C7EC
+color.catppuccin.blue = #89B4FA
+color.catppuccin.lavender = #B4BEFE
+
+color.catppuccin.white = #BAC2DE
+color.catppuccin.text = #CDD6F4
+color.catppuccin.subtext1 = #BAC2DE
+color.catppuccin.subtext0 = #A6ADC8
+
+color.catppuccin.overlay2 = #9399B2
+color.catppuccin.overlay1 = #7F849C
+color.catppuccin.overlay0 = #6C7086
+
+color.catppuccin.surface2 = #585B70
+color.catppuccin.surface1 = #45475A
+color.catppuccin.surface0 = #313244
+
+color.catppuccin.base = #1E1E2E
+color.catppuccin.mantle = #181825
+color.catppuccin.crust = #11111B
+
+
+// -----------------------------------------------------------------------------
+// Kitty-compatible semantic colors
+// -----------------------------------------------------------------------------
+
+// Kitty foreground
+color.catppuccin.foreground = #CDD6F4
+
+// Kitty background
+color.catppuccin.background = #1E1E2E
+
+// Kitty selection
+color.catppuccin.selection.foreground = #1E1E2E
+color.catppuccin.selection.background = #F5E0DC
+
+// Kitty cursor
+color.catppuccin.cursor = #F5E0DC
+color.catppuccin.cursor.text = #1E1E2E
+
+// Kitty URL
+color.catppuccin.url = #F5E0DC
+
+// Kitty active border
+color.catppuccin.border.active = #45475B
+color.catppuccin.border.inactive = #45475B
+color.catppuccin.border.bell = #F9E2AF
+
+
+// -----------------------------------------------------------------------------
+// Decompiler Colors
+// -----------------------------------------------------------------------------
+
+color.fg.decompiler.comment = color.catppuccin.overlay2
+color.fg.decompiler.constant = color.catppuccin.peach
+color.fg.decompiler.function.name = color.catppuccin.blue
+color.fg.decompiler.keyword = color.catppuccin.mauve
+color.fg.decompiler.type = color.catppuccin.mauve
+color.fg.decompiler.variable = color.catppuccin.text
+color.fg.decompiler.parameter = color.catppuccin.maroon
+color.fg.decompiler.global = color.catppuccin.yellow
+
+
+// -----------------------------------------------------------------------------
+// Listing Colors
+// -----------------------------------------------------------------------------
+
+color.fg.listing.bytes = color.catppuccin.blue
+
+color.fg.listing.comment.auto = color.catppuccin.overlay2
+color.fg.listing.comment.eol = color.catppuccin.overlay2
+color.fg.listing.comment.plate = color.catppuccin.overlay2
+color.fg.listing.comment.post = color.catppuccin.overlay2
+color.fg.listing.comment.pre = color.catppuccin.overlay2
+
+color.fg.listing.comment.ref.repeatable = color.catppuccin.red
+color.fg.listing.comment.repeatable = color.catppuccin.red
+
+color.fg.listing.constant = color.catppuccin.peach
+
+color.fg.listing.ext.entrypoint = color.catppuccin.green
+color.fg.listing.ext.ref.resolved = color.catppuccin.mauve
+color.fg.listing.ext.ref.unresolved = color.catppuccin.blue
+
+color.fg.listing.function.name = color.catppuccin.blue
+color.fg.listing.function.param.dynamic = color.catppuccin.maroon
+color.fg.listing.function.variable = color.catppuccin.text
+color.fg.listing.function.tag = color.catppuccin.yellow
+
+color.fg.listing.label.local = color.catppuccin.blue
+color.fg.listing.label.primary = color.catppuccin.yellow
+color.fg.listing.label.non.primary = color.catppuccin.white
+
+color.fg.listing.mnemonic = color.catppuccin.mauve
+color.fg.listing.mnemonic.override = color.catppuccin.text
+
+color.fg.listing.underline = color.catppuccin.red
+
+color.fg.listing.xref = color.catppuccin.green
+color.fg.listing.xref.read = color.catppuccin.red
+
+color.fg.listing.register = color.catppuccin.sky
+
+color.fg.listing.block.start = color.catppuccin.yellow
+
+color.fg.listing.flow.arrow.selected = color.catppuccin.yellow
+color.fg.listing.flow.arrow.active = color.catppuccin.green
+color.fg.listing.flow.arrow.inactive = color.catppuccin.red
+
+color.fg.listing.tabs.text.selected = color.catppuccin.text
+
+
+// -----------------------------------------------------------------------------
+// Selection / Highlighting
+// -----------------------------------------------------------------------------
+
+color.catppuccin.clicked = color.catppuccin.surface1
+color.catppuccin.selected = color.catppuccin.surface0
+color.catppuccin.highlight = color.catppuccin.mauve
+
+color.bg.selection = color.catppuccin.selected
+color.bg.undefined = color.catppuccin.selected
+color.bg.highlight = color.catppuccin.highlight
+
+color.cursor.focused = color.catppuccin.rosewater
+
+
+// -----------------------------------------------------------------------------
+// Header / Tabs
+// -----------------------------------------------------------------------------
+
+color.bg.header.active = color.catppuccin.mauve
+color.fg.header.active = color.catppuccin.crust
+color.bg.header.inactive = color.catppuccin.base
+
+
+// -----------------------------------------------------------------------------
+// Filter / Console
+// -----------------------------------------------------------------------------
+
+color.bg.filterfield = color.catppuccin.surface0
+color.fg.filterfield = color.catppuccin.white
+
+color.fg.interpreterconsole.error = color.catppuccin.red
+color.fg.consoletextpane = color.catppuccin.white
+
+
+// -----------------------------------------------------------------------------
+// Plugin Overview
+// -----------------------------------------------------------------------------
+
+color.bg.plugin.overview.address.function = color.catppuccin.mauve
+color.bg.plugin.overview.address.instruction = color.catppuccin.blue
+color.bg.plugin.overview.address.data = color.catppuccin.yellow
+color.bg.plugin.overview.address.undefined = color.catppuccin.red
+color.bg.plugin.overview.address.uninitialized = color.catppuccin.white
+color.bg.plugin.overview.address.external.ref = color.catppuccin.peach
+
+
+// -----------------------------------------------------------------------------
+// Bookmarks
+// -----------------------------------------------------------------------------
+
+color.bg.plugin.bookmark.note = color.catppuccin.mauve
+color.bg.plugin.bookmark.default = color.catppuccin.green
+color.bg.plugin.bookmark.info = color.catppuccin.yellow
+color.bg.plugin.bookmark.warning = color.catppuccin.peach
+color.bg.plugin.bookmark.analysis = color.catppuccin.blue
+color.bg.plugin.bookmark.error = color.catppuccin.red
+
+
+// -----------------------------------------------------------------------------
+// Listing Highlighter
+// -----------------------------------------------------------------------------
+
+color.bg.listing.highlighter.default = color.catppuccin.surface1
+color.bg.listing.highlighter.scoped.read = color.catppuccin.mauve
+color.bg.listing.highlighter.scoped.write = color.catppuccin.green
+
+
+// -----------------------------------------------------------------------------
+// Ghidra System Colors
+// -----------------------------------------------------------------------------
+
+[color]system.color.bg.view = color.catppuccin.base
+[color]system.color.fg.view = color.catppuccin.text
+
+[color]system.color.bg.border = color.catppuccin.mantle
+[color]system.color.bg.control = color.catppuccin.base
+[color]system.color.bg.tooltip = color.catppuccin.crust
+
+[color]system.color.bg.selected.view = color.catppuccin.surface0
+
+[color]system.color.fg.control = color.catppuccin.text
+[color]system.color.fg.disabled = color.catppuccin.overlay0
+[color]system.color.fg.selected.view = color.catppuccin.text
+[color]system.color.fg.tooltip = color.catppuccin.text
+
+
+// -----------------------------------------------------------------------------
+// Ghidra Palette
+// Maps UI elements toward Kitty's Catppuccin Mocha appearance
+// -----------------------------------------------------------------------------
+
+// Primary button
+[color]laf.palette.color.04 = color.catppuccin.mauve
+
+// Primary button hover
+[color]laf.palette.color.08 = color.catppuccin.pink
+
+// Primary button pressed
+[color]laf.palette.color.09 = color.catppuccin.flamingo
+
+// Secondary button hover
+[color]laf.palette.color.10 = color.catppuccin.mantle
+
+// Secondary button pressed
+[color]laf.palette.color.14 = color.catppuccin.crust
+
+// Tab bar edge
+[color]laf.palette.color.16 = color.catppuccin.crust
+
+// Menubar shortcut keys
+[color]laf.palette.color.31 = color.catppuccin.subtext0
+
+// Dropdown arrow
+[color]laf.palette.color.33 = color.catppuccin.overlay2
+
+// File menu selection inactive
+[color]laf.palette.color.59 = color.catppuccin.surface1
+
+// Toolbar border
+[color]laf.palette.color.60 = color.catppuccin.surface2
+
+// Menubar hover
+[color]laf.palette.color.61 = color.catppuccin.surface0
+
+// Selected tab accent
+[color]laf.palette.color.86 = color.catppuccin.mauve
+
+[color]laf.palette.color.71 = color.catppuccin.mauve
+[color]laf.palette.color.72 = color.catppuccin.overlay1
+[color]laf.palette.color.73 = color.catppuccin.surface1
+
+[color]laf.palette.color.69 = color.catppuccin.mauve
+[color]laf.palette.color.62 = color.catppuccin.surface1
+[color]laf.palette.color.63 = color.catppuccin.mauve
+
+// Menubar background
+[color]laf.palette.color.32 = color.catppuccin.base
+
+[color]laf.palette.color.20 = color.catppuccin.surface0
+
+// Resize border indicator
+[color]laf.palette.color.82 = color.catppuccin.overlay0
+
+// Selected tab background
+[color]laf.palette.color.85 = color.catppuccin.base
+
+
+// -----------------------------------------------------------------------------
+// Swing / Look & Feel
+// -----------------------------------------------------------------------------
+
+[color]laf.color.TextArea.caretForeground = [color]color.catppuccin.rosewater
+[color]laf.color.TextField.caretForeground = [color]color.catppuccin.rosewater
+
+[color]laf.color.Button.default.foreground = [color]color.catppuccin.base
+
+[color]laf.color.ProgressBar.background = [color]color.catppuccin.mantle
+[color]laf.color.ProgressBar.foreground = [color]color.catppuccin.mauve
+
+[color]laf.color.ProgressBar.selectionBackground = [color]color.catppuccin.base
+[color]laf.color.ProgressBar.selectionForeground = [color]color.catppuccin.base

@@ -1,0 +1,249 @@
+" " --- ALLGEMEINE SETTINGS ---
+" set clipboard+=unnamedplus  " Entspricht vim.useSystemClipboard: true
+" set incsearch               " Entspricht vim.incsearch
+" set hlsearch                " Entspricht vim.hlsearch
+" set smartcase               " Entspricht search.smartCase
+" set number relativenumber   " Falls du relative Zeilen willst
+" set scrolloff=8             " Komfort beim Scrollen
+"
+" " Tabs & Einrückung
+" set tabstop=4
+" set shiftwidth=4
+" set expandtab
+"
+" " --- PLUGINS (IdeaVim Extensions) ---
+" set surround                " Entspricht vim.surround
+" set commentary              " Entspricht vim.commentary
+" set argtextobj              " Erlaubt 'cia' (change in argument)
+"
+" " --- KEYBINDINGS ---
+" let mapleader=" "           " Entspricht vim.leader: <space>
+"
+" " Blackhole Register für 'd' (Löschen ohne zu kopieren)
+" " Entspricht deinen vim.normalModeKeyBindingsNonRecursive
+" nnoremap d "_d
+" vnoremap d "_d
+" nnoremap dd "_dd
+"
+" " 'u' und 'Ctrl-j' / 'Ctrl-b' freigeben (falls du IntelliJ Shortcuts willst)
+" " In IdeaVim musst du Keys aktiv ignorieren, wenn sie NICHT von Vim gefangen werden sollen
+" set handler+=<C-b>:ide
+" set handler+=<C-j>:ide
+"
+" " --- OPTIONAL: IDE ACTIONS ---
+" " Schnelles Speichern (statt :w)
+" nnoremap <leader>w :action      FileStructurePopup<CR> 
+
+" ============================================================
+" LAZYVIM STYLE IDEAVIMRC
+" ============================================================
+
+
+" ------------------------
+" Core
+" ------------------------
+
+set clipboard+=unnamedplus
+
+set number
+set relativenumber
+
+set scrolloff=10
+set sidescrolloff=10
+
+set incsearch
+set hlsearch
+set smartcase
+
+set timeoutlen=400
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+set splitbelow
+set splitright
+
+
+" ------------------------
+" Plugins
+" ------------------------
+
+set surround
+set commentary
+set argtextobj
+set easymotion
+
+
+" ------------------------
+" Leader
+" ------------------------
+
+let mapleader=" "
+
+
+" ============================================================
+" Editing like LazyVim
+" ============================================================
+
+" delete without yank
+nnoremap d "_d
+vnoremap d "_d
+nnoremap dd "_dd
+
+" x without yank
+nnoremap x "_x
+
+
+" paste keeps register
+xnoremap p "_dP
+
+
+" Better movement
+nnoremap j gj
+nnoremap k gk
+
+
+" Better search
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
+" Keep cursor centered
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+
+" ============================================================
+" IntelliJ handlers
+" ============================================================
+
+set handler+=<C-b>:ide
+set handler+=<C-j>:ide
+set handler+=<C-p>:ide
+
+
+" ============================================================
+" FIND (Telescope replacement)
+" ============================================================
+
+" files
+nnoremap <leader>ff :action GotoFile<CR>
+
+" classes
+nnoremap <leader>fc :action GotoClass<CR>
+
+" symbols
+nnoremap <leader>fs :action GotoSymbol<CR>
+
+" grep
+nnoremap <leader>fg :action FindInPath<CR>
+
+" recent
+nnoremap <leader>fr :action RecentFiles<CR>
+
+
+" ============================================================
+" BUFFERS
+" ============================================================
+
+nnoremap <leader>bb :action Switcher<CR>
+
+nnoremap <leader>bd :action CloseContent<CR>
+
+
+" ============================================================
+" CODE
+" ============================================================
+
+" rename
+nnoremap <leader>cr :action RenameElement<CR>
+
+" code action
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+
+" format
+nnoremap <leader>cf :action ReformatCode<CR>
+
+" optimize imports
+nnoremap <leader>oi :action OptimizeImports<CR>
+
+
+" ============================================================
+" PROJECT
+" ============================================================
+
+nnoremap <leader>e :action ActivateProjectToolWindow<CR>
+
+nnoremap <leader>ss :action ActivateStructureToolWindow<CR>
+
+
+" ============================================================
+" GIT
+" ============================================================
+
+nnoremap <leader>gg :action ActivateVersionControlToolWindow<CR>
+
+nnoremap <leader>gd :action Git.ShowDiff<CR>
+
+nnoremap <leader>gc :action Git.Commit<CR>
+
+
+" ============================================================
+" TERMINAL
+" ============================================================
+
+nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+
+" ============================================================
+" TESTING
+" ============================================================
+
+nnoremap <leader>tr :action RunClass<CR>
+
+nnoremap <leader>td :action DebugClass<CR>
+
+
+" ============================================================
+" DEBUG
+" ============================================================
+
+nnoremap <leader>db :action Debug<CR>
+
+nnoremap <leader>dt :action ToggleLineBreakpoint<CR>
+
+
+" ============================================================
+" WINDOWS
+" ============================================================
+
+nnoremap <leader>wv :vsplit<CR>
+nnoremap <leader>wh :split<CR>
+
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+
+
+" Ctrl + h/j/k/l für Editor-Splits
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" ============================================================
+" SAVE / EXIT
+" ============================================================
+
+nnoremap <leader>w :w<CR>
+
+nnoremap <leader>q :q<CR>
+
+
+" ============================================================
+" PROBLEMS
+" ============================================================
+
+nnoremap <leader>xx :action ActivateProblemsView<CR>
