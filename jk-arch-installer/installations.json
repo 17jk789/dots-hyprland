@@ -2102,7 +2102,7 @@
                 "de": "Lädt das offizielle BlackArch-strap-Skript herunter, überprüft dessen SHA1-Prüfsumme, führt es als Root aus und aktualisiert anschließend das System.",
                 "en": "Downloads the official BlackArch strap script, verifies its SHA1 checksum, runs it as root, and then updates the system."
             },
-            "file": "147_install_blackarch.json"
+            "file": "147_blackarch_configuration.json"
         }
     ]
 }
