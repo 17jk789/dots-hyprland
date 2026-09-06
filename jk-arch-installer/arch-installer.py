@@ -48,21 +48,21 @@ CREDS = WORK / "user_credentials.json"
 LOG = WORK / "installer.log"
 
 LANGUAGES = [
-    ("de", "Deutsch", "de_DE.UTF-8"),
+    ("de", "German", "de_DE.UTF-8"),
     ("en", "English", "en_US.UTF-8"),
 ]
 
 KEYBOARDS = [
-    ("de", "Deutsch (DE)"),
+    ("de", "German (DE)"),
     ("us", "English (US)"),
     ("gb", "English (UK)"),
-    ("fr", "Français (FR)"),
-    ("es", "Español (ES)"),
-    ("it", "Italiano (IT)"),
+    ("fr", "French (FR)"),
+    ("es", "Spanish (ES)"),
+    ("it", "Italian (IT)"),
 ]
 
 CORE_PACKAGES = [
-    # Complete Arch base / administration
+    # Vollständige Arch-Basis / Administration
     "base",
     "base-devel",
     "linux",
@@ -100,7 +100,7 @@ CORE_PACKAGES = [
     "xdg-desktop-portal",
     "xdg-desktop-portal-hyprland",
 
-    # Hyprland stack
+    # Hyprland-Stack
     "hyprland",
     "hyprpaper",
     "hyprlock",
@@ -110,7 +110,7 @@ CORE_PACKAGES = [
     "hyprpolkitagent",
     "quickshell",
 
-    # Desktop applications / utilities
+    # Desktop-Anwendungen / Dienstprogramme
     "kitty",
     "waybar",
     "wofi",
@@ -137,7 +137,7 @@ CORE_PACKAGES = [
     "jq",
     "firefox",
 
-    # Python / build tooling
+    # Python / Build-Werkzeuge
     "python",
     "python-pip",
     "python-gobject",
@@ -149,7 +149,7 @@ CORE_PACKAGES = [
     "make",
     "pkgconf",
 
-    # Fonts
+    # Schriftarten
     "ttf-dejavu",
     "ttf-liberation",
     "noto-fonts",
@@ -230,14 +230,14 @@ def run(
             log.write(proc.stdout)
 
     if check and proc.returncode != 0:
-        die(f"Befehl fehlgeschlagen ({proc.returncode}): {shown}")
+        die(f"Command failed ({proc.returncode}): {shown}")
 
     return proc
 
 
 def require_root() -> None:
     if os.geteuid() != 0:
-        die("Bitte im offiziellen Arch-ISO-Terminal als root ausführen.")
+        die("Please run this in the official Arch ISO terminal as root.")
 
 
 def read_os_release() -> dict[str, str]:
@@ -266,10 +266,10 @@ def check_arch_iso() -> None:
     )
 
     if not looks_like_arch:
-        die("Dies sieht nicht wie das offizielle Arch-Linux-ISO aus.")
+        die("This does not appear to be the official Arch Linux ISO.")
 
     if platform.machine() != "x86_64":
-        die("Dieser Installer unterstützt derzeit nur x86_64.")
+        die("This installer currently supports x86_64 only.")
 
 
 def network_ok() -> bool:
@@ -284,34 +284,34 @@ def network_ok() -> bool:
 
 
 def select_language() -> tuple[str, str]:
-    print("\n=== SPRACHE / LANGUAGE ===")
+    print("\n=== LANGUAGE ===")
 
     for index, (_, name, _) in enumerate(LANGUAGES, 1):
         print(f"  {index}) {name}")
 
     while True:
-        answer = input("Auswahl [1-2]: ").strip()
+        answer = input("Selection [1-2]: ").strip()
 
         if answer in {"1", "2"}:
             code, _, locale = LANGUAGES[int(answer) - 1]
             return code, locale
 
-        warn("Ungültige Auswahl.")
+        warn("Invalid selection.")
 
 
 def select_keyboard() -> str:
-    print("\n=== TASTATUR / KEYBOARD ===")
+    print("\n=== KEYBOARD ===")
 
     for index, (_, name) in enumerate(KEYBOARDS, 1):
         print(f"  {index}) {name}")
 
     while True:
-        answer = input(f"Auswahl [1-{len(KEYBOARDS)}]: ").strip()
+        answer = input(f"Selection [1-{len(KEYBOARDS)}]: ").strip()
 
         if answer.isdigit() and 1 <= int(answer) <= len(KEYBOARDS):
             return KEYBOARDS[int(answer) - 1][0]
 
-        warn("Ungültige Auswahl.")
+        warn("Invalid selection.")
 
 
 def get_block_devices() -> list[dict]:
@@ -329,7 +329,7 @@ def get_block_devices() -> list[dict]:
     try:
         return json.loads(proc.stdout)["blockdevices"]
     except Exception as exc:
-        die(f"lsblk-Ausgabe konnte nicht verarbeitet werden: {exc}")
+        die(f"Could not process lsblk output: {exc}")
 
 
 def human_size(size: int) -> str:
@@ -355,9 +355,9 @@ def select_disk() -> str:
     ]
 
     if not devices:
-        die("Kein geeignetes internes Laufwerk gefunden.")
+        die("No suitable internal drive found.")
 
-    print("\n=== ZIELFESTPLATTE / TARGET DISK ===")
+    print("\n=== TARGET DISK ===")
 
     for index, device in enumerate(devices, 1):
         print(
@@ -365,11 +365,11 @@ def select_disk() -> str:
             f"{device['path']:<18} "
             f"{human_size(int(device.get('size', 0))):>10}  "
             f"{str(device.get('tran') or '?'):<5} "
-            f"{device.get('model') or 'unbekannt'}"
+            f"{device.get('model') or 'unknown'}"
         )
 
     while True:
-        answer = input(f"Auswahl [1-{len(devices)}]: ").strip()
+        answer = input(f"Selection [1-{len(devices)}]: ").strip()
 
         if answer.isdigit() and 1 <= int(answer) <= len(devices):
             selected = devices[int(answer) - 1]
@@ -378,20 +378,20 @@ def select_disk() -> str:
 
             if size < 32 * 1024**3:
                 die(
-                    f"{path} ist mit {human_size(size)} zu klein. "
-                    "Mindestens 32 GiB werden empfohlen."
+                    f"{path} is too small at {human_size(size)}. "
+                    "At least 32 GiB is recommended."
                 )
 
             print(
                 f"\n\033[1;31m"
-                f"ACHTUNG: {path} ({human_size(size)}) wird "
-                f"vollständig gelöscht.\033[0m"
+                f"WARNING: {path} ({human_size(size)}) will be "
+                f"completely erased.\033[0m"
             )
-            print("Ab hier erfolgt keine weitere Eingabe.")
+            print("No further input will be required after this point.")
 
             return path
 
-        warn("Ungültige Auswahl.")
+        warn("Invalid selection.")
 
 
 def validate_username(username: str) -> bool:
@@ -399,29 +399,29 @@ def validate_username(username: str) -> bool:
 
 
 def select_user() -> tuple[str, str]:
-    print("\n=== BENUTZER ===")
+    print("\n=== USER ===")
 
     while True:
-        username = input("Benutzername: ").strip().lower()
+        username = input("Username: ").strip().lower()
 
         if validate_username(username):
             break
 
         warn(
-            "Ungültiger Benutzername. Erlaubt sind a-z, 0-9, _ und -. "
-            "Er muss mit a-z oder _ beginnen."
+            "Invalid username. Allowed characters are a-z, 0-9, _ and -. "
+            "It must start with a-z or _."
         )
 
     while True:
-        password1 = getpass.getpass("Passwort: ")
-        password2 = getpass.getpass("Passwort wiederholen: ")
+        password1 = getpass.getpass("Password: ")
+        password2 = getpass.getpass("Repeat password: ")
 
         if not password1:
-            warn("Das Passwort darf nicht leer sein.")
+            warn("The password cannot be empty.")
             continue
 
         if password1 != password2:
-            warn("Die Passwörter stimmen nicht überein.")
+            warn("The passwords do not match.")
             continue
 
         return username, password1
@@ -467,7 +467,7 @@ def get_disk_size_bytes(disk: str) -> int:
         if device.get("path") == disk and device.get("type") == "disk":
             return int(device.get("size", 0))
 
-    die(f"Größe von {disk} konnte nicht ermittelt werden.")
+    die(f"Could not determine the size of {disk}.")
 
 
 def package_exists(package: str) -> bool:
@@ -488,16 +488,16 @@ def available_packages(packages: list[str]) -> list[str]:
         if package_exists(package):
             available.append(package)
         else:
-            warn(f"Paket im aktuellen Repo nicht gefunden: {package}")
+            warn(f"Package not found in the current repository: {package}")
 
     return available
 
 
 def install_archinstall_live() -> None:
-    info("Aktualisiere die Paketdatenbank des Arch-ISO …")
+    info("Updating the package database of the Arch ISO …")
     run(["pacman", "-Sy", "--noconfirm"])
 
-    info("Installiere archinstall und die benötigten Live-Werkzeuge …")
+    info("Installing archinstall and the required live environment tools …")
     run(
         [
             "pacman",
@@ -589,11 +589,11 @@ def build_disk_config(
 ) -> dict:
     total_bytes = get_disk_size_bytes(disk)
 
-    # Keep a small alignment reserve at the end of the device.
+    # Eine kleine Ausrichtungsreserve am Ende des Laufwerks beibehalten.
     usable_bytes = total_bytes - 4 * 1024**2
 
     if usable_bytes < 32 * 1024**3:
-        die("Die Zielfestplatte ist zu klein für diese Installation.")
+        die("The target disk is too small for this installation.")
 
     partitions: list[dict] = []
 
@@ -630,7 +630,10 @@ def build_disk_config(
     root_size = usable_bytes - root_start_bytes
 
     if root_size < 30 * 1024**3:
-        die("Nach der Boot-Partition bleibt zu wenig Platz für Arch Linux.")
+        die(
+            "Too little space remains for Arch Linux "
+            "after the boot partition."
+        )
 
     subvolumes = [
         {"mountpoint": "/", "name": "@"},
@@ -679,7 +682,7 @@ def crypt_password(password: str) -> str:
     )
 
     if proc.returncode != 0 or not proc.stdout.strip():
-        die("Das Passwort konnte nicht gehasht werden.")
+        die("The password could not be hashed.")
 
     return proc.stdout.strip()
 
@@ -742,8 +745,10 @@ def build_custom_commands(
             "printf '%s\\n' "
             "'[Service]' "
             "'ExecStart=' "
-            + f"'ExecStart=-/sbin/agetty --autologin {username} --noclear %I $TERM' "
-            + "> /etc/systemd/system/getty@tty1.service.d/autologin.conf"
+            + f"'ExecStart=-/sbin/agetty --autologin {username} "
+            "--noclear %I $TERM' "
+            + "> /etc/systemd/system/getty@tty1.service.d/"
+            "autologin.conf"
         )
     )
 
@@ -895,16 +900,16 @@ def write_configuration(
 
 def validate_configuration() -> None:
     if not CONFIG.exists():
-        die("Die archinstall-Konfiguration wurde nicht erzeugt.")
+        die("The archinstall configuration was not created.")
 
     if not CREDS.exists():
-        die("Die archinstall-Credentials wurden nicht erzeugt.")
+        die("The archinstall credentials were not created.")
 
     try:
         config = json.loads(CONFIG.read_text(encoding="utf-8"))
         creds = json.loads(CREDS.read_text(encoding="utf-8"))
     except Exception as exc:
-        die(f"Konfigurationsdateien sind kein gültiges JSON: {exc}")
+        die(f"Configuration files are not valid JSON: {exc}")
 
     required = [
         "disk_config",
@@ -917,23 +922,23 @@ def validate_configuration() -> None:
 
     missing = [key for key in required if key not in config]
     if missing:
-        die(f"Fehlende archinstall-Konfigurationsfelder: {missing}")
+        die(f"Missing archinstall configuration fields: {missing}")
 
     if config["silent"] is not True:
-        die("Die archinstall-Konfiguration ist nicht silent.")
+        die("The archinstall configuration is not silent.")
 
     if not creds.get("users"):
-        die("Kein Benutzer in den archinstall-Credentials.")
+        die("No user found in the archinstall credentials.")
 
 
 def run_archinstall() -> None:
-    info("Starte jetzt archinstall vollständig automatisiert …")
+    info("Starting archinstall fully automated now …")
 
     print(
         "\n\033[1;32m"
-        "AB HIER KEINE BENUTZEREINGABE MEHR.\n"
-        "archinstall übernimmt Partitionierung, Dateisystem,\n"
-        "Btrfs-Subvolumes, Arch-Installation und Bootloader.\n"
+        "NO FURTHER USER INPUT FROM THIS POINT.\n"
+        "archinstall will handle partitioning, filesystem creation,\n"
+        "Btrfs subvolumes, Arch installation and bootloader.\n"
         "\033[0m"
     )
 
@@ -983,16 +988,16 @@ def main() -> None:
        ARCH LINUX + HYPRLAND ULTIMATE INSTALLER
 ============================================================\033[0m
 
-Dieser Installer ersetzt die manuelle archinstall-Bedienung.
+This installer replaces manual archinstall interaction.
 
-Eingabe:
-  1. Sprache
-  2. Tastatur
-  3. Zielfestplatte
-  4. Benutzername
-  5. Passwort zweimal
+Input:
+  1. Language
+  2. Keyboard layout
+  3. Target disk
+  4. Username
+  5. Password twice
 
-Danach läuft die komplette Installation automatisch.
+After that, the entire installation runs automatically.
 """
     )
 
@@ -1000,8 +1005,8 @@ Danach läuft die komplette Installation automatisch.
 
     if not network_ok():
         die(
-            "Keine Internetverbindung. "
-            "Verbinde das offizielle Arch-ISO zuerst mit dem Internet."
+            "No internet connection. "
+            "Connect the official Arch ISO to the internet first."
         )
 
     language, locale = select_language()
@@ -1013,8 +1018,8 @@ Danach läuft die komplette Installation automatisch.
     cpu = detect_cpu_vendor()
     gpu = detect_gpu()
 
-    print("\n=== AUTOMATISCHE HARDWARE-ERKENNUNG ===")
-    print(f"CPU      : {cpu or 'unbekannt'}")
+    print("\n=== AUTOMATIC HARDWARE DETECTION ===")
+    print(f"CPU      : {cpu or 'unknown'}")
     print(f"GPU      : {gpu}")
     print(f"Firmware : {'UEFI' if uefi else 'BIOS'}")
     print(f"Disk     : {disk}")
@@ -1033,13 +1038,13 @@ Danach läuft die komplette Installation automatisch.
 
     packages = list(dict.fromkeys(packages))
 
-    info("Prüfe die Paketnamen des aktuellen Arch-Repositories …")
+    info("Checking package names in the current Arch repository …")
     packages = available_packages(packages)
 
     if "base" not in packages or "linux" not in packages:
         die(
-            "Die erforderlichen Arch-Basispakete sind nicht verfügbar. "
-            "Installation wird aus Sicherheitsgründen abgebrochen."
+            "The required Arch base packages are not available. "
+            "Installation is being aborted for safety."
         )
 
     config = build_configuration(
@@ -1055,8 +1060,8 @@ Danach läuft die komplette Installation automatisch.
     write_configuration(config, username, password)
     validate_configuration()
 
-    # The password is no longer needed by Python after the credentials file
-    # has been written. It is deliberately not logged.
+    # Das Passwort wird von Python nach dem Schreiben der Credentials nicht mehr benötigt.
+    # Es wird absichtlich nicht protokolliert.
     password = ""
 
     run_archinstall()
@@ -1064,10 +1069,10 @@ Danach läuft die komplette Installation automatisch.
     cleanup()
     unmount_target()
 
-    ok("Arch Linux + Hyprland wurde vollständig installiert.")
+    ok("Arch Linux + Hyprland has been installed completely.")
     print(
-        "\nDas System startet jetzt neu. "
-        "Entferne danach den Arch-USB-Stick."
+        "\nThe system will now reboot. "
+        "Remove the Arch USB stick afterward."
     )
 
     time.sleep(3)
@@ -1078,4 +1083,4 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        die("Installation abgebrochen.")
+        die("Installation aborted.")
