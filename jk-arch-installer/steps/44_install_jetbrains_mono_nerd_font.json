@@ -75,22 +75,6 @@
             "distros": [
                 "arch_based"
             ]
-        },
-        {
-            "description": {
-                "de": "Startet NeoVim, wodurch LazyVim beim ersten Start automatisch die benötigten Plugins einrichten kann.",
-                "en": "Starts NeoVim, allowing LazyVim to automatically set up the required plugins on first launch."
-            },
-
-            "command": [
-                "nvim"
-            ],
-
-            "requires_root": false,
-
-            "distros": [
-                "arch_based"
-            ]
         }
     ]
 }
