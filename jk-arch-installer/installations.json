@@ -2103,6 +2103,30 @@
                 "en": "Downloads the official BlackArch strap script, verifies its SHA1 checksum, runs it as root, and then updates the system."
             },
             "file": "147_blackarch_configuration.json"
+        },
+        {
+            "id": "install_sddm",
+            "name": {
+                "de": "✨ SDDM installieren",
+                "en": "✨ Install SDDM"
+            },
+            "description": {
+                "de": "Installiert SDDM als Display Manager und ersetzt greetd.",
+                "en": "Installs SDDM as the display manager and replaces greetd."
+            },
+            "file": "148_install_sddm.json"
+        },
+        {
+            "id": "install_security_tools",
+            "name": {
+                "de": "✨ Sicherheits- und Pentesting-Tools installieren",
+                "en": "✨ Install security and pentesting tools"
+            },
+            "description": {
+                "de": "Installiert eine Sammlung von Netzwerk-, Web-, OSINT-, Analyse- und Pentesting-Tools.",
+                "en": "Installs a collection of network, web, OSINT, analysis, and pentesting tools."
+            },
+            "file": "149_install_security_tools.json"
         }
     ]
 }

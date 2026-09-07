@@ -2987,7 +2987,7 @@ sudo pacman -Syu \
   powersploit \    # PowerShell Exploits
   sslyze \         # SSL/TLS Analyse
   sslscan \        # SSL/TLS Analyse
-  testssl.sh       # SSL/TLS Analyse
+  testssl.sh \     # SSL/TLS Analyse
   hashcat          # GPU-basiertes Cracking (optional)
 ```
 

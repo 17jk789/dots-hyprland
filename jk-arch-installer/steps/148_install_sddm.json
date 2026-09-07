@@ -1,0 +1,83 @@
+{
+    "id": "install_sddm",
+
+    "name": {
+        "de": "SDDM installieren",
+        "en": "Install SDDM"
+    },
+
+    "description": {
+        "de": "Installiert SDDM als Display Manager, deaktiviert greetd, aktiviert SDDM und startet das System neu.",
+        "en": "Installs SDDM as the display manager, disables greetd, enables SDDM, and reboots the system."
+    },
+
+    "question": {
+        "de": "Soll SDDM installiert und als Display Manager aktiviert werden?",
+        "en": "Should SDDM be installed and enabled as the display manager?"
+    },
+
+    "optional": false,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert SDDM.",
+                "en": "Installs SDDM."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "sddm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Deaktiviert den bisherigen Display Manager greetd.",
+                "en": "Disables the previous display manager greetd."
+            },
+
+            "command": [
+                "systemctl",
+                "disable",
+                "greetd"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert SDDM als Display Manager.",
+                "en": "Enables SDDM as the display manager."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "sddm"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
