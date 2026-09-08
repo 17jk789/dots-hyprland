@@ -41,9 +41,9 @@ function set-jk-setting
             "type": "scheme-catppuccin-mocha"
         },
         "transparency": {
-            "automatic": true,
-            "backgroundTransparency": 0.11,
-            "contentTransparency": 0.57,
+            "automatic": false,
+            "backgroundTransparency": 0.43,
+            "contentTransparency": 0.86,
             "enable": true
         },
         "wallpaperTheming": {
