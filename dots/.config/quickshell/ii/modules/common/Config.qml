@@ -117,9 +117,9 @@ Singleton {
                     property string expressive: "Space Grotesk"
                 }
                 property JsonObject transparency: JsonObject {
-                    property bool enable: false
-                    property bool automatic: true
-                    property real backgroundTransparency: 0.11
+                    property bool enable: true
+                    property bool automatic: false
+                    property real backgroundTransparency: 0.24
                     property real contentTransparency: 0.57
                 }
                 property JsonObject wallpaperTheming: JsonObject {
