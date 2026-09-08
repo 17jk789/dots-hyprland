@@ -20,6 +20,22 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
                     set opacity $argv[2]
                 end
 
+            case personal
+
+                set mode personal
+
+                if test (count $argv) -gt 1
+                    set opacity $argv[2]
+                end
+
+            case normal
+
+                set mode normal
+
+                if test (count $argv) -gt 1
+                    set opacity $argv[2]
+                end
+
             case off reset default
 
                 set mode off
@@ -61,7 +77,7 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
 
         sed -i 's/ignore_opacity = false,/ignore_opacity = true,/' $general
 
-        # alten Block entfernen
+        # alten Block löschen
 
         sed -i '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' $file
 
@@ -95,6 +111,36 @@ hl.window_rule({
 
             notify-send "Glass Toggle" "FULL ON ($opacity)"
 
+        else if test "$mode" = personal
+
+            # PERSONAL GLASS
+
+            printf '%s\n' \
+                '-- GLASS_MODE_START
+-- PERSONAL GLASS MODE
+
+hl.window_rule({
+    match = {
+        class = ".*",
+    },
+    opacity = '$opacity',
+})
+
+
+-- PERSÖNLICHE APPS OHNE GLASS
+
+hl.window_rule({
+    match = {
+        class = "^(brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",
+    },
+    opacity = 1.0,
+})
+
+
+-- GLASS_MODE_END' >>$file
+
+            notify-send "Glass Toggle" "PERSONAL ON ($opacity)"
+
         else
 
             # NORMAL GLASS
@@ -115,7 +161,7 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
-        class = "^(code|Code|com.jetbrains.*|jetbrains-.*|brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark)$",
+        class = "^(code|Code|com.jetbrains.*|jetbrains-.*|brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",
     },
     opacity = 1.0,
 })
@@ -123,7 +169,7 @@ hl.window_rule({
 
 -- GLASS_MODE_END' >>$file
 
-            notify-send "Glass Toggle" "ON ($opacity)"
+            notify-send "Glass Toggle" "NORMAL ON ($opacity)"
 
         end
 
