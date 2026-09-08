@@ -42,7 +42,7 @@ function set-jk-setting
         },
         "transparency": {
             "automatic": false,
-            "backgroundTransparency": 0.43,
+            "backgroundTransparency": 0.39,
             "contentTransparency": 0.86,
             "enable": true
         },
