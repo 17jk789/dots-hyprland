@@ -1,199 +1,113 @@
-function glasstoggle --description "Ultimate Hyprland glass mode toggle"
-
-    set file "$HOME/.config/hypr/hyprland/rules.lua"
-    set general "$HOME/.config/hypr/hyprland/general.lua"
-    set json "$HOME/.config/illogical-impulse/config.json"
+function glasstoggle --description "Toggle Hyprland glass mode and Illogical Impulse transparency"
 
     # ============================================================
-    # DEFAULT
+    # CONFIGURATION
     # ============================================================
 
+    set rules_file "$HOME/.config/hypr/hyprland/rules.lua"
+    set general_file "$HOME/.config/hypr/hyprland/general.lua"
+    set illogical_config "$HOME/.config/illogical-impulse/config.json"
+
+    # Default values
     set mode normal
     set opacity 0.90
 
+
     # ============================================================
-    # ARGUMENTE
+    # HELP
     # ============================================================
 
-    if test (count $argv) -gt 0
+    if test (count $argv) -eq 0
+        echo "Usage: glasstoggle [MODE] [OPACITY]"
+        echo ""
+        echo "Modes:"
+        echo "  full [OPACITY]       Enable full glass mode"
+        echo "  personal [OPACITY]   Enable personal glass mode"
+        echo "  normal [OPACITY]     Enable normal glass mode"
+        echo "  illogical [OPACITY]  Toggle Illogical Impulse transparency"
+        echo "  off                  Disable glass mode and transparency"
+        echo "  reset                Reset glass mode and transparency"
+        echo "  default              Reset glass mode and transparency"
+        echo ""
+        echo "Examples:"
+        echo "  glasstoggle normal 0.90"
+        echo "  glasstoggle full 0.85"
+        echo "  glasstoggle personal 0.80"
+        echo "  glasstoggle illogical 0.75"
+        echo "  glasstoggle off"
 
-        switch $argv[1]
+        return 1
+    end
 
-            case full
 
-                set mode full
+    # ============================================================
+    # ARGUMENT PARSING
+    # ============================================================
 
-                if test (count $argv) -gt 1
-                    set opacity $argv[2]
-                end
+    switch $argv[1]
 
-            case personal
+        case full personal normal illogical
+            set mode $argv[1]
 
-                set mode personal
+            if test (count $argv) -gt 1
+                set opacity $argv[2]
+            end
 
-                if test (count $argv) -gt 1
-                    set opacity $argv[2]
-                end
+        case off reset default
+            set mode off
 
-            case normal
-
-                set mode normal
-
-                if test (count $argv) -gt 1
-                    set opacity $argv[2]
-                end
-
-            case off reset default
-
-                set mode off
-
-            case '*'
-
-                set opacity $argv[1]
-
-        end
+        case '*'
+            # Allow "glasstoggle 0.85" as shorthand for normal mode.
+            set opacity $argv[1]
 
     end
 
+
     # ============================================================
-    # KOMMA -> PUNKT
+    # NORMALIZE OPACITY
     # ============================================================
 
     set opacity (string replace ',' '.' -- "$opacity")
 
-    # ============================================================
-    # DATEIEN PRÜFEN
-    # ============================================================
-
-    if not test -f "$file"
-
-        notify-send \
-            "Glass Toggle" \
-            "rules.lua not found."
-
-        return 1
-
-    end
-
-    if not test -f "$general"
-
-        notify-send \
-            "Glass Toggle" \
-            "general.lua not found."
-
-        return 1
-
-    end
-
-    if not test -f "$json"
-
-        notify-send \
-            "Glass Toggle" \
-            "config.json not found."
-
-        return 1
-
-    end
 
     # ============================================================
-    # OFF / RESET
-    # ============================================================
-
-    if test "$mode" = off
-
-        sed -i \
-            's/ignore_opacity = true,/ignore_opacity = false,/' \
-            "$general"
-
-        sed -i \
-            '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
-            "$file"
-
-        # --------------------------------------------------------
-        # ILLOGICAL IMPULSE TRANSPARENCY AUS
-        # --------------------------------------------------------
-        #
-        # contentTransparency wird NICHT angerührt.
-        #
-        if test -f "$json"; and command -q jq
-
-            set tmp (mktemp)
-
-            if jq \
-                    '.appearance.transparency.enable = false' \
-                    "$json" >"$tmp"
-
-                mv "$tmp" "$json"
-
-            else
-
-                rm -f "$tmp"
-
-            end
-
-        end
-
-        hyprctl reload
-
-        notify-send \
-            "Glass Toggle" \
-            "OFF / Default"
-
-        return 0
-
-    end
-
-    # ============================================================
-    # OPACITY VALIDIEREN
+    # VALIDATE OPACITY
     # ============================================================
 
     if not string match -rq '^[0-9]+([.][0-9]+)?$' -- "$opacity"
-
         notify-send \
             "Glass Toggle" \
             "Invalid opacity: $opacity"
 
         return 1
-
     end
 
-    # ============================================================
-    # OPACITY BEGRENZEN
-    # ============================================================
-
+    # Keep opacity inside the valid 0.0 - 1.0 range.
     if test "$opacity" -lt 0
         set opacity 0
-    end
-
-    if test "$opacity" -gt 1
+    else if test "$opacity" -gt 1
         set opacity 1
     end
 
+
     # ============================================================
-    # BACKGROUND TRANSPARENCY BERECHNEN
+    # CALCULATE BACKGROUND TRANSPARENCY
     # ============================================================
     #
-    # contentTransparency wird NICHT berechnet.
+    # Illogical Impulse uses a different scale than Hyprland.
     #
-    # Nur backgroundTransparency:
+    # Formula:
     #
-    # 1 - opacity^3.03
+    #     backgroundTransparency = 1 - opacity^3.03
     #
-    # ============================================================
+    # contentTransparency is intentionally left untouched.
+    #
 
     set background_transparency \
         (math --scale=6 "1 - ($opacity ^ 3.03)")
 
-    # ============================================================
-    # DEZIMALPUNKT ERZWINGEN
-    # ============================================================
-
     set background_transparency \
         (string replace ',' '.' -- "$background_transparency")
-
-    # ============================================================
-    # AUF 2 STELLEN FORMATIEREN
-    # ============================================================
 
     set background_transparency \
         (printf '%.2f' "$background_transparency")
@@ -201,72 +115,223 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
     set background_transparency \
         (string replace ',' '.' -- "$background_transparency")
 
+
     # ============================================================
-    # GLASS STATUS PRÜFEN
+    # ILLOGICAL IMPULSE ONLY
     # ============================================================
 
-    if grep -q 'ignore_opacity = true,' "$general"
+    if test "$mode" = illogical
 
-        # ========================================================
-        # ON -> OFF
-        # ========================================================
+        if not test -f "$illogical_config"
+            notify-send \
+                "Glass Toggle" \
+                "config.json not found."
 
-        sed -i \
-            's/ignore_opacity = true,/ignore_opacity = false,/' \
-            "$general"
+            return 1
+        end
 
-        sed -i \
-            '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
-            "$file"
+        if not command -q jq
+            notify-send \
+                "Glass Toggle" \
+                "jq is not installed."
 
-        # --------------------------------------------------------
-        # TRANSPARENCY AUS
-        # --------------------------------------------------------
-        #
-        # NUR enable ändern.
-        #
-        # contentTransparency bleibt 100 % unverändert.
-        #
-        if test -f "$json"; and command -q jq
+            return 1
+        end
 
-            set tmp (mktemp)
+        # Read the current transparency state.
+        set transparency_enabled \
+            (jq -r '.appearance.transparency.enable // false' "$illogical_config")
+
+        # Toggle transparency.
+        if test "$transparency_enabled" = true
+
+            set tmp_file (mktemp)
 
             if jq \
                     '.appearance.transparency.enable = false' \
-                    "$json" >"$tmp"
+                    "$illogical_config" >"$tmp_file"
 
-                mv "$tmp" "$json"
+                mv "$tmp_file" "$illogical_config"
 
             else
+                rm -f "$tmp_file"
 
-                rm -f "$tmp"
+                notify-send \
+                    "Glass Toggle" \
+                    "Failed to update config.json."
 
+                return 1
             end
 
+            notify-send \
+                "Glass Toggle" \
+                "Illogical transparency OFF"
+
+            return 0
+        end
+
+        # Enable transparency while preserving contentTransparency.
+        set tmp_file (mktemp)
+
+        if jq \
+                --arg bg "$background_transparency" \
+                '
+                .appearance.transparency.automatic = false |
+                .appearance.transparency.backgroundTransparency = ($bg | tonumber) |
+                .appearance.transparency.enable = true
+                ' \
+                "$illogical_config" >"$tmp_file"
+
+            mv "$tmp_file" "$illogical_config"
+
+        else
+            rm -f "$tmp_file"
+
+            notify-send \
+                "Glass Toggle" \
+                "Failed to update config.json."
+
+            return 1
+        end
+
+        notify-send \
+            "Glass Toggle" \
+            "Illogical transparency ON ($opacity)"
+
+        return 0
+    end
+
+
+    # ============================================================
+    # REQUIRED FILES
+    # ============================================================
+
+    if not test -f "$rules_file"
+        notify-send \
+            "Glass Toggle" \
+            "rules.lua not found."
+
+        return 1
+    end
+
+    if not test -f "$general_file"
+        notify-send \
+            "Glass Toggle" \
+            "general.lua not found."
+
+        return 1
+    end
+
+    if not test -f "$illogical_config"
+        notify-send \
+            "Glass Toggle" \
+            "config.json not found."
+
+        return 1
+    end
+
+
+    # ============================================================
+    # DISABLE / RESET
+    # ============================================================
+
+    if test "$mode" = off
+
+        # Restore normal Hyprland opacity handling.
+        sed -i \
+            's/ignore_opacity = true,/ignore_opacity = false,/' \
+            "$general_file"
+
+        # Remove all generated glass rules.
+        sed -i \
+            '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
+            "$rules_file"
+
+        # Disable Illogical Impulse transparency.
+        # contentTransparency remains untouched.
+        if command -q jq
+
+            set tmp_file (mktemp)
+
+            if jq \
+                    '.appearance.transparency.enable = false' \
+                    "$illogical_config" >"$tmp_file"
+
+                mv "$tmp_file" "$illogical_config"
+
+            else
+                rm -f "$tmp_file"
+            end
         end
 
         hyprctl reload
 
         notify-send \
             "Glass Toggle" \
-            "OFF"
+            "Glass mode OFF / Default"
 
         return 0
-
     end
 
+
     # ============================================================
-    # OFF -> ON
+    # CHECK CURRENT GLASS STATE
+    # ============================================================
+
+    if grep -q 'ignore_opacity = true,' "$general_file"
+
+        # --------------------------------------------------------
+        # GLASS IS ON -> TURN IT OFF
+        # --------------------------------------------------------
+
+        sed -i \
+            's/ignore_opacity = true,/ignore_opacity = false,/' \
+            "$general_file"
+
+        sed -i \
+            '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
+            "$rules_file"
+
+        # Disable Illogical Impulse transparency.
+        # contentTransparency remains untouched.
+        if command -q jq
+
+            set tmp_file (mktemp)
+
+            if jq \
+                    '.appearance.transparency.enable = false' \
+                    "$illogical_config" >"$tmp_file"
+
+                mv "$tmp_file" "$illogical_config"
+
+            else
+                rm -f "$tmp_file"
+            end
+        end
+
+        hyprctl reload
+
+        notify-send \
+            "Glass Toggle" \
+            "Glass mode OFF"
+
+        return 0
+    end
+
+
+    # ============================================================
+    # ENABLE GLASS MODE
     # ============================================================
 
     sed -i \
         's/ignore_opacity = false,/ignore_opacity = true,/' \
-        "$general"
+        "$general_file"
 
-    # Alte Glass-Regeln entfernen
+    # Always remove previously generated rules before creating new ones.
     sed -i \
         '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
-        "$file"
+        "$rules_file"
+
 
     # ============================================================
     # FULL GLASS
@@ -285,8 +350,7 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             "    opacity = $opacity," \
             '})' \
             '' \
-            '-- AUSNAHMEN' \
-            '' \
+            '-- Applications excluded from glass' \
             'hl.window_rule({' \
             '    match = {' \
             '        class = "^(kitty|Alacritty|ghostty)$",' \
@@ -294,13 +358,15 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             '    opacity = 1.0,' \
             '})' \
             '' \
-            '-- GLASS_MODE_END' >>"$file"
+            '-- GLASS_MODE_END' \
+            >> "$rules_file"
 
-        set notification "FULL ON ($opacity)"
+        set notification "FULL GLASS ON ($opacity)"
 
-        # ============================================================
-        # PERSONAL GLASS
-        # ============================================================
+
+    # ============================================================
+    # PERSONAL GLASS
+    # ============================================================
 
     else if test "$mode" = personal
 
@@ -315,8 +381,7 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             "    opacity = $opacity," \
             '})' \
             '' \
-            '-- PERSÖNLICHE APPS OHNE GLASS' \
-            '' \
+            '-- Personal applications excluded from glass' \
             'hl.window_rule({' \
             '    match = {' \
             '        class = "^(brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",' \
@@ -324,13 +389,15 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             '    opacity = 1.0,' \
             '})' \
             '' \
-            '-- GLASS_MODE_END' >>"$file"
+            '-- GLASS_MODE_END' \
+            >> "$rules_file"
 
-        set notification "PERSONAL ON ($opacity)"
+        set notification "PERSONAL GLASS ON ($opacity)"
 
-        # ============================================================
-        # NORMAL GLASS
-        # ============================================================
+
+    # ============================================================
+    # NORMAL GLASS
+    # ============================================================
 
     else
 
@@ -345,8 +412,7 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             "    opacity = $opacity," \
             '})' \
             '' \
-            '-- AUSNAHMEN' \
-            '' \
+            '-- Applications excluded from glass' \
             'hl.window_rule({' \
             '    match = {' \
             '        class = "^(code|Code|com.jetbrains.*|jetbrains-.*|brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",' \
@@ -354,61 +420,61 @@ function glasstoggle --description "Ultimate Hyprland glass mode toggle"
             '    opacity = 1.0,' \
             '})' \
             '' \
-            '-- GLASS_MODE_END' >>"$file"
+            '-- GLASS_MODE_END' \
+            >> "$rules_file"
 
-        set notification "NORMAL ON ($opacity)"
+        set notification "NORMAL GLASS ON ($opacity)"
 
     end
 
+
     # ============================================================
-    # ILLOGICAL IMPULSE
+    # UPDATE ILLOGICAL IMPULSE
     # ============================================================
     #
-    # WICHTIG:
+    # Only these values are modified:
     #
-    # contentTransparency wird hier NICHT verändert.
-    #
-    # Es werden ausschließlich diese beiden Werte gesetzt:
-    #
+    #   automatic
     #   backgroundTransparency
     #   enable
     #
-    # ============================================================
+    # contentTransparency is intentionally preserved.
+    #
 
-    if test -f "$json"; and command -q jq
+    if command -q jq
 
-        set tmp (mktemp)
+        set tmp_file (mktemp)
 
         if jq \
                 --arg bg "$background_transparency" \
                 '
-            .appearance.transparency.automatic = false |
-            .appearance.transparency.backgroundTransparency = ($bg | tonumber) |
-            .appearance.transparency.enable = true
-            ' \
-                "$json" >"$tmp"
+                .appearance.transparency.automatic = false |
+                .appearance.transparency.backgroundTransparency = ($bg | tonumber) |
+                .appearance.transparency.enable = true
+                ' \
+                "$illogical_config" >"$tmp_file"
 
-            mv "$tmp" "$json"
+            mv "$tmp_file" "$illogical_config"
 
         else
-
-            rm -f "$tmp"
+            rm -f "$tmp_file"
 
             notify-send \
                 "Glass Toggle" \
-                "Error writing transparency configuration."
+                "Failed to update config.json."
 
             return 1
-
         end
 
     end
 
+
     # ============================================================
-    # HYPRLAND RELOAD
+    # RELOAD HYPRLAND
     # ============================================================
 
     hyprctl reload
+
 
     # ============================================================
     # NOTIFICATION

@@ -352,7 +352,7 @@ hl.bind("SUPER + ALT + P", function()
 end, { description = "Window: Return to tiling" })
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("qalculate-gtk"), { description = "App: Start Qalculate" })
 hl.bind("SUPER + SHIFT + 7", hl.dsp.global("quickshell:cheatsheetToggle"), { description = "Shell: Toggle cheatsheet" })
-hl.bind("CTRL + SUPER + G", hl.dsp.exec_cmd("fish -c glasstoggle"), { description = "Toggle glass mode" })
+hl.bind("CTRL + SUPER + G", hl.dsp.exec_cmd("fish -c glasstoggle 0.85"), { description = "Toggle glass mode" })
 hl.bind("CTRL + SUPER + B", hl.dsp.exec_cmd("fish -c border-visible"), { description = "Toggle border visibility" })
 
 --##! Apps
