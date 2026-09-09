@@ -1,17 +1,17 @@
-function jtime --description "Modernes Benchmarking-, Profiling- und Tracing-Werkzeug"
+function jtime --description "Modern benchmarking, profiling and tracing tool"
 
     # Hilfe anzeigen, falls keine Argumente übergeben wurden
     if test (count $argv) -eq 0
-        echo "Nutzung: jtime [OPTION] [BEFEHL]"
+        echo "Usage: jtime [OPTION] [COMMAND]"
         echo ""
-        echo "Optionen:"
-        echo "  -full       Nutzt GNU time für detaillierte Systemstatistiken"
-        echo "  -bench      Nutzt hyperfine für präzise CLI-Benchmarks (inkl. Warmup & No-Shell)"
-        echo "  -ram        Nutzt Valgrind Massif für RAM-Profiling über Zeit"
-        echo "  -perf       Nutzt Linux perf stat für CPU-Zyklen und Cache-Misses"
-        echo "  -syscall    Nutzt strace für eine tabellarische Übersicht aller Systemaufrufe"
-        echo "  -lib        Nutzt ltrace für Aufrufe von dynamischen Bibliotheken (libc)"
-        echo "  [Befehl]    Ohne Option wird das Fish-eigene Standard-time genutzt"
+        echo "Options:"
+        echo "  -full       Uses GNU time for detailed system statistics"
+        echo "  -bench      Uses hyperfine for precise CLI benchmarks (including warmup & no-shell)"
+        echo "  -ram        Uses Valgrind Massif for RAM profiling over time"
+        echo "  -perf       Uses Linux perf stat for CPU cycles and cache misses"
+        echo "  -syscall    Uses strace for a tabular overview of all system calls"
+        echo "  -lib        Uses ltrace for calls to dynamic libraries (libc)"
+        echo "  [COMMAND]   Without an option, uses Fish's built-in standard time"
         return 1
     end
 
@@ -26,7 +26,7 @@ function jtime --description "Modernes Benchmarking-, Profiling- und Tracing-Wer
         case -ram
             # Speicher-Profiling mit Valgrind Massif
             valgrind --tool=massif $argv[2..-1]
-            echo "-> Analyse abgeschlossen. Nutze 'ms_print massif.out.<pid>' zum Visualisieren."
+            echo "-> Analysis completed. Use 'ms_print massif.out.<pid>' to visualize."
         case -perf
             # Hardware-Zähler der CPU auslesen
             perf stat $argv[2..-1]

@@ -27,13 +27,13 @@ def run_command(cmd):
         if not output:
             output = result.stderr.strip()
 
-        return output or "Keine Ausgabe."
+        return output or "No output."
 
     except subprocess.TimeoutExpired:
         return "Timeout."
 
     except Exception as e:
-        return f"Fehler: {e}"
+        return f"Error: {e}"
 
 
 def pw_top_snapshot():
@@ -48,7 +48,7 @@ def pw_top_snapshot():
     blocks = output.split("S   ID")
 
     if len(blocks) < 3:
-        return "Keine aktiven PipeWire Streams."
+        return "No active PipeWire streams."
 
     # letzten Messblock nehmen
     last_block = "S   ID" + blocks[-1]
@@ -77,7 +77,7 @@ def pw_top_snapshot():
 
         result.append(f"{node_id:<5} {name}")
 
-    return "\n".join(result) or "Keine aktiven Streams."
+    return "\n".join(result) or "No active streams."
 
 
 def print_box(title, content):
@@ -133,7 +133,7 @@ def audio_users():
     if devices:
         lsof = run_command(["lsof"] + devices)
 
-        if lsof != "Keine Ausgabe.":
+        if lsof != "No output.":
             output.append("Hardware:")
             output.append(lsof)
 
@@ -200,7 +200,7 @@ def audio_users():
             output.append("Active Audio Streams:")
             output.extend(stream_lines)
 
-    return "\n".join(output) if output else "Keine Audio-Nutzer."
+    return "\n".join(output) if output else "No audio users."
 
 
 def main():
@@ -218,7 +218,7 @@ def main():
 
     for title, cmd in checks:
         if not command_exists(cmd[0]):
-            print_box(title, f"{cmd[0]} ist nicht installiert.")
+            print_box(title, f"{cmd[0]} is not installed.")
             continue
 
         print_box(title, run_command(cmd))

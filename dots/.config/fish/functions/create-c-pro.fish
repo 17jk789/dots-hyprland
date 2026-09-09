@@ -295,7 +295,7 @@ function gcc-check
     end
 
     if not command -q gcc
-        echo "Error: gcc not found. Install it with: sudo apt install gcc"
+        echo "Error: gcc not found. Install it with: sudo pacman -S gcc"
         return 1
     end
 
@@ -459,7 +459,7 @@ function clang-check
     end
 
     if not command -q clang
-        echo "Error: clang not found. Install it with: sudo apt install clang"
+        echo "Error: clang not found. Install it with: sudo pacman -S clang"
         return 1
     end
 

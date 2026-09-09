@@ -1,4 +1,4 @@
-function set-jk-setting
+function set-jk-setting --description "Configures the ILogical Impulse settings for Hyprland"
 
     set -l config "$HOME/.config/illogical-impulse/config.json"
 
@@ -662,6 +662,6 @@ function set-jk-setting
 
     printf '%s\n' "$json" >"$config"
 
-    echo "Config geschrieben: $config"
+    echo "Config written: $config"
 
 end

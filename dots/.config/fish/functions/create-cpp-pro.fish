@@ -295,7 +295,7 @@ function gxx-check
     end
 
     if not command -q g++
-        echo "Error: g++ not found. Install it with: sudo apt install g++"
+        echo "Error: g++ not found. Install it with: sudo pacman -S g++"
         return 1
     end
 
@@ -466,7 +466,7 @@ function clangxx-check
     end
 
     if not command -q clang++
-        echo "Error: clang++ not found. Install it with: sudo apt install clang"
+        echo "Error: clang++ not found. Install it with: sudo pacman -S clang"
         return 1
     end
 

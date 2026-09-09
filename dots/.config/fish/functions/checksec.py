@@ -121,7 +121,7 @@ def render(checks, name):
 
     print()
 
-    print(COLORS["cyan"] + BOLD + "CHECKSEC ANALYSE: " + name + RESET)
+    print(COLORS["cyan"] + BOLD + "CHECKSEC ANALYSIS: " + name + RESET)
 
     order = list(checks.keys())
 
@@ -166,7 +166,7 @@ def render(checks, name):
 
 def scan_dir(directory):
 
-    print(COLORS["cyan"] + BOLD + "Durchsuche:" + RESET, directory)
+    print(COLORS["cyan"] + BOLD + "Scanning:" + RESET, directory)
 
     for root, dirs, files in os.walk(directory):
         for f in files:
@@ -205,7 +205,7 @@ def main():
         scan_dir(target)
 
     else:
-        print("Nicht gefunden:", target)
+        print("Not found:", target)
 
 
 if __name__ == "__main__":
