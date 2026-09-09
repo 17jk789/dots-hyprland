@@ -747,7 +747,7 @@ hl.bind("ALT + SUPER + W", hl.dsp.exec_cmd("firefox-developer-edition"), { descr
 --# Cursed stuff
 --## Make window not amogus large
 hl.bind(
-	"CTRL + SUPER + Backslash",
+	"CTRL + SUPER + ALT + ssharp",
 	hl.dsp.window.resize({
 		x = 640,
 		y = 480,
