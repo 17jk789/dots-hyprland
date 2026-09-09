@@ -342,11 +342,11 @@ hl.bind("CTRL + SHIFT + ALT + SUPER + Delete", hl.dsp.exec_cmd("systemctl powero
     { description = "Session: Shut down" }) -- # [hidden] Power off
 hl.bind("SUPER + H", hl.dsp.focus({ workspace = "+1" }))
 hl.bind("SUPER + ALT + H", hl.dsp.focus({ workspace = "-1" }))
-hl.bind("SUPER + ALT + F", function()
+hl.bind("SUPER + CTRL + F", function()
 	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
 	hl.dispatch(hl.dsp.window.pin())
 end, { description = "Window: Float + Always on top" })
-hl.bind("SUPER + ALT + P", function()
+hl.bind("SUPER + CTRL + P", function()
 	hl.dispatch(hl.dsp.window.pin())
 	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
 end, { description = "Window: Return to tiling" })
