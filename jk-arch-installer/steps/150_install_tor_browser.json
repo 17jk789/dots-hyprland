@@ -1,0 +1,63 @@
+{
+    "id": "install_tor_browser",
+
+    "name": {
+        "de": "Tor Browser installieren",
+        "en": "Install Tor Browser"
+    },
+
+    "description": {
+        "de": "Installiert den Tor Browser Launcher und ermöglicht die Einrichtung des Tor Browsers.",
+        "en": "Installs the Tor Browser Launcher and enables the setup of the Tor Browser."
+    },
+
+    "question": {
+        "de": "Soll der Tor Browser installiert werden?",
+        "en": "Should the Tor Browser be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert den Tor Browser Launcher.",
+                "en": "Installs the Tor Browser Launcher."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "torbrowser-launcher"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Startet den Tor Browser Launcher zur Einrichtung des Tor Browsers.",
+                "en": "Starts the Tor Browser Launcher to set up the Tor Browser."
+            },
+
+            "command": [
+                "torbrowser-launcher"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

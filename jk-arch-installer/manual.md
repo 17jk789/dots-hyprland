@@ -225,6 +225,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
 - [✨ Haskell-Pakete reparieren](#-haskell-pakete-reparieren)
 - [✨ Cloudflare WARP („1.1.1.1“) installieren und einrichten](#-cloudflare-warp-1111-installieren-und-einrichten)
     - [✨ Wichtige WARP-Befehle](#-wichtige-warp-befehle)
+- [✨ Tor Browser und Tor Client installieren und einrichten](#-tor-browser-und-tor-client-installieren-und-einrichten)
 - [✨ Tailscale installieren und einrichten](#-tailscale-installieren-und-einrichten)
     - [✨ Wichtige Tailscale-Befehle](#-wichtige-tailscale-befehle)
 - [✨ ZRAM konfigurieren](#-zram-konfigurieren)
@@ -4185,6 +4186,56 @@ warp-cli status         # Verbindungsstatus anzeigen
 warp-cli settings       # Einstellungen anzeigen
 warp-cli connectivity-check  # Verbindung überprüfen
 ```
+
+# ✨ Tor Browser und Tor Client installieren und einrichten
+
+> **Tor** ermöglicht anonymisierte Netzwerkverbindungen, indem der Datenverkehr über das Tor-Netzwerk geleitet wird. Der **Tor Browser** ist ein speziell für die Nutzung des Tor-Netzwerks konfigurierter Browser.
+>
+> Unter Arch Linux können sowohl der Tor Client als auch der Tor Browser installiert und eingerichtet werden.
+
+<details>
+<summary>✨ Tor Client installieren</summary>
+
+> Der Tor Client ermöglicht Anwendungen die Verbindung mit dem Tor-Netzwerk.
+
+```bash
+sudo pacman -S tor
+````
+
+</details>
+
+<details>
+<summary>✨ Tor-Dienst aktivieren</summary>
+
+> Nach der Installation kann der Tor-Dienst aktiviert und direkt gestartet werden.
+
+```bash
+sudo systemctl enable --now tor
+```
+
+</details>
+
+<details>
+<summary>✨ Tor Browser installieren</summary>
+
+> Der Tor Browser ermöglicht das komfortable Surfen über das Tor-Netzwerk und ist auf Datenschutz und Anonymität ausgelegt.
+
+```bash
+sudo pacman -S torbrowser-launcher
+```
+
+</details>
+
+<details>
+<summary>✨ Tor Browser starten</summary>
+
+> Nach der Installation kann der Tor Browser über den Tor Browser Launcher gestartet werden.
+
+```bash
+torbrowser-launcher
+```
+
+</details>
 
 # ✨ Tailscale installieren und einrichten
 

@@ -2127,6 +2127,54 @@
                 "en": "Installs a collection of network, web, OSINT, analysis, and pentesting tools."
             },
             "file": "149_install_security_tools.json"
+        },
+        {
+            "id": "install_tor_browser",
+            "name": {
+                "de": "✨ Tor Browser installieren",
+                "en": "✨ Install Tor Browser"
+            },
+            "description": {
+                "de": "Installiert den Tor Browser Launcher für den Tor Browser.",
+                "en": "Installs the Tor Browser Launcher for the Tor Browser."
+            },
+            "file": "150_install_tor_browser.json"
+        },
+        {
+            "id": "install_tor",
+            "name": {
+                "de": "✨ Tor installieren",
+                "en": "✨ Install Tor"
+            },
+            "description": {
+                "de": "Installiert den Tor-Dienst.",
+                "en": "Installs the Tor service."
+            },
+            "file": "151_install_tor.json"
+        },
+        {
+            "id": "install_cloudflare_warp",
+            "name": {
+                "de": "✨ Cloudflare WARP installieren",
+                "en": "✨ Install Cloudflare WARP"
+            },
+            "description": {
+                "de": "Installiert den Cloudflare-WARP-Client.",
+                "en": "Installs the Cloudflare WARP client."
+            },
+            "file": "152_install_cloudflare_warp.json"
+        },
+        {
+            "id": "install_cachy_update",
+            "name": {
+                "de": "✨ CachyOS Update installieren",
+                "en": "✨ Install CachyOS Update"
+            },
+            "description": {
+                "de": "Installiert das CachyOS-Update-Tool cachy-update.",
+                "en": "Installs the CachyOS update tool cachy-update."
+            },
+            "file": "153_install_cachy_update.json"
         }
     ]
 }

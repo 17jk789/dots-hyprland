@@ -1,0 +1,47 @@
+{
+    "id": "install_cloudflare_warp",
+
+    "name": {
+        "de": "Cloudflare WARP installieren",
+        "en": "Install Cloudflare WARP"
+    },
+
+    "description": {
+        "de": "Installiert den Cloudflare-WARP-Client.",
+        "en": "Installs the Cloudflare WARP client."
+    },
+
+    "question": {
+        "de": "Soll Cloudflare WARP installiert werden?",
+        "en": "Should Cloudflare WARP be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert den Cloudflare-WARP-Client.",
+                "en": "Installs the Cloudflare WARP client."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "cloudflare-warp-bin"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

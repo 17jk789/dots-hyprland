@@ -1,0 +1,47 @@
+{
+    "id": "install_tor",
+
+    "name": {
+        "de": "Tor installieren",
+        "en": "Install Tor"
+    },
+
+    "description": {
+        "de": "Installiert den Tor-Dienst.",
+        "en": "Installs the Tor service."
+    },
+
+    "question": {
+        "de": "Soll Tor installiert werden?",
+        "en": "Should Tor be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Tor.",
+                "en": "Installs Tor."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tor"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

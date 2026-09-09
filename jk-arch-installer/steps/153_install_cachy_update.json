@@ -1,0 +1,47 @@
+{
+    "id": "install_cachy_update",
+
+    "name": {
+        "de": "CachyOS Update installieren",
+        "en": "Install CachyOS Update"
+    },
+
+    "description": {
+        "de": "Installiert das CachyOS-Update-Tool cachy-update.",
+        "en": "Installs the CachyOS update tool cachy-update."
+    },
+
+    "question": {
+        "de": "Soll cachy-update installiert werden?",
+        "en": "Should cachy-update be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert das CachyOS-Update-Tool cachy-update.",
+                "en": "Installs the CachyOS update tool cachy-update."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "cachy-update"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "cachyos"
+            ]
+        }
+    ]
+}
