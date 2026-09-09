@@ -226,6 +226,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
 - [✨ Cloudflare WARP („1.1.1.1“) installieren und einrichten](#-cloudflare-warp-1111-installieren-und-einrichten)
     - [✨ Wichtige WARP-Befehle](#-wichtige-warp-befehle)
 - [✨ Tor Browser und Tor Client installieren und einrichten](#-tor-browser-und-tor-client-installieren-und-einrichten)
+- [✨ Bottles installieren und einrichten](#-bottles-installieren-und-einrichten)
 - [✨ Tailscale installieren und einrichten](#-tailscale-installieren-und-einrichten)
     - [✨ Wichtige Tailscale-Befehle](#-wichtige-tailscale-befehle)
 - [✨ ZRAM konfigurieren](#-zram-konfigurieren)
@@ -2040,6 +2041,12 @@ systemctl --user restart pipewire wireplumber
 
 ```bash
 sudo pacman -S discover flatpak
+```
+
+> Hinweis: KDE Discover richtet die Flatpak-Unterstützung und Flathub normalerweise automatisch ein. Falls Flathub trotzdem nicht verfügbar ist, kann es manuell hinzugefügt werden:
+
+```bash
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
 ### Die Desktop-Uhr KClock installieren
@@ -4236,6 +4243,70 @@ torbrowser-launcher
 ```
 
 </details>
+
+# ✨ Bottles installieren und einrichten
+
+> **Bottles** ermöglicht es, Windows-Programme und Spiele unter Linux auszuführen. Es verwendet **Wine** als Kompatibilitätsschicht und verwaltet für jedes Programm getrennte Umgebungen („Bottles") mit eigenen Einstellungen, Abhängigkeiten und Wine-Versionen.
+>
+> Die Installation erfolgt über **Flatpak**. Daher muss Flatpak bereits auf dem System installiert und eingerichtet sein. Bottles wird anschließend aus dem **Flathub**-Repository installiert.
+
+<details>
+<summary>✨ Flatpak installieren (falls nicht vorhanden)</summary>
+
+> Falls Flatpak noch nicht installiert ist, kann es unter Arch Linux zusammen mit KDE Discover eingerichtet werden:
+
+```bash
+sudo pacman -S discover flatpak
+```
+
+> Hinweis: KDE Discover richtet die Flatpak-Unterstützung und Flathub normalerweise automatisch ein. Falls Flathub trotzdem nicht verfügbar ist, kann es manuell hinzugefügt werden:
+
+```bash
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
+</details>
+
+<details>
+<summary>✨ Bottles installieren</summary>
+
+> Bottles wird über Flatpak aus Flathub installiert:
+
+```bash
+flatpak install flathub com.usebottles.bottles
+```
+
+</details>
+
+<details>
+<summary>✨ Bottles starten</summary>
+
+> Nach der Installation kann Bottles über das Anwendungsmenü oder direkt über die Kommandozeile gestartet werden:
+
+```bash
+flatpak run com.usebottles.bottles
+```
+
+</details>
+
+<details>
+<summary>✨ Wine-Komponenten und Abhängigkeiten</summary>
+
+> Bottles verwaltet benötigte Wine-Komponenten automatisch. Dazu gehören unter anderem:
+>
+> - Wine-Versionen (Runner)
+> - DXVK für DirectX-zu-Vulkan-Übersetzung
+> - VKD3D für DirectX 12
+> - Wine Mono für .NET-Anwendungen
+> - Wine Gecko für eingebettete Web-Inhalte
+>
+> Dadurch müssen viele zusätzliche Wine-Pakete nicht manuell installiert werden.
+
+</details>
+
+> **Hinweis:** Bottles installiert keine Windows-Programme automatisch. Nach der Einrichtung können eigene `.exe`-Dateien oder Installationsprogramme innerhalb einer Bottle ausgeführt werden.
+>
+> Da Bottles als Flatpak installiert wird, läuft es in einer isolierten Umgebung. Der Zugriff auf Dateien außerhalb der freigegebenen Ordner kann über die Flatpak-Berechtigungen angepasst werden.
 
 # ✨ Tailscale installieren und einrichten
 

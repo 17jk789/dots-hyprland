@@ -2175,6 +2175,18 @@
                 "en": "Installs the CachyOS update tool cachy-update."
             },
             "file": "153_install_cachy_update.json"
+        },
+        {
+            "id": "install_bottles_flatpak",
+            "name": {
+                "de": "✨ Bottles installieren (Flatpak)",
+                "en": "✨ Install Bottles (Flatpak)"
+            },
+            "description": {
+                "de": "Installiert Bottles über Flatpak. Flatpak muss auf dem System installiert und eingerichtet sein.",
+                "en": "Installs Bottles via Flatpak. Flatpak must be installed and configured on the system."
+            },
+            "file": "154_install_bottles_flatpak.json"
         }
     ]
 }
