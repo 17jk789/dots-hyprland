@@ -1,0 +1,106 @@
+{
+    "id": "install_weather",
+
+    "variants": {
+        "mousam": {
+            "id": "install_weather_mousam",
+
+            "name": {
+                "de": "Mousam installieren",
+                "en": "Install Mousam"
+            },
+
+            "description": {
+                "de": "Installiert Mousam, eine moderne Wetter-App über yay.",
+                "en": "Installs Mousam, a modern weather application using yay."
+            },
+
+            "question": {
+                "de": "Soll Mousam über yay installiert werden?",
+                "en": "Should Mousam be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "weather_app_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Mousam aus dem AUR.",
+                        "en": "Installs Mousam from the AUR."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "mousam"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+
+        "gnome_weather": {
+            "id": "install_weather_gnome",
+
+            "name": {
+                "de": "GNOME Wetter installieren",
+                "en": "Install GNOME Weather"
+            },
+
+            "description": {
+                "de": "Installiert GNOME Wetter über pacman.",
+                "en": "Installs GNOME Weather using pacman."
+            },
+
+            "question": {
+                "de": "Soll GNOME Wetter installiert werden?",
+                "en": "Should GNOME Weather be installed?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "weather_app_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GNOME Wetter.",
+                        "en": "Installs GNOME Weather."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gnome-weather"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

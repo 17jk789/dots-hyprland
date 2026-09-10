@@ -106,9 +106,14 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Der grafische Bildbetrachter Gwenview installieren](#der-grafische-bildbetrachter-gwenview-installieren)
     - [Der universelle Dokumentenbetrachter Okular installieren](#der-universelle-dokumentenbetrachter-okular-installieren)
     - [Den universellen Medienplayer VLC installieren](#den-universellen-medienplayer-vlc-installieren)
-    - [KDE Graphics Thumbnailers installieren](#kde-graphics-thumbnailers-installieren)
+    - [Den GNOME Video- und Audio-Player installieren](#den-gnome-video--und-audio-player-installieren)
     - [✨ Den Internetradio-Player Shortwave installieren](#-den-internetradio-player-shortwave-installieren)
+    - [✨ Den Musikplayer Amberol installieren](#-den-musikplayer-amberol-installieren)
+    - [✨ Den Musikplayer Amarok installieren](#-den-musikplayer-amarok-installieren)
     - [✨ Den Audio-Editor Audacity installieren](#-den-audio-editor-audacity-installieren)
+    - [✨ Die Wetter-App Mousam installieren](#-die-wetter-app-mousam-installieren)
+    - [✨ GNOME Wetter installieren](#-gnome-wetter-installieren)
+    - [KDE Graphics Thumbnailers installieren](#kde-graphics-thumbnailers-installieren)
     - [✨ Die Wissensdatenbank Obsidian installieren](#-die-wissensdatenbank-obsidian-installieren)
     - [Den grafischen Plasma-Systemmonitor installieren](#den-grafischen-plasma-systemmonitor-installieren)
     - [✨ Den Taskmanager Mission Center über yay installieren](#-den-taskmanager-mission-center-über-yay-installieren)
@@ -124,6 +129,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Die Streaming- und Aufnahme-Software OBS Studio installieren](#die-streaming--und-aufnahme-software-obs-studio-installieren)
     - [Das Software-Zentrum Discover und das Flatpak-System installieren](#das-software-zentrum-discover-und-das-flatpak-system-installieren)
     - [Die Desktop-Uhr KClock installieren](#die-desktop-uhr-kclock-installieren)
+    - [GNOME Clocks installieren](#gnome-clocks-installieren)
     - [✨ Den Morgen Calendar über yay installieren](#-den-morgen-calendar-über-yay-installieren)
     - [Das Smartphone-Integrationswerkzeug KDE Connect installieren](#das-smartphone-integrationswerkzeug-kde-connect-installieren)
     - [✨ Eine ältere Python-Version (3.12) über yay installieren](#-eine-ältere-python-version-312-über-yay-installieren)
@@ -1799,21 +1805,53 @@ sudo pacman -S okular
 sudo pacman -S vlc
 ```
 
-### KDE Graphics Thumbnailers installieren
+### Den GNOME Video- und Audio-Player installieren
 
-> `KDE Graphics Thumbnailers` erweitert den KDE-Dateimanager um zusätzliche Vorschaubilder (Thumbnails) für verschiedene Grafikformate. Dadurch können Bilder und andere unterstützte Dateien direkt als Vorschau angezeigt werden, ohne sie erst öffnen zu müssen.
+> **GNOME Videos (Totem)** und **Decibels** sind einfache und moderne Medienplayer aus dem GNOME-Ökosystem.  
+> GNOME Videos ermöglicht die Wiedergabe von Videoformaten mit einer übersichtlichen Oberfläche, während **Decibels** speziell für die einfache Wiedergabe von Musik und Audiodateien entwickelt wurde. Beide Anwendungen sind leichtgewichtig und passen sich optimal in die GNOME-Desktopumgebung ein.
 
 ```bash
-sudo pacman -S kdegraphics-thumbnailers
+sudo pacman -S totem decibels
 ```
 
 ### ✨ Den Internetradio-Player Shortwave installieren
 
 > `Shortwave` ist ein moderner Internetradio-Player für Linux. Er bietet Zugriff auf über 50.000 Radiosender weltweit, unterstützt Favoriten, automatische Sendererkennung und die Wiedergabe von Online-Radiostationen.
 
+<details>
+<summary>Installieren</summary>
+
 ```bash
 sudo pacman -S shortwave
 ```
+
+</details>
+
+### ✨ Den Musikplayer Amberol installieren
+
+> **Amberol** ist ein einfacher und moderner Musikplayer aus dem GNOME-Ökosystem. Er konzentriert sich auf eine übersichtliche Bedienung und die reine Wiedergabe von Musik ohne unnötige Zusatzfunktionen. Durch das schlanke Design integriert sich Amberol besonders gut in die GNOME-Desktopumgebung.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S amberol
+```
+
+</details>
+
+### ✨ Den Musikplayer Amarok installieren
+
+> **Amarok** ist ein umfangreicher Musikplayer aus dem KDE-Ökosystem. Er bietet viele Funktionen zur Verwaltung großer Musiksammlungen, unterstützt Wiedergabelisten, Internetradio, Coververwaltung und weitere Werkzeuge für eine komfortable Musikverwaltung. Amarok eignet sich besonders für Nutzer, die mehr als nur eine einfache Audiowiedergabe benötigen.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S amarok
+```
+
+</details>
 
 ### ✨ Den Audio-Editor Audacity installieren
 
@@ -1827,6 +1865,40 @@ sudo pacman -S audacity
 ```
 
 </details>
+
+### ✨ Die Wetter-App Mousam installieren
+
+> **Mousam** ist eine moderne Wetter-Anwendung für Linux mit einer übersichtlichen Oberfläche. Sie zeigt aktuelle Wetterdaten, Vorhersagen und weitere Wetterinformationen an. Mousam ist besonders gut für moderne Linux-Desktops geeignet und wird über das AUR installiert.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+yay -S mousam
+```
+
+</details>
+
+### ✨ GNOME Wetter installieren
+
+> **GNOME Wetter** ist eine einfache und übersichtliche Wetter-Anwendung aus dem GNOME-Ökosystem. Sie bietet aktuelle Wetterinformationen, Vorhersagen und eine nahtlose Integration in die GNOME-Desktopumgebung.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S gnome-weather
+```
+
+</details>
+
+### KDE Graphics Thumbnailers installieren
+
+> `KDE Graphics Thumbnailers` erweitert den KDE-Dateimanager um zusätzliche Vorschaubilder (Thumbnails) für verschiedene Grafikformate. Dadurch können Bilder und andere unterstützte Dateien direkt als Vorschau angezeigt werden, ohne sie erst öffnen zu müssen.
+
+```bash
+sudo pacman -S kdegraphics-thumbnailers
+```
 
 ### ✨ Die Wissensdatenbank Obsidian installieren
 
@@ -2077,6 +2149,15 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 ```bash
 sudo pacman -S kclock
+```
+
+### GNOME Clocks installieren
+
+> **GNOME Clocks** ist eine einfache und moderne Uhr-Anwendung aus dem GNOME-Ökosystem.  
+> Sie bietet Funktionen wie Weltzeiten, Wecker, Timer und eine Stoppuhr. Die Anwendung ist leichtgewichtig und integriert sich optimal in die GNOME-Desktopumgebung.
+
+```bash
+sudo pacman -S gnome-clocks
 ```
 
 ### ✨ Den Morgen Calendar über yay installieren
