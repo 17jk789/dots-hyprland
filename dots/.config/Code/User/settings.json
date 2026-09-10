@@ -7,10 +7,8 @@
         "markdown": true,
         "scminput": true
     },
-    "gitlens.ai.model": "vscode",
-    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
-    // New
-    // Komfort & Editor-Visuals
+    "gitlens.ai.enabled": false,
+
     // "editor.mouseWheelZoom": true,
     "editor.cursorSmoothCaretAnimation": "on",
     "editor.smoothScrolling": true,
@@ -20,13 +18,19 @@
     "editor.occurrencesHighlight": "off",
     "editor.selectionHighlight": false,
 
-    // Tabs & Indentation (nur Anzeige, keine automatische Änderung)
+    "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', 'JetBrains Mono', monospace",
+    "editor.fontWeight": "400",
+    "editor.letterSpacing": 0,
+    "editor.fontLigatures": true,
+    "editor.fontSize": 15,
+    "editor.lineHeight": 1.6,
+
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.detectIndentation": true, // VS Code passt sich an bestehende Datei an
+    "editor.detectIndentation": true,
 
-    // Dateien & Speicherung
     "files.insertFinalNewline": true,
+
     // "files.exclude": {
     //    "**/.git": true,
     //    "**/node_modules": true,
@@ -34,11 +38,30 @@
     // },
     "files.autoSave": "off", // Kein automatisches Speichern, um ungewollte Änderungen zu vermeiden
 
-    // Suche
+    "files.watcherExclude": {
+        "**/.git/**": true,
+        "**/target/**": true,
+        "**/node_modules/**": true
+    },
+
+    "window.titleBarStyle": "custom",
+    "window.nativeTabs": false,
+    "window.restoreWindows": "all",
+    "window.zoomLevel": 0,
+    "window.nativeFullScreen": true,
+    "editor.minimap.enabled": false,
+
     "search.smartCase": true,
     "workbench.editor.enablePreview": false,
 
-    // Vim-Erweiterung (sicher, nur Anzeige & Navigation)
+    "workbench.colorTheme": "Catppuccin Mocha",
+
+    "workbench.activityBar.location": "top",
+    "workbench.sideBar.location": "right",
+
+    "window.menuBarVisibility": "compact",
+    "window.commandCenter": false,
+
     "vim.useSystemClipboard": true,
     "vim.incsearch": true,
     "vim.hlsearch": true,
@@ -69,28 +92,52 @@
     "vim.showmatch": true,
     "vim.matchpairs": "(:),{:},[:],<:>",
     "vim.wrap": false,
-    "vim.autowrite": false, // Kein automatisches Schreiben,
+    // "vim.autowrite": false, // Kein automatisches Schreiben,
+
     "vim.handleKeys": {
         "<C-b>": false,
         "<C-j>": false,
         "u": false
     },
+
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-        "before": ["d"],
-        "after": ["\"", "_", "d"]
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
         },
         {
-        "before": ["d", "d"],
-        "after": ["\"", "_", "d", "d"]
+            "before": [
+                "d",
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d",
+                "d"
+            ]
         }
     ],
+
     "vim.visualModeKeyBindingsNonRecursive": [
         {
-            "before": ["d"],
-            "after": ["\"", "_", "d"]
+            "before": [
+                "d"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d"
+            ]
         }
     ],
+
     "vim.statusBarColorControl": true,
     // "vim.statusBarColors.normal": ["#78A4F1", "#ffffff"],
     // "vim.statusBarColors.insert": ["#BF616A", "#ffffff"],
@@ -123,48 +170,46 @@
         "statusBar.foreground": "#11111b",
         "statusBar.debuggingForeground": "#11111b"
     },
-    // Windows
-    // "vim.shell": "...",
-    /* "vim.shellArgs": [
-        "-NoLogo",
-        "-NoProfile",
-        "-Command"
-    ], */
-    "workbench.colorTheme": "Catppuccin Mocha",
-    "workbench.activityBar.location": "top",
-    "gitlens.ai.enabled": false,
-    "workbench.sideBar.location": "right",
-    "window.menuBarVisibility": "compact",
-    "window.commandCenter": false,
-
-    // Rust Analyzer
     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
     "rust-analyzer.procMacro.enable": true,
     "rust-analyzer.checkOnSave": true,
     "rust-analyzer.checkOnSave.command": "clippy",
     // "rust-analyzer.checkOnSave.command": "check" // fatser
-    "rust-analyzer.checkOnSave.extraArgs": ["--", "-W", "clippy::all"],
+    "rust-analyzer.checkOnSave.extraArgs": [
+        "--",
+        "-W",
+        "clippy::all"
+    ],
     "rust-analyzer.inlayHints.enable": true,
     "rust-analyzer.inlayHints.typeHints": true,
     "rust-analyzer.inlayHints.parameterHints": true,
     "rust-analyzer.lens.enable": true,
-    "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"],
+    "rust-analyzer.diagnostics.disabled": [
+        "unresolved-proc-macro"
+    ],
     "rust-analyzer.server.extraEnv": {
         "RA_LRU_CAP": "100000"
     },
-    // "material-code.primaryColor": "#9FD2E0",
     "git.autofetch": true,
-
-    // Terminal-Optimierung für das Fish-Shell-Design
-    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+    "git.confirmSync": false,
+    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font Mono', 'JetBrains Mono', monospace",
+    "terminal.integrated.fontSize": 14,
     "terminal.integrated.gpuAcceleration": "on",
-    "terminal.integrated.fontWeight": "normal",
+    // "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.fontWeight": "400",
     "terminal.integrated.letterSpacing": 0,
     "terminal.integrated.lineHeight": 1.2,
-    "terminal.integrated.smoothScrolling": true,
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.cursorStyle": "line",
-    "terminal.external.linuxExec": "kitty"
+    "terminal.external.linuxExec": "kitty",
+    "terminal.integrated.smoothScrolling": true,
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.profiles.linux": {
+        "fish": {
+            "path": "/usr/bin/fish"
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "fish"
 }
 
 // {
