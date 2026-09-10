@@ -142,6 +142,10 @@ case ${SUBCMD_NAME} in
     if [[ "${SKIP_ALLFILES}" != true ]]; then
       source ${SUBCMD_DIR}/3.files.sh
     fi
+    if command -v fish >/dev/null 2>&1 && [[ -f "$HOME/.config/fish/functions/set-jk-settings.fish" ]]; then
+        printf "${STY_CYAN}[INFO] Applying JK illogical-impulse settings...${STY_RST}\n"
+        fish -c "source $HOME/.config/fish/functions/set-jk-settings.fish; set-jk-settings"
+    fi
     ;;
   install-deps)
     for function in ${print_os_group_id_functions[@]}; do

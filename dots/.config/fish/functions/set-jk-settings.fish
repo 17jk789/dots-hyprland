@@ -1,4 +1,4 @@
-function set-jk-setting --description "Configures the ILogical Impulse settings for Hyprland"
+function set-jk-settings --description "Configures the JK illogical-impulse settings for Hyprland"
 
     set -l config "$HOME/.config/illogical-impulse/config.json"
 
