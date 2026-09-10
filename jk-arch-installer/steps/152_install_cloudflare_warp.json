@@ -1,47 +1,106 @@
 {
     "id": "install_cloudflare_warp",
 
-    "name": {
-        "de": "Cloudflare WARP installieren",
-        "en": "Install Cloudflare WARP"
-    },
+    "variants": {
+        "pacman": {
+            "id": "install_cloudflare_warp_pacman",
 
-    "description": {
-        "de": "Installiert den Cloudflare-WARP-Client.",
-        "en": "Installs the Cloudflare WARP client."
-    },
-
-    "question": {
-        "de": "Soll Cloudflare WARP installiert werden?",
-        "en": "Should Cloudflare WARP be installed?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert den Cloudflare-WARP-Client.",
-                "en": "Installs the Cloudflare WARP client."
+            "name": {
+                "de": "Cloudflare WARP mit pacman installieren",
+                "en": "Install Cloudflare WARP with pacman"
             },
 
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "cloudflare-warp-bin"
-            ],
+            "description": {
+                "de": "Installiert den Cloudflare-WARP-Client über pacman.",
+                "en": "Installs the Cloudflare WARP client using pacman."
+            },
 
-            "requires_root": true,
+            "question": {
+                "de": "Soll Cloudflare WARP mit pacman installiert werden?",
+                "en": "Should Cloudflare WARP be installed using pacman?"
+            },
 
-            "distros": [
-                "arch_based"
+            "optional": true,
+
+            "exclusive_group": "cloudflare_warp_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Cloudflare-WARP-Client.",
+                        "en": "Installs the Cloudflare WARP client."
+                    },
+
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "cloudflare-warp-bin"
+                    ],
+
+                    "requires_root": true,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+
+        "yay": {
+            "id": "install_cloudflare_warp_yay",
+
+            "name": {
+                "de": "Cloudflare WARP mit yay installieren",
+                "en": "Install Cloudflare WARP with yay"
+            },
+
+            "description": {
+                "de": "Installiert den Cloudflare-WARP-NOX-Client über yay.",
+                "en": "Installs the Cloudflare WARP NOX client using yay."
+            },
+
+            "question": {
+                "de": "Soll Cloudflare WARP NOX mit yay installiert werden?",
+                "en": "Should Cloudflare WARP NOX be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "cloudflare_warp_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Cloudflare WARP NOX über yay.",
+                        "en": "Installs Cloudflare WARP NOX using yay."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "cloudflare-warp-nox-bin"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

@@ -1,0 +1,106 @@
+{
+    "id": "install_bottles",
+
+    "variants": {
+        "yay": {
+            "id": "install_bottles_yay",
+
+            "name": {
+                "de": "Bottles mit yay installieren",
+                "en": "Install Bottles with yay"
+            },
+
+            "description": {
+                "de": "Installiert Bottles über yay.",
+                "en": "Installs Bottles using yay."
+            },
+
+            "question": {
+                "de": "Soll Bottles über yay installiert werden?",
+                "en": "Should Bottles be installed using yay?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "bottles_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Bottles aus dem AUR.",
+                        "en": "Installs Bottles from the AUR."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "bottles"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+
+
+        "flatpak": {
+            "id": "install_bottles_flatpak",
+
+            "name": {
+                "de": "Bottles mit Flatpak installieren",
+                "en": "Install Bottles with Flatpak"
+            },
+
+            "description": {
+                "de": "Installiert Bottles über Flatpak aus Flathub.",
+                "en": "Installs Bottles via Flatpak from Flathub."
+            },
+
+            "question": {
+                "de": "Soll Bottles über Flatpak installiert werden?",
+                "en": "Should Bottles be installed via Flatpak?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "bottles_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Bottles aus dem Flathub-Repository.",
+                        "en": "Installs Bottles from the Flathub repository."
+                    },
+
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "-y",
+                        "flathub",
+                        "com.usebottles.bottles"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

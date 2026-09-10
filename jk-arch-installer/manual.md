@@ -106,6 +106,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Der grafische Bildbetrachter Gwenview installieren](#der-grafische-bildbetrachter-gwenview-installieren)
     - [Der universelle Dokumentenbetrachter Okular installieren](#der-universelle-dokumentenbetrachter-okular-installieren)
     - [Den universellen Medienplayer VLC installieren](#den-universellen-medienplayer-vlc-installieren)
+    - [✨ Den Internetradio-Player Shortwave installieren](#-den-internetradio-player-shortwave-installieren)
     - [✨ Den Audio-Editor Audacity installieren](#-den-audio-editor-audacity-installieren)
     - [✨ Die Wissensdatenbank Obsidian installieren](#-die-wissensdatenbank-obsidian-installieren)
     - [Den grafischen Plasma-Systemmonitor installieren](#den-grafischen-plasma-systemmonitor-installieren)
@@ -227,6 +228,10 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Wichtige WARP-Befehle](#-wichtige-warp-befehle)
 - [✨ Tor Browser und Tor Client installieren und einrichten](#-tor-browser-und-tor-client-installieren-und-einrichten)
 - [✨ Bottles installieren und einrichten](#-bottles-installieren-und-einrichten)
+    - [Flatpak installieren (falls nicht vorhanden)](#flatpak-installieren-falls-nicht-vorhanden)
+    - [Bottles installieren](#bottles-installieren)
+    - [Installation über yay](#installation-über-yay)
+    - [Installation über Flatpak](#installation-über-flatpak)
 - [✨ Tailscale installieren und einrichten](#-tailscale-installieren-und-einrichten)
     - [✨ Wichtige Tailscale-Befehle](#-wichtige-tailscale-befehle)
 - [✨ ZRAM konfigurieren](#-zram-konfigurieren)
@@ -1791,6 +1796,14 @@ sudo pacman -S okular
 
 ```bash
 sudo pacman -S vlc
+```
+
+### ✨ Den Internetradio-Player Shortwave installieren
+
+> `Shortwave` ist ein moderner Internetradio-Player für Linux. Er bietet Zugriff auf über 50.000 Radiosender weltweit, unterstützt Favoriten, automatische Sendererkennung und die Wiedergabe von Online-Radiostationen.
+
+```bash
+sudo pacman -S shortwave
 ```
 
 ### ✨ Den Audio-Editor Audacity installieren
@@ -4246,46 +4259,82 @@ torbrowser-launcher
 
 # ✨ Bottles installieren und einrichten
 
-> **Bottles** ermöglicht es, Windows-Programme und Spiele unter Linux auszuführen. Es verwendet **Wine** als Kompatibilitätsschicht und verwaltet für jedes Programm getrennte Umgebungen („Bottles") mit eigenen Einstellungen, Abhängigkeiten und Wine-Versionen.
+> **Bottles** ermöglicht es, Windows-Programme und Spiele unter Linux auszuführen.  
+> Es verwendet **Wine** als Kompatibilitätsschicht und verwaltet für jedes Programm getrennte Umgebungen („Bottles") mit eigenen Einstellungen, Abhängigkeiten und Wine-Versionen.
 >
-> Die Installation erfolgt über **Flatpak**. Daher muss Flatpak bereits auf dem System installiert und eingerichtet sein. Bottles wird anschließend aus dem **Flathub**-Repository installiert.
+> Für Arch-basierte Systeme stehen zwei Installationsmöglichkeiten zur Verfügung:
+>
+> - **yay (AUR)** -> native Installation als Arch-Paket
+> - **Flatpak (Flathub)** -> isolierte Installation mit eigener Laufzeitumgebung
 
 <details>
-<summary>✨ Flatpak installieren (falls nicht vorhanden)</summary>
+<summary>✨ Variante 1: Bottles mit yay installieren (AUR)</summary>
 
-> Falls Flatpak noch nicht installiert ist, kann es unter Arch Linux zusammen mit KDE Discover eingerichtet werden:
+> Die Installation über **yay** integriert Bottles direkt in das Arch-Paketmanagement.
 
 ```bash
-sudo pacman -S discover flatpak
+yay -S bottles
+````
+
+</details>
+
+<details>
+<summary>✨ Variante 2: Bottles mit Flatpak installieren</summary>
+
+> Die Flatpak-Version wird über das **Flathub**-Repository installiert.
+> Flatpak muss dafür bereits eingerichtet sein.
+
+### Flatpak installieren (falls nicht vorhanden)
+
+Unter Arch Linux:
+
+```bash
+sudo pacman -S flatpak
 ```
 
-> Hinweis: KDE Discover richtet die Flatpak-Unterstützung und Flathub normalerweise automatisch ein. Falls Flathub trotzdem nicht verfügbar ist, kann es manuell hinzugefügt werden:
+Optional für KDE:
+
+```bash
+sudo pacman -S discover
+```
+
+> Falls Flathub noch nicht eingerichtet ist:
 
 ```bash
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
-</details>
-
-<details>
-<summary>✨ Bottles installieren</summary>
-
-> Bottles wird über Flatpak aus Flathub installiert:
+### Bottles installieren
 
 ```bash
 flatpak install flathub com.usebottles.bottles
 ```
+
+> Vorteile:
+>
+> * Saubere Isolation vom System
+> * Eigene Laufzeitumgebung
+> * Einfache Deinstallation
+> * Unabhängig von Arch-Paketversionen
 
 </details>
 
 <details>
 <summary>✨ Bottles starten</summary>
 
-> Nach der Installation kann Bottles über das Anwendungsmenü oder direkt über die Kommandozeile gestartet werden:
+### Installation über yay
+
+```bash
+bottles
+```
+
+### Installation über Flatpak
 
 ```bash
 flatpak run com.usebottles.bottles
 ```
+
+> Alternativ kann Bottles bei beiden Varianten über das Anwendungsmenü gestartet werden.
 
 </details>
 
@@ -4293,20 +4342,36 @@ flatpak run com.usebottles.bottles
 <summary>✨ Wine-Komponenten und Abhängigkeiten</summary>
 
 > Bottles verwaltet benötigte Wine-Komponenten automatisch. Dazu gehören unter anderem:
->
-> - Wine-Versionen (Runner)
-> - DXVK für DirectX-zu-Vulkan-Übersetzung
-> - VKD3D für DirectX 12
-> - Wine Mono für .NET-Anwendungen
-> - Wine Gecko für eingebettete Web-Inhalte
->
+
+* Wine-Versionen (Runner)
+* DXVK für DirectX-zu-Vulkan-Übersetzung
+* VKD3D für DirectX 12
+* Wine Mono für .NET-Anwendungen
+* Wine Gecko für eingebettete Web-Inhalte
+
 > Dadurch müssen viele zusätzliche Wine-Pakete nicht manuell installiert werden.
 
 </details>
 
-> **Hinweis:** Bottles installiert keine Windows-Programme automatisch. Nach der Einrichtung können eigene `.exe`-Dateien oder Installationsprogramme innerhalb einer Bottle ausgeführt werden.
+<details>
+<summary>✨ Erste Einrichtung</summary>
+
+> Nach dem Start kann eine neue **Bottle** erstellt werden:
+
+* **Gaming** → optimiert für Spiele
+* **Application** → optimiert für normale Windows-Programme
+* **Custom** → eigene Konfiguration
+
+> Anschließend können `.exe`-Dateien oder Installationsprogramme innerhalb der jeweiligen Bottle ausgeführt werden.
+
+</details>
+
+> **Hinweis:** Bottles installiert keine Windows-Programme automatisch.
+> Eigene Anwendungen müssen anschließend innerhalb einer Bottle eingerichtet werden.
 >
-> Da Bottles als Flatpak installiert wird, läuft es in einer isolierten Umgebung. Der Zugriff auf Dateien außerhalb der freigegebenen Ordner kann über die Flatpak-Berechtigungen angepasst werden.
+> Bei der Flatpak-Version läuft Bottles in einer Sandbox. Falls Zugriff auf zusätzliche Ordner benötigt wird, müssen die Flatpak-Berechtigungen angepasst werden.
+>
+> Bei der yay-Version bestehen weniger Einschränkungen, da Bottles direkt als Arch-Anwendung installiert wird.
 
 # ✨ Tailscale installieren und einrichten
 
