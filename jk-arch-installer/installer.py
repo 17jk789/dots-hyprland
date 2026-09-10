@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import platform
 import pwd
 import shlex
 import shutil
@@ -101,6 +100,7 @@ TRANSLATIONS = {
         "arch_detected": "Arch-basierte Distribution erkannt",
         "root_ok": "Root-Rechte vorhanden.",
         "programs_ok": "Benötigte Programme vorhanden.",
+        "programs_check_skipped": "Programmprüfung im DRY-RUN übersprungen.",
         "dry_run": "DRY-RUN ist aktiv. Es werden keine Änderungen vorgenommen.",
         "start": "Soll die Installation gestartet werden?",
         "skip": "Schritt wird übersprungen.",
@@ -142,6 +142,7 @@ TRANSLATIONS = {
         "arch_detected": "Arch-based distribution detected",
         "root_ok": "Root privileges available.",
         "programs_ok": "Required programs are available.",
+        "programs_check_skipped": "Required program check skipped in DRY-RUN.",
         "dry_run": "DRY-RUN is active. No changes will be made.",
         "start": "Start the installation?",
         "skip": "Step skipped.",
@@ -836,6 +837,7 @@ def check_required_programs() -> None:
     required = [
         "pacman",
         "systemctl",
+        "runuser",
     ]
 
     missing = [program for program in required if shutil.which(program) is None]
@@ -1215,6 +1217,7 @@ def execute_command(
     if command.requires_root and os.geteuid() != 0:
         raise CommandError(f"Command requires root: {display}")
 
+    process = None
     start = time.monotonic()
 
     try:
@@ -1239,14 +1242,15 @@ def execute_command(
         returncode = process.wait()
 
     except KeyboardInterrupt:
-        try:
-            process.terminate()
-            process.wait(timeout=5)
-        except Exception:
+        if process is not None:
             try:
-                process.kill()
+                process.terminate()
+                process.wait(timeout=5)
             except Exception:
-                pass
+                try:
+                    process.kill()
+                except Exception:
+                    pass
 
         log(f"COMMAND INTERRUPTED: {display}")
         return False
@@ -1686,9 +1690,11 @@ def run_installer(
 
             success(tr("root_ok"))
 
-        check_required_programs()
-
-        success(tr("programs_ok"))
+        if dry_run:
+            info(tr("programs_check_skipped"))
+        else:
+            check_required_programs()
+            success(tr("programs_ok"))
 
         installations = load_installation_table()
 
