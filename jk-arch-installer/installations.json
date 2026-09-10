@@ -2349,8 +2349,8 @@
             },
 
             "description": {
-                "de": "Wähle einen Musikplayer: Amberol für GNOME oder Amarok für KDE.",
-                "en": "Choose a music player: Amberol for GNOME or Amarok for KDE."
+                "de": "Wähle einen Musikplayer: Amberol für GNOME, Amarok für KDE oder AudioTube.",
+                "en": "Choose a music player: Amberol for GNOME, Amarok for KDE, or AudioTube."
             },
 
             "file": "157_install_music_player.json",
@@ -2379,6 +2379,19 @@
                     "description": {
                         "de": "Installiert Amarok, einen umfangreichen Musikplayer für KDE Plasma.",
                         "en": "Installs Amarok, a feature-rich music player for KDE Plasma."
+                    },
+                    "exclusive_group": "music_player_method"
+                },
+                {
+                    "id": "install_music_player_audiotube",
+                    "variant": "audiotube",
+                    "name": {
+                        "de": "✨ AudioTube installieren",
+                        "en": "✨ Install AudioTube"
+                    },
+                    "description": {
+                        "de": "Installiert AudioTube, einen modernen Musikplayer für YouTube Music.",
+                        "en": "Installs AudioTube, a modern music player for YouTube Music."
                     },
                     "exclusive_group": "music_player_method"
                 }

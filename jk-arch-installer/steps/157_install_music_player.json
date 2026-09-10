@@ -101,6 +101,57 @@
                     ]
                 }
             ]
+        },
+
+
+        "audiotube": {
+            "id": "install_music_player_audiotube",
+
+            "name": {
+                "de": "AudioTube installieren",
+                "en": "Install AudioTube"
+            },
+
+            "description": {
+                "de": "Installiert AudioTube, einen modernen Musikplayer für YouTube Music.",
+                "en": "Installs AudioTube, a modern music player for YouTube Music."
+            },
+
+            "question": {
+                "de": "Soll AudioTube installiert werden?",
+                "en": "Should AudioTube be installed?"
+            },
+
+            "optional": true,
+
+            "exclusive_group": "music_player_method",
+
+            "continue_on_error": false,
+
+            "checks": [],
+
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert AudioTube über den AUR-Helper yay.",
+                        "en": "Installs AudioTube using the yay AUR helper."
+                    },
+
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "audiotube"
+                    ],
+
+                    "requires_root": false,
+
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
         }
     }
 }

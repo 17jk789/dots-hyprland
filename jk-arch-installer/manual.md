@@ -110,6 +110,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Den Internetradio-Player Shortwave installieren](#-den-internetradio-player-shortwave-installieren)
     - [✨ Den Musikplayer Amberol installieren](#-den-musikplayer-amberol-installieren)
     - [✨ Den Musikplayer Amarok installieren](#-den-musikplayer-amarok-installieren)
+    - [✨ Den Musikplayer AudioTube installieren](#-den-musikplayer-audiotube-installieren)
     - [✨ Den Audio-Editor Audacity installieren](#-den-audio-editor-audacity-installieren)
     - [✨ Die Wetter-App Mousam installieren](#-die-wetter-app-mousam-installieren)
     - [✨ GNOME Wetter installieren](#-gnome-wetter-installieren)
@@ -1849,6 +1850,19 @@ sudo pacman -S amberol
 
 ```bash
 sudo pacman -S amarok
+```
+
+</details>
+
+### ✨ Den Musikplayer AudioTube installieren
+
+> **AudioTube** ist ein moderner Musikplayer für **YouTube Music** aus dem KDE-Ökosystem. Er ermöglicht das Durchsuchen und Abspielen von Musik direkt über YouTube Music, unterstützt Wiedergabelisten, Alben, Künstler und bietet eine schlanke Oberfläche ohne den vollständigen YouTube-Client verwenden zu müssen. AudioTube eignet sich besonders für Nutzer, die ihre Musik über YouTube Music verwalten möchten.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+yay -S audiotube
 ```
 
 </details>
