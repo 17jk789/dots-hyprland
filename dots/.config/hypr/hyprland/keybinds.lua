@@ -1,3 +1,6 @@
+-- Experimentell: Diese Keybinds befinden sich noch in der Testphase.
+-- Einige Commands funktionieren möglicherweise noch nicht vollständig oder fehlerfrei.
+
 require("hyprland.lib")
 require("hyprland.variables")
 if is_file_exists(HOME .. "/.config/hypr/custom/variables.lua") then
