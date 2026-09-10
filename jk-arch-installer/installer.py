@@ -44,6 +44,7 @@ LANGUAGE = "en"
 # COLORS
 # ============================================================
 
+
 class Colors:
     RESET = "\033[0m"
     BOLD = "\033[1m"
@@ -131,7 +132,6 @@ TRANSLATIONS = {
         "selection_noninteractive": "Kein interaktives Terminal erkannt; alle Schritte werden ausgewählt.",
         "selected_plan": "Folgende Installationsschritte werden jetzt ausgeführt:",
     },
-
     "en": {
         "title": "JK-ARCH LINUX INSTALLER",
         "subtitle": "Secure, modular JSON-based installation manager",
@@ -213,29 +213,21 @@ def localized(value: Any) -> str:
 # LOGGING
 # ============================================================
 
+
 class Logger:
     def __init__(self) -> None:
-        timestamp = datetime.now().strftime(
-            "%Y-%m-%d_%H-%M-%S"
-        )
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-        self.path = (
-            LOG_DIR /
-            f"installer_{timestamp}.log"
-        )
+        self.path = LOG_DIR / f"installer_{timestamp}.log"
 
     def write(self, message: str) -> None:
-        timestamp = datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         with self.path.open(
             "a",
             encoding="utf-8",
         ) as file:
-            file.write(
-                f"[{timestamp}] {message}\n"
-            )
+            file.write(f"[{timestamp}] {message}\n")
 
 
 LOGGER = Logger()
@@ -249,6 +241,7 @@ def log(message: str) -> None:
 # SIGNAL HANDLING
 # ============================================================
 
+
 def handle_signal(
     signum: int,
     frame: Any,
@@ -259,11 +252,9 @@ def handle_signal(
     STOP_REQUESTED = True
 
     warning(
-        "Abbruch angefordert. "
-        "Der aktuelle Prozess darf sauber beendet werden."
+        "Abbruch angefordert. Der aktuelle Prozess darf sauber beendet werden."
         if LANGUAGE == "de"
-        else "Abort requested. "
-        "The current process will be allowed to exit cleanly."
+        else "Abort requested. The current process will be allowed to exit cleanly."
     )
 
     log(f"Received signal: {signum}")
@@ -284,6 +275,7 @@ signal.signal(
 # EXCEPTIONS
 # ============================================================
 
+
 class InstallerError(Exception):
     pass
 
@@ -299,6 +291,7 @@ class CommandError(InstallerError):
 # ============================================================
 # DATA STRUCTURES
 # ============================================================
+
 
 @dataclass
 class Command:
@@ -326,12 +319,11 @@ class InstallationStep:
 # JSON
 # ============================================================
 
+
 def load_json(path: Path) -> dict[str, Any]:
 
     if not path.exists():
-        raise ConfigurationError(
-            f"JSON file does not exist: {path}"
-        )
+        raise ConfigurationError(f"JSON file does not exist: {path}")
 
     try:
         with path.open(
@@ -341,35 +333,25 @@ def load_json(path: Path) -> dict[str, Any]:
             data = json.load(file)
 
     except json.JSONDecodeError as exc:
-        raise ConfigurationError(
-            f"Invalid JSON in {path}: {exc}"
-        ) from exc
+        raise ConfigurationError(f"Invalid JSON in {path}: {exc}") from exc
 
     if not isinstance(data, dict):
-        raise ConfigurationError(
-            f"{path} must contain a JSON object."
-        )
+        raise ConfigurationError(f"{path} must contain a JSON object.")
 
     return data
 
 
 def load_installation_table() -> list[dict[str, Any]]:
 
-    data = load_json(
-        INSTALLATIONS_FILE
-    )
+    data = load_json(INSTALLATIONS_FILE)
 
-    installations = data.get(
-        "installations"
-    )
+    installations = data.get("installations")
 
     if not isinstance(
         installations,
         list,
     ):
-        raise ConfigurationError(
-            "'installations' must be a JSON array."
-        )
+        raise ConfigurationError("'installations' must be a JSON array.")
 
     return installations
 
@@ -393,14 +375,10 @@ def load_step(
     variants = data.get("variants")
     if variants is not None:
         if not isinstance(variants, dict) or not variants:
-            raise ConfigurationError(
-                f"{path}: 'variants' must be a non-empty object."
-            )
+            raise ConfigurationError(f"{path}: 'variants' must be a non-empty object.")
         selected_variant = variant or next(iter(variants))
         if selected_variant not in variants:
-            raise ConfigurationError(
-                f"{path}: unknown variant '{selected_variant}'."
-            )
+            raise ConfigurationError(f"{path}: unknown variant '{selected_variant}'.")
         variant_data = variants[selected_variant]
         if not isinstance(variant_data, dict):
             raise ConfigurationError(
@@ -418,43 +396,29 @@ def load_step(
 
     for key in required:
         if key not in data:
-            raise ConfigurationError(
-                f"{path}: missing field '{key}'."
-            )
+            raise ConfigurationError(f"{path}: missing field '{key}'.")
 
     if not isinstance(
         data["commands"],
         list,
     ):
-        raise ConfigurationError(
-            f"{path}: 'commands' must be an array."
-        )
+        raise ConfigurationError(f"{path}: 'commands' must be an array.")
 
     commands: list[Command] = []
 
-    for index, raw in enumerate(
-        data["commands"]
-    ):
-
+    for index, raw in enumerate(data["commands"]):
         if not isinstance(raw, dict):
-            raise ConfigurationError(
-                f"{path}: commands[{index}] "
-                f"must be an object."
-            )
+            raise ConfigurationError(f"{path}: commands[{index}] must be an object.")
 
         command = raw.get("command")
 
         if (
             not isinstance(command, list)
             or not command
-            or not all(
-                isinstance(x, str)
-                for x in command
-            )
+            or not all(isinstance(x, str) for x in command)
         ):
             raise ConfigurationError(
-                f"{path}: commands[{index}].command "
-                f"must be a non-empty string array."
+                f"{path}: commands[{index}].command must be a non-empty string array."
             )
 
         if "distros" not in raw:
@@ -469,18 +433,11 @@ def load_step(
             list,
         ):
             raise ConfigurationError(
-                f"{path}: commands[{index}].distros "
-                f"must be an array."
+                f"{path}: commands[{index}].distros must be an array."
             )
 
-        if not distros or not all(
-            isinstance(x, str) and x.strip()
-            for x in distros
-        ):
-            raise ConfigurationError(
-                f"{path}: every distro target "
-                f"must be a string."
-            )
+        if not distros or not all(isinstance(x, str) and x.strip() for x in distros):
+            raise ConfigurationError(f"{path}: every distro target must be a string.")
 
         requires_root = raw.get("requires_root", True)
         if not isinstance(requires_root, bool):
@@ -496,10 +453,7 @@ def load_step(
                     "",
                 ),
                 requires_root=requires_root,
-                distros=[
-                    x.lower()
-                    for x in distros
-                ],
+                distros=[x.lower() for x in distros],
                 working_directory=(
                     raw.get("working_directory")
                     if isinstance(raw.get("working_directory"), str)
@@ -510,27 +464,19 @@ def load_step(
 
     checks = data.get("checks", [])
     if not isinstance(checks, list):
-        raise ConfigurationError(
-            f"{path}: 'checks' must be an array."
-        )
+        raise ConfigurationError(f"{path}: 'checks' must be an array.")
 
     optional = data.get("optional", False)
     if not isinstance(optional, bool):
-        raise ConfigurationError(
-            f"{path}: 'optional' must be boolean."
-        )
+        raise ConfigurationError(f"{path}: 'optional' must be boolean.")
 
     continue_on_error = data.get("continue_on_error", False)
     if not isinstance(continue_on_error, bool):
-        raise ConfigurationError(
-            f"{path}: 'continue_on_error' must be boolean."
-        )
+        raise ConfigurationError(f"{path}: 'continue_on_error' must be boolean.")
 
     exclusive_group = data.get("exclusive_group")
     if exclusive_group is not None and not isinstance(exclusive_group, str):
-        raise ConfigurationError(
-            f"{path}: 'exclusive_group' must be a string."
-        )
+        raise ConfigurationError(f"{path}: 'exclusive_group' must be a string.")
 
     return InstallationStep(
         id=str(data["id"]),
@@ -549,21 +495,17 @@ def load_step(
 # DISTRIBUTION DETECTION
 # ============================================================
 
+
 def read_os_release() -> dict[str, str]:
 
     path = Path("/etc/os-release")
 
     if not path.exists():
-        raise InstallerError(
-            "/etc/os-release was not found."
-        )
+        raise InstallerError("/etc/os-release was not found.")
 
     result: dict[str, str] = {}
 
-    for line in path.read_text(
-        encoding="utf-8"
-    ).splitlines():
-
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
 
         if not line or "=" not in line:
@@ -576,11 +518,7 @@ def read_os_release() -> dict[str, str]:
 
         value = value.strip()
 
-        if (
-            len(value) >= 2
-            and value[0] == '"'
-            and value[-1] == '"'
-        ):
+        if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
             value = value[1:-1]
 
         result[key] = value
@@ -620,15 +558,23 @@ def detect_distribution() -> str:
 
     data = read_os_release()
 
-    distro_id = data.get(
-        "ID",
-        "",
-    ).strip().lower()
+    distro_id = (
+        data.get(
+            "ID",
+            "",
+        )
+        .strip()
+        .lower()
+    )
 
-    id_like_raw = data.get(
-        "ID_LIKE",
-        "",
-    ).strip().lower()
+    id_like_raw = (
+        data.get(
+            "ID_LIKE",
+            "",
+        )
+        .strip()
+        .lower()
+    )
 
     pretty_name = data.get(
         "PRETTY_NAME",
@@ -639,11 +585,7 @@ def detect_distribution() -> str:
     # Normalize ID_LIKE
     # --------------------------------------------------------
 
-    id_like = {
-        value.strip().lower()
-        for value in id_like_raw.split()
-        if value.strip()
-    }
+    id_like = {value.strip().lower() for value in id_like_raw.split() if value.strip()}
 
     log(
         "OS detection: "
@@ -670,16 +612,10 @@ def detect_distribution() -> str:
         "manjaro": "manjaro",
     }
 
-    detected = exact_distributions.get(
-        distro_id
-    )
+    detected = exact_distributions.get(distro_id)
 
     if detected is not None:
-
-        log(
-            "Detected supported distribution: "
-            f"{detected}"
-        )
+        log(f"Detected supported distribution: {detected}")
 
         return detected
 
@@ -709,11 +645,7 @@ def detect_distribution() -> str:
     # ========================================================
 
     if "arch" in id_like:
-
-        log(
-            "Detected generic Arch-based distribution: "
-            f"ID={distro_id!r}"
-        )
+        log(f"Detected generic Arch-based distribution: ID={distro_id!r}")
 
         return "arch_based"
 
@@ -803,8 +735,7 @@ def command_allowed(
     targets = {
         target.strip().lower()
         for target in command.distros
-        if isinstance(target, str)
-        and target.strip()
+        if isinstance(target, str) and target.strip()
     }
 
     # --------------------------------------------------------
@@ -813,27 +744,17 @@ def command_allowed(
     # --------------------------------------------------------
 
     if not targets:
-
-        raise ConfigurationError(
-            "Command has no distribution target."
-        )
+        raise ConfigurationError("Command has no distribution target.")
 
     # --------------------------------------------------------
     # Validate distribution targets
     # --------------------------------------------------------
 
-    unknown_targets = (
-        targets
-        - SUPPORTED_DISTRIBUTIONS
-    )
+    unknown_targets = targets - SUPPORTED_DISTRIBUTIONS
 
     if unknown_targets:
-
         raise ConfigurationError(
-            "Unknown distribution target(s): "
-            + ", ".join(
-                sorted(unknown_targets)
-            )
+            "Unknown distribution target(s): " + ", ".join(sorted(unknown_targets))
         )
 
     # --------------------------------------------------------
@@ -841,11 +762,7 @@ def command_allowed(
     # --------------------------------------------------------
 
     if detected_distro not in SUPPORTED_DISTRIBUTIONS:
-
-        log(
-            "Command blocked: unsupported "
-            f"distribution={detected_distro!r}"
-        )
+        log(f"Command blocked: unsupported distribution={detected_distro!r}")
 
         return False
 
@@ -854,7 +771,6 @@ def command_allowed(
     # --------------------------------------------------------
 
     if detected_distro in targets:
-
         return True
 
     # --------------------------------------------------------
@@ -874,9 +790,7 @@ def command_allowed(
     # --------------------------------------------------------
 
     if "arch_based" in targets:
-
         if detected_distro in SUPPORTED_DISTRIBUTIONS:
-
             return True
 
     # --------------------------------------------------------
@@ -891,16 +805,16 @@ def command_allowed(
 
     return False
 
+
 # ============================================================
 # SYSTEM VALIDATION
 # ============================================================
 
+
 def require_root() -> None:
 
     if os.geteuid() != 0:
-        raise InstallerError(
-            "Root privileges are required."
-        )
+        raise InstallerError("Root privileges are required.")
 
 
 def check_arch_family(
@@ -924,22 +838,16 @@ def check_required_programs() -> None:
         "systemctl",
     ]
 
-    missing = [
-        program
-        for program in required
-        if shutil.which(program) is None
-    ]
+    missing = [program for program in required if shutil.which(program) is None]
 
     if missing:
-        raise InstallerError(
-            "Missing required programs: "
-            + ", ".join(missing)
-        )
+        raise InstallerError("Missing required programs: " + ", ".join(missing))
 
 
 # ============================================================
 # LANGUAGE SELECTION
 # ============================================================
+
 
 def select_language() -> None:
 
@@ -955,11 +863,8 @@ def select_language() -> None:
     print()
 
     while True:
-
         try:
-            answer = input(
-                "Auswahl / Choice [1/2]: "
-            ).strip()
+            answer = input("Auswahl / Choice [1/2]: ").strip()
 
         except EOFError:
             answer = "2"
@@ -984,6 +889,7 @@ def select_language() -> None:
 # YES / NO
 # ============================================================
 
+
 def ask_yes_no(
     question: str,
     default: bool = True,
@@ -1000,11 +906,8 @@ def ask_yes_no(
     )
 
     while True:
-
         try:
-            answer = input(
-                f"{question} {suffix}: "
-            ).strip().lower()
+            answer = input(f"{question} {suffix}: ").strip().lower()
 
         except EOFError:
             return default
@@ -1041,6 +944,7 @@ def ask_yes_no(
 # ============================================================
 # CHECKS
 # ============================================================
+
 
 def package_installed(
     package: str,
@@ -1079,33 +983,23 @@ def perform_check(
 ) -> bool:
 
     if not isinstance(check, dict):
-        raise ConfigurationError(
-            "Every check must be an object."
-        )
+        raise ConfigurationError("Every check must be an object.")
 
     check_type = check.get("type")
 
     if check_type == "package_installed":
-        return package_installed(
-            str(check["package"])
-        )
+        return package_installed(str(check["package"]))
 
     if check_type == "command_exists":
-        return command_exists(
-            str(check["command"])
-        )
+        return command_exists(str(check["command"]))
 
     if check_type == "file_exists":
-        return file_exists(
-            str(check["path"])
-        )
+        return file_exists(str(check["path"]))
 
     if check_type == "always":
         return True
 
-    raise ConfigurationError(
-        f"Unknown check type: {check_type}"
-    )
+    raise ConfigurationError(f"Unknown check type: {check_type}")
 
 
 def is_already_installed(
@@ -1115,15 +1009,13 @@ def is_already_installed(
     if not step.checks:
         return False
 
-    return all(
-        perform_check(check)
-        for check in step.checks
-    )
+    return all(perform_check(check) for check in step.checks)
 
 
 # ============================================================
 # COMMAND EXECUTION
 # ============================================================
+
 
 def format_command(
     command: list[str],
@@ -1135,10 +1027,7 @@ def format_command(
 def installer_user() -> pwd.struct_passwd | None:
     """Return the interactive user when the installer was started via sudo."""
 
-    username = (
-        os.environ.get("SUDO_USER")
-        or os.environ.get("PKEXEC_UID")
-    )
+    username = os.environ.get("SUDO_USER") or os.environ.get("PKEXEC_UID")
 
     if username and username.isdigit():
         try:
@@ -1171,24 +1060,19 @@ def user_path(user: pwd.struct_passwd, current_path: str) -> str:
     sdkman_root = Path(user.pw_dir) / ".sdkman/candidates"
     if sdkman_root.exists():
         path_entries.extend(
-            str(path)
-            for path in sdkman_root.glob("*/current/bin")
-            if path.is_dir()
+            str(path) for path in sdkman_root.glob("*/current/bin") if path.is_dir()
         )
 
     path_entries.extend(current_path.split(os.pathsep))
 
-    return os.pathsep.join(dict.fromkeys(
-        entry for entry in path_entries if entry
-    ))
+    return os.pathsep.join(dict.fromkeys(entry for entry in path_entries if entry))
 
 
 def expand_user_argument(argument: str, user: pwd.struct_passwd) -> str:
     """Expand user-home syntax without invoking a shell."""
 
     return (
-        argument
-        .replace("${HOME}", user.pw_dir)
+        argument.replace("${HOME}", user.pw_dir)
         .replace("$HOME", user.pw_dir)
         .replace("${USER}", user.pw_name)
         .replace("$USER", user.pw_name)
@@ -1196,17 +1080,16 @@ def expand_user_argument(argument: str, user: pwd.struct_passwd) -> str:
     )
 
 
-def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], str | None]:
+def command_for_execution(
+    command: Command,
+) -> tuple[list[str], dict[str, str], str | None]:
     """Run user commands as the invoking user, even when the installer is root."""
 
     executable = list(command.command)
     environment = os.environ.copy()
     working_directory = command.working_directory
     user = installer_user()
-    needs_user = any(
-        argument == "__INSTALLER_USER__"
-        for argument in executable
-    )
+    needs_user = any(argument == "__INSTALLER_USER__" for argument in executable)
 
     if command.requires_root:
         if needs_user:
@@ -1216,9 +1099,7 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
                 )
 
             executable = [
-                user.pw_name
-                if argument == "__INSTALLER_USER__"
-                else argument
+                user.pw_name if argument == "__INSTALLER_USER__" else argument
                 for argument in executable
             ]
 
@@ -1242,12 +1123,14 @@ def command_for_execution(command: Command) -> tuple[list[str], dict[str, str], 
         user,
         environment.get("PATH", ""),
     )
-    environment.update({
-        "HOME": user.pw_dir,
-        "USER": user.pw_name,
-        "LOGNAME": user.pw_name,
-        "XDG_RUNTIME_DIR": f"/run/user/{user.pw_uid}",
-    })
+    environment.update(
+        {
+            "HOME": user.pw_dir,
+            "USER": user.pw_name,
+            "LOGNAME": user.pw_name,
+            "XDG_RUNTIME_DIR": f"/run/user/{user.pw_uid}",
+        }
+    )
 
     dbus_socket = f"/run/user/{user.pw_uid}/bus"
     if Path(dbus_socket).exists():
@@ -1307,10 +1190,7 @@ def execute_command(
 
         error(message)
 
-        log(
-            f"COMMAND BLOCKED BY DISTRO POLICY: "
-            f"{format_command(command.command)}"
-        )
+        log(f"COMMAND BLOCKED BY DISTRO POLICY: {format_command(command.command)}")
 
         return False
 
@@ -1319,35 +1199,21 @@ def execute_command(
     print()
     command_output(display)
 
-    description = localized(
-        command.description
-    )
+    description = localized(command.description)
 
     if description:
         info(description)
 
-    log(
-        f"COMMAND: {display}"
-    )
+    log(f"COMMAND: {display}")
 
-    log(
-        f"TARGET DISTROS: "
-        f"{','.join(command.distros)}"
-    )
+    log(f"TARGET DISTROS: {','.join(command.distros)}")
 
     if dry_run:
-        warning(
-            tr("dry_run")
-        )
+        warning(tr("dry_run"))
         return True
 
-    if (
-        command.requires_root
-        and os.geteuid() != 0
-    ):
-        raise CommandError(
-            f"Command requires root: {display}"
-        )
+    if command.requires_root and os.geteuid() != 0:
+        raise CommandError(f"Command requires root: {display}")
 
     start = time.monotonic()
 
@@ -1386,55 +1252,31 @@ def execute_command(
         return False
 
     except FileNotFoundError:
-        error(
-            f"Executable not found: "
-            f"{command.command[0]}"
-        )
+        error(f"Executable not found: {command.command[0]}")
 
-        log(
-            f"EXECUTABLE NOT FOUND: {display}"
-        )
+        log(f"EXECUTABLE NOT FOUND: {display}")
 
         return False
 
     except OSError as exc:
-        error(
-            f"Could not execute command: {exc}"
-        )
+        error(f"Could not execute command: {exc}")
 
-        log(
-            f"EXECUTION ERROR: {exc}"
-        )
+        log(f"EXECUTION ERROR: {exc}")
 
         return False
 
-    duration = (
-        time.monotonic() - start
-    )
+    duration = time.monotonic() - start
 
     if returncode == 0:
+        success(f"{tr('command_success')} ({duration:.2f}s).")
 
-        success(
-            f"{tr('command_success')} "
-            f"({duration:.2f}s)."
-        )
-
-        log(
-            f"SUCCESS exit=0 "
-            f"time={duration:.2f}s"
-        )
+        log(f"SUCCESS exit=0 time={duration:.2f}s")
 
         return True
 
-    error(
-        f"{tr('command_failed')}. "
-        f"Exit code: {returncode}"
-    )
+    error(f"{tr('command_failed')}. Exit code: {returncode}")
 
-    log(
-        f"FAILED exit={returncode} "
-        f"time={duration:.2f}s"
-    )
+    log(f"FAILED exit={returncode} time={duration:.2f}s")
 
     return False
 
@@ -1442,6 +1284,7 @@ def execute_command(
 # ============================================================
 # STEP EXECUTION
 # ============================================================
+
 
 def execute_step(
     step: InstallationStep,
@@ -1453,47 +1296,35 @@ def execute_step(
     print("=" * 70)
     print(
         paint(
-            f"{step.id}: "
-            f"{localized(step.name)}",
+            f"{step.id}: {localized(step.name)}",
             Colors.BOLD + Colors.MAGENTA,
         )
     )
     print("=" * 70)
 
     print()
-    print(
-        localized(step.description)
-    )
+    print(localized(step.description))
 
     print()
 
     if is_already_installed(step):
-
-        success(
-            tr("already")
-        )
+        success(tr("already"))
 
         if not ask_yes_no(
             tr("reinstall"),
             default=False,
         ):
-            info(
-                tr("skip")
-            )
+            info(tr("skip"))
             return True
 
     for index, command in enumerate(
         step.commands,
         start=1,
     ):
-
         if STOP_REQUESTED:
             return False
 
-        info(
-            f"{tr('step')} "
-            f"{index}/{len(step.commands)}"
-        )
+        info(f"{tr('step')} {index}/{len(step.commands)}")
 
         result = execute_command(
             command,
@@ -1502,31 +1333,22 @@ def execute_step(
         )
 
         if not result:
-
-            log(
-                f"STEP FAILED: {step.id}"
-            )
+            log(f"STEP FAILED: {step.id}")
 
             if step.continue_on_error:
-
                 warning(
                     "Error ignored; continuing."
                     if LANGUAGE == "en"
-                    else "Fehler ignoriert; "
-                    "Installation wird fortgesetzt."
+                    else "Fehler ignoriert; Installation wird fortgesetzt."
                 )
 
                 continue
 
             return False
 
-    success(
-        localized(step.name)
-    )
+    success(localized(step.name))
 
-    log(
-        f"STEP SUCCESS: {step.id}"
-    )
+    log(f"STEP SUCCESS: {step.id}")
 
     return True
 
@@ -1535,59 +1357,42 @@ def execute_step(
 # VALIDATION
 # ============================================================
 
+
 def validate_installations(
     installations: list[dict[str, Any]],
 ) -> None:
 
     ids: set[str] = set()
 
-    for index, installation in enumerate(
-        installations
-    ):
-
+    for index, installation in enumerate(installations):
         if not isinstance(
             installation,
             dict,
         ):
-            raise ConfigurationError(
-                f"installations[{index}] must be an object."
-            )
+            raise ConfigurationError(f"installations[{index}] must be an object.")
 
-        step_id = installation.get(
-            "id"
-        )
+        step_id = installation.get("id")
 
         if not step_id:
-            raise ConfigurationError(
-                f"installations[{index}] "
-                f"has no id."
-            )
+            raise ConfigurationError(f"installations[{index}] has no id.")
 
         if step_id in ids:
-            raise ConfigurationError(
-                f"Duplicate installation id: "
-                f"{step_id}"
-            )
+            raise ConfigurationError(f"Duplicate installation id: {step_id}")
 
         ids.add(step_id)
 
-        filename = installation.get(
-            "file"
-        )
+        filename = installation.get("file")
 
         if not filename:
-            raise ConfigurationError(
-                f"{step_id}: missing 'file'."
-            )
+            raise ConfigurationError(f"{step_id}: missing 'file'.")
 
-        load_step(
-            str(filename)
-        )
+        load_step(str(filename))
 
 
 # ============================================================
 # TABLE DISPLAY
 # ============================================================
+
 
 def show_installation_table(
     installations: list[dict[str, Any]],
@@ -1595,18 +1400,13 @@ def show_installation_table(
 
     print()
     print("=" * 70)
-    print(
-        "Installationsschritte"
-        if LANGUAGE == "de"
-        else "Installation steps"
-    )
+    print("Installationsschritte" if LANGUAGE == "de" else "Installation steps")
     print("=" * 70)
 
     for index, installation in enumerate(
         installations,
         start=1,
     ):
-
         display_number = installation.get(
             "display_number",
             f"{index:02d}",
@@ -1625,9 +1425,7 @@ def show_installation_table(
         )
 
         if description:
-            print(
-                f"    {description}"
-            )
+            print(f"    {description}")
 
 
 def select_installations(
@@ -1679,8 +1477,8 @@ def select_installations(
     ) -> None:
         screen.erase()
         height, width = screen.getmaxyx()
-        screen.addstr(0, 0, tr("step_selection")[:width - 1], curses.A_BOLD)
-        screen.addstr(1, 0, tr("step_selection_help")[:width - 1])
+        screen.addstr(0, 0, tr("step_selection")[: width - 1], curses.A_BOLD)
+        screen.addstr(1, 0, tr("step_selection_help")[: width - 1])
 
         detail_height = min(12, max(height - 8, 4))
         footer_rows = detail_height + 3 if show_description else 5
@@ -1711,7 +1509,7 @@ def select_installations(
 
             if index == cursor:
                 screen.attron(curses.A_REVERSE)
-            screen.addstr(row, 0, line[:width - 1])
+            screen.addstr(row, 0, line[: width - 1])
             if index == cursor:
                 screen.attroff(curses.A_REVERSE)
 
@@ -1724,28 +1522,27 @@ def select_installations(
                 ),
             ]
             for command in step.commands:
-                detail_lines.extend([
-                    "",
-                    f"{tr('step_command')}: {format_command(command.command)}",
-                    f"{tr('step_requires_root')}: "
-                    f"{tr('yes') if command.requires_root else tr('no')}",
-                    f"{tr('step_allowed_distros')}: "
-                    f"{', '.join(command.distros)}",
-                ])
-                detail_lines.extend(textwrap.wrap(
-                    localized(command.description),
-                    width=max(width - 4, 1),
-                ))
+                detail_lines.extend(
+                    [
+                        "",
+                        f"{tr('step_command')}: {format_command(command.command)}",
+                        f"{tr('step_requires_root')}: "
+                        f"{tr('yes') if command.requires_root else tr('no')}",
+                        f"{tr('step_allowed_distros')}: {', '.join(command.distros)}",
+                    ]
+                )
+                detail_lines.extend(
+                    textwrap.wrap(
+                        localized(command.description),
+                        width=max(width - 4, 1),
+                    )
+                )
 
             visible_details = detail_lines[
-                detail_scroll:detail_scroll + detail_height - 1
+                detail_scroll : detail_scroll + detail_height - 1
             ]
             description_row = height - detail_height - 3
-            detail_attr = (
-                curses.color_pair(1)
-                if curses.has_colors()
-                else curses.A_DIM
-            )
+            detail_attr = curses.color_pair(1) if curses.has_colors() else curses.A_DIM
             header_attr = detail_attr | curses.A_BOLD
             for panel_row in range(description_row, height - 2):
                 screen.addstr(
@@ -1757,7 +1554,7 @@ def select_installations(
             screen.addstr(
                 description_row,
                 0,
-                f" {tr('step_description')} "[:width - 1],
+                f" {tr('step_description')} "[: width - 1],
                 header_attr,
             )
             for offset, line in enumerate(visible_details, start=1):
@@ -1765,7 +1562,7 @@ def select_installations(
                     screen.addstr(
                         description_row + offset,
                         1,
-                        line[:width - 2],
+                        line[: width - 2],
                         detail_attr,
                     )
 
@@ -1773,8 +1570,8 @@ def select_installations(
             selected=sum(selected),
             total=len(installations),
         )
-        screen.addstr(height - 2, 0, count[:width - 1], curses.A_BOLD)
-        screen.addstr(height - 1, 0, tr("step_selection_empty")[:width - 1])
+        screen.addstr(height - 2, 0, count[: width - 1], curses.A_BOLD)
+        screen.addstr(height - 1, 0, tr("step_selection_empty")[: width - 1])
         screen.refresh()
 
     def choose(screen: Any) -> list[dict[str, Any]] | None:
@@ -1844,16 +1641,14 @@ def select_installations(
         log("STEP SELECTION CANCELLED")
         return None
 
-    log(
-        "SELECTED STEPS: "
-        + ",".join(str(item["id"]) for item in result)
-    )
+    log("SELECTED STEPS: " + ",".join(str(item["id"]) for item in result))
     return result
 
 
 # ============================================================
 # MAIN
 # ============================================================
+
 
 def run_installer(
     dry_run: bool,
@@ -1869,16 +1664,11 @@ def run_installer(
         )
     )
 
-    print(
-        tr("subtitle")
-    )
+    print(tr("subtitle"))
 
     print()
 
-    log(
-        f"Installer started. "
-        f"Language={LANGUAGE}"
-    )
+    log(f"Installer started. Language={LANGUAGE}")
 
     # --------------------------------------------------------
     # Detect distro
@@ -1887,73 +1677,46 @@ def run_installer(
     try:
         detected_distro = detect_distribution()
 
-        check_arch_family(
-            detected_distro
-        )
+        check_arch_family(detected_distro)
 
-        success(
-            f"{tr('arch_detected')}: "
-            f"{distribution_display_name(detected_distro)}"
-        )
+        success(f"{tr('arch_detected')}: {distribution_display_name(detected_distro)}")
 
         if not dry_run:
             require_root()
 
-            success(
-                tr("root_ok")
-            )
+            success(tr("root_ok"))
 
         check_required_programs()
 
-        success(
-            tr("programs_ok")
-        )
+        success(tr("programs_ok"))
 
-        installations = (
-            load_installation_table()
-        )
+        installations = load_installation_table()
 
-        validate_installations(
-            installations
-        )
+        validate_installations(installations)
 
     except InstallerError as exc:
-
         error(str(exc))
 
-        log(
-            f"FATAL: {exc}"
-        )
+        log(f"FATAL: {exc}")
 
         return 1
 
     except Exception as exc:
+        error(f"Unexpected error: {type(exc).__name__}: {exc}")
 
-        error(
-            f"Unexpected error: "
-            f"{type(exc).__name__}: {exc}"
-        )
-
-        log(
-            f"UNEXPECTED ERROR: "
-            f"{type(exc).__name__}: {exc}"
-        )
+        log(f"UNEXPECTED ERROR: {type(exc).__name__}: {exc}")
 
         return 1
 
     if dry_run:
-        warning(
-            tr("dry_run")
-        )
+        warning(tr("dry_run"))
         info(
             "Root check is skipped in DRY-RUN mode."
             if LANGUAGE == "en"
             else "Die Root-Prüfung wird im DRY-RUN-Modus übersprungen."
         )
 
-    selected_installations = select_installations(
-        installations
-    )
+    selected_installations = select_installations(installations)
 
     if selected_installations is None:
         return 0
@@ -1969,15 +1732,11 @@ def run_installer(
         tr("start"),
         default=False,
     ):
-        warning(
-            tr("abort")
-        )
+        warning(tr("abort"))
 
         return 0
 
-    total = len(
-        installations
-    )
+    total = len(installations)
 
     successful = 0
 
@@ -1985,30 +1744,22 @@ def run_installer(
         installations,
         start=1,
     ):
-
         if STOP_REQUESTED:
             break
 
-        step_id = str(
-            installation["id"]
-        )
+        step_id = str(installation["id"])
 
-        filename = str(
-            installation["file"]
-        )
+        filename = str(installation["file"])
 
         print()
         print(
             paint(
-                f"========== "
-                f"{position}/{total} "
-                f"==========",
+                f"========== {position}/{total} ==========",
                 Colors.BOLD,
             )
         )
 
         try:
-
             step = load_step(
                 filename,
                 installation.get("variant"),
@@ -2024,11 +1775,7 @@ def run_installer(
                 successful += 1
 
             else:
-
-                error(
-                    f"{tr('failed')}: "
-                    f"{step_id}"
-                )
+                error(f"{tr('failed')}: {step_id}")
 
                 if not ask_yes_no(
                     tr("continue"),
@@ -2037,17 +1784,9 @@ def run_installer(
                     break
 
         except Exception as exc:
+            error(f"{step_id}: {type(exc).__name__}: {exc}")
 
-            error(
-                f"{step_id}: "
-                f"{type(exc).__name__}: {exc}"
-            )
-
-            log(
-                f"STEP EXCEPTION: "
-                f"{step_id}: "
-                f"{type(exc).__name__}: {exc}"
-            )
+            log(f"STEP EXCEPTION: {step_id}: {type(exc).__name__}: {exc}")
 
             if not ask_yes_no(
                 tr("continue"),
@@ -2057,24 +1796,14 @@ def run_installer(
 
     print()
     print("=" * 70)
-    print(
-        tr("finished")
-    )
+    print(tr("finished"))
     print("=" * 70)
 
-    print(
-        f"{tr('successful')}: "
-        f"{successful}/{total}"
-    )
+    print(f"{tr('successful')}: {successful}/{total}")
 
-    print(
-        f"Log: {LOGGER.path}"
-    )
+    print(f"Log: {LOGGER.path}")
 
-    log(
-        f"Installer finished. "
-        f"Successful={successful}/{total}"
-    )
+    log(f"Installer finished. Successful={successful}/{total}")
 
     return 0
 
@@ -2083,20 +1812,17 @@ def run_installer(
 # CLI
 # ============================================================
 
+
 def parse_arguments() -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(
-        description=(
-            "Secure JSON-based Arch-family installer"
-        )
+        description=("Secure JSON-based Arch-family installer")
     )
 
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help=(
-            "Show commands without executing them."
-        ),
+        help=("Show commands without executing them."),
     )
 
     return parser.parse_args()
@@ -2107,15 +1833,10 @@ def main() -> int:
     args = parse_arguments()
 
     try:
-        return run_installer(
-            dry_run=args.dry_run
-        )
+        return run_installer(dry_run=args.dry_run)
 
     except KeyboardInterrupt:
-
-        error(
-            "Installation interrupted by user."
-        )
+        error("Installation interrupted by user.")
 
         return 130
 

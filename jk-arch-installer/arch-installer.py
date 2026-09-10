@@ -84,7 +84,6 @@ CORE_PACKAGES = [
     "which",
     "polkit",
     "polkit-gnome",
-
     # Audio / Bluetooth
     "pipewire",
     "pipewire-audio",
@@ -92,14 +91,12 @@ CORE_PACKAGES = [
     "wireplumber",
     "bluez",
     "bluez-utils",
-
     # XDG / Wayland
     "xdg-utils",
     "xdg-user-dirs",
     "xdg-user-dirs-gtk",
     "xdg-desktop-portal",
     "xdg-desktop-portal-hyprland",
-
     # Hyprland-Stack
     "hyprland",
     "hyprpaper",
@@ -109,7 +106,6 @@ CORE_PACKAGES = [
     "hyprcursor",
     "hyprpolkitagent",
     "quickshell",
-
     # Desktop-Anwendungen / Dienstprogramme
     "kitty",
     "waybar",
@@ -136,7 +132,6 @@ CORE_PACKAGES = [
     "fastfetch",
     "jq",
     "firefox",
-
     # Python / Build-Werkzeuge
     "python",
     "python-pip",
@@ -148,14 +143,12 @@ CORE_PACKAGES = [
     "gcc",
     "make",
     "pkgconf",
-
     # Schriftarten
     "ttf-dejavu",
     "ttf-liberation",
     "noto-fonts",
     "noto-fonts-emoji",
     "otf-font-awesome",
-
     # zram
     "zram-generator",
 ]
@@ -244,9 +237,7 @@ def read_os_release() -> dict[str, str]:
     result: dict[str, str] = {}
 
     try:
-        for line in Path("/etc/os-release").read_text(
-            encoding="utf-8"
-        ).splitlines():
+        for line in Path("/etc/os-release").read_text(encoding="utf-8").splitlines():
             if "=" in line:
                 key, value = line.split("=", 1)
                 result[key] = value.strip().strip('"')
@@ -449,11 +440,7 @@ def detect_gpu() -> str:
     if "nvidia" in text:
         return "nvidia"
 
-    if (
-        "amd" in text
-        or "advanced micro devices" in text
-        or "radeon" in text
-    ):
+    if "amd" in text or "advanced micro devices" in text or "radeon" in text:
         return "amd"
 
     if "intel" in text:
@@ -630,10 +617,7 @@ def build_disk_config(
     root_size = usable_bytes - root_start_bytes
 
     if root_size < 30 * 1024**3:
-        die(
-            "Too little space remains for Arch Linux "
-            "after the boot partition."
-        )
+        die("Too little space remains for Arch Linux after the boot partition.")
 
     subvolumes = [
         {"mountpoint": "/", "name": "@"},
@@ -697,81 +681,48 @@ def build_custom_commands(
     keyboard: str,
 ) -> list[str]:
     profile = (
-        "if [ -z \"${DISPLAY:-}\" ] && "
-        "[ -z \"${WAYLAND_DISPLAY:-}\" ] && "
-        "[ \"$(tty 2>/dev/null)\" = \"/dev/tty1\" ]; then "
+        'if [ -z "${DISPLAY:-}" ] && '
+        '[ -z "${WAYLAND_DISPLAY:-}" ] && '
+        '[ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then '
         "exec Hyprland; "
         "fi"
     )
 
-    profile_command = (
-        "bash -c "
-        + shell_quote(
-            "PROFILE=/home/"
-            + username
-            + "/.bash_profile; "
-            "touch \"$PROFILE\"; "
-            "grep -qxF "
-            + shell_quote(profile)
-            + " \"$PROFILE\" || "
-            "printf '%s\\n' "
-            + shell_quote(profile)
-            + " >> \"$PROFILE\"; "
-            "chown "
-            + username
-            + ":"
-            + username
-            + " \"$PROFILE\""
-        )
+    profile_command = "bash -c " + shell_quote(
+        "PROFILE=/home/" + username + "/.bash_profile; "
+        'touch "$PROFILE"; '
+        "grep -qxF " + shell_quote(profile) + ' "$PROFILE" || '
+        "printf '%s\\n' " + shell_quote(profile) + ' >> "$PROFILE"; '
+        "chown " + username + ":" + username + ' "$PROFILE"'
     )
 
-    zram_command = (
-        "bash -c "
-        + shell_quote(
-            "install -d -m 0755 /etc/systemd; "
-            "printf '%s\\n' "
-            "'[zram0]' "
-            "'zram-size = ram / 2' "
-            "'compression-algorithm = zstd' "
-            "> /etc/systemd/zram-generator.conf"
-        )
+    zram_command = "bash -c " + shell_quote(
+        "install -d -m 0755 /etc/systemd; "
+        "printf '%s\\n' "
+        "'[zram0]' "
+        "'zram-size = ram / 2' "
+        "'compression-algorithm = zstd' "
+        "> /etc/systemd/zram-generator.conf"
     )
 
-    getty_command = (
-        "bash -c "
-        + shell_quote(
-            "install -d -m 0755 "
-            "/etc/systemd/system/getty@tty1.service.d; "
-            "printf '%s\\n' "
-            "'[Service]' "
-            "'ExecStart=' "
-            + f"'ExecStart=-/sbin/agetty --autologin {username} "
-            "--noclear %I $TERM' "
-            + "> /etc/systemd/system/getty@tty1.service.d/"
-            "autologin.conf"
-        )
+    getty_command = "bash -c " + shell_quote(
+        "install -d -m 0755 "
+        "/etc/systemd/system/getty@tty1.service.d; "
+        "printf '%s\\n' "
+        "'[Service]' "
+        "'ExecStart=' " + f"'ExecStart=-/sbin/agetty --autologin {username} "
+        "--noclear %I $TERM' " + "> /etc/systemd/system/getty@tty1.service.d/"
+        "autologin.conf"
     )
 
-    locale_command = (
-        "bash -c "
-        + shell_quote(
-            "printf 'LANG=%s\\n' "
-            + shell_quote(locale)
-            + " > /etc/locale.conf; "
-            "printf 'KEYMAP=%s\\n' "
-            + shell_quote(keyboard)
-            + " > /etc/vconsole.conf; "
-            "locale-gen"
-        )
+    locale_command = "bash -c " + shell_quote(
+        "printf 'LANG=%s\\n' " + shell_quote(locale) + " > /etc/locale.conf; "
+        "printf 'KEYMAP=%s\\n' " + shell_quote(keyboard) + " > /etc/vconsole.conf; "
+        "locale-gen"
     )
 
-    xdg_command = (
-        "bash -c "
-        + shell_quote(
-            "su - "
-            + username
-            + " -c 'xdg-user-dirs-update'"
-        )
+    xdg_command = "bash -c " + shell_quote(
+        "su - " + username + " -c 'xdg-user-dirs-update'"
     )
 
     return [
@@ -811,9 +762,7 @@ def build_configuration(
                 "enabled": True,
             },
         },
-        "archinstall-language": (
-            "German" if language == "de" else "English"
-        ),
+        "archinstall-language": ("German" if language == "de" else "English"),
         "auth_config": {},
         "bootloader": bootloader,
         "bootloader_config": {
@@ -1070,10 +1019,7 @@ After that, the entire installation runs automatically.
     unmount_target()
 
     ok("Arch Linux + Hyprland has been installed completely.")
-    print(
-        "\nThe system will now reboot. "
-        "Remove the Arch USB stick afterward."
-    )
+    print("\nThe system will now reboot. Remove the Arch USB stick afterward.")
 
     time.sleep(3)
     run(["reboot", "now"], check=False)
