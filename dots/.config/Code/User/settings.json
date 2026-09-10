@@ -192,7 +192,7 @@
     },
     "git.autofetch": true,
     "git.confirmSync": false,
-    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font Mono', 'JetBrains Mono', monospace",
+    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.gpuAcceleration": "on",
     // "terminal.integrated.fontWeight": "normal",
