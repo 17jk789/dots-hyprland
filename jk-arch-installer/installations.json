@@ -2440,6 +2440,18 @@
                     "exclusive_group": "weather_app_method"
                 }
             ]
+        },
+        {
+            "id": "install_clion_plugins",
+            "name": {
+                "de": "✨ CLion-Plugins installieren",
+                "en": "✨ Install CLion plugins"
+            },
+            "description": {
+                "de": "Installiert nützliche CLion-Plugins für Vim-Keybindings, Themes, Git, KI-Assistenz und Codeanalyse.",
+                "en": "Installs useful CLion plugins for Vim keybindings, themes, Git, AI assistance, and code analysis."
+            },
+            "file": "159_install_clion_plugins.json"
         }
     ]
 }

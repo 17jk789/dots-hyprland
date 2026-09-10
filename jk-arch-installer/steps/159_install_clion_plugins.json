@@ -1,0 +1,49 @@
+{
+    "id": "install_clion_plugins",
+
+    "name": {
+        "de": "CLion-Plugins installieren",
+        "en": "Install CLion plugins"
+    },
+
+    "description": {
+        "de": "Installiert eine Auswahl nützlicher CLion-Plugins für Vim-Keybindings, Themes, Git, GitHub Copilot und statische Codeanalyse.",
+        "en": "Installs a selection of useful CLion plugins for Vim keybindings, themes, Git, GitHub Copilot, and static code analysis."
+    },
+
+    "question": {
+        "de": "Sollen die empfohlenen CLion-Plugins installiert werden?",
+        "en": "Should the recommended CLion plugins be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert IdeaVim, Catppuccin, GitHub Copilot, GitToolBox und SonarQube for IDE.",
+                "en": "Installs IdeaVim, Catppuccin, GitHub Copilot, GitToolBox, and SonarQube for IDE."
+            },
+
+            "command": [
+                "$HOME/.local/share/JetBrains/Toolbox/apps/clion/bin/clion.sh",
+                "installPlugins",
+                "IdeaVIM",
+                "catppuccin",
+                "com.github.copilot",
+                "zielu.gittoolbox",
+                "org.sonarlint.idea"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
