@@ -106,6 +106,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Der grafische Bildbetrachter Gwenview installieren](#der-grafische-bildbetrachter-gwenview-installieren)
     - [Der universelle Dokumentenbetrachter Okular installieren](#der-universelle-dokumentenbetrachter-okular-installieren)
     - [Den universellen Medienplayer VLC installieren](#den-universellen-medienplayer-vlc-installieren)
+    - [KDE Graphics Thumbnailers installieren](#kde-graphics-thumbnailers-installieren)
     - [✨ Den Internetradio-Player Shortwave installieren](#-den-internetradio-player-shortwave-installieren)
     - [✨ Den Audio-Editor Audacity installieren](#-den-audio-editor-audacity-installieren)
     - [✨ Die Wissensdatenbank Obsidian installieren](#-die-wissensdatenbank-obsidian-installieren)
@@ -1796,6 +1797,14 @@ sudo pacman -S okular
 
 ```bash
 sudo pacman -S vlc
+```
+
+### KDE Graphics Thumbnailers installieren
+
+> `KDE Graphics Thumbnailers` erweitert den KDE-Dateimanager um zusätzliche Vorschaubilder (Thumbnails) für verschiedene Grafikformate. Dadurch können Bilder und andere unterstützte Dateien direkt als Vorschau angezeigt werden, ohne sie erst öffnen zu müssen.
+
+```bash
+sudo pacman -S kdegraphics-thumbnailers
 ```
 
 ### ✨ Den Internetradio-Player Shortwave installieren

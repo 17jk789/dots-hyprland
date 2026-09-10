@@ -2263,6 +2263,18 @@
                 "en": "Installs Shortwave, an internet radio player with access to over 50,000 radio stations worldwide."
             },
             "file": "155_install_shortwave.json"
+        },
+        {
+            "id": "install_kdegraphics_thumbnailers",
+            "name": {
+                "de": "KDE Graphics Thumbnailers installieren",
+                "en": "Install KDE Graphics Thumbnailers"
+            },
+            "description": {
+                "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
+                "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
+            },
+            "file": "156_install_kdegraphics_thumbnailers.json"
         }
     ]
 }
