@@ -2228,8 +2228,8 @@
                     "id": "install_bottles_yay",
                     "variant": "yay",
                     "name": {
-                        "de": "Bottles mit yay installieren",
-                        "en": "Install Bottles with yay"
+                        "de": "✨ Bottles mit yay installieren",
+                        "en": "✨ Install Bottles with yay"
                     },
                     "description": {
                         "de": "Installiert Bottles über den AUR-Paketmanager yay.",
@@ -2241,8 +2241,8 @@
                     "id": "install_bottles_flatpak",
                     "variant": "flatpak",
                     "name": {
-                        "de": "Bottles mit Flatpak installieren",
-                        "en": "Install Bottles with Flatpak"
+                        "de": "✨ Bottles mit Flatpak installieren",
+                        "en": "✨ Install Bottles with Flatpak"
                     },
                     "description": {
                         "de": "Installiert Bottles über Flathub. Flatpak muss eingerichtet sein.",
