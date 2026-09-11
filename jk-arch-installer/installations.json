@@ -380,6 +380,18 @@
             "file": "24_install_jetbrains_toolbox.json"
         },
         {
+            "id": "install_clion_plugins",
+            "name": {
+                "de": "✨ CLion-Plugins installieren",
+                "en": "✨ Install CLion plugins"
+            },
+            "description": {
+                "de": "Installiert nützliche CLion-Plugins für Vim-Keybindings, Themes, Git, KI-Assistenz und Codeanalyse.",
+                "en": "Installs useful CLion plugins for Vim keybindings, themes, Git, AI assistance, and code analysis."
+            },
+            "file": "159_install_clion_plugins.json"
+        },
+        {
             "id": "install_docker",
             "name": {
                 "de": "Docker und Erweiterungen installieren",
@@ -1276,6 +1288,75 @@
             ]
         },
         {
+            "id": "install_shortwave",
+            "name": {
+                "de": "Shortwave installieren",
+                "en": "Install Shortwave"
+            },
+            "description": {
+                "de": "Installiert Shortwave, einen Internetradio-Player mit Zugriff auf über 50.000 Radiosender weltweit.",
+                "en": "Installs Shortwave, an internet radio player with access to over 50,000 radio stations worldwide."
+            },
+            "file": "155_install_shortwave.json"
+        },
+        {
+            "id": "install_music_player",
+
+            "name": {
+                "de": "✨ Musikplayer installieren",
+                "en": "✨ Install music player"
+            },
+
+            "description": {
+                "de": "Wähle einen Musikplayer: Amberol für GNOME, Amarok für KDE oder AudioTube.",
+                "en": "Choose a music player: Amberol for GNOME, Amarok for KDE, or AudioTube."
+            },
+
+            "file": "157_install_music_player.json",
+
+            "substeps": [
+                {
+                    "id": "install_music_player_amberol",
+                    "variant": "amberol",
+                    "name": {
+                        "de": "✨ Amberol installieren (GNOME)",
+                        "en": "✨ Install Amberol (GNOME)"
+                    },
+                    "description": {
+                        "de": "Installiert Amberol, einen einfachen und modernen Musikplayer für GNOME.",
+                        "en": "Installs Amberol, a simple and modern music player for GNOME."
+                    },
+                    "exclusive_group": "music_player_method"
+                },
+                {
+                    "id": "install_music_player_amarok",
+                    "variant": "amarok",
+                    "name": {
+                        "de": "✨ Amarok installieren (KDE)",
+                        "en": "✨ Install Amarok (KDE)"
+                    },
+                    "description": {
+                        "de": "Installiert Amarok, einen umfangreichen Musikplayer für KDE Plasma.",
+                        "en": "Installs Amarok, a feature-rich music player for KDE Plasma."
+                    },
+                    "exclusive_group": "music_player_method"
+                },
+                {
+                    "id": "install_music_player_audiotube",
+                    "variant": "audiotube",
+                    "name": {
+                        "de": "✨ AudioTube installieren",
+                        "en": "✨ Install AudioTube"
+                    },
+                    "description": {
+                        "de": "Installiert AudioTube, einen modernen Musikplayer für YouTube Music.",
+                        "en": "Installs AudioTube, a modern music player for YouTube Music."
+                    },
+                    "exclusive_group": "music_player_method"
+                }
+            ]
+        },
+        {
             "id": "install_audacity",
             "name": {
                 "de": "✨ Audacity installieren",
@@ -1286,6 +1367,62 @@
                 "en": "Installs the powerful audio editor Audacity using Pacman."
             },
             "file": "82_install_audacity.json"
+        },
+        {
+            "id": "install_weather",
+
+            "name": {
+                "de": "✨ Wetter-App installieren",
+                "en": "✨ Install weather app"
+            },
+
+            "description": {
+                "de": "Wähle genau eine Wetter-App: Mousam oder GNOME Weather.",
+                "en": "Choose exactly one weather app: Mousam or GNOME Weather."
+            },
+
+            "file": "158_install_weather.json",
+
+            "substeps": [
+                {
+                    "id": "install_weather_mousam",
+                    "variant": "mousam",
+                    "name": {
+                        "de": "✨ Mousam installieren",
+                        "en": "✨ Install Mousam"
+                    },
+                    "description": {
+                        "de": "Installiert Mousam über yay.",
+                        "en": "Installs Mousam using yay."
+                    },
+                    "exclusive_group": "weather_app_method"
+                },
+                {
+                    "id": "install_weather_gnome",
+                    "variant": "gnome_weather",
+                    "name": {
+                        "de": "✨ GNOME Wetter installieren",
+                        "en": "✨ Install GNOME Weather"
+                    },
+                    "description": {
+                        "de": "Installiert GNOME Wetter über pacman.",
+                        "en": "Installs GNOME Weather using pacman."
+                    },
+                    "exclusive_group": "weather_app_method"
+                }
+            ]
+        },
+        {
+            "id": "install_kdegraphics_thumbnailers",
+            "name": {
+                "de": "KDE Graphics Thumbnailers installieren",
+                "en": "Install KDE Graphics Thumbnailers"
+            },
+            "description": {
+                "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
+                "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
+            },
+            "file": "156_install_kdegraphics_thumbnailers.json"
         },
         {
             "id": "install_obsidian",
@@ -2133,6 +2270,18 @@
             "file": "144_remove_cachyos_hello.json"
         },
         {
+            "id": "install_cachy_update",
+            "name": {
+                "de": "✨ CachyOS Update installieren",
+                "en": "✨ Install CachyOS Update"
+            },
+            "description": {
+                "de": "Installiert das CachyOS-Update-Tool cachy-update.",
+                "en": "Installs the CachyOS update tool cachy-update."
+            },
+            "file": "153_install_cachy_update.json"
+        },
+        {
             "id": "install_en_croissant",
             "name": {
                 "de": "✨ En Croissant installieren",
@@ -2143,6 +2292,18 @@
                 "en": "Installs En Croissant with the required WebKit and GStreamer components and optionally Stockfish for chess analysis."
             },
             "file": "145_install_en_croissant.json"
+        },
+        {
+            "id": "install_sddm",
+            "name": {
+                "de": "✨ SDDM installieren",
+                "en": "✨ Install SDDM"
+            },
+            "description": {
+                "de": "Installiert SDDM als Display Manager und ersetzt greetd.",
+                "en": "Installs SDDM as the display manager and replaces greetd."
+            },
+            "file": "148_install_sddm.json"
         },
         {
             "id": "cleanup_nvim_configuration",
@@ -2167,18 +2328,6 @@
                 "en": "Downloads the official BlackArch strap script, verifies its SHA1 checksum, runs it as root, and then updates the system."
             },
             "file": "147_blackarch_configuration.json"
-        },
-        {
-            "id": "install_sddm",
-            "name": {
-                "de": "✨ SDDM installieren",
-                "en": "✨ Install SDDM"
-            },
-            "description": {
-                "de": "Installiert SDDM als Display Manager und ersetzt greetd.",
-                "en": "Installs SDDM as the display manager and replaces greetd."
-            },
-            "file": "148_install_sddm.json"
         },
         {
             "id": "install_security_tools",
@@ -2211,8 +2360,8 @@
                 "en": "✨ Install Tor"
             },
             "description": {
-                "de": "Installiert den Tor-Dienst.",
-                "en": "Installs the Tor service."
+                "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
+                "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
             },
             "file": "151_install_tor.json"
         },
@@ -2261,18 +2410,6 @@
             ]
         },
         {
-            "id": "install_cachy_update",
-            "name": {
-                "de": "✨ CachyOS Update installieren",
-                "en": "✨ Install CachyOS Update"
-            },
-            "description": {
-                "de": "Installiert das CachyOS-Update-Tool cachy-update.",
-                "en": "Installs the CachyOS update tool cachy-update."
-            },
-            "file": "153_install_cachy_update.json"
-        },
-        {
             "id": "install_bottles",
 
             "name": {
@@ -2315,143 +2452,6 @@
                     "exclusive_group": "bottles_method"
                 }
             ]
-        },
-        {
-            "id": "install_shortwave",
-            "name": {
-                "de": "✨ Shortwave installieren",
-                "en": "✨ Install Shortwave"
-            },
-            "description": {
-                "de": "Installiert Shortwave, einen Internetradio-Player mit Zugriff auf über 50.000 Radiosender weltweit.",
-                "en": "Installs Shortwave, an internet radio player with access to over 50,000 radio stations worldwide."
-            },
-            "file": "155_install_shortwave.json"
-        },
-        {
-            "id": "install_kdegraphics_thumbnailers",
-            "name": {
-                "de": "KDE Graphics Thumbnailers installieren",
-                "en": "Install KDE Graphics Thumbnailers"
-            },
-            "description": {
-                "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
-                "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
-            },
-            "file": "156_install_kdegraphics_thumbnailers.json"
-        },
-        {
-            "id": "install_music_player",
-
-            "name": {
-                "de": "✨ Musikplayer installieren",
-                "en": "✨ Install music player"
-            },
-
-            "description": {
-                "de": "Wähle einen Musikplayer: Amberol für GNOME, Amarok für KDE oder AudioTube.",
-                "en": "Choose a music player: Amberol for GNOME, Amarok for KDE, or AudioTube."
-            },
-
-            "file": "157_install_music_player.json",
-
-            "substeps": [
-                {
-                    "id": "install_music_player_amberol",
-                    "variant": "amberol",
-                    "name": {
-                        "de": "✨ Amberol installieren (GNOME)",
-                        "en": "✨ Install Amberol (GNOME)"
-                    },
-                    "description": {
-                        "de": "Installiert Amberol, einen einfachen und modernen Musikplayer für GNOME.",
-                        "en": "Installs Amberol, a simple and modern music player for GNOME."
-                    },
-                    "exclusive_group": "music_player_method"
-                },
-                {
-                    "id": "install_music_player_amarok",
-                    "variant": "amarok",
-                    "name": {
-                        "de": "✨ Amarok installieren (KDE)",
-                        "en": "✨ Install Amarok (KDE)"
-                    },
-                    "description": {
-                        "de": "Installiert Amarok, einen umfangreichen Musikplayer für KDE Plasma.",
-                        "en": "Installs Amarok, a feature-rich music player for KDE Plasma."
-                    },
-                    "exclusive_group": "music_player_method"
-                },
-                {
-                    "id": "install_music_player_audiotube",
-                    "variant": "audiotube",
-                    "name": {
-                        "de": "✨ AudioTube installieren",
-                        "en": "✨ Install AudioTube"
-                    },
-                    "description": {
-                        "de": "Installiert AudioTube, einen modernen Musikplayer für YouTube Music.",
-                        "en": "Installs AudioTube, a modern music player for YouTube Music."
-                    },
-                    "exclusive_group": "music_player_method"
-                }
-            ]
-        },
-        {
-            "id": "install_weather",
-
-            "name": {
-                "de": "✨ Wetter-App installieren",
-                "en": "✨ Install weather app"
-            },
-
-            "description": {
-                "de": "Wähle genau eine Wetter-App: Mousam oder GNOME Weather.",
-                "en": "Choose exactly one weather app: Mousam or GNOME Weather."
-            },
-
-            "file": "158_install_weather.json",
-
-            "substeps": [
-                {
-                    "id": "install_weather_mousam",
-                    "variant": "mousam",
-                    "name": {
-                        "de": "✨ Mousam installieren",
-                        "en": "✨ Install Mousam"
-                    },
-                    "description": {
-                        "de": "Installiert Mousam über yay.",
-                        "en": "Installs Mousam using yay."
-                    },
-                    "exclusive_group": "weather_app_method"
-                },
-                {
-                    "id": "install_weather_gnome",
-                    "variant": "gnome_weather",
-                    "name": {
-                        "de": "✨ GNOME Wetter installieren",
-                        "en": "✨ Install GNOME Weather"
-                    },
-                    "description": {
-                        "de": "Installiert GNOME Wetter über pacman.",
-                        "en": "Installs GNOME Weather using pacman."
-                    },
-                    "exclusive_group": "weather_app_method"
-                }
-            ]
-        },
-        {
-            "id": "install_clion_plugins",
-            "name": {
-                "de": "✨ CLion-Plugins installieren",
-                "en": "✨ Install CLion plugins"
-            },
-            "description": {
-                "de": "Installiert nützliche CLion-Plugins für Vim-Keybindings, Themes, Git, KI-Assistenz und Codeanalyse.",
-                "en": "Installs useful CLion plugins for Vim keybindings, themes, Git, AI assistance, and code analysis."
-            },
-            "file": "159_install_clion_plugins.json"
         }
     ]
 }

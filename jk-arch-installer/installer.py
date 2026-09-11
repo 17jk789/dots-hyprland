@@ -24,6 +24,17 @@ from typing import Any
 # ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent
+
+# Hinweis zur Reihenfolge:
+# Die Nummerierung der JSON-Dateien dient ausschließlich der Organisation und
+# bestimmt nicht die Reihenfolge, in der die Installationen ausgeführt werden.
+# Die Installationsschritte können grundsätzlich in beliebiger Reihenfolge
+# ausgeführt werden. Zu beachten sind jedoch mögliche Abhängigkeiten zwischen
+# einzelnen Schritten: Voraussetzungen müssen vor den davon abhängigen
+# Installationen ausgeführt werden (z. B. Neovim vor LazyVim).
+
+# Daher ist die Reihenfolge der Dateien (z. B. 01_, 02_, 10_, 150_) frei wählbar,
+# sofern die erforderlichen Abhängigkeiten bei der Ausführung berücksichtigt werden.
 INSTALLATIONS_FILE = BASE_DIR / "installations.json"
 STEPS_DIR = BASE_DIR / "steps"
 LOG_DIR = BASE_DIR / "logs"

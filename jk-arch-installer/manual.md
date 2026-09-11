@@ -222,8 +222,10 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Einen modularen Fish-Konfigurationsordner erstellen](#einen-modularen-fish-konfigurationsordner-erstellen)
     - [✨ Den praktischen Befehls-Ausführer just installieren](#-den-praktischen-befehls-ausführer-just-installieren)
     - [✨ Das Begrüßungsprogramm von CachyOS entfernen](#-das-begrüßungsprogramm-von-cachyos-entfernen)
+    - [✨ Den CachyOS Updater installieren](#-den-cachyos-updater-installieren)
     - [✨ Die moderne Schachdatenbank- und Analyse-Software En Croissant installieren](#-die-moderne-schachdatenbank--und-analyse-software-en-croissant-installieren)
     - [✨ Den Boot-Bildschirm (Plymouth) anpassen und das System-Abbild neu bauen](#-den-boot-bildschirm-plymouth-anpassen-und-das-system-abbild-neu-bauen)
+    - [✨ SDDM installieren](#-sddm-installieren)
   - [Nach der Neovim-Konfiguration](#nach-der-neovim-konfiguration)
     - [Code über den LSP-Server im Editor formatieren](#code-über-den-lsp-server-im-editor-formatieren)
   - [Emfehlungen bei end-4 -\> fix soon](#emfehlungen-bei-end-4---fix-soon)
@@ -3783,6 +3785,19 @@ rm ~/.config/autostart/cachyos-hello.desktop
 
 </details>
 
+### ✨ Den CachyOS Updater installieren
+
+ > Der `cachyos-updater` ist ein grafisches Update-Werkzeug für CachyOS. Es ermöglicht eine komfortable Verwaltung und Installation von System- und Paketupdates und eignet sich besonders für Benutzer, die Updates lieber über eine grafische Oberfläche durchführen.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S cachyos-updater
+```
+
+</details>
+
 ### ✨ Die moderne Schachdatenbank- und Analyse-Software En Croissant installieren
 
 > **En Croissant** ist eine moderne grafische Benutzeroberfläche (GUI) für die Verwaltung von Schachdatenbanken und die Analyse von Schachpartien.
@@ -3875,6 +3890,33 @@ sudo mkinitcpio -P
 ```
 
 > Anschließend kann das System neu gestartet werden, um die Änderungen am Boot-Bildschirm zu überprüfen.
+
+</details>
+
+### ✨ SDDM installieren
+
+> SDDM (Simple Desktop Display Manager) ist ein grafischer Display Manager für Linux. Er stellt den grafischen Anmeldebildschirm bereit und startet nach der Anmeldung die gewünschte Desktop-Umgebung.
+
+<details> 
+<summary>Installieren und aktivieren</summary>
+
+SDDM wird installiert:
+
+```bash
+sudo pacman -S sddm
+```
+
+Der bisherige Display Manager greetd wird deaktiviert:
+
+```bash
+sudo systemctl disable greetd
+```
+
+SDDM wird als Display Manager aktiviert:
+
+```bash
+sudo systemctl enable sddm
+```
 
 </details>
 

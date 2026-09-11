@@ -7,8 +7,8 @@
     },
 
     "description": {
-        "de": "Installiert den Tor-Dienst.",
-        "en": "Installs the Tor service."
+        "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
+        "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
     },
 
     "question": {
