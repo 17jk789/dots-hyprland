@@ -18,7 +18,7 @@
     "editor.occurrencesHighlight": "off",
     "editor.selectionHighlight": false,
 
-    "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', 'JetBrains Mono', monospace",
+    "editor.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
     "editor.fontWeight": "400",
     "editor.letterSpacing": 0,
     "editor.fontLigatures": true,
