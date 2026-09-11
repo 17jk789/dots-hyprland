@@ -2330,14 +2330,691 @@
             "file": "147_blackarch_configuration.json"
         },
         {
-            "id": "install_security_tools",
+            "id": "install_blackarch_tools",
             "name": {
-                "de": "✨ Sicherheits- und Pentesting-Tools installieren",
-                "en": "✨ Install security and pentesting tools"
+                "de": "✨ BlackArch Tools installieren",
+                "en": "✨ Install BlackArch tools"
             },
             "description": {
-                "de": "Installiert eine Sammlung von Netzwerk-, Web-, OSINT-, Analyse- und Pentesting-Tools.",
-                "en": "Installs a collection of network, web, OSINT, analysis, and pentesting tools."
+                "de": "Wähle eine BlackArch-Kategorie oder installiere alle verfügbaren BlackArch Tools.",
+                "en": "Choose a BlackArch category or install all available BlackArch tools."
+            },
+            "file": "160_install_blackarch_tools.json",
+            "substeps": [
+                {
+                    "id": "install_blackarch_all",
+                    "variant": "all",
+                    "default_selected": true,
+                    "name": {
+                        "de": "✨ Alle BlackArch Tools installieren",
+                        "en": "✨ Install all BlackArch tools"
+                    },
+                    "description": {
+                        "de": "Installiert alle verfügbaren BlackArch Tools.",
+                        "en": "Installs all available BlackArch tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_anti_forensic",
+                    "variant": "anti-forensic",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Anti-Forensic Tools",
+                        "en": "✨ Anti-Forensic tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Anti-Forensic Tools.",
+                        "en": "Installs BlackArch anti-forensic tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_automation",
+                    "variant": "automation",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Automation Tools",
+                        "en": "✨ Automation tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Automation Tools.",
+                        "en": "Installs BlackArch automation tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_ai",
+                    "variant": "ai",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ AI Tools",
+                        "en": "✨ AI tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch AI Tools.",
+                        "en": "Installs BlackArch AI tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_automobile",
+                    "variant": "automobile",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Automotive Tools",
+                        "en": "✨ Automotive tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Automotive Tools.",
+                        "en": "Installs BlackArch automotive tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_backdoor",
+                    "variant": "backdoor",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Backdoor Tools",
+                        "en": "✨ Backdoor tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Backdoor Tools.",
+                        "en": "Installs BlackArch backdoor tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_binary",
+                    "variant": "binary",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Binary Tools",
+                        "en": "✨ Binary tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Binary Tools.",
+                        "en": "Installs BlackArch binary tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_bluetooth",
+                    "variant": "bluetooth",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Bluetooth Tools",
+                        "en": "✨ Bluetooth tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Bluetooth Tools.",
+                        "en": "Installs BlackArch Bluetooth tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_code_audit",
+                    "variant": "code-audit",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Code Audit Tools",
+                        "en": "✨ Code audit tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Code Audit Tools.",
+                        "en": "Installs BlackArch code audit tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_cracker",
+                    "variant": "cracker",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Cracking Tools",
+                        "en": "✨ Cracking tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Cracking Tools.",
+                        "en": "Installs BlackArch cracking tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_crypto",
+                    "variant": "crypto",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Crypto Tools",
+                        "en": "✨ Crypto tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Crypto Tools.",
+                        "en": "Installs BlackArch crypto tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_database",
+                    "variant": "database",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Database Tools",
+                        "en": "✨ Database tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Database Tools.",
+                        "en": "Installs BlackArch database tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_debugger",
+                    "variant": "debugger",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Debugger Tools",
+                        "en": "✨ Debugger tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Debugger Tools.",
+                        "en": "Installs BlackArch debugger tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_decompiler",
+                    "variant": "decompiler",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Decompiler Tools",
+                        "en": "✨ Decompiler tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Decompiler Tools.",
+                        "en": "Installs BlackArch decompiler tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_defensive",
+                    "variant": "defensive",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Defensive Security Tools",
+                        "en": "✨ Defensive security tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Defensive Security Tools.",
+                        "en": "Installs BlackArch defensive security tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_disassembler",
+                    "variant": "disassembler",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Disassembler Tools",
+                        "en": "✨ Disassembler tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Disassembler Tools.",
+                        "en": "Installs BlackArch disassembler tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_dos",
+                    "variant": "dos",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ DoS Tools",
+                        "en": "✨ DoS tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch DoS Tools.",
+                        "en": "Installs BlackArch DoS tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_drone",
+                    "variant": "drone",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Drone Tools",
+                        "en": "✨ Drone tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Drone Tools.",
+                        "en": "Installs BlackArch drone tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_exploitation",
+                    "variant": "exploitation",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Exploitation Tools",
+                        "en": "✨ Exploitation tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Exploitation Tools.",
+                        "en": "Installs BlackArch exploitation tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_fingerprint",
+                    "variant": "fingerprint",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Fingerprint Tools",
+                        "en": "✨ Fingerprint tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Fingerprint Tools.",
+                        "en": "Installs BlackArch fingerprint tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_firmware",
+                    "variant": "firmware",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Firmware Tools",
+                        "en": "✨ Firmware tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Firmware Tools.",
+                        "en": "Installs BlackArch firmware tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_forensic",
+                    "variant": "forensic",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Forensic Tools",
+                        "en": "✨ Forensic tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Forensic Tools.",
+                        "en": "Installs BlackArch forensic tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_fuzzer",
+                    "variant": "fuzzer",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Fuzzing Tools",
+                        "en": "✨ Fuzzing tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Fuzzing Tools.",
+                        "en": "Installs BlackArch fuzzing tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_gpu",
+                    "variant": "gpu",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ GPU Tools",
+                        "en": "✨ GPU tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch GPU Tools.",
+                        "en": "Installs BlackArch GPU tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_hardware",
+                    "variant": "hardware",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Hardware Tools",
+                        "en": "✨ Hardware tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Hardware Tools.",
+                        "en": "Installs BlackArch hardware tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_honeypot",
+                    "variant": "honeypot",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Honeypot Tools",
+                        "en": "✨ Honeypot tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Honeypot Tools.",
+                        "en": "Installs BlackArch honeypot tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_ids",
+                    "variant": "ids",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ IDS Tools",
+                        "en": "✨ IDS tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch IDS Tools.",
+                        "en": "Installs BlackArch IDS tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_keylogger",
+                    "variant": "keylogger",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Keylogger Tools",
+                        "en": "✨ Keylogger tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Keylogger Tools.",
+                        "en": "Installs BlackArch keylogger tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_malware",
+                    "variant": "malware",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Malware Tools",
+                        "en": "✨ Malware tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Malware Tools.",
+                        "en": "Installs BlackArch malware tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_misc",
+                    "variant": "misc",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Miscellaneous Tools",
+                        "en": "✨ Miscellaneous tools"
+                    },
+                    "description": {
+                        "de": "Installiert sonstige BlackArch Tools.",
+                        "en": "Installs miscellaneous BlackArch tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_mobile_reversing",
+                    "variant": "mobile-reversing",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Mobile Reversing Tools",
+                        "en": "✨ Mobile reversing tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Mobile Reversing Tools.",
+                        "en": "Installs BlackArch mobile reversing tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_mobile",
+                    "variant": "mobile",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Mobile Tools",
+                        "en": "✨ Mobile tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Mobile Tools.",
+                        "en": "Installs BlackArch mobile tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_networking",
+                    "variant": "networking",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Networking Tools",
+                        "en": "✨ Networking tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Networking Tools.",
+                        "en": "Installs BlackArch networking tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_nfc",
+                    "variant": "nfc",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ NFC Tools",
+                        "en": "✨ NFC tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch NFC Tools.",
+                        "en": "Installs BlackArch NFC tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_packer",
+                    "variant": "packer",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Packer Tools",
+                        "en": "✨ Packer tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Packer Tools.",
+                        "en": "Installs BlackArch packer tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_proxy",
+                    "variant": "proxy",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Proxy Tools",
+                        "en": "✨ Proxy tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Proxy Tools.",
+                        "en": "Installs BlackArch proxy tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_radio",
+                    "variant": "radio",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Radio Tools",
+                        "en": "✨ Radio tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Radio Tools.",
+                        "en": "Installs BlackArch radio tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_recon",
+                    "variant": "recon",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Reconnaissance Tools",
+                        "en": "✨ Reconnaissance tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Reconnaissance Tools.",
+                        "en": "Installs BlackArch reconnaissance tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_reversing",
+                    "variant": "reversing",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Reverse Engineering Tools",
+                        "en": "✨ Reverse engineering tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Reverse Engineering Tools.",
+                        "en": "Installs BlackArch reverse engineering tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_scan",
+                    "variant": "scan",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Scan Tools",
+                        "en": "✨ Scan tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Scan Tools.",
+                        "en": "Installs BlackArch scan tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_scanner",
+                    "variant": "scanner",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Scanner Tools",
+                        "en": "✨ Scanner tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Scanner Tools.",
+                        "en": "Installs BlackArch scanner tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_sniffer",
+                    "variant": "sniffer",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Sniffer Tools",
+                        "en": "✨ Sniffer tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Sniffer Tools.",
+                        "en": "Installs BlackArch sniffer tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_social",
+                    "variant": "social",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Social Engineering Tools",
+                        "en": "✨ Social engineering tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Social Engineering Tools.",
+                        "en": "Installs BlackArch social engineering tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_spoof",
+                    "variant": "spoof",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Spoofing Tools",
+                        "en": "✨ Spoofing tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Spoofing Tools.",
+                        "en": "Installs BlackArch spoofing tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_stego",
+                    "variant": "stego",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Steganography Tools",
+                        "en": "✨ Steganography tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Steganography Tools.",
+                        "en": "Installs BlackArch steganography tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_tunnel",
+                    "variant": "tunnel",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Tunnel Tools",
+                        "en": "✨ Tunnel tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Tunnel Tools.",
+                        "en": "Installs BlackArch tunnel tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_unpacker",
+                    "variant": "unpacker",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Unpacker Tools",
+                        "en": "✨ Unpacker tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Unpacker Tools.",
+                        "en": "Installs BlackArch unpacker tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_voip",
+                    "variant": "voip",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ VoIP Tools",
+                        "en": "✨ VoIP tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch VoIP Tools.",
+                        "en": "Installs BlackArch VoIP tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_webapp",
+                    "variant": "webapp",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Web Application Tools",
+                        "en": "✨ Web application tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Web Application Tools.",
+                        "en": "Installs BlackArch web application tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_windows",
+                    "variant": "windows",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Windows Tools",
+                        "en": "✨ Windows tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Windows Tools.",
+                        "en": "Installs BlackArch Windows tools."
+                    }
+                },
+                {
+                    "id": "install_blackarch_wireless",
+                    "variant": "wireless",
+                    "default_selected": false,
+                    "name": {
+                        "de": "✨ Wireless Tools",
+                        "en": "✨ Wireless tools"
+                    },
+                    "description": {
+                        "de": "Installiert BlackArch Wireless Tools.",
+                        "en": "Installs BlackArch wireless tools."
+                    }
+                }
+            ]
+        },
+        {
+            "id": "install_security_tools",
+            "name": {
+                "de": "✨ JKs Sicherheits- und Pentesting-Tools installieren",
+                "en": "✨ Install JK's Security and Pentesting Tools"
+            },
+            "description": {
+                "de": "Installiert eine Sammlung von Tools für Netzwerk, Web, OSINT, Analyse und Pentesting.",
+                "en": "Installs a collection of tools for network, web, OSINT, analysis, and pentesting."
             },
             "file": "149_install_security_tools.json"
         },

@@ -1475,7 +1475,10 @@ def select_installations(
         load_step(str(installation["file"]), installation.get("variant"))
         for installation in installations
     ]
-    selected = [True] * len(installations)
+    selected = [
+        installation.get("default_selected", True)
+        for installation in installations
+    ]
     exclusive_groups: dict[str, list[int]] = {}
     for index, step in enumerate(step_details):
         if step.exclusive_group:
