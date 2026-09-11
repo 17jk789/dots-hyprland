@@ -384,7 +384,7 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
             '-- Personal applications excluded from glass' \
             'hl.window_rule({' \
             '    match = {' \
-            '        class = "^(brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",' \
+            '        class = "^(brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular|com.obsproject.Studio)$",' \
             '    },' \
             '    opacity = 1.0,' \
             '})' \
@@ -415,7 +415,7 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
             '-- Applications excluded from glass' \
             'hl.window_rule({' \
             '    match = {' \
-            '        class = "^(code|Code|com.jetbrains.*|jetbrains-.*|brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular)$",' \
+            '        class = "^(code|Code|com.jetbrains.*|jetbrains-.*|brave-browser|Blender|resolve|com.blackmagicdesign.resolve|kitty|Alacritty|ghostty|firefox|firefox-developer-edition|libreoffice|libreoffice-startcenter|org.wireshark.Wireshark|wireshark|org.kde.gwenview|org.kde.okular|com.obsproject.Studio)$",' \
             '    },' \
             '    opacity = 1.0,' \
             '})' \
