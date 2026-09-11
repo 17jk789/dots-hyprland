@@ -1,4 +1,4 @@
-function glasstoggle --description "Toggle Hyprland glass mode and Illogical Impulse transparency"
+function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impulse transparency, Kitty opacity and Alacritty opacity"
 
     # ============================================================
     # CONFIGURATION
@@ -7,6 +7,8 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
     set rules_file "$HOME/.config/hypr/hyprland/rules.lua"
     set general_file "$HOME/.config/hypr/hyprland/general.lua"
     set illogical_config "$HOME/.config/illogical-impulse/config.json"
+    set kitty_config "$HOME/.config/kitty/kitty.conf"
+    set alacritty_config "$HOME/.config/alacritty/alacritty.toml"
 
     # Default values
     set mode normal
@@ -91,6 +93,166 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
 
 
     # ============================================================
+    # UPDATE KITTY OPACITY
+    # ============================================================
+    #
+    # The exact opacity value passed to glasstoggle is written to:
+    #
+    #     ~/.config/kitty/kitty.conf
+    #
+    # Example:
+    #
+    #     glasstoggle normal 0.80
+    #
+    # becomes:
+    #
+    #     background_opacity 0.80
+    #
+    # Existing background_opacity lines are replaced.
+    # If none exists, the setting is appended.
+    #
+
+    if test -f "$kitty_config"
+
+        if grep -q '^[[:space:]]*background_opacity[[:space:]]' "$kitty_config"
+
+            sed -i \
+                "s/^[[:space:]]*background_opacity[[:space:]].*/background_opacity $opacity/" \
+                "$kitty_config"
+
+        else
+
+            printf '\nbackground_opacity %s\n' "$opacity" \
+                >> "$kitty_config"
+
+        end
+
+    else
+
+        mkdir -p (dirname "$kitty_config")
+
+        printf '%s\n' \
+            "background_opacity $opacity" \
+            > "$kitty_config"
+
+    end
+
+
+    # ============================================================
+    # UPDATE ALACRITTY OPACITY
+    # ============================================================
+    #
+    # The exact opacity value passed to glasstoggle is written to:
+    #
+    #     ~/.config/alacritty/alacritty.toml
+    #
+    # The [window] section is used.
+    #
+    # Example:
+    #
+    #     glasstoggle normal 0.80
+    #
+    # becomes:
+    #
+    #     [window]
+    #     decorations = "None"
+    #     opacity = 0.80
+    #
+    # Existing window opacity/decorations settings are replaced.
+    #
+
+    mkdir -p (dirname "$alacritty_config")
+
+    if test -f "$alacritty_config"
+
+        set tmp_file (mktemp)
+
+        awk -v opacity="$opacity" '
+        BEGIN {
+            in_window = 0
+            opacity_found = 0
+            decorations_found = 0
+        }
+
+        /^\[window\][[:space:]]*$/ {
+            if (in_window && !opacity_found) {
+                print "opacity = " opacity
+            }
+
+            if (in_window && !decorations_found) {
+                print "decorations = \"None\""
+            }
+
+            in_window = 1
+            opacity_found = 0
+            decorations_found = 0
+
+            print
+            next
+        }
+
+        /^\[/ {
+            if (in_window && !opacity_found) {
+                print "opacity = " opacity
+            }
+
+            if (in_window && !decorations_found) {
+                print "decorations = \"None\""
+            }
+
+            in_window = 0
+            print
+            next
+        }
+
+        {
+            if (in_window && $0 ~ /^[[:space:]]*opacity[[:space:]]*=/) {
+                print "opacity = " opacity
+                opacity_found = 1
+                next
+            }
+
+            if (in_window && $0 ~ /^[[:space:]]*decorations[[:space:]]*=/) {
+                print "decorations = \"None\""
+                decorations_found = 1
+                next
+            }
+
+            print
+        }
+
+        END {
+            if (in_window && !opacity_found) {
+                print "opacity = " opacity
+            }
+
+            if (in_window && !decorations_found) {
+                print "decorations = \"None\""
+            }
+        }
+        ' "$alacritty_config" > "$tmp_file"
+
+        mv "$tmp_file" "$alacritty_config"
+
+        if not grep -q '^\[window\][[:space:]]*$' "$alacritty_config"
+
+            printf '\n[window]\ndecorations = "None"\nopacity = %s\n' "$opacity" \
+                >> "$alacritty_config"
+
+        end
+
+    else
+
+        printf '%s\n' \
+            '[window]' \
+            'decorations = "None"' \
+            "opacity = $opacity" \
+            > "$alacritty_config"
+
+    end
+
+
+    # ============================================================
     # CALCULATE BACKGROUND TRANSPARENCY
     # ============================================================
     #
@@ -98,13 +260,13 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
     #
     # Formula:
     #
-    #     backgroundTransparency = 1 - opacity^3.03
+    #     backgroundTransparency = 1 - opacity^3.3
     #
     # contentTransparency is intentionally left untouched.
     #
 
     set background_transparency \
-        (math --scale=6 "1 - ($opacity ^ 3.03)")
+        (math --scale=6 "1 - ($opacity ^ 3.3)")
 
     set background_transparency \
         (string replace ',' '.' -- "$background_transparency")
@@ -165,7 +327,7 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
 
             notify-send \
                 "Glass Toggle" \
-                "Illogical transparency OFF"
+                "Illogical transparency OFF / Kitty opacity $opacity / Alacritty opacity $opacity"
 
             return 0
         end
@@ -264,6 +426,59 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
             end
         end
 
+        # Reset Kitty opacity to the default value.
+        if test -f "$kitty_config"
+
+            if grep -q '^[[:space:]]*background_opacity[[:space:]]' "$kitty_config"
+
+                sed -i \
+                    's/^[[:space:]]*background_opacity[[:space:]].*/background_opacity 1.0/' \
+                    "$kitty_config"
+
+            end
+        end
+
+        # Reset Alacritty opacity to the default value.
+        if test -f "$alacritty_config"
+
+            set tmp_file (mktemp)
+
+            awk '
+            BEGIN {
+                in_window = 0
+            }
+
+            /^\[window\][[:space:]]*$/ {
+                in_window = 1
+                print
+                next
+            }
+
+            /^\[/ {
+                in_window = 0
+                print
+                next
+            }
+
+            {
+                if (in_window && $0 ~ /^[[:space:]]*opacity[[:space:]]*=/) {
+                    print "opacity = 1.0"
+                    next
+                }
+
+                if (in_window && $0 ~ /^[[:space:]]*decorations[[:space:]]*=/) {
+                    print "decorations = \"None\""
+                    next
+                }
+
+                print
+            }
+            ' "$alacritty_config" > "$tmp_file"
+
+            mv "$tmp_file" "$alacritty_config"
+
+        end
+
         hyprctl reload
 
         notify-send \
@@ -307,6 +522,59 @@ function glasstoggle --description "Toggle Hyprland glass mode and Illogical Imp
             else
                 rm -f "$tmp_file"
             end
+        end
+
+        # Reset Kitty opacity.
+        if test -f "$kitty_config"
+
+            if grep -q '^[[:space:]]*background_opacity[[:space:]]' "$kitty_config"
+
+                sed -i \
+                    's/^[[:space:]]*background_opacity[[:space:]].*/background_opacity 1.0/' \
+                    "$kitty_config"
+
+            end
+        end
+
+        # Reset Alacritty opacity.
+        if test -f "$alacritty_config"
+
+            set tmp_file (mktemp)
+
+            awk '
+            BEGIN {
+                in_window = 0
+            }
+
+            /^\[window\][[:space:]]*$/ {
+                in_window = 1
+                print
+                next
+            }
+
+            /^\[/ {
+                in_window = 0
+                print
+                next
+            }
+
+            {
+                if (in_window && $0 ~ /^[[:space:]]*opacity[[:space:]]*=/) {
+                    print "opacity = 1.0"
+                    next
+                }
+
+                if (in_window && $0 ~ /^[[:space:]]*decorations[[:space:]]*=/) {
+                    print "decorations = \"None\""
+                    next
+                }
+
+                print
+            }
+            ' "$alacritty_config" > "$tmp_file"
+
+            mv "$tmp_file" "$alacritty_config"
+
         end
 
         hyprctl reload

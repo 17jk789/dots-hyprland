@@ -16,7 +16,7 @@ TERM = "xterm-256color"
 
 [window]
 decorations = "None"
-opacity = 0.8
+opacity = 1
 blur = true
 startup_mode = "Windowed"
 dynamic_padding = false
@@ -73,7 +73,7 @@ blinking = "Never"
 [terminal]
 
 [terminal.shell]
-program = "/usr/bin/fish"
+program = "/usr/bin/bash"
 args = ["--login"]
 
 ###############################
