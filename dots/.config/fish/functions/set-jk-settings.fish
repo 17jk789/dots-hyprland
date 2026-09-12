@@ -84,7 +84,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "enableWorkspace": true,
             "vertical": false,
             "widgetsFactor": 1.2,
-            "workspaceZoom": 1.07
+            "workspaceZoom": 1
         },
         "thumbnailPath": "",
         "wallpaperPath": "/home/jk/Pictures/image.jpg",
