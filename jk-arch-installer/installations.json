@@ -1908,6 +1908,18 @@
             "file": "104_install_firejail.json"
         },
         {
+            "id": "install_global_menu",
+            "name": {
+                "de": "✨ Globales Menü aktivieren",
+                "en": "✨ Enable Global Menu"
+            },
+            "description": {
+                "de": "Installiert die GTK- und D-Bus-Komponenten für Anwendungen mit AppMenu-/DBusMenu-Unterstützung.",
+                "en": "Installs the GTK and D-Bus components for applications using AppMenu/DBusMenu support."
+            },
+            "file": "166_install_global_menu.json"
+        },
+        {
             "id": "install_cups",
             "name": {
                 "de": "✨ CUPS-Drucksystem installieren",
@@ -3363,18 +3375,6 @@
                 "en": "Installs Fail2ban as an additional security layer against brute-force attacks. Further configuration and customization of jails must then be performed manually according to the official documentation."
             },
             "file": "171_install_fail2ban.json"
-        },
-        {
-            "id": "install_global_menu",
-            "name": {
-                "de": "✨ Globales Menü aktivieren",
-                "en": "✨ Enable Global Menu"
-            },
-            "description": {
-                "de": "Installiert die GTK- und D-Bus-Komponenten für Anwendungen mit AppMenu-/DBusMenu-Unterstützung.",
-                "en": "Installs the GTK and D-Bus components for applications using AppMenu/DBusMenu support."
-            },
-            "file": "166_install_global_menu.json"
         },
         {
             "id": "disable_sshd",

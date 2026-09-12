@@ -137,6 +137,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Eine ältere Python-Version (3.12) über yay installieren](#-eine-ältere-python-version-312-über-yay-installieren)
     - [✨ Die Office-Suite LibreOffice installieren](#-die-office-suite-libreoffice-installieren)
     - [✨ Das Sandbox-Sicherheitswerkzeug Firejail installieren](#-das-sandbox-sicherheitswerkzeug-firejail-installieren)
+    - [✨ Globales Menü aktivieren](#-globales-menü-aktivieren)
     - [✨ Das vollständige Linux-Drucksystem CUPS für Hyprland mit KDE-Tools einrichten](#-das-vollständige-linux-drucksystem-cups-für-hyprland-mit-kde-tools-einrichten)
     - [✨ Die moderne LaTeX-Alternative Tectonic und den Dokumenten-Konverter Pandoc einrichten](#-die-moderne-latex-alternative-tectonic-und-den-dokumenten-konverter-pandoc-einrichten)
     - [✨ Die Rust-Alternative für den sudo-Befehl installieren](#-die-rust-alternative-für-den-sudo-befehl-installieren)
@@ -281,7 +282,6 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
   - [7. ✨ System mit Lynis überprüfen](#7--system-mit-lynis-überprüfen)
   - [✨ AppArmor sauber aktivieren](#-apparmor-sauber-aktivieren)
   - [✨ Fail2ban sauber aktivieren](#-fail2ban-sauber-aktivieren)
-  - [✨ Globales Menü aktivieren](#-globales-menü-aktivieren)
   - [✨ SSH-Server deaktivieren](#-ssh-server-deaktivieren)
 - [✨ Arch Linux AUR auf Malware überprüfen](#-arch-linux-aur-auf-malware-überprüfen)
   - [✨ AUR-Malware-Check installieren](#-aur-malware-check-installieren)
@@ -2286,6 +2286,14 @@ sudo pacman -S firejail
 ```
 
 </details>
+
+### ✨ Globales Menü aktivieren
+
+> Für Anwendungen, die das **AppMenu-/DBusMenu-System** verwenden, können die entsprechenden GTK- und D-Bus-Komponenten installiert werden.
+
+```bash
+sudo pacman -S appmenu-gtk-module libdbusmenu-glib
+```
 
 ### ✨ Das vollständige Linux-Drucksystem CUPS für Hyprland mit KDE-Tools einrichten
 
@@ -5541,14 +5549,6 @@ sudo fail2ban-client status sshd
 ```
 
 </details>
-
-## ✨ Globales Menü aktivieren
-
-> Für Anwendungen, die das **AppMenu-/DBusMenu-System** verwenden, können die entsprechenden GTK- und D-Bus-Komponenten installiert werden.
-
-```bash
-sudo pacman -S appmenu-gtk-module libdbusmenu-glib
-```
 
 ## ✨ SSH-Server deaktivieren
 
