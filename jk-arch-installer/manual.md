@@ -5175,7 +5175,7 @@ sudo pacman -S <paketname>
 >
 > Die folgende Suche sucht beispielsweise nach `npm`, `curl`, `wget`, `bash -c`, `eval`, `base64`, `openssl`, `nc`, `socat` und ähnlichen Befehlen.
 
-```bash id="5u4z7n"
+```bash
 grep -RinE \
 'npm|node|curl.*\||wget.*\||bash -c|sh -c|eval|base64|openssl|nc |socat|python -c' \
 ~/.cache/yay/*/PKGBUILD
@@ -5185,19 +5185,19 @@ grep -RinE \
 
 Installierte AUR- beziehungsweise Fremdpakete anzeigen:
 
-```bash id="q8v3kc"
+```bash
 pacman -Qm
 ```
 
 Nach `npm install` im `yay`-Cache suchen:
 
-```bash id="k6f2wp"
+```bash
 grep -R "npm install" ~/.cache/yay 2>/dev/null
 ```
 
 Nach der bekannten Zeichenfolge `atomic-lockfile` im temporären Verzeichnis suchen:
 
-```bash id="j4r9mx"
+```bash
 grep -R "atomic-lockfile" /tmp 2>/dev/null
 ```
 
@@ -5205,19 +5205,19 @@ grep -R "atomic-lockfile" /tmp 2>/dev/null
 
 > Falls gezielt nach der bekannten Bezeichnung `atomic-lockfile` gesucht werden soll, können das Home-Verzeichnis, globale npm-Pakete sowie verschiedene Paket- und Build-Caches durchsucht werden.
 
-```bash id="z2c7vh"
+```bash
 find ~ -iname "*atomic-lockfile*" 2>/dev/null
 ```
 
 Globale npm-Pakete überprüfen:
 
-```bash id="e7n4qs"
+```bash
 npm list -g 2>/dev/null | grep atomic-lockfile
 ```
 
 Paket- und AUR-Caches durchsuchen:
 
-```bash id="s5m8dx"
+```bash
 grep -R "atomic-lockfile" /var/cache 2>/dev/null
 grep -R "atomic-lockfile" ~/.cache/yay 2>/dev/null
 ```
@@ -5230,13 +5230,13 @@ grep -R "atomic-lockfile" ~/.cache/yay 2>/dev/null
 >
 > Das ist besonders nützlich, wenn überprüft werden soll, welche AUR- oder anderen Fremdpakete auf dem System installiert sind.
 
-```bash id="r3v7mp"
+```bash
 yay -Qm
 ```
 
 AUR-Cache anzeigen:
 
-```bash id="n9c4wk"
+```bash
 ls ~/.cache/yay
 ```
 
@@ -5244,13 +5244,13 @@ ls ~/.cache/yay
 
 Beispielsweise die Einträge eines bestimmten Monats anzeigen:
 
-```bash id="u6x1za"
+```bash
 grep "2026-06" /var/log/pacman.log | tail -100
 ```
 
 Installierte und aktualisierte Pakete anzeigen:
 
-```bash id="p8k5cf"
+```bash
 grep -E "installed|upgraded" /var/log/pacman.log | tail -200
 ```
 
@@ -5260,7 +5260,7 @@ grep -E "installed|upgraded" /var/log/pacman.log | tail -200
 >
 > Zunächst wird ClamAV installiert und die Virensignaturen aktualisiert:
 
-```bash id="w2q6mv"
+```bash
 sudo pacman -S clamav
 sudo freshclam
 ```
@@ -5269,19 +5269,19 @@ sudo freshclam
 
 Neovim-Konfiguration und Cache:
 
-```bash id="a7d3xr"
+```bash
 clamscan -r -i ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
 ```
 
 Entwicklungsumgebungen und heruntergeladene Pakete:
 
-```bash id="c5m9qt"
+```bash
 clamscan -r -i ~/.cargo ~/.sdkman ~/.npm ~/.local/lib/python3*/site-packages ~/Downloads
 ```
 
 AUR-Build-Cache:
 
-```bash id="h8v4nb"
+```bash
 clamscan -r -i ~/.cache/yay
 ```
 
@@ -5291,13 +5291,13 @@ clamscan -r -i ~/.cache/yay
 
 > **Rootkit Hunter (rkhunter)** untersucht das System unter anderem auf bekannte Rootkits, verdächtige Dateien und ungewöhnliche Änderungen an Systemdateien.
 
-```bash id="m3w7qp"
+```bash
 sudo pacman -S rkhunter
 ```
 
 Signaturen und Daten aktualisieren:
 
-```bash id="x6k2vd"
+```bash
 sudo rkhunter --update
 ```
 
@@ -5311,7 +5311,7 @@ sudo rkhunter --propupd
 
 System überprüfen:
 
-```bash id="q9c5xr"
+```bash
 sudo rkhunter --check
 ```
 
@@ -5321,7 +5321,7 @@ sudo rkhunter --check
 >
 > Falls das Paket aus einer geeigneten Paketquelle verfügbar ist, kann es installiert und anschließend als Root ausgeführt werden.
 
-```bash id="v4m8zs"
+```bash
 yay -S chkrootkit
 sudo chkrootkit
 ```
@@ -5330,13 +5330,13 @@ sudo chkrootkit
 
 > **Lynis** führt ein umfassendes Sicherheits-Audit des Linux-Systems durch. Dabei werden unter anderem Systemkonfiguration, Berechtigungen, Dienste, Netzwerkoptionen und verschiedene Sicherheitsmechanismen überprüft.
 
-```bash id="b7n3kw"
+```bash
 sudo pacman -S lynis
 ```
 
 System-Audit starten:
 
-```bash id="d5q9mc"
+```bash
 sudo lynis audit system
 ```
 

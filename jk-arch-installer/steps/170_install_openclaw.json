@@ -1,0 +1,46 @@
+{
+    "id": "install_openclaw",
+
+    "name": {
+        "de": "OpenClaw installieren",
+        "en": "Install OpenClaw"
+    },
+
+    "description": {
+        "de": "Installiert die aktuellste OpenClaw-Version global über npm.",
+        "en": "Installs the latest OpenClaw version globally using npm."
+    },
+
+    "question": {
+        "de": "Soll OpenClaw installiert werden?",
+        "en": "Should OpenClaw be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert die aktuellste OpenClaw-Version global über npm.",
+                "en": "Installs the latest OpenClaw version globally using npm."
+            },
+
+            "command": [
+                "npm",
+                "i",
+                "-g",
+                "openclaw@latest"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

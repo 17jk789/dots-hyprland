@@ -1,0 +1,63 @@
+{
+    "id": "install_chkrootkit",
+
+    "name": {
+        "de": "chkrootkit installieren",
+        "en": "Install chkrootkit"
+    },
+
+    "description": {
+        "de": "Installiert chkrootkit aus dem AUR und führt anschließend eine Rootkit-Prüfung durch.",
+        "en": "Installs chkrootkit from the AUR and then performs a rootkit check."
+    },
+
+    "question": {
+        "de": "Soll chkrootkit installiert und eine Rootkit-Prüfung durchgeführt werden?",
+        "en": "Should chkrootkit be installed and a rootkit check performed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert chkrootkit über den AUR-Helper yay.",
+                "en": "Installs chkrootkit using the AUR helper yay."
+            },
+
+            "command": [
+                "yay",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "chkrootkit"
+            ],
+
+            "requires_root": false,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Führt chkrootkit mit Root-Rechten aus.",
+                "en": "Runs chkrootkit with root privileges."
+            },
+
+            "command": [
+                "chkrootkit"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "id": "install_global_menu",
+
+    "name": {
+        "de": "Globales Menü aktivieren",
+        "en": "Enable Global Menu"
+    },
+
+    "description": {
+        "de": "Installiert die GTK- und D-Bus-Komponenten für das AppMenu-/DBusMenu-System.",
+        "en": "Installs the GTK and D-Bus components for the AppMenu/DBusMenu system."
+    },
+
+    "question": {
+        "de": "Sollen die Komponenten für das globale Menü installiert werden?",
+        "en": "Should the components for the global menu be installed?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert das GTK-Modul und die D-Bus-Komponente für AppMenu/DBusMenu.",
+                "en": "Installs the GTK module and D-Bus component for AppMenu/DBusMenu."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "appmenu-gtk-module",
+                "libdbusmenu-glib"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

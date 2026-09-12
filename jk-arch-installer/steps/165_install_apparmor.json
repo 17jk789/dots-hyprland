@@ -1,0 +1,67 @@
+{
+    "id": "install_apparmor",
+
+    "name": {
+        "de": "AppArmor installieren",
+        "en": "Install AppArmor"
+    },
+
+    "description": {
+        "de": "Installiert AppArmor und die AppArmor-Profile. Die weitere Einrichtung und Härtung von AppArmor muss anschließend manuell anhand des offiziellen Manuals und der Dokumentation durchgeführt werden. Profile und Kernel-Parameter sollten nicht blind übernommen werden.",
+        "en": "Installs AppArmor and the AppArmor profiles. Further AppArmor configuration and hardening must then be performed manually according to the official manual and documentation. Profiles and kernel parameters should not be applied blindly."
+    },
+
+    "question": {
+        "de": "Soll AppArmor installiert und aktiviert werden?",
+        "en": "Should AppArmor be installed and enabled?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert AppArmor und die AppArmor-Profile.",
+                "en": "Installs AppArmor and the AppArmor profiles."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "apparmor",
+                "apparmor.d"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert den AppArmor-Dienst und startet ihn sofort.",
+                "en": "Enables and immediately starts the AppArmor service."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "apparmor"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -3129,6 +3129,126 @@
                     "exclusive_group": "bottles_method"
                 }
             ]
+        },
+        {
+            "id": "install_tailscale",
+            "name": {
+                "de": "✨ Tailscale installieren",
+                "en": "✨ Install Tailscale"
+            },
+            "description": {
+                "de": "Installiert Tailscale und aktiviert den Tailscale-Dienst.",
+                "en": "Installs Tailscale and enables the Tailscale service."
+            },
+            "file": "168_install_tailscale.json"
+        },
+        {
+            "id": "install_sunshine",
+            "name": {
+                "de": "✨ Sunshine für Hyprland installieren",
+                "en": "✨ Install Sunshine for Hyprland"
+            },
+            "description": {
+                "de": "Installiert Sunshine und fail2ban für Remote-Desktop-Streaming unter Hyprland.",
+                "en": "Installs Sunshine and fail2ban for remote desktop streaming with Hyprland."
+            },
+            "file": "169_install_sunshine.json"
+        },
+        {
+            "id": "install_openclaw",
+            "name": {
+                "de": "✨ OpenClaw installieren",
+                "en": "✨ Install OpenClaw"
+            },
+            "description": {
+                "de": "Installiert OpenClaw über npm.",
+                "en": "Installs OpenClaw using npm."
+            },
+            "file": "170_install_openclaw.json"
+        },
+        {
+            "id": "install_clamav",
+            "name": {
+                "de": "✨ ClamAV installieren",
+                "en": "✨ Install ClamAV"
+            },
+            "description": {
+                "de": "Installiert ClamAV und aktualisiert die Virensignaturen.",
+                "en": "Installs ClamAV and updates the virus signatures."
+            },
+            "file": "161_install_clamav.json"
+        },
+        {
+            "id": "install_rkhunter",
+            "name": {
+                "de": "✨ Rootkit Hunter installieren",
+                "en": "Install Rootkit Hunter"
+            },
+            "description": {
+                "de": "Installiert Rootkit Hunter und aktualisiert die Prüfungsdaten.",
+                "en": "Installs Rootkit Hunter and updates its data."
+            },
+            "file": "162_install_rkhunter.json"
+        },
+        {
+            "id": "install_chkrootkit",
+            "name": {
+                "de": "✨ chkrootkit installieren",
+                "en": "✨ Install chkrootkit"
+            },
+            "description": {
+                "de": "Installiert chkrootkit und führt eine Rootkit-Prüfung durch.",
+                "en": "Installs chkrootkit and performs a rootkit check."
+            },
+            "file": "163_install_chkrootkit.json"
+        },
+        {
+            "id": "install_lynis",
+            "name": {
+                "de": "✨ Lynis installieren",
+                "en": "✨ Install Lynis"
+            },
+            "description": {
+                "de": "Installiert Lynis und führt anschließend ein Sicherheits-Audit des Systems durch.",
+                "en": "Installs Lynis and then performs a security audit of the system."
+            },
+            "file": "164_install_lynis.json"
+        },
+        {
+            "id": "install_apparmor",
+            "name": {
+                "de": "✨ AppArmor installieren",
+                "en": "✨ Install AppArmor"
+            },
+            "description": {
+                "de": "Installiert AppArmor und die AppArmor-Profile. Die weitere Einrichtung und Härtung von AppArmor muss anschließend manuell anhand des offiziellen Manuals und der Dokumentation durchgeführt werden. Profile und Kernel-Parameter sollten nicht blind übernommen werden.",
+                "en": "Installs AppArmor and the AppArmor profiles. Further AppArmor configuration and hardening must then be performed manually according to the official manual and documentation. Profiles and kernel parameters should not be applied blindly."
+            },
+            "file": "165_install_apparmor.json"
+        },
+        {
+            "id": "install_global_menu",
+            "name": {
+                "de": "✨ Globales Menü aktivieren",
+                "en": "✨ Enable Global Menu"
+            },
+            "description": {
+                "de": "Installiert die GTK- und D-Bus-Komponenten für Anwendungen mit AppMenu-/DBusMenu-Unterstützung.",
+                "en": "Installs the GTK and D-Bus components for applications using AppMenu/DBusMenu support."
+            },
+            "file": "166_install_global_menu.json"
+        },
+        {
+            "id": "disable_sshd",
+            "name": {
+                "de": "✨ SSH-Server deaktivieren",
+                "en": "✨ Disable SSH Server"
+            },
+            "description": {
+                "de": "Deaktiviert den SSH-Server, wenn kein eingehender SSH-Zugriff benötigt wird.",
+                "en": "Disables the SSH server when incoming SSH access is not required."
+            },
+            "file": "167_disable_sshd.json"
         }
     ]
 }

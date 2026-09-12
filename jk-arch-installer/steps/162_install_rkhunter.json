@@ -1,0 +1,64 @@
+{
+    "id": "install_rkhunter",
+
+    "name": {
+        "de": "Rootkit Hunter installieren",
+        "en": "Install Rootkit Hunter"
+    },
+
+    "description": {
+        "de": "Installiert Rootkit Hunter und aktualisiert die Prüfungsdaten.",
+        "en": "Installs Rootkit Hunter and updates its data."
+    },
+
+    "question": {
+        "de": "Soll Rootkit Hunter installiert und aktualisiert werden?",
+        "en": "Should Rootkit Hunter be installed and updated?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Rootkit Hunter.",
+                "en": "Installs Rootkit Hunter."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "rkhunter"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktualisiert die Daten von Rootkit Hunter.",
+                "en": "Updates the Rootkit Hunter data."
+            },
+
+            "command": [
+                "rkhunter",
+                "--update"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,66 @@
+{
+    "id": "install_tailscale",
+
+    "name": {
+        "de": "Tailscale installieren",
+        "en": "Install Tailscale"
+    },
+
+    "description": {
+        "de": "Installiert Tailscale und aktiviert anschließend den Tailscale-Dienst.",
+        "en": "Installs Tailscale and then enables the Tailscale service."
+    },
+
+    "question": {
+        "de": "Soll Tailscale installiert und aktiviert werden?",
+        "en": "Should Tailscale be installed and enabled?"
+    },
+
+    "optional": true,
+
+    "continue_on_error": false,
+
+    "checks": [],
+
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Tailscale.",
+                "en": "Installs Tailscale."
+            },
+
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tailscale"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert den Tailscale-Dienst und startet ihn sofort.",
+                "en": "Enables the Tailscale service and starts it immediately."
+            },
+
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "tailscaled"
+            ],
+
+            "requires_root": true,
+
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
