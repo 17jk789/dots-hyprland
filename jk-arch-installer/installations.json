@@ -3320,7 +3320,7 @@
             "id": "install_rkhunter",
             "name": {
                 "de": "✨ Rootkit Hunter installieren",
-                "en": "Install Rootkit Hunter"
+                "en": "✨ Install Rootkit Hunter"
             },
             "description": {
                 "de": "Installiert Rootkit Hunter und aktualisiert die Prüfungsdaten.",
@@ -3355,8 +3355,8 @@
         {
             "id": "install_apparmor",
             "name": {
-                "de": "✨ AppArmor installieren",
-                "en": "✨ Install AppArmor"
+                "de": "AppArmor installieren",
+                "en": "Install AppArmor"
             },
             "description": {
                 "de": "Installiert AppArmor und die AppArmor-Profile. Die weitere Einrichtung und Härtung von AppArmor muss anschließend manuell anhand des offiziellen Manuals und der Dokumentation durchgeführt werden. Profile und Kernel-Parameter sollten nicht blind übernommen werden.",
@@ -3367,8 +3367,8 @@
         {
             "id": "install_fail2ban",
             "name": {
-                "de": "✨ Fail2ban installieren",
-                "en": "✨ Install Fail2ban"
+                "de": "Fail2ban installieren",
+                "en": "Install Fail2ban"
             },
             "description": {
                 "de": "Installiert Fail2ban als zusätzliche Sicherheitsschicht zum Schutz vor Brute-Force-Angriffen. Die weitere Einrichtung und Anpassung von Jails muss anschließend manuell anhand der offiziellen Dokumentation durchgeführt werden.",
