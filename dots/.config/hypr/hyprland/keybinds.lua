@@ -733,6 +733,14 @@ hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File ma
 
 hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" })
 
+hl.bind(
+	"CTRL + SUPER + W",
+	hl.dsp.exec_cmd("flatpak run net.mullvad.MullvadBrowser"),
+	{ description = "App: Mullvad Browser" }
+)
+
+hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Firefox" })
+
 hl.bind("SUPER + C", hl.dsp.exec_cmd(codeEditor), { description = "App: Code editor" })
 
 hl.bind("CTRL + SHIFT + ALT + SUPER + W", hl.dsp.exec_cmd(officeSoftware), { description = "App: Office software" })
@@ -744,8 +752,6 @@ hl.bind("CTRL + SUPER + V", hl.dsp.exec_cmd(volumeMixer), { description = "App: 
 hl.bind("SUPER + I", hl.dsp.exec_cmd(settingsApp), { description = "App: Settings app" })
 
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd(taskManager), { description = "App: Task manager" })
-
-hl.bind("ALT + SUPER + W", hl.dsp.exec_cmd("firefox-developer-edition"), { description = "App: Firefox Developer" })
 
 --# Cursed stuff
 --## Make window not amogus large
