@@ -1,34 +1,26 @@
 {
     "id": "install_security_tools",
-
     "name": {
         "de": "JKs Sicherheits- und Pentesting-Tools installieren",
         "en": "Install JK's Security and Pentesting Tools"
     },
-
     "description": {
         "de": "Installiert eine Sammlung von Netzwerk-, Web-, OSINT-, Analyse- und Pentesting-Tools.",
         "en": "Installs a collection of network, web, OSINT, analysis, and pentesting tools."
     },
-
     "question": {
         "de": "Sollen die Sicherheits- und Pentesting-Tools installiert werden?",
         "en": "Should the security and pentesting tools be installed?"
     },
-
     "optional": false,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Installiert die Netzwerk-, Analyse-, Web-, OSINT- und Pentesting-Tools einschließlich Hashcat.",
                 "en": "Installs the network, analysis, web, OSINT, and pentesting tools including Hashcat."
             },
-
             "command": [
                 "pacman",
                 "-Syu",
@@ -55,9 +47,7 @@
                 "testssl.sh",
                 "hashcat"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

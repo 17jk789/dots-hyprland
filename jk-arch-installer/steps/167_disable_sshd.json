@@ -1,43 +1,33 @@
 {
     "id": "disable_sshd",
-
     "name": {
         "de": "SSH-Server deaktivieren",
         "en": "Disable SSH Server"
     },
-
     "description": {
         "de": "Deaktiviert und stoppt den SSH-Server, wenn kein eingehender SSH-Zugriff benötigt wird.",
         "en": "Disables and stops the SSH server when incoming SSH access is not required."
     },
-
     "question": {
         "de": "Soll der SSH-Server deaktiviert werden?",
         "en": "Should the SSH server be disabled?"
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Deaktiviert den SSH-Server und stoppt den Dienst sofort.",
                 "en": "Disables the SSH server and stops the service immediately."
             },
-
             "command": [
                 "systemctl",
                 "disable",
                 "--now",
                 "sshd"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

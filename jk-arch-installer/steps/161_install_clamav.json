@@ -1,34 +1,26 @@
 {
     "id": "install_clamav",
-
     "name": {
         "de": "ClamAV installieren",
         "en": "Install ClamAV"
     },
-
     "description": {
         "de": "Installiert ClamAV und aktualisiert die Virensignaturen.",
         "en": "Installs ClamAV and updates the virus signatures."
     },
-
     "question": {
         "de": "Soll ClamAV installiert und die Virensignaturen aktualisiert werden?",
         "en": "Should ClamAV be installed and the virus signatures updated?"
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Installiert ClamAV.",
                 "en": "Installs ClamAV."
             },
-
             "command": [
                 "pacman",
                 "-S",
@@ -36,9 +28,7 @@
                 "--noconfirm",
                 "clamav"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]
@@ -48,13 +38,10 @@
                 "de": "Aktualisiert die Virensignaturen von ClamAV.",
                 "en": "Updates the ClamAV virus signatures."
             },
-
             "command": [
                 "freshclam"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

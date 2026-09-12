@@ -25,18 +25,35 @@
                         "de": "Installiert radare2 und das r2ghidra-Decompilation-Plugin.",
                         "en": "Installs radare2 and the r2ghidra decompilation plugin."
                     },
-                    "command": ["pacman", "-S", "--needed", "--noconfirm", "radare2", "r2ghidra"],
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "radare2",
+                        "r2ghidra"
+                    ],
                     "requires_root": true,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 },
                 {
                     "description": {
                         "de": "Installiert die optionalen Python-Bindings für r2pipe.",
                         "en": "Installs the optional Python bindings for r2pipe."
                     },
-                    "command": ["pacman", "-S", "--needed", "--noconfirm", "python-r2pipe"],
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "python-r2pipe"
+                    ],
                     "requires_root": true,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 }
             ]
         },
@@ -64,36 +81,60 @@
                         "de": "Installiert radare2 als Voraussetzung für r2pm.",
                         "en": "Installs radare2 as a prerequisite for r2pm."
                     },
-                    "command": ["pacman", "-S", "--needed", "--noconfirm", "radare2"],
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "radare2"
+                    ],
                     "requires_root": true,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 },
                 {
                     "description": {
                         "de": "Aktualisiert r2pm.",
                         "en": "Updates r2pm."
                     },
-                    "command": ["r2pm", "-U"],
+                    "command": [
+                        "r2pm",
+                        "-U"
+                    ],
                     "requires_root": false,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 },
                 {
                     "description": {
                         "de": "Initialisiert r2pm.",
                         "en": "Initializes r2pm."
                     },
-                    "command": ["r2pm", "-init"],
+                    "command": [
+                        "r2pm",
+                        "-init"
+                    ],
                     "requires_root": false,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 },
                 {
                     "description": {
                         "de": "Installiert das r2ghidra-Plugin über r2pm.",
                         "en": "Installs the r2ghidra plugin through r2pm."
                     },
-                    "command": ["r2pm", "-i", "r2ghidra"],
+                    "command": [
+                        "r2pm",
+                        "-i",
+                        "r2ghidra"
+                    ],
                     "requires_root": false,
-                    "distros": ["arch_based"]
+                    "distros": [
+                        "arch_based"
+                    ]
                 }
             ]
         }

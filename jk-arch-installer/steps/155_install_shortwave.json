@@ -1,34 +1,26 @@
 {
     "id": "install_shortwave",
-
     "name": {
         "de": "✨ Shortwave installieren",
         "en": "✨ Install Shortwave"
     },
-
     "description": {
         "de": "Installiert Shortwave, einen Internetradio-Player mit Zugriff auf über 50.000 Radiosender weltweit.",
         "en": "Installs Shortwave, an internet radio player with access to over 50,000 radio stations worldwide."
     },
-
     "question": {
         "de": "Soll Shortwave installiert werden?",
         "en": "Should Shortwave be installed?"
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Installiert Shortwave, um Internetradios mit über 50.000 Sendern zu hören.",
                 "en": "Installs Shortwave to listen to internet radio with over 50,000 stations."
             },
-
             "command": [
                 "pacman",
                 "-S",
@@ -36,9 +28,7 @@
                 "--noconfirm",
                 "shortwave"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

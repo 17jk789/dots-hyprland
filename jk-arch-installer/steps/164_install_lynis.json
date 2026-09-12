@@ -1,34 +1,26 @@
 {
     "id": "install_lynis",
-
     "name": {
         "de": "Lynis installieren",
         "en": "Install Lynis"
     },
-
     "description": {
         "de": "Installiert Lynis und führt anschließend ein Sicherheits-Audit des Systems durch.",
         "en": "Installs Lynis and then performs a security audit of the system."
     },
-
     "question": {
         "de": "Soll Lynis installiert und ein Sicherheits-Audit durchgeführt werden?",
         "en": "Should Lynis be installed and a security audit performed?"
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Installiert Lynis.",
                 "en": "Installs Lynis."
             },
-
             "command": [
                 "pacman",
                 "-S",
@@ -36,9 +28,7 @@
                 "--noconfirm",
                 "lynis"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]
@@ -48,15 +38,12 @@
                 "de": "Führt ein umfassendes Sicherheits-Audit des Systems durch.",
                 "en": "Performs a comprehensive security audit of the system."
             },
-
             "command": [
                 "lynis",
                 "audit",
                 "system"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

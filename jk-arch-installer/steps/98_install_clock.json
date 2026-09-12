@@ -1,40 +1,30 @@
 {
     "id": "install_clock",
-
     "variants": {
         "kclock": {
             "id": "install_clock_kclock",
-
             "name": {
                 "de": "KClock installieren (KDE Plasma)",
                 "en": "Install KClock (KDE Plasma)"
             },
-
             "description": {
                 "de": "Installiert KClock für KDE Plasma.",
                 "en": "Installs KClock for KDE Plasma."
             },
-
             "question": {
                 "de": "Soll KClock installiert werden?",
                 "en": "Should KClock be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "clock_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert KClock über Pacman.",
                         "en": "Installs KClock using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -42,50 +32,37 @@
                         "--noconfirm",
                         "kclock"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
                 }
             ]
         },
-
-
         "gnome_clocks": {
             "id": "install_clock_gnome",
-
             "name": {
                 "de": "GNOME Clocks installieren",
                 "en": "Install GNOME Clocks"
             },
-
             "description": {
                 "de": "Installiert GNOME Clocks für die GNOME-Desktopumgebung.",
                 "en": "Installs GNOME Clocks for the GNOME desktop environment."
             },
-
             "question": {
                 "de": "Soll GNOME Clocks installiert werden?",
                 "en": "Should GNOME Clocks be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "clock_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert GNOME Clocks über Pacman.",
                         "en": "Installs GNOME Clocks using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -93,9 +70,7 @@
                         "--noconfirm",
                         "gnome-clocks"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]

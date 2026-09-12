@@ -1,40 +1,30 @@
 {
     "id": "install_music_player",
-
     "variants": {
         "amberol": {
             "id": "install_music_player_amberol",
-
             "name": {
                 "de": "Amberol installieren (GNOME)",
                 "en": "Install Amberol (GNOME)"
             },
-
             "description": {
                 "de": "Installiert Amberol über Pacman.",
                 "en": "Installs Amberol using Pacman."
             },
-
             "question": {
                 "de": "Soll Amberol installiert werden?",
                 "en": "Should Amberol be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "music_player_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert Amberol über Pacman.",
                         "en": "Installs Amberol using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -42,50 +32,37 @@
                         "--noconfirm",
                         "amberol"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
                 }
             ]
         },
-
-
         "amarok": {
             "id": "install_music_player_amarok",
-
             "name": {
                 "de": "Amarok installieren (KDE)",
                 "en": "Install Amarok (KDE)"
             },
-
             "description": {
                 "de": "Installiert Amarok, den klassischen Musikplayer aus dem KDE-Ökosystem.",
                 "en": "Installs Amarok, the classic music player from the KDE ecosystem."
             },
-
             "question": {
                 "de": "Soll Amarok installiert werden?",
                 "en": "Should Amarok be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "music_player_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert Amarok über Pacman.",
                         "en": "Installs Amarok using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -93,50 +70,37 @@
                         "--noconfirm",
                         "amarok"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
                 }
             ]
         },
-
-
         "audiotube": {
             "id": "install_music_player_audiotube",
-
             "name": {
                 "de": "AudioTube installieren",
                 "en": "Install AudioTube"
             },
-
             "description": {
                 "de": "Installiert AudioTube, einen modernen Musikplayer für YouTube Music.",
                 "en": "Installs AudioTube, a modern music player for YouTube Music."
             },
-
             "question": {
                 "de": "Soll AudioTube installiert werden?",
                 "en": "Should AudioTube be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "music_player_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert AudioTube über den AUR-Helper yay.",
                         "en": "Installs AudioTube using the yay AUR helper."
                     },
-
                     "command": [
                         "yay",
                         "-S",
@@ -144,9 +108,7 @@
                         "--noconfirm",
                         "audiotube"
                     ],
-
                     "requires_root": false,
-
                     "distros": [
                         "arch_based"
                     ]

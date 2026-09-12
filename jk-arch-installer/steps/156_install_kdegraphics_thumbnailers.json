@@ -1,34 +1,26 @@
 {
     "id": "install_kdegraphics_thumbnailers",
-
     "name": {
         "de": "KDE Graphics Thumbnailers installieren",
         "en": "Install KDE Graphics Thumbnailers"
     },
-
     "description": {
         "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
         "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
     },
-
     "question": {
         "de": "Sollen KDE Graphics Thumbnailers installiert werden?",
         "en": "Should KDE Graphics Thumbnailers be installed?"
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
                 "de": "Installiert KDE Graphics Thumbnailers für zusätzliche Dateivorschauen im KDE-Dateimanager.",
                 "en": "Installs KDE Graphics Thumbnailers for additional file previews in the KDE file manager."
             },
-
             "command": [
                 "pacman",
                 "-S",
@@ -36,9 +28,7 @@
                 "--noconfirm",
                 "kdegraphics-thumbnailers"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

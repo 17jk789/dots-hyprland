@@ -1,40 +1,30 @@
 {
     "id": "install_media_player",
-
     "variants": {
         "vlc": {
             "id": "install_media_player_vlc",
-
             "name": {
                 "de": "VLC installieren",
                 "en": "Install VLC"
             },
-
             "description": {
                 "de": "Installiert den universellen Medienplayer VLC.",
                 "en": "Installs the universal VLC media player."
             },
-
             "question": {
                 "de": "Soll VLC installiert werden?",
                 "en": "Should VLC be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "media_player_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert VLC über Pacman.",
                         "en": "Installs VLC using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -42,50 +32,37 @@
                         "--noconfirm",
                         "vlc"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
                 }
             ]
         },
-
-
         "gnome": {
             "id": "install_media_player_gnome",
-
             "name": {
                 "de": "GNOME Video + Audio Player installieren",
                 "en": "Install GNOME Video + Audio Player"
             },
-
             "description": {
                 "de": "Installiert GNOME Videos (Totem) und Decibels.",
                 "en": "Installs GNOME Videos (Totem) and Decibels."
             },
-
             "question": {
                 "de": "Sollen GNOME Videos und Decibels installiert werden?",
                 "en": "Should GNOME Videos and Decibels be installed?"
             },
-
             "optional": true,
-
             "exclusive_group": "media_player_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert GNOME Videos (Totem) und Decibels über Pacman.",
                         "en": "Installs GNOME Videos (Totem) and Decibels using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -94,9 +71,7 @@
                         "totem",
                         "decibels"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
