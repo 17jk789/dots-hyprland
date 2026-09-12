@@ -1,45 +1,34 @@
 {
     "id": "install_sunshine",
-
     "name": {
         "de": "Sunshine für Hyprland installieren",
         "en": "Install Sunshine for Hyprland"
     },
-
     "description": {
-        "de": "Installiert Sunshine als Streaming-Server und Fail2ban als zusätzlichen Schutz für das System. Für die Einrichtung und Verwendung von Sunshine mit Moonlight bitte die Projektdokumentation beachten.",
-        "en": "Installs Sunshine as a streaming server and Fail2ban as additional system protection. For configuring and using Sunshine with Moonlight, please refer to the project documentation."
+        "de": "Installiert Sunshine als Streaming-Server. Für die Absicherung des Systems wird empfohlen, Fail2ban installiert und konfiguriert zu haben. Für die Einrichtung und Verwendung von Sunshine mit Moonlight bitte die Projektdokumentation beachten.",
+        "en": "Installs Sunshine as a streaming server. For system security, it is recommended to have Fail2ban installed and configured. For configuring and using Sunshine with Moonlight, please refer to the project documentation."
     },
-
     "question": {
-        "de": "Soll Sunshine und fail2ban installiert werden?",
-        "en": "Should Sunshine and fail2ban be installed?"
+        "de": "Soll Sunshine installiert werden? Es wird empfohlen, Fail2ban bereits installiert zu haben.",
+        "en": "Should Sunshine be installed? It is recommended to have Fail2ban installed beforehand."
     },
-
     "optional": true,
-
     "continue_on_error": false,
-
     "checks": [],
-
     "commands": [
         {
             "description": {
-                "de": "Installiert Sunshine und fail2ban.",
-                "en": "Installs Sunshine and fail2ban."
+                "de": "Installiert Sunshine.",
+                "en": "Installs Sunshine."
             },
-
             "command": [
                 "pacman",
                 "-S",
                 "--needed",
                 "--noconfirm",
-                "sunshine",
-                "fail2ban"
+                "sunshine"
             ],
-
             "requires_root": true,
-
             "distros": [
                 "arch_based"
             ]

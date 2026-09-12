@@ -4,7 +4,6 @@
         "de": "Arch Linux Installer",
         "en": "Arch Linux Installer"
     },
-
     "installations": [
         {
             "id": "system_update",
@@ -1074,8 +1073,8 @@
                 "en": "Install Firefox"
             },
             "description": {
-                "de": "Wähle genau eine Installationsmethode für Firefox: Pacman oder yay.",
-                "en": "Choose exactly one installation method for Firefox: Pacman or yay."
+                "de": "Wähle genau eine Installationsmethode für Firefox: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for Firefox: Pacman, yay or Flatpak."
             },
             "file": "71_install_firefox.json",
             "substeps": [
@@ -1104,6 +1103,19 @@
                         "en": "Installs Firefox from the AUR using yay."
                     },
                     "exclusive_group": "firefox_method"
+                },
+                {
+                    "id": "install_firefox_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "Firefox über Flatpak installieren",
+                        "en": "Install Firefox with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert Firefox über Flathub mit Flatpak.",
+                        "en": "Installs Firefox from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "firefox_method"
                 }
             ]
         },
@@ -1114,8 +1126,8 @@
                 "en": "Install Brave"
             },
             "description": {
-                "de": "Wähle genau eine Installationsmethode für Brave: Pacman oder yay.",
-                "en": "Choose exactly one installation method for Brave: Pacman or yay."
+                "de": "Wähle genau eine Installationsmethode für Brave: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for Brave: Pacman, yay or Flatpak."
             },
             "file": "72_install_brave.json",
             "substeps": [
@@ -1144,6 +1156,19 @@
                         "en": "Installs Brave from the AUR using yay."
                     },
                     "exclusive_group": "brave_method"
+                },
+                {
+                    "id": "install_brave_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "Brave über Flatpak installieren",
+                        "en": "Install Brave with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert Brave über Flathub mit Flatpak.",
+                        "en": "Installs Brave from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "brave_method"
                 }
             ]
         },
@@ -1154,10 +1179,50 @@
                 "en": "✨ Install Mullvad Browser"
             },
             "description": {
-                "de": "Installiert den datenschutzfokussierten Mullvad Browser über yay.",
-                "en": "Installs the privacy-focused Mullvad Browser using yay."
+                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten Mullvad Browser: yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the privacy-focused Mullvad Browser: yay or Flatpak."
             },
-            "file": "73_install_mullvad_browser.json"
+            "file": "73_install_mullvad_browser.json",
+            "substeps": [
+                {
+                    "id": "install_mullvad_browser_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Mullvad Browser über yay installieren",
+                        "en": "Install Mullvad Browser with yay"
+                    },
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über das AUR mit yay.",
+                        "en": "Installs the Mullvad Browser from the AUR using yay."
+                    },
+                    "exclusive_group": "mullvad_browser_method"
+                },
+                {
+                    "id": "install_mullvad_browser_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "Mullvad Browser über Flatpak installieren",
+                        "en": "Install Mullvad Browser with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über Flathub mit Flatpak.",
+                        "en": "Installs the Mullvad Browser from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "mullvad_browser_method"
+                }
+            ]
+        },
+        {
+            "id": "install_tor_browser",
+            "name": {
+                "de": "✨ Tor Browser installieren",
+                "en": "✨ Install Tor Browser"
+            },
+            "description": {
+                "de": "Installiert den Tor Browser Launcher für den Tor Browser.",
+                "en": "Installs the Tor Browser Launcher for the Tor Browser."
+            },
+            "file": "150_install_tor_browser.json"
         },
         {
             "id": "install_google_chrome",
@@ -1166,10 +1231,38 @@
                 "en": "✨ Install Google Chrome"
             },
             "description": {
-                "de": "Installiert Google Chrome über das AUR mit yay.",
-                "en": "Installs Google Chrome from the AUR using yay."
+                "de": "Wähle genau eine Installationsmethode für Google Chrome: yay oder Flatpak.",
+                "en": "Choose exactly one installation method for Google Chrome: yay or Flatpak."
             },
-            "file": "74_install_google_chrome.json"
+            "file": "74_install_google_chrome.json",
+            "substeps": [
+                {
+                    "id": "install_google_chrome_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Google Chrome über yay installieren",
+                        "en": "Install Google Chrome with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Google Chrome über das AUR mit yay.",
+                        "en": "Installs Google Chrome from the AUR using yay."
+                    },
+                    "exclusive_group": "google_chrome_method"
+                },
+                {
+                    "id": "install_google_chrome_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "Google Chrome über Flatpak installieren",
+                        "en": "Install Google Chrome with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert Google Chrome über Flathub mit Flatpak.",
+                        "en": "Installs Google Chrome from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "google_chrome_method"
+                }
+            ]
         },
         {
             "id": "install_librewolf",
@@ -1178,10 +1271,38 @@
                 "en": "✨ Install LibreWolf"
             },
             "description": {
-                "de": "Installiert den datenschutzfokussierten LibreWolf Browser über das AUR mit yay.",
-                "en": "Installs the privacy-focused LibreWolf browser from the AUR using yay."
+                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten LibreWolf Browser: yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the privacy-focused LibreWolf browser: yay or Flatpak."
             },
-            "file": "75_install_librewolf.json"
+            "file": "75_install_librewolf.json",
+            "substeps": [
+                {
+                    "id": "install_librewolf_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "LibreWolf über yay installieren",
+                        "en": "Install LibreWolf with yay"
+                    },
+                    "description": {
+                        "de": "Installiert den LibreWolf Browser über das AUR mit yay.",
+                        "en": "Installs the LibreWolf browser from the AUR using yay."
+                    },
+                    "exclusive_group": "librewolf_method"
+                },
+                {
+                    "id": "install_librewolf_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "LibreWolf über Flatpak installieren",
+                        "en": "Install LibreWolf with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert den LibreWolf Browser über Flathub mit Flatpak.",
+                        "en": "Installs the LibreWolf browser from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "librewolf_method"
+                }
+            ]
         },
         {
             "id": "install_firefox_developer_edition",
@@ -1245,19 +1366,15 @@
         },
         {
             "id": "install_media_player",
-
             "name": {
                 "de": "Medienplayer installieren",
                 "en": "Install media player"
             },
-
             "description": {
                 "de": "Wähle einen Medienplayer: VLC oder GNOME Video und Audio Player.",
                 "en": "Choose a media player: VLC or GNOME Video and Audio Player."
             },
-
             "file": "81_install_media_player.json",
-
             "substeps": [
                 {
                     "id": "install_media_player_vlc",
@@ -1301,19 +1418,15 @@
         },
         {
             "id": "install_music_player",
-
             "name": {
                 "de": "✨ Musikplayer installieren",
                 "en": "✨ Install music player"
             },
-
             "description": {
                 "de": "Wähle einen Musikplayer: Amberol für GNOME, Amarok für KDE oder AudioTube.",
                 "en": "Choose a music player: Amberol for GNOME, Amarok for KDE, or AudioTube."
             },
-
             "file": "157_install_music_player.json",
-
             "substeps": [
                 {
                     "id": "install_music_player_amberol",
@@ -1370,19 +1483,15 @@
         },
         {
             "id": "install_weather",
-
             "name": {
                 "de": "✨ Wetter-App installieren",
                 "en": "✨ Install weather app"
             },
-
             "description": {
                 "de": "Wähle genau eine Wetter-App: Mousam oder GNOME Weather.",
                 "en": "Choose exactly one weather app: Mousam or GNOME Weather."
             },
-
             "file": "158_install_weather.json",
-
             "substeps": [
                 {
                     "id": "install_weather_mousam",
@@ -1580,10 +1689,51 @@
                 "en": "✨ Install Thunderbird"
             },
             "description": {
-                "de": "Installiert den freien und quelloffenen E-Mail- und Kalender-Client Thunderbird.",
-                "en": "Installs the free and open-source Thunderbird email and calendar client."
+                "de": "Wähle genau eine Installationsmethode für den freien und quelloffenen E-Mail- und Kalender-Client Thunderbird: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the free and open-source Thunderbird email and calendar client: Pacman, yay or Flatpak."
             },
-            "file": "92_install_thunderbird.json"
+            "file": "92_install_thunderbird.json",
+            "substeps": [
+                {
+                    "id": "install_thunderbird_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Thunderbird über Pacman installieren",
+                        "en": "Install Thunderbird with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Thunderbird über die offiziellen Arch-Repositories mit Pacman.",
+                        "en": "Installs Thunderbird from the official Arch repositories using Pacman."
+                    },
+                    "exclusive_group": "thunderbird_method"
+                },
+                {
+                    "id": "install_thunderbird_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Thunderbird über yay installieren",
+                        "en": "Install Thunderbird with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Thunderbird über das AUR mit yay.",
+                        "en": "Installs Thunderbird from the AUR using yay."
+                    },
+                    "exclusive_group": "thunderbird_method"
+                },
+                {
+                    "id": "install_thunderbird_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "Thunderbird über Flatpak installieren",
+                        "en": "Install Thunderbird with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert Thunderbird über Flathub mit Flatpak.",
+                        "en": "Installs Thunderbird from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "thunderbird_method"
+                }
+            ]
         },
         {
             "id": "install_qalculate",
@@ -1647,19 +1797,15 @@
         },
         {
             "id": "install_clock",
-
             "name": {
                 "de": "Uhr-Anwendung installieren",
                 "en": "Install clock application"
             },
-
             "description": {
                 "de": "Wähle eine Desktop-Uhr: KClock für KDE Plasma oder GNOME Clocks für GNOME.",
                 "en": "Choose a desktop clock: KClock for KDE Plasma or GNOME Clocks for GNOME."
             },
-
             "file": "98_install_clock.json",
-
             "substeps": [
                 {
                     "id": "install_clock_kclock",
@@ -3019,18 +3165,6 @@
             "file": "149_install_security_tools.json"
         },
         {
-            "id": "install_tor_browser",
-            "name": {
-                "de": "✨ Tor Browser installieren",
-                "en": "✨ Install Tor Browser"
-            },
-            "description": {
-                "de": "Installiert den Tor Browser Launcher für den Tor Browser.",
-                "en": "Installs the Tor Browser Launcher for the Tor Browser."
-            },
-            "file": "150_install_tor_browser.json"
-        },
-        {
             "id": "install_tor",
             "name": {
                 "de": "✨ Tor installieren",
@@ -3044,19 +3178,15 @@
         },
         {
             "id": "install_cloudflare_warp",
-
             "name": {
                 "de": "✨ Cloudflare WARP installieren",
                 "en": "✨ Install Cloudflare WARP"
             },
-
             "description": {
                 "de": "Wähle eine Installationsmethode für den Cloudflare-WARP-Client.",
                 "en": "Choose an installation method for the Cloudflare WARP client."
             },
-
             "file": "152_install_cloudflare_warp.json",
-
             "substeps": [
                 {
                     "id": "install_cloudflare_warp_pacman",
@@ -3088,19 +3218,15 @@
         },
         {
             "id": "install_bottles",
-
             "name": {
                 "de": "✨ Bottles installieren",
                 "en": "✨ Install Bottles"
             },
-
             "description": {
                 "de": "Wähle eine Installationsmethode für Bottles.",
                 "en": "Choose an installation method for Bottles."
             },
-
             "file": "154_install_bottles.json",
-
             "substeps": [
                 {
                     "id": "install_bottles_yay",
@@ -3149,8 +3275,8 @@
                 "en": "✨ Install Sunshine for Hyprland"
             },
             "description": {
-                "de": "Installiert Sunshine und fail2ban für Remote-Desktop-Streaming unter Hyprland.",
-                "en": "Installs Sunshine and fail2ban for remote desktop streaming with Hyprland."
+                "de": "Installiert Sunshine für Remote-Desktop-Streaming unter Hyprland. Für zusätzliche Systemsicherheit wird empfohlen, Fail2ban installiert und konfiguriert zu haben.",
+                "en": "Installs Sunshine for remote desktop streaming with Hyprland. For additional system security, it is recommended to have Fail2ban installed and configured."
             },
             "file": "169_install_sunshine.json"
         },
@@ -3225,6 +3351,18 @@
                 "en": "Installs AppArmor and the AppArmor profiles. Further AppArmor configuration and hardening must then be performed manually according to the official manual and documentation. Profiles and kernel parameters should not be applied blindly."
             },
             "file": "165_install_apparmor.json"
+        },
+        {
+            "id": "install_fail2ban",
+            "name": {
+                "de": "✨ Fail2ban installieren",
+                "en": "✨ Install Fail2ban"
+            },
+            "description": {
+                "de": "Installiert Fail2ban als zusätzliche Sicherheitsschicht zum Schutz vor Brute-Force-Angriffen. Die weitere Einrichtung und Anpassung von Jails muss anschließend manuell anhand der offiziellen Dokumentation durchgeführt werden.",
+                "en": "Installs Fail2ban as an additional security layer against brute-force attacks. Further configuration and customization of jails must then be performed manually according to the official documentation."
+            },
+            "file": "171_install_fail2ban.json"
         },
         {
             "id": "install_global_menu",

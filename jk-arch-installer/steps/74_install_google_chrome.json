@@ -1,47 +1,81 @@
 {
     "id": "install_google_chrome",
-
-    "name": {
-        "de": "Google Chrome installieren",
-        "en": "Install Google Chrome"
-    },
-
-    "description": {
-        "de": "Installiert Google Chrome über das AUR mit yay.",
-        "en": "Installs Google Chrome from the AUR using yay."
-    },
-
-    "question": {
-        "de": "Soll Google Chrome installiert werden?",
-        "en": "Should Google Chrome be installed?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert Google Chrome über yay.",
-                "en": "Installs Google Chrome using yay."
+    "variants": {
+        "yay": {
+            "id": "install_google_chrome_yay",
+            "name": {
+                "de": "Google Chrome über yay installieren",
+                "en": "Install Google Chrome with yay"
             },
-
-            "command": [
-                "yay",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "google-chrome"
-            ],
-
-            "requires_root": false,
-
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert Google Chrome über das AUR mit yay.",
+                "en": "Installs Google Chrome from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll Google Chrome über yay installiert werden?",
+                "en": "Should Google Chrome be installed using yay?"
+            },
+            "optional": false,
+            "exclusive_group": "google_chrome_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Google Chrome über yay.",
+                        "en": "Installs Google Chrome using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "google-chrome"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_google_chrome_flatpak",
+            "name": {
+                "de": "Google Chrome über Flatpak installieren",
+                "en": "Install Google Chrome with Flatpak"
+            },
+            "description": {
+                "de": "Installiert Google Chrome über Flathub mit Flatpak.",
+                "en": "Installs Google Chrome from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll Google Chrome über Flatpak installiert werden?",
+                "en": "Should Google Chrome be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "google_chrome_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Google Chrome über Flatpak.",
+                        "en": "Installs Google Chrome using Flatpak."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "com.google.Chrome"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

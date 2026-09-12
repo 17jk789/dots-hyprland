@@ -1,47 +1,119 @@
 {
     "id": "install_thunderbird",
-
-    "name": {
-        "de": "Thunderbird installieren",
-        "en": "Install Thunderbird"
-    },
-
-    "description": {
-        "de": "Installiert Thunderbird zur Verwaltung von E-Mails, Kalendern und Aufgaben.",
-        "en": "Installs Thunderbird for managing emails, calendars, and tasks."
-    },
-
-    "question": {
-        "de": "Soll Thunderbird installiert werden?",
-        "en": "Should Thunderbird be installed?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert Thunderbird über Pacman.",
-                "en": "Installs Thunderbird using Pacman."
+    "variants": {
+        "pacman": {
+            "id": "install_thunderbird_pacman",
+            "name": {
+                "de": "Thunderbird über Pacman installieren",
+                "en": "Install Thunderbird with Pacman"
             },
-
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "thunderbird"
-            ],
-
-            "requires_root": true,
-
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert Thunderbird über die offiziellen Arch-Repositories mit Pacman.",
+                "en": "Installs Thunderbird from the official Arch repositories using Pacman."
+            },
+            "question": {
+                "de": "Soll Thunderbird über Pacman installiert werden?",
+                "en": "Should Thunderbird be installed using Pacman?"
+            },
+            "optional": false,
+            "exclusive_group": "thunderbird_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Thunderbird über Pacman.",
+                        "en": "Installs Thunderbird using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "thunderbird"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "yay": {
+            "id": "install_thunderbird_yay",
+            "name": {
+                "de": "Thunderbird über yay installieren",
+                "en": "Install Thunderbird with yay"
+            },
+            "description": {
+                "de": "Installiert Thunderbird über das AUR mit yay.",
+                "en": "Installs Thunderbird from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll Thunderbird über yay installiert werden?",
+                "en": "Should Thunderbird be installed using yay?"
+            },
+            "optional": true,
+            "exclusive_group": "thunderbird_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Thunderbird über yay.",
+                        "en": "Installs Thunderbird using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "thunderbird"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_thunderbird_flatpak",
+            "name": {
+                "de": "Thunderbird über Flatpak installieren",
+                "en": "Install Thunderbird with Flatpak"
+            },
+            "description": {
+                "de": "Installiert Thunderbird über Flathub mit Flatpak.",
+                "en": "Installs Thunderbird from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll Thunderbird über Flatpak installiert werden?",
+                "en": "Should Thunderbird be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "thunderbird_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Thunderbird über Flatpak.",
+                        "en": "Installs Thunderbird using Flatpak."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "org.mozilla.Thunderbird"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

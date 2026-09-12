@@ -1,47 +1,81 @@
 {
     "id": "install_mullvad_browser",
-
-    "name": {
-        "de": "Mullvad Browser installieren",
-        "en": "Install Mullvad Browser"
-    },
-
-    "description": {
-        "de": "Installiert den datenschutzfokussierten Mullvad Browser über das AUR.",
-        "en": "Installs the privacy-focused Mullvad Browser from the AUR."
-    },
-
-    "question": {
-        "de": "Soll der Mullvad Browser installiert werden?",
-        "en": "Should the Mullvad Browser be installed?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert den Mullvad Browser über yay.",
-                "en": "Installs the Mullvad Browser using yay."
+    "variants": {
+        "yay": {
+            "id": "install_mullvad_browser_yay",
+            "name": {
+                "de": "Mullvad Browser über yay installieren",
+                "en": "Install Mullvad Browser with yay"
             },
-
-            "command": [
-                "yay",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "mullvad-browser-bin"
-            ],
-
-            "requires_root": false,
-
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert den datenschutzfokussierten Mullvad Browser über das AUR mit yay.",
+                "en": "Installs the privacy-focused Mullvad Browser from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll der Mullvad Browser über yay installiert werden?",
+                "en": "Should the Mullvad Browser be installed using yay?"
+            },
+            "optional": false,
+            "exclusive_group": "mullvad_browser_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über yay.",
+                        "en": "Installs the Mullvad Browser using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "mullvad-browser-bin"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_mullvad_browser_flatpak",
+            "name": {
+                "de": "Mullvad Browser über Flatpak installieren",
+                "en": "Install Mullvad Browser with Flatpak"
+            },
+            "description": {
+                "de": "Installiert den datenschutzfokussierten Mullvad Browser über Flathub mit Flatpak.",
+                "en": "Installs the privacy-focused Mullvad Browser from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll der Mullvad Browser über Flatpak installiert werden?",
+                "en": "Should the Mullvad Browser be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "mullvad_browser_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über Flatpak.",
+                        "en": "Installs the Mullvad Browser using Flatpak."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "net.mullvad.MullvadBrowser"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

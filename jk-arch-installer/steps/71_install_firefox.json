@@ -1,40 +1,30 @@
 {
     "id": "install_firefox",
-
     "variants": {
         "pacman": {
             "id": "install_firefox_pacman",
-
             "name": {
                 "de": "Firefox über Pacman installieren",
                 "en": "Install Firefox with Pacman"
             },
-
             "description": {
                 "de": "Installiert Firefox über die offiziellen Arch-Repositories mit Pacman.",
                 "en": "Installs Firefox from the official Arch repositories using Pacman."
             },
-
             "question": {
                 "de": "Soll Firefox über Pacman installiert werden?",
                 "en": "Should Firefox be installed using Pacman?"
             },
-
             "optional": false,
-
             "exclusive_group": "firefox_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert Firefox über Pacman.",
                         "en": "Installs Firefox using Pacman."
                     },
-
                     "command": [
                         "pacman",
                         "-S",
@@ -42,49 +32,37 @@
                         "--noconfirm",
                         "firefox"
                     ],
-
                     "requires_root": true,
-
                     "distros": [
                         "arch_based"
                     ]
                 }
             ]
         },
-
         "yay": {
             "id": "install_firefox_yay",
-
             "name": {
                 "de": "Firefox über yay installieren",
                 "en": "Install Firefox with yay"
             },
-
             "description": {
                 "de": "Installiert Firefox über das AUR mit yay.",
                 "en": "Installs Firefox from the AUR using yay."
             },
-
             "question": {
                 "de": "Soll Firefox über yay installiert werden?",
                 "en": "Should Firefox be installed using yay?"
             },
-
             "optional": true,
-
             "exclusive_group": "firefox_method",
-
             "continue_on_error": false,
-
             "checks": [],
-
             "commands": [
                 {
                     "description": {
                         "de": "Installiert Firefox über yay.",
                         "en": "Installs Firefox using yay."
                     },
-
                     "command": [
                         "yay",
                         "-S",
@@ -92,9 +70,45 @@
                         "--noconfirm",
                         "firefox"
                     ],
-
                     "requires_root": false,
-
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_firefox_flatpak",
+            "name": {
+                "de": "Firefox über Flatpak installieren",
+                "en": "Install Firefox with Flatpak"
+            },
+            "description": {
+                "de": "Installiert Firefox über Flathub mit Flatpak.",
+                "en": "Installs Firefox from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll Firefox über Flatpak installiert werden?",
+                "en": "Should Firefox be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "firefox_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Firefox über Flatpak.",
+                        "en": "Installs Firefox using Flatpak."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "-y",
+                        "flathub",
+                        "org.mozilla.firefox"
+                    ],
+                    "requires_root": false,
                     "distros": [
                         "arch_based"
                     ]

@@ -1,0 +1,53 @@
+{
+    "id": "install_fail2ban",
+    "name": {
+        "de": "Fail2ban installieren",
+        "en": "Install Fail2ban"
+    },
+    "description": {
+        "de": "Installiert Fail2ban als zusätzliche Schutzschicht für das System. Die eigentliche Konfiguration von Schutzregeln (Jails) muss anschließend manuell durchgeführt werden.",
+        "en": "Installs Fail2ban as an additional system protection layer. The actual configuration of protection rules (jails) must be performed manually afterwards."
+    },
+    "question": {
+        "de": "Soll Fail2ban installiert und aktiviert werden?",
+        "en": "Should Fail2ban be installed and enabled?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Fail2ban.",
+                "en": "Installs Fail2ban."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "fail2ban"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert den Fail2ban-Dienst und startet ihn sofort.",
+                "en": "Enables and immediately starts the Fail2ban service."
+            },
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "fail2ban"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

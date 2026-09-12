@@ -1,47 +1,81 @@
 {
     "id": "install_librewolf",
-
-    "name": {
-        "de": "LibreWolf installieren",
-        "en": "Install LibreWolf"
-    },
-
-    "description": {
-        "de": "Installiert den datenschutzfokussierten LibreWolf Browser über das AUR.",
-        "en": "Installs the privacy-focused LibreWolf browser from the AUR."
-    },
-
-    "question": {
-        "de": "Soll LibreWolf installiert werden?",
-        "en": "Should LibreWolf be installed?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": false,
-
-    "checks": [],
-
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert LibreWolf über yay.",
-                "en": "Installs LibreWolf using yay."
+    "variants": {
+        "yay": {
+            "id": "install_librewolf_yay",
+            "name": {
+                "de": "LibreWolf über yay installieren",
+                "en": "Install LibreWolf with yay"
             },
-
-            "command": [
-                "yay",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "librewolf-bin"
-            ],
-
-            "requires_root": false,
-
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert den datenschutzfokussierten LibreWolf Browser über das AUR mit yay.",
+                "en": "Installs the privacy-focused LibreWolf browser from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll LibreWolf über yay installiert werden?",
+                "en": "Should LibreWolf be installed using yay?"
+            },
+            "optional": false,
+            "exclusive_group": "librewolf_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert LibreWolf über yay.",
+                        "en": "Installs LibreWolf using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "librewolf-bin"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_librewolf_flatpak",
+            "name": {
+                "de": "LibreWolf über Flatpak installieren",
+                "en": "Install LibreWolf with Flatpak"
+            },
+            "description": {
+                "de": "Installiert den datenschutzfokussierten LibreWolf Browser über Flathub mit Flatpak.",
+                "en": "Installs the privacy-focused LibreWolf browser from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll LibreWolf über Flatpak installiert werden?",
+                "en": "Should LibreWolf be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "librewolf_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert LibreWolf über Flatpak.",
+                        "en": "Installs LibreWolf using Flatpak."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "io.gitlab.librewolf-community"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

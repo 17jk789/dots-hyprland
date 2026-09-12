@@ -98,6 +98,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Den Firefox Browser installieren](#den-firefox-browser-installieren)
     - [Den Brave Browser über yay installieren](#den-brave-browser-über-yay-installieren)
     - [✨ Den datenschutzfokussierten Mullvad Browser installieren](#-den-datenschutzfokussierten-mullvad-browser-installieren)
+- [✨ Tor Browser installieren und einrichten](#-tor-browser-installieren-und-einrichten)
     - [✨ Google Chrome über den AUR-Helfer installieren](#-google-chrome-über-den-aur-helfer-installieren)
     - [✨ Den datenschutzfokussierten LibreWolf Browser installieren](#-den-datenschutzfokussierten-librewolf-browser-installieren)
     - [✨ Die Firefox Developer Edition installieren](#-die-firefox-developer-edition-installieren)
@@ -235,7 +236,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
 - [✨ Haskell-Pakete reparieren](#-haskell-pakete-reparieren)
 - [✨ Cloudflare WARP („1.1.1.1“) installieren und einrichten](#-cloudflare-warp-1111-installieren-und-einrichten)
     - [✨ Wichtige WARP-Befehle](#-wichtige-warp-befehle)
-- [✨ Tor Browser und Tor Client installieren und einrichten](#-tor-browser-und-tor-client-installieren-und-einrichten)
+- [✨ Tor Client installieren und einrichten](#-tor-client-installieren-und-einrichten)
 - [✨ Bottles installieren und einrichten](#-bottles-installieren-und-einrichten)
     - [Flatpak installieren (falls nicht vorhanden)](#flatpak-installieren-falls-nicht-vorhanden)
     - [Bottles installieren](#bottles-installieren)
@@ -279,6 +280,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
   - [6. ✨ Zusätzliche Rootkit-Prüfung mit chkrootkit](#6--zusätzliche-rootkit-prüfung-mit-chkrootkit)
   - [7. ✨ System mit Lynis überprüfen](#7--system-mit-lynis-überprüfen)
   - [✨ AppArmor sauber aktivieren](#-apparmor-sauber-aktivieren)
+  - [✨ Fail2ban sauber aktivieren](#-fail2ban-sauber-aktivieren)
   - [✨ Globales Menü aktivieren](#-globales-menü-aktivieren)
   - [✨ SSH-Server deaktivieren](#-ssh-server-deaktivieren)
 - [✨ Arch Linux AUR auf Malware überprüfen](#-arch-linux-aur-auf-malware-überprüfen)
@@ -1704,6 +1706,7 @@ sudo pacman -S signal-desktop
 ```bash
 sudo pacman -S firefox
 # yay -S firefox
+# flatpak install --noninteractive flathub org.mozilla.firefox
 ```
 
 ### Den Brave Browser über yay installieren
@@ -1713,6 +1716,7 @@ sudo pacman -S firefox
 ```bash
 sudo pacman -S brave-bin
 # yay -S brave-bin
+# flatpak install --noninteractive flathub com.brave.Browser
 ```
 
 ### ✨ Den datenschutzfokussierten Mullvad Browser installieren
@@ -1724,6 +1728,35 @@ sudo pacman -S brave-bin
 
 ```bash
 yay -S mullvad-browser-bin
+# flatpak install --noninteractive flathub net.mullvad.MullvadBrowser
+```
+
+</details>
+
+# ✨ Tor Browser installieren und einrichten
+
+> Der **Tor Browser** ist ein speziell konfigurierter Browser, der den Datenverkehr über das Tor-Netzwerk leitet und auf Datenschutz sowie Anonymität ausgelegt ist.
+>
+> Unter Arch Linux kann der Tor Browser über den Tor Browser Launcher installiert und gestartet werden.
+
+<details>
+<summary>✨ Tor Browser installieren</summary>
+
+> Der Tor Browser ermöglicht das komfortable Surfen über das Tor-Netzwerk.
+
+```bash
+sudo pacman -S torbrowser-launcher
+```
+
+</details>
+
+<details>
+<summary>✨ Tor Browser starten</summary>
+
+> Nach der Installation kann der Tor Browser über den Tor Browser Launcher gestartet werden.
+
+```bash
+torbrowser-launcher
 ```
 
 </details>
@@ -1737,6 +1770,7 @@ yay -S mullvad-browser-bin
 
 ```bash
 yay -S google-chrome
+# flatpak install --noninteractive flathub com.google.Chrome
 ```
 
 </details>
@@ -1750,6 +1784,7 @@ yay -S google-chrome
 
 ```bash
 yay -S librewolf-bin
+# flatpak install --noninteractive flathub io.gitlab.librewolf-community
 ```
 
 </details>
@@ -2079,6 +2114,8 @@ sudo pacman -S blender
 
 ```bash
 sudo pacman -S thunderbird
+# yay -S thunderbird
+# flatpak install --noninteractive flathub org.mozilla.Thunderbird
 ```
 
 </details>
@@ -4352,11 +4389,11 @@ warp-cli settings       # Einstellungen anzeigen
 warp-cli connectivity-check  # Verbindung überprüfen
 ```
 
-# ✨ Tor Browser und Tor Client installieren und einrichten
+# ✨ Tor Client installieren und einrichten
 
-> **Tor** ermöglicht anonymisierte Netzwerkverbindungen, indem der Datenverkehr über das Tor-Netzwerk geleitet wird. Der **Tor Browser** ist ein speziell für die Nutzung des Tor-Netzwerks konfigurierter Browser.
+> **Tor** ermöglicht anonymisierte Netzwerkverbindungen, indem der Datenverkehr über das Tor-Netzwerk geleitet wird. Der **Tor Client** stellt Anwendungen eine Verbindung zum Tor-Netzwerk bereit.
 >
-> Unter Arch Linux können sowohl der Tor Client als auch der Tor Browser installiert und eingerichtet werden.
+> Unter Arch Linux kann der Tor Client installiert und als Systemdienst eingerichtet werden.
 
 <details>
 <summary>✨ Tor Client installieren</summary>
@@ -4365,7 +4402,7 @@ warp-cli connectivity-check  # Verbindung überprüfen
 
 ```bash
 sudo pacman -S tor
-````
+```
 
 </details>
 
@@ -4376,28 +4413,6 @@ sudo pacman -S tor
 
 ```bash
 sudo systemctl enable --now tor
-```
-
-</details>
-
-<details>
-<summary>✨ Tor Browser installieren</summary>
-
-> Der Tor Browser ermöglicht das komfortable Surfen über das Tor-Netzwerk und ist auf Datenschutz und Anonymität ausgelegt.
-
-```bash
-sudo pacman -S torbrowser-launcher
-```
-
-</details>
-
-<details>
-<summary>✨ Tor Browser starten</summary>
-
-> Nach der Installation kann der Tor Browser über den Tor Browser Launcher gestartet werden.
-
-```bash
-torbrowser-launcher
 ```
 
 </details>
@@ -5441,6 +5456,88 @@ sudo aa-status
 
 ```bash
 systemctl status apparmor
+```
+
+</details>
+
+## ✨ Fail2ban sauber aktivieren
+
+> **Fail2ban** ist ein Intrusion-Prevention-System (IPS), das Logdateien überwacht und bei wiederholten fehlgeschlagenen Anmeldeversuchen automatisch IP-Adressen temporär sperrt.
+>
+> Unter CachyOS beziehungsweise Arch Linux kann Fail2ban als zusätzliche Schutzschicht eingesetzt werden, um Dienste wie SSH gegen Brute-Force-Angriffe abzusichern.
+
+<details>
+<summary>✨ Fail2ban installieren und aktivieren</summary>
+
+> Fail2ban wird über die offiziellen Arch-Paketquellen installiert:
+
+```bash
+sudo pacman -S fail2ban
+```
+
+> Anschließend wird der Fail2ban-Dienst aktiviert und direkt gestartet:
+
+```bash
+sudo systemctl enable --now fail2ban
+```
+
+</details>
+
+<details>
+<summary>✨ Fail2ban überprüfen</summary>
+
+> Nach der Aktivierung kann überprüft werden, ob der Dienst erfolgreich läuft:
+
+```bash
+systemctl status fail2ban
+```
+
+> Zusätzlich kann der aktuelle Fail2ban-Status abgefragt werden:
+
+```bash
+sudo fail2ban-client status
+```
+
+</details>
+
+<details>
+<summary>✨ SSH-Schutz aktivieren (empfohlen)</summary>
+
+> Fail2ban wird normalerweise über lokale Konfigurationen angepasst. Die Standarddateien sollten nicht direkt verändert werden.
+>
+> Eine eigene Konfiguration wird unter `jail.local` erstellt:
+
+```bash
+sudo nvim /etc/fail2ban/jail.local
+```
+
+> Beispielkonfiguration für SSH:
+
+```ini
+[DEFAULT]
+bantime = 1h
+findtime = 10m
+maxretry = 5
+
+backend = systemd
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+maxretry = 5
+```
+
+> Danach wird Fail2ban neu geladen:
+
+```bash
+sudo systemctl restart fail2ban
+```
+
+> Der Status des SSH-Schutzes kann anschließend geprüft werden:
+
+```bash
+sudo fail2ban-client status sshd
 ```
 
 </details>
