@@ -228,7 +228,6 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ SDDM installieren](#-sddm-installieren)
   - [Nach der Neovim-Konfiguration](#nach-der-neovim-konfiguration)
     - [Code über den LSP-Server im Editor formatieren](#code-über-den-lsp-server-im-editor-formatieren)
-  - [Emfehlungen bei end-4 -\> fix soon](#emfehlungen-bei-end-4---fix-soon)
 - [✨ UFW ist langsam](#-ufw-ist-langsam)
 - [✨ Langsames Internet über WLAN beheben](#-langsames-internet-über-wlan-beheben)
 - [✨ Firefox ist langsam](#-firefox-ist-langsam)
@@ -4004,7 +4003,7 @@ Im Editor folgenden Befehl ausführen:
 
 > Der Befehl formatiert den aktuell geöffneten Buffer. Voraussetzung ist, dass für die verwendete Programmiersprache ein LSP-Server mit aktivierter Formatierungsunterstützung eingerichtet ist.
 
-## Emfehlungen bei end-4 -> fix soon
+<!-- ## Emfehlungen bei end-4
 
 ```bash
 nvim ~/.config/quickshell/ii/modules/common/Config.qml
@@ -4015,7 +4014,7 @@ Zeile 480:
 ```qml
 // property list<string> excludedSites: ["quora.com", "facebook.com"]
 property list<string> excludedSites: []
-```
+``` -->
 
 # ✨ UFW ist langsam
 
