@@ -731,7 +731,9 @@ hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
 
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })
 
-hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" })
+hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" }) -- Sollte Brave laut JK-Arch Config sein
+
+hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Firefox" })
 
 hl.bind(
 	"CTRL + SUPER + W",
@@ -739,7 +741,21 @@ hl.bind(
 	{ description = "App: Mullvad Browser" }
 )
 
-hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Firefox" })
+hl.bind(
+	"SUPER + SHIFT + W",
+	hl.dsp.exec_cmd("flatpak run io.gitlab.librewolf-community"),
+	{ description = "App: LibreWolf" }
+)
+
+hl.bind("SUPER + ALT + SHIFT + W", hl.dsp.exec_cmd("torbrowser-launcher"), { description = "App: Tor Browser" })
+
+hl.bind(
+	"ALT + space",
+	hl.dsp.exec_cmd(
+		'bash -c \'BROWSERS=(brave firefox "flatpak run io.gitlab.librewolf-community" "flatpak run net.mullvad.MullvadBrowser"); ${BROWSERS[$((RANDOM % ${#BROWSERS[@]}))]}\''
+	),
+	{ description = "App: Random browser" }
+)
 
 hl.bind("SUPER + C", hl.dsp.exec_cmd(codeEditor), { description = "App: Code editor" })
 
