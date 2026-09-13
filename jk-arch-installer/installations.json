@@ -3177,18 +3177,6 @@
             "file": "149_install_security_tools.json"
         },
         {
-            "id": "install_tor",
-            "name": {
-                "de": "✨ Tor installieren",
-                "en": "✨ Install Tor"
-            },
-            "description": {
-                "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
-                "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
-            },
-            "file": "151_install_tor.json"
-        },
-        {
             "id": "install_cloudflare_warp",
             "name": {
                 "de": "✨ Cloudflare WARP installieren",
@@ -3227,6 +3215,30 @@
                     "exclusive_group": "cloudflare_warp_method"
                 }
             ]
+        },
+        {
+            "id": "install_mullvad_vpn",
+            "name": {
+                "de": "✨ Mullvad VPN installieren",
+                "en": "✨ Install Mullvad VPN"
+            },
+            "description": {
+                "de": "Installiert den Mullvad VPN-Client über Pacman. Mullvad VPN kostet 5 € pro Monat.",
+                "en": "Installs the Mullvad VPN client using Pacman. Mullvad VPN costs €5 per month."
+            },
+            "file": "172_install_mullvad-vpn.json"
+        },
+        {
+            "id": "install_tor",
+            "name": {
+                "de": "✨ Tor installieren",
+                "en": "✨ Install Tor"
+            },
+            "description": {
+                "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
+                "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
+            },
+            "file": "151_install_tor.json"
         },
         {
             "id": "install_bottles",

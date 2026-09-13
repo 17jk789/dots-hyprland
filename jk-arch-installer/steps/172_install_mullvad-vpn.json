@@ -1,0 +1,33 @@
+{
+    "id": "install_mullvad_vpn",
+    "name": {
+        "de": "Mullvad VPN installieren",
+        "en": "Install Mullvad VPN"
+    },
+    "description": {
+        "de": "Installiert den Mullvad VPN-Client über Pacman.",
+        "en": "Installs the Mullvad VPN client using Pacman."
+    },
+    "question": {
+        "de": "Mullvad VPN installieren?",
+        "en": "Install Mullvad VPN?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "mullvad-vpn"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}
