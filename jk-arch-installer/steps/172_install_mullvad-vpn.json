@@ -5,8 +5,8 @@
         "en": "Install Mullvad VPN"
     },
     "description": {
-        "de": "Installiert den Mullvad VPN-Client über Pacman.",
-        "en": "Installs the Mullvad VPN client using Pacman."
+        "de": "Installiert den Mullvad VPN-Client über Pacman und aktiviert den Mullvad-Dienst.",
+        "en": "Installs the Mullvad VPN client using Pacman and enables the Mullvad service."
     },
     "question": {
         "de": "Mullvad VPN installieren?",
@@ -17,12 +17,32 @@
     "checks": [],
     "commands": [
         {
+            "description": {
+                "de": "Installiert den Mullvad-VPN-Client.",
+                "en": "Installs the Mullvad VPN client."
+            },
             "command": [
                 "pacman",
                 "-S",
                 "--needed",
                 "--noconfirm",
                 "mullvad-vpn"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        },
+        {
+            "description": {
+                "de": "Aktiviert den Mullvad-Dienst und startet ihn sofort.",
+                "en": "Enables the Mullvad service and starts it immediately."
+            },
+            "command": [
+                "systemctl",
+                "enable",
+                "--now",
+                "mullvad-daemon.service"
             ],
             "requires_root": true,
             "distros": [

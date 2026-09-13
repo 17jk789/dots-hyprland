@@ -237,6 +237,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
 - [✨ Haskell-Pakete reparieren](#-haskell-pakete-reparieren)
 - [✨ Cloudflare WARP („1.1.1.1“) installieren und einrichten](#-cloudflare-warp-1111-installieren-und-einrichten)
     - [✨ Wichtige WARP-Befehle](#-wichtige-warp-befehle)
+- [✨ Den Mullvad VPN-Client installieren](#-den-mullvad-vpn-client-installieren)
 - [✨ Tor Client installieren und einrichten](#-tor-client-installieren-und-einrichten)
 - [✨ Bottles installieren und einrichten](#-bottles-installieren-und-einrichten)
     - [Flatpak installieren (falls nicht vorhanden)](#flatpak-installieren-falls-nicht-vorhanden)
@@ -4397,6 +4398,27 @@ warp-cli settings       # Einstellungen anzeigen
 warp-cli connectivity-check  # Verbindung überprüfen
 ```
 
+# ✨ Den Mullvad VPN-Client installieren
+
+> `Mullvad VPN` ist ein VPN-Dienst zum Schutz der Privatsphäre und zur Absicherung der Internetverbindung. Der Dienst kostet 5 € pro Monat.
+
+<details>
+<summary>Installieren</summary>
+
+Zuerst wird der Mullvad-VPN-Client über pacman installiert:
+
+```bash
+sudo pacman -S mullvad-vpn
+```
+
+Anschließend wird der Mullvad-Dienst aktiviert und sofort gestartet:
+
+```bash
+sudo systemctl enable --now mullvad-daemon.service
+```
+
+</details>
+
 # ✨ Tor Client installieren und einrichten
 
 > **Tor** ermöglicht anonymisierte Netzwerkverbindungen, indem der Datenverkehr über das Tor-Netzwerk geleitet wird. Der **Tor Client** stellt Anwendungen eine Verbindung zum Tor-Netzwerk bereit.
@@ -5419,6 +5441,8 @@ lsm=landlock,lockdown,yama,integrity,apparmor,bpf
 ```
 
 > Die vorhandenen Kernel-Parameter sollten dabei **nicht ersetzt**, sondern lediglich um die benötigte LSM-Konfiguration ergänzt werden.
+
+<!-- sudo limine-update -->
 
 </details>
 
