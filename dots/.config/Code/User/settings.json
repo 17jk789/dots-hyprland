@@ -8,7 +8,6 @@
         "scminput": true
     },
     "gitlens.ai.enabled": false,
-
     // "editor.mouseWheelZoom": true,
     "editor.cursorSmoothCaretAnimation": "on",
     "editor.smoothScrolling": true,
@@ -17,65 +16,52 @@
     "editor.lineNumbers": "relative",
     "editor.occurrencesHighlight": "off",
     "editor.selectionHighlight": false,
-
     "editor.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
     "editor.fontWeight": "400",
     "editor.letterSpacing": 0,
     "editor.fontLigatures": true,
     "editor.fontSize": 15,
     "editor.lineHeight": 1.6,
-
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "editor.detectIndentation": true,
-
     "files.insertFinalNewline": true,
-
     // "files.exclude": {
     //    "**/.git": true,
     //    "**/node_modules": true,
     //    "**/.DS_Store": true
     // },
     "files.autoSave": "off", // Kein automatisches Speichern, um ungewollte Änderungen zu vermeiden
-
     "files.watcherExclude": {
         "**/.git/**": true,
         "**/target/**": true,
         "**/node_modules/**": true
     },
-
     // "[json]": {
-    //     "editor.tabSize": 8,
+    //     "editor.tabSize": 4,
     //     "editor.insertSpaces": true,
     //     "editor.detectIndentation": false,
     //     "editor.formatOnSave": true
     // },
-
     // "[jsonc]": {
     //     "editor.tabSize": 4,
     //     "editor.insertSpaces": true,
     //     "editor.detectIndentation": false,
     //     "editor.formatOnSave": true
     // },
-
     "window.titleBarStyle": "custom",
     "window.nativeTabs": false,
     "window.restoreWindows": "all",
     "window.zoomLevel": 0,
     "window.nativeFullScreen": true,
     "editor.minimap.enabled": false,
-
     "search.smartCase": true,
     "workbench.editor.enablePreview": false,
-
     "workbench.colorTheme": "Catppuccin Mocha",
-
     "workbench.activityBar.location": "top",
     "workbench.sideBar.location": "right",
-
     "window.menuBarVisibility": "compact",
     "window.commandCenter": false,
-
     "vim.useSystemClipboard": true,
     "vim.incsearch": true,
     "vim.hlsearch": true,
@@ -107,13 +93,11 @@
     "vim.matchpairs": "(:),{:},[:],<:>",
     "vim.wrap": false,
     // "vim.autowrite": false, // Kein automatisches Schreiben,
-
     "vim.handleKeys": {
         "<C-b>": false,
         "<C-j>": false,
         "u": false
     },
-
     "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -138,7 +122,6 @@
             ]
         }
     ],
-
     "vim.visualModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -151,7 +134,6 @@
             ]
         }
     ],
-
     "vim.statusBarColorControl": true,
     // "vim.statusBarColors.normal": ["#78A4F1", "#ffffff"],
     // "vim.statusBarColors.insert": ["#BF616A", "#ffffff"],
@@ -165,17 +147,50 @@
     // "vim.statusBarColors.easymotioninputmode": ["#020408", "#ffffff"],
     // "vim.statusBarColors.surroundinputmode": ["#020408", "#ffffff"],
     // Catppuccin Mocha
-    "vim.statusBarColors.normal": ["#C5AAF1", "#11111b"],
-    "vim.statusBarColors.insert": ["#89b4fa", "#11111b"],
-    "vim.statusBarColors.visual": ["#a6e3a1", "#11111b"],
-    "vim.statusBarColors.visualline": ["#b4befe", "#11111b"],
-    "vim.statusBarColors.visualblock": ["#fab387", "#11111b"],
-    "vim.statusBarColors.replace": ["#f38ba8", "#11111b"],
-    "vim.statusBarColors.commandlineinprogress": ["#11111A", "#cdd6f4"],
-    "vim.statusBarColors.searchinprogressmode": ["#11111A", "#cdd6f4"],
-    "vim.statusBarColors.easymotionmode": ["#11111A", "#11111b"],
-    "vim.statusBarColors.easymotioninputmode": ["#11111A", "#11111b"],
-    "vim.statusBarColors.surroundinputmode": ["#11111A", "#11111b"],
+    "vim.statusBarColors.normal": [
+        "#C5AAF1",
+        "#11111b"
+    ],
+    "vim.statusBarColors.insert": [
+        "#89b4fa",
+        "#11111b"
+    ],
+    "vim.statusBarColors.visual": [
+        "#a6e3a1",
+        "#11111b"
+    ],
+    "vim.statusBarColors.visualline": [
+        "#b4befe",
+        "#11111b"
+    ],
+    "vim.statusBarColors.visualblock": [
+        "#fab387",
+        "#11111b"
+    ],
+    "vim.statusBarColors.replace": [
+        "#f38ba8",
+        "#11111b"
+    ],
+    "vim.statusBarColors.commandlineinprogress": [
+        "#11111A",
+        "#cdd6f4"
+    ],
+    "vim.statusBarColors.searchinprogressmode": [
+        "#11111A",
+        "#cdd6f4"
+    ],
+    "vim.statusBarColors.easymotionmode": [
+        "#11111A",
+        "#11111b"
+    ],
+    "vim.statusBarColors.easymotioninputmode": [
+        "#11111A",
+        "#11111b"
+    ],
+    "vim.statusBarColors.surroundinputmode": [
+        "#11111A",
+        "#11111b"
+    ],
     "editor.wordWrap": "off",
     "workbench.colorCustomizations": {
         "statusBar.background": "#C5AAF1",
