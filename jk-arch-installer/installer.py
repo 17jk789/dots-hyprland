@@ -1145,6 +1145,16 @@ def command_for_execution(
         }
     )
 
+    if "DBUS_SESSION_BUS_ADDRESS" not in environment:
+        bus = Path(
+            f"/run/user/{user.pw_uid}/bus"
+        )
+
+        if bus.exists():
+            environment[
+                "DBUS_SESSION_BUS_ADDRESS"
+            ] = f"unix:path={bus}"
+
     dbus_socket = f"/run/user/{user.pw_uid}/bus"
     if Path(dbus_socket).exists():
         environment["DBUS_SESSION_BUS_ADDRESS"] = f"unix:path={dbus_socket}"
@@ -1161,6 +1171,7 @@ def command_for_execution(
         "DISPLAY",
         "WAYLAND_DISPLAY",
         "XAUTHORITY",
+        "XDG_CURRENT_DESKTOP",
     ):
         value = environment.get(key)
         if value:
