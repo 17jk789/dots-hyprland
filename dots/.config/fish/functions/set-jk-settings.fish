@@ -248,6 +248,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "alacritty",
             "com.mitchellh.ghostty",
             "code",
+            "jetbrains-idea",
             "jetbrains-clion",
             "ghidra-ghidra",
             "gitkraken",
