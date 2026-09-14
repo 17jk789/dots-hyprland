@@ -409,6 +409,21 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
             '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
             "$rules_file"
 
+        # Ensure all windows have blur disabled when glass mode is off.
+        sed -i \
+            '\|^hl\.window_rule({match = {class = "\.\*" }, no_blur = true })$|d' \
+            "$rules_file"
+
+        set tmp_file (mktemp)
+
+        printf '%s\n' \
+            'hl.window_rule({match = {class = ".*" }, no_blur = true })' \
+            '' \
+            (cat "$rules_file") \
+            > "$tmp_file"
+
+        mv "$tmp_file" "$rules_file"
+
         # Disable Illogical Impulse transparency.
         # contentTransparency remains untouched.
         if command -q jq
@@ -507,6 +522,21 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
             '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
             "$rules_file"
 
+        # Ensure all windows have blur disabled when glass mode is off.
+        sed -i \
+            '\|^hl\.window_rule({match = {class = "\.\*" }, no_blur = true })$|d' \
+            "$rules_file"
+
+        set tmp_file (mktemp)
+
+        printf '%s\n' \
+            'hl.window_rule({match = {class = ".*" }, no_blur = true })' \
+            '' \
+            (cat "$rules_file") \
+            > "$tmp_file"
+
+        mv "$tmp_file" "$rules_file"
+
         # Disable Illogical Impulse transparency.
         # contentTransparency remains untouched.
         if command -q jq
@@ -598,6 +628,11 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
     # Always remove previously generated rules before creating new ones.
     sed -i \
         '/-- GLASS_MODE_START/,/-- GLASS_MODE_END/d' \
+        "$rules_file"
+
+    # Restore Hyprland blur when glass mode is enabled again.
+    sed -i \
+        '\|^hl\.window_rule({match = {class = "\.\*" }, no_blur = true })$|d' \
         "$rules_file"
 
 
