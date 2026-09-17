@@ -5,52 +5,127 @@
         "en": "Set up university Wi-Fi (eduroam)"
     },
     "description": {
-        "de": "Installiert NetworkManager, Python-D-Bus, CA-Zertifikate und die grafische geteduroam-Anwendung zur sicheren Einrichtung von eduroam.",
-        "en": "Installs NetworkManager, Python D-Bus, CA certificates, and the graphical geteduroam application for secure eduroam setup."
+        "de": "Installiert die benötigten Netzwerkkomponenten und geteduroam zur sicheren Einrichtung von eduroam.",
+        "en": "Installs the required network components and geteduroam for secure eduroam setup."
     },
     "question": {
-        "de": "Soll eduroam eingerichtet und die benötigte Software installiert werden?",
-        "en": "Should eduroam be set up and the required software installed?"
+        "de": "Wie soll eduroam eingerichtet werden?",
+        "en": "How should eduroam be set up?"
     },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert NetworkManager, Python-D-Bus und CA-Zertifikate.",
-                "en": "Installs NetworkManager, Python D-Bus, and CA certificates."
+    "variants": {
+        "gui": {
+            "id": "eduroam_gui",
+            "name": {
+                "de": "geteduroam mit GUI installieren",
+                "en": "Install geteduroam with GUI"
             },
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "networkmanager",
-                "python-dbus",
-                "ca-certificates"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert die grafische geteduroam-Anwendung zur Einrichtung von eduroam.",
+                "en": "Installs the graphical geteduroam application for setting up eduroam."
+            },
+            "question": {
+                "de": "Soll die grafische geteduroam-Anwendung installiert werden?",
+                "en": "Should the graphical geteduroam application be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "eduroam_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert NetworkManager, Python-D-Bus und CA-Zertifikate.",
+                        "en": "Installs NetworkManager, Python D-Bus, and CA certificates."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "networkmanager",
+                        "python-dbus",
+                        "ca-certificates"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert die grafische geteduroam-Anwendung über den AUR-Helper yay.",
+                        "en": "Installs the graphical geteduroam application using the AUR helper yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "geteduroam-gui"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         },
-        {
-            "description": {
-                "de": "Installiert die grafische geteduroam-Anwendung über den AUR-Helper yay.",
-                "en": "Installs the graphical geteduroam application using the AUR helper yay."
+        "cli": {
+            "id": "eduroam_cli",
+            "name": {
+                "de": "geteduroam ohne GUI installieren",
+                "en": "Install geteduroam without GUI"
             },
-            "command": [
-                "yay",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "geteduroam-gui"
-            ],
-            "requires_root": false,
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert geteduroam ohne grafische Oberfläche über den AUR-Helper yay.",
+                "en": "Installs geteduroam without a graphical interface using the AUR helper yay."
+            },
+            "question": {
+                "de": "Soll geteduroam ohne GUI installiert werden?",
+                "en": "Should geteduroam be installed without a GUI?"
+            },
+            "optional": true,
+            "exclusive_group": "eduroam_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert NetworkManager, Python-D-Bus und CA-Zertifikate.",
+                        "en": "Installs NetworkManager, Python D-Bus, and CA certificates."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "networkmanager",
+                        "python-dbus",
+                        "ca-certificates"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert geteduroam ohne grafische Oberfläche über den AUR-Helper yay.",
+                        "en": "Installs geteduroam without a graphical interface using the AUR helper yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "geteduroam"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

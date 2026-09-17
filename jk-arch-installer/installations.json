@@ -2302,10 +2302,38 @@
                 "en": "✨ Set up university Wi-Fi (eduroam)"
             },
             "description": {
-                "de": "Installiert die benötigten Netzwerkkomponenten und die grafische geteduroam-Anwendung zur Einrichtung von eduroam.",
-                "en": "Installs the required network components and the graphical geteduroam application for setting up eduroam."
+                "de": "Installiert die benötigten Netzwerkkomponenten und geteduroam zur Einrichtung von eduroam.",
+                "en": "Installs the required network components and geteduroam for setting up eduroam."
             },
-            "file": "134_setup_eduroam.json"
+            "file": "134_setup_eduroam.json",
+            "substeps": [
+                {
+                    "id": "eduroam_gui",
+                    "variant": "gui",
+                    "name": {
+                        "de": "geteduroam mit GUI installieren",
+                        "en": "Install geteduroam with GUI"
+                    },
+                    "description": {
+                        "de": "Installiert die grafische geteduroam-Anwendung.",
+                        "en": "Installs the graphical geteduroam application."
+                    },
+                    "exclusive_group": "eduroam_method"
+                },
+                {
+                    "id": "eduroam_cli",
+                    "variant": "cli",
+                    "name": {
+                        "de": "geteduroam ohne GUI installieren",
+                        "en": "Install geteduroam without GUI"
+                    },
+                    "description": {
+                        "de": "Installiert geteduroam ohne grafische Oberfläche.",
+                        "en": "Installs geteduroam without a graphical interface."
+                    },
+                    "exclusive_group": "eduroam_method"
+                }
+            ]
         },
         {
             "id": "install_globalprotect_openconnect",
