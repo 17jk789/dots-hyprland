@@ -70,7 +70,7 @@
                         "flathub",
                         "com.google.Chrome"
                     ],
-                    "requires_root": false,
+                    "requires_root": true,
                     "distros": [
                         "arch_based"
                     ]
