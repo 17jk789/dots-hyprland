@@ -1146,14 +1146,10 @@ def command_for_execution(
     )
 
     if "DBUS_SESSION_BUS_ADDRESS" not in environment:
-        bus = Path(
-            f"/run/user/{user.pw_uid}/bus"
-        )
+        bus = Path(f"/run/user/{user.pw_uid}/bus")
 
         if bus.exists():
-            environment[
-                "DBUS_SESSION_BUS_ADDRESS"
-            ] = f"unix:path={bus}"
+            environment["DBUS_SESSION_BUS_ADDRESS"] = f"unix:path={bus}"
 
     dbus_socket = f"/run/user/{user.pw_uid}/bus"
     if Path(dbus_socket).exists():
@@ -1487,8 +1483,7 @@ def select_installations(
         for installation in installations
     ]
     selected = [
-        installation.get("default_selected", True)
-        for installation in installations
+        installation.get("default_selected", True) for installation in installations
     ]
     exclusive_groups: dict[str, list[int]] = {}
     for index, step in enumerate(step_details):
