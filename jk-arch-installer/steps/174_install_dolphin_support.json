@@ -1,0 +1,87 @@
+{
+    "id": "install_dolphin_support",
+    "variants": {
+        "dolphin_base": {
+            "id": "install_dolphin_base",
+            "name": {
+                "de": "Empfohlene Dolphin-Unterstützung installieren",
+                "en": "Install recommended Dolphin support"
+            },
+            "description": {
+                "de": "Installiert Dolphin sowie KIO Extras, KDE Graphics Thumbnailers, FFmpeg-Thumbnails und Tumbler für ein Hyprland-Setup.",
+                "en": "Installs Dolphin, KIO Extras, KDE Graphics Thumbnailers, FFmpeg thumbnails and Tumbler for a Hyprland setup."
+            },
+            "question": {
+                "de": "Sollen die empfohlenen Dolphin-Pakete installiert werden?",
+                "en": "Should the recommended Dolphin packages be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "dolphin_support_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Dolphin sowie zusätzliche KIO-, Thumbnail- und Medienunterstützung.",
+                        "en": "Installs Dolphin together with additional KIO, thumbnail and media support."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "dolphin",
+                        "kio-extras",
+                        "kdegraphics-thumbnailers",
+                        "ffmpegthumbs",
+                        "tumbler"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "image_media": {
+            "id": "install_dolphin_image_media",
+            "name": {
+                "de": "Zusätzliche Bild- und Medienunterstützung installieren",
+                "en": "Install additional image and media support"
+            },
+            "description": {
+                "de": "Installiert nsxiv, libwebp und imlib2 für zusätzliche Bild- und Medienunterstützung.",
+                "en": "Installs nsxiv, libwebp and imlib2 for additional image and media support."
+            },
+            "question": {
+                "de": "Sollen zusätzliche Bild- und Medienpakete installiert werden?",
+                "en": "Should additional image and media packages be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "dolphin_support_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert nsxiv, libwebp und imlib2.",
+                        "en": "Installs nsxiv, libwebp and imlib2."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "nsxiv",
+                        "libwebp",
+                        "imlib2"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "id": "install_image_media_support",
+    "name": {
+        "de": "Zusätzliche Bild- und Medienunterstützung installieren",
+        "en": "Install additional image and media support"
+    },
+    "description": {
+        "de": "Installiert zusätzliche Unterstützung für Bildformate und Medien mit nsxiv, libwebp und imlib2. nsxiv ist ein eigenständiger, schlanker Bildbetrachter und keine notwendige Thumbnail-Komponente für Dolphin.",
+        "en": "Installs additional image format and media support with nsxiv, libwebp and imlib2. nsxiv is a standalone lightweight image viewer and is not a required thumbnail component for Dolphin."
+    },
+    "question": {
+        "de": "Sollen zusätzliche Bild- und Medienunterstützung installiert werden?",
+        "en": "Should additional image and media support be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert nsxiv, libwebp und imlib2 für zusätzliche Bildformat- und Medienunterstützung.",
+                "en": "Installs nsxiv, libwebp and imlib2 for additional image format and media support."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "nsxiv",
+                "libwebp",
+                "imlib2"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

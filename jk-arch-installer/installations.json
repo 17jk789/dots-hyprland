@@ -1522,16 +1522,68 @@
             ]
         },
         {
-            "id": "install_kdegraphics_thumbnailers",
+            "id": "install_dolphin_hyprland_support",
             "name": {
-                "de": "KDE Graphics Thumbnailers installieren",
-                "en": "Install KDE Graphics Thumbnailers"
+                "de": "Dolphin-Unterstützung für Hyprland installieren",
+                "en": "Install Dolphin support for Hyprland"
             },
             "description": {
-                "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
-                "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
+                "de": "Installiert zusätzliche KIO-, Thumbnail- und Medienunterstützung für Dolphin unter Hyprland.",
+                "en": "Installs additional KIO, thumbnail and media support for Dolphin under Hyprland."
             },
-            "file": "156_install_kdegraphics_thumbnailers.json"
+            "file": "159_install_dolphin_hyprland_support.json"
+        },
+        {
+            "id": "install_image_media_support",
+            "name": {
+                "de": "✨ Zusätzliche Bild- und Medienunterstützung installieren",
+                "en": "✨ Install additional image and media support"
+            },
+            "description": {
+                "de": "Installiert zusätzliche Unterstützung für Bildformate und Medien mit nsxiv, libwebp und imlib2.",
+                "en": "Installs additional image format and media support with nsxiv, libwebp and imlib2."
+            },
+            "file": "173_install_image_media_support.json"
+        },
+        {
+            "id": "install_dolphin_support",
+            "name": {
+                "de": "✨ Dolphin-Unterstützung installieren",
+                "en": "✨ Install Dolphin support"
+            },
+            "description": {
+                "de": "Wähle eine Option für die Dolphin- und Bildunterstützung.",
+                "en": "Choose an option for Dolphin and image support."
+            },
+            "file": "161_install_dolphin_support.json",
+            "substeps": [
+                {
+                    "id": "install_dolphin_base",
+                    "variant": "dolphin_base",
+                    "name": {
+                        "de": "✨ Empfohlene Dolphin-Unterstützung",
+                        "en": "✨ Recommended Dolphin support"
+                    },
+                    "description": {
+                        "de": "Dolphin mit KIO-, Thumbnail- und Medienunterstützung.",
+                        "en": "Dolphin with KIO, thumbnail and media support."
+                    },
+                    "exclusive_group": "dolphin_support_method"
+                },
+                {
+                    "id": "install_dolphin_image_media",
+                    "variant": "image_media",
+                    "name": {
+                        "de": "✨ Zusätzliche Bild- und Medienunterstützung",
+                        "en": "✨ Additional image and media support"
+                    },
+                    "description": {
+                        "de": "nsxiv, libwebp und imlib2 installieren.",
+                        "en": "Install nsxiv, libwebp and imlib2."
+                    },
+                    "exclusive_group": "dolphin_support_method"
+                }
+            ]
         },
         {
             "id": "install_obsidian",

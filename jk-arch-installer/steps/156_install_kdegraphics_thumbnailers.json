@@ -1,16 +1,16 @@
 {
-    "id": "install_kdegraphics_thumbnailers",
+    "id": "install_dolphin_hyprland_support",
     "name": {
-        "de": "KDE Graphics Thumbnailers installieren",
-        "en": "Install KDE Graphics Thumbnailers"
+        "de": "Dolphin-Unterstützung für Hyprland installieren",
+        "en": "Install Dolphin support for Hyprland"
     },
     "description": {
-        "de": "Installiert KDE Graphics Thumbnailers, um zusätzliche Vorschauen für verschiedene Grafikformate im Dateimanager bereitzustellen.",
-        "en": "Installs KDE Graphics Thumbnailers to provide additional previews for various image formats in the file manager."
+        "de": "Installiert zusätzliche KIO-, Thumbnail- und Medienunterstützung für Dolphin unter Hyprland. Dolphin selbst und eine vollständige KDE-Plasma-Desktopumgebung werden nicht installiert.",
+        "en": "Installs additional KIO, thumbnail and media support for Dolphin under Hyprland. Dolphin itself and a complete KDE Plasma desktop environment are not installed."
     },
     "question": {
-        "de": "Sollen KDE Graphics Thumbnailers installiert werden?",
-        "en": "Should KDE Graphics Thumbnailers be installed?"
+        "de": "Soll die zusätzliche Dolphin-Unterstützung für Hyprland installiert werden?",
+        "en": "Should additional Dolphin support for Hyprland be installed?"
     },
     "optional": true,
     "continue_on_error": false,
@@ -18,15 +18,18 @@
     "commands": [
         {
             "description": {
-                "de": "Installiert KDE Graphics Thumbnailers für zusätzliche Dateivorschauen im KDE-Dateimanager.",
-                "en": "Installs KDE Graphics Thumbnailers for additional file previews in the KDE file manager."
+                "de": "Installiert KIO Extras, KDE Graphics Thumbnailers, FFmpeg-Thumbnails und Tumbler für zusätzliche Dateivorschauen und Medienunterstützung in Dolphin.",
+                "en": "Installs KIO Extras, KDE Graphics Thumbnailers, FFmpeg thumbnails and Tumbler for additional file previews and media support in Dolphin."
             },
             "command": [
                 "pacman",
                 "-S",
                 "--needed",
                 "--noconfirm",
-                "kdegraphics-thumbnailers"
+                "kio-extras",
+                "kdegraphics-thumbnailers",
+                "ffmpegthumbs",
+                "tumbler"
             ],
             "requires_root": true,
             "distros": [
