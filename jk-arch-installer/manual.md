@@ -115,7 +115,9 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Den Audio-Editor Audacity installieren](#-den-audio-editor-audacity-installieren)
     - [✨ Die Wetter-App Mousam installieren](#-die-wetter-app-mousam-installieren)
     - [✨ GNOME Wetter installieren](#-gnome-wetter-installieren)
-    - [KDE Graphics Thumbnailers installieren](#kde-graphics-thumbnailers-installieren)
+    - [Zusätzliche Dolphin-Unterstützung für Hyprland installieren](#zusätzliche-dolphin-unterstützung-für-hyprland-installieren)
+    - [✨ Zusätzliche Unterstützung für Bilder und Medien](#-zusätzliche-unterstützung-für-bilder-und-medien)
+    - [✨ Empfohlene Pakete für dieses Setup](#-empfohlene-pakete-für-dieses-setup)
     - [✨ Die Wissensdatenbank Obsidian installieren](#-die-wissensdatenbank-obsidian-installieren)
     - [Den grafischen Plasma-Systemmonitor installieren](#den-grafischen-plasma-systemmonitor-installieren)
     - [✨ Den Taskmanager Mission Center über yay installieren](#-den-taskmanager-mission-center-über-yay-installieren)
@@ -1943,13 +1945,62 @@ sudo pacman -S gnome-weather
 
 </details>
 
-### KDE Graphics Thumbnailers installieren
+### Zusätzliche Dolphin-Unterstützung für Hyprland installieren
 
-> `KDE Graphics Thumbnailers` erweitert den KDE-Dateimanager um zusätzliche Vorschaubilder (Thumbnails) für verschiedene Grafikformate. Dadurch können Bilder und andere unterstützte Dateien direkt als Vorschau angezeigt werden, ohne sie erst öffnen zu müssen.
+> Für **Dolphin unter Hyprland** können zusätzliche Pakete installiert werden, um die Unterstützung für Dateivorschauen, Grafiken und Medien zu erweitern.
+>
+> Die folgenden Pakete ergänzen deine bestehende Dolphin-Installation:
+>
+> * `kio-extras` – zusätzliche KIO-Funktionen und Unterstützung für weitere Dateisysteme und Protokolle
+> * `kdegraphics-thumbnailers` – zusätzliche Thumbnail-Unterstützung für verschiedene Grafikformate
+> * `ffmpegthumbs` – Vorschaubilder für Videos und andere von FFmpeg unterstützte Medien
+> * `tumbler` – Thumbnail-Service für GTK-/Freedesktop-Anwendungen
+>
+> **Dolphin selbst wird hier nicht installiert**, da es bereits vorhanden ist.
+>
+> Eine vollständige **KDE-Plasma-Desktopumgebung** wird für dieses Setup ebenfalls nicht benötigt. Die Pakete können problemlos zusammen mit **Hyprland und Quickshell/end-4** verwendet werden.
+
+<details>
+<summary>Installieren</summary>
 
 ```bash
-sudo pacman -S kdegraphics-thumbnailers
+sudo pacman -S kio-extras kdegraphics-thumbnailers ffmpegthumbs tumbler
 ```
+
+</details>
+
+### ✨ Zusätzliche Unterstützung für Bilder und Medien
+
+> Für ein Hyprland-Setup mit **Dolphin und Quickshell/end-4** können zusätzliche Bildbibliotheken sinnvoll sein. Sie ermöglichen Anwendungen, verschiedene Bildformate zu öffnen und zu verarbeiten.
+>
+> `nsxiv` ist dabei **kein notwendiges Thumbnail-Paket für Dolphin**, sondern ein eigenständiger, sehr schlanker Bildbetrachter. Wenn du bereits einen anderen Bildbetrachter verwendest, brauchst du es nicht.
+
+<details>
+<summary>Optional installieren</summary>
+
+```bash
+sudo pacman -S nsxiv libwebp imlib2
+```
+
+</details>
+
+### ✨ Empfohlene Pakete für dieses Setup
+
+Für **Hyprland + Dolphin + Quickshell/end-4** würde ich als Basis folgendes installieren:
+
+```bash
+sudo pacman -S dolphin kio-extras kdegraphics-thumbnailers ffmpegthumbs tumbler
+```
+
+**Optional**, wenn du zusätzliche Bildunterstützung bzw. einen minimalistischen Bildbetrachter möchtest:
+
+```bash
+sudo pacman -S nsxiv libwebp imlib2
+```
+
+Danach **Dolphin einmal neu starten**. Falls Thumbnails weiterhin fehlen, kann es außerdem notwendig sein, den Thumbnail-Cache neu aufzubauen bzw. Dolphin neu zu starten.
+
+> **Hinweis:** `thunar-volman` brauchst du für Dolphin nicht. Das Paket gehört zum Thunar-Ökosystem und ist für dein Dolphin-Setup daher nicht erforderlich.
 
 ### ✨ Die Wissensdatenbank Obsidian installieren
 
