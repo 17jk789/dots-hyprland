@@ -242,6 +242,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "firefox-developer-edition",
             "brave-browser",
             "librewolf",
+            "tor browser",
             "mullvad browser",
             "mullvad-vpn",
             "kitty",
