@@ -16,6 +16,39 @@ function create-python-container --description "Create a secure Python developme
     end
 
     # ==================================================
+    # Validate project name
+    # ==================================================
+
+    if not string match -rq '^[a-zA-Z0-9][a-zA-Z0-9_-]*$' "$name"
+
+        echo ""
+        echo "❌ Invalid project name:"
+        echo "   $name"
+        echo ""
+        echo "Allowed characters:"
+        echo "   letters, numbers, '-' and '_'"
+        echo ""
+
+        return 1
+    end
+
+    # ==================================================
+    # Detect host UID/GID
+    # ==================================================
+
+    set HOST_UID (id -u)
+    set HOST_GID (id -g)
+
+    if test -z "$HOST_UID" -o -z "$HOST_GID"
+
+        echo ""
+        echo "❌ Could not determine host UID/GID."
+        echo ""
+
+        return 1
+    end
+
+    # ==================================================
     # Detect installed Python versions on Arch host
     # ==================================================
 
@@ -48,8 +81,13 @@ function create-python-container --description "Create a secure Python developme
 
                     set VERSION_SHORT "3.$MINOR_VERSION"
 
-                    if not contains "$VERSION_SHORT" $PYTHON_CANDIDATES
-                        set -a PYTHON_CANDIDATES "$VERSION_SHORT"
+                    # Only Python 3.13+
+                    if test "$MINOR_VERSION" -ge 13
+
+                        if not contains "$VERSION_SHORT" $PYTHON_CANDIDATES
+                            set -a PYTHON_CANDIDATES "$VERSION_SHORT"
+                        end
+
                     end
 
                 end
@@ -79,22 +117,24 @@ function create-python-container --description "Create a secure Python developme
 
                 set VERSION_SHORT "3.$MINOR_VERSION"
 
-                set -a PYTHON_CANDIDATES "$VERSION_SHORT"
+                if test "$MINOR_VERSION" -ge 13
+                    set -a PYTHON_CANDIDATES "$VERSION_SHORT"
+                end
 
             end
         end
     end
 
     # ==================================================
-    # No Python found
+    # No compatible Python found
     # ==================================================
 
     if test (count $PYTHON_CANDIDATES) -eq 0
 
         echo ""
-        echo "❌ No Python 3 versions were found."
+        echo "❌ No compatible Python 3.13+ versions were found."
         echo ""
-        echo "Install Python with pacman:"
+        echo "Install/update Python with:"
         echo ""
         echo "  sudo pacman -S python"
         echo ""
@@ -118,7 +158,7 @@ function create-python-container --description "Create a secure Python developme
     # ==================================================
 
     echo ""
-    echo "Installed Python versions:"
+    echo "Installed compatible Python versions:"
     echo ""
 
     set INDEX 1
@@ -165,7 +205,7 @@ function create-python-container --description "Create a secure Python developme
             end
 
             echo ""
-            echo "❌ Python $PYTHON_VERSION is not installed."
+            echo "❌ Python $PYTHON_VERSION is not installed or not supported."
             echo ""
             echo "Available versions:"
             printf '  %s\n' $PYTHON_CANDIDATES
@@ -213,7 +253,7 @@ function create-python-container --description "Create a secure Python developme
     # ==================================================
 
     set PROJECT_DIR (pwd)/$name
-    set IMAGE_NAME python-secure-dev
+    set IMAGE_NAME "python-secure-dev-$name"
     set CONTAINER_NAME "$name"
 
     if test -d "$PROJECT_DIR"
@@ -224,10 +264,26 @@ function create-python-container --description "Create a secure Python developme
     end
 
     # ==================================================
+    # Check for existing Docker container
+    # ==================================================
+
+    if sudo docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1
+
+        echo ""
+        echo "❌ Docker container '$CONTAINER_NAME' already exists."
+        echo ""
+        echo "Check it with:"
+        echo "  sudo docker ps -a --filter name=$CONTAINER_NAME"
+        echo ""
+        echo "Remove it with:"
+        echo "  sudo docker rm -f $CONTAINER_NAME"
+        echo ""
+
+        return 1
+    end
+
+    # ==================================================
     # Python package name
-    #
-    # Docker/project names may contain "-"
-    # Python packages should use "_"
     # ==================================================
 
     set PACKAGE_NAME (
@@ -235,10 +291,13 @@ function create-python-container --description "Create a secure Python developme
         string replace -a '-' '_'
     )
 
-    # Remove characters that are invalid for Python packages
     set PACKAGE_NAME (
         string replace -ra '[^a-zA-Z0-9_]' '_' "$PACKAGE_NAME"
     )
+
+    if string match -rq '^[0-9]' "$PACKAGE_NAME"
+        set PACKAGE_NAME "_$PACKAGE_NAME"
+    end
 
     # ==================================================
     # Create project directories
@@ -246,7 +305,8 @@ function create-python-container --description "Create a secure Python developme
 
     mkdir -p \
         "$PROJECT_DIR/src/$PACKAGE_NAME" \
-        "$PROJECT_DIR/tests"
+        "$PROJECT_DIR/tests" \
+        "$PROJECT_DIR/.devcontainer"
 
     if test $status -ne 0
 
@@ -272,55 +332,39 @@ function create-python-container --description "Create a secure Python developme
         README.md
 
     # ==================================================
-    # Python package: __init__.py
+    # __init__.py
     # ==================================================
 
     echo "\"\"\"$PACKAGE_NAME package.\"\"\"" >"src/$PACKAGE_NAME/__init__.py"
 
     # ==================================================
-    # Python package: main.py
+    # main.py
     # ==================================================
 
     echo 'def main() -> None:' >"src/$PACKAGE_NAME/main.py"
-
     echo '    print("Hello, Python!")' >>"src/$PACKAGE_NAME/main.py"
-
     echo "" >>"src/$PACKAGE_NAME/main.py"
-
     echo 'if __name__ == "__main__":' >>"src/$PACKAGE_NAME/main.py"
-
     echo '    main()' >>"src/$PACKAGE_NAME/main.py"
 
     # ==================================================
-    # Python package: database.py
+    # database.py
     # ==================================================
 
     echo '"""Database related functionality."""' >"src/$PACKAGE_NAME/database.py"
-
     echo "" >>"src/$PACKAGE_NAME/database.py"
-
-    echo "" >>"src/$PACKAGE_NAME/database.py"
-
     echo 'def connect() -> str:' >>"src/$PACKAGE_NAME/database.py"
-
     echo '    """Return a placeholder database connection."""' >>"src/$PACKAGE_NAME/database.py"
-
     echo '    return "database connection"' >>"src/$PACKAGE_NAME/database.py"
 
     # ==================================================
-    # Python package: utils.py
+    # utils.py
     # ==================================================
 
     echo '"""Utility functions."""' >"src/$PACKAGE_NAME/utils.py"
-
     echo "" >>"src/$PACKAGE_NAME/utils.py"
-
-    echo "" >>"src/$PACKAGE_NAME/utils.py"
-
     echo 'def add(a: int, b: int) -> int:' >>"src/$PACKAGE_NAME/utils.py"
-
     echo '    """Add two integers."""' >>"src/$PACKAGE_NAME/utils.py"
-
     echo '    return a + b' >>"src/$PACKAGE_NAME/utils.py"
 
     # ==================================================
@@ -328,23 +372,13 @@ function create-python-container --description "Create a secure Python developme
     # ==================================================
 
     echo "from $PACKAGE_NAME.database import connect" >"tests/test_database.py"
-
     echo "" >>"tests/test_database.py"
-
-    echo "" >>"tests/test_database.py"
-
     echo "def test_connect():" >>"tests/test_database.py"
-
     echo '    assert connect() == "database connection"' >>"tests/test_database.py"
 
     echo "from $PACKAGE_NAME.utils import add" >"tests/test_utils.py"
-
     echo "" >>"tests/test_utils.py"
-
-    echo "" >>"tests/test_utils.py"
-
     echo "def test_add():" >>"tests/test_utils.py"
-
     echo "    assert add(2, 3) == 5" >>"tests/test_utils.py"
 
     # ==================================================
@@ -362,7 +396,7 @@ function create-python-container --description "Create a secure Python developme
     echo 'version = "0.1.0"' >>pyproject.toml
     echo 'description = "Python application"' >>pyproject.toml
     echo 'readme = "README.md"' >>pyproject.toml
-    echo 'requires-python = ">=3.13"' >>pyproject.toml
+    echo "requires-python = \">=$PYTHON_VERSION\"" >>pyproject.toml
     echo 'dependencies = []' >>pyproject.toml
 
     echo "" >>pyproject.toml
@@ -373,6 +407,8 @@ function create-python-container --description "Create a secure Python developme
     echo '    "black",' >>pyproject.toml
     echo '    "mypy",' >>pyproject.toml
     echo '    "bandit",' >>pyproject.toml
+    echo '    "jupyter",' >>pyproject.toml
+    echo '    "jupyterlab",' >>pyproject.toml
     echo ']' >>pyproject.toml
 
     echo "" >>pyproject.toml
@@ -397,7 +433,7 @@ function create-python-container --description "Create a secure Python developme
     echo "## Tests" >>README.md
     echo "" >>README.md
     echo '```bash' >>README.md
-    echo pytest >>README.md
+    echo "pytest" >>README.md
     echo '```' >>README.md
 
     # ==================================================
@@ -431,10 +467,42 @@ function create-python-container --description "Create a secure Python developme
     echo "" >>Dockerfile
 
     echo "# ================================================" >>Dockerfile
+    echo "# Host UID/GID" >>Dockerfile
+    echo "# ================================================" >>Dockerfile
+
+    echo "ARG DEV_UID=$HOST_UID" >>Dockerfile
+    echo "ARG DEV_GID=$HOST_GID" >>Dockerfile
+
+    echo "" >>Dockerfile
+
+    echo "# ================================================" >>Dockerfile
     echo "# Non-root developer" >>Dockerfile
     echo "# ================================================" >>Dockerfile
 
-    echo "RUN adduser -D developer" >>Dockerfile
+    echo 'RUN addgroup -g $DEV_GID developer && \\' >>Dockerfile
+    echo '    adduser -D -u $DEV_UID -G developer developer' >>Dockerfile
+
+    echo "" >>Dockerfile
+
+    echo "# ================================================" >>Dockerfile
+    echo "# Virtual environment outside /workspace" >>Dockerfile
+    echo "# ================================================" >>Dockerfile
+
+    echo "RUN mkdir -p /opt/venv && \\" >>Dockerfile
+    echo "    chown -R developer:developer /opt/venv" >>Dockerfile
+
+    echo "" >>Dockerfile
+
+    echo "ENV VIRTUAL_ENV=/opt/venv" >>Dockerfile
+    echo 'ENV PATH=/opt/venv/bin:$PATH' >>Dockerfile
+
+    echo "" >>Dockerfile
+
+    echo "# ================================================" >>Dockerfile
+    echo "# Workspace" >>Dockerfile
+    echo "# ================================================" >>Dockerfile
+
+    echo "WORKDIR /workspace" >>Dockerfile
 
     echo "" >>Dockerfile
 
@@ -442,20 +510,38 @@ function create-python-container --description "Create a secure Python developme
 
     echo "" >>Dockerfile
 
-    echo "WORKDIR /workspace" >>Dockerfile
-
-    echo "" >>Dockerfile
-
-    echo "# ================================================" >>Dockerfile
-    echo "# Virtual environment" >>Dockerfile
-    echo "# ================================================" >>Dockerfile
-
-    echo 'ENV VIRTUAL_ENV="/workspace/venv"' >>Dockerfile
-    echo 'ENV PATH="/workspace/venv/bin:$PATH"' >>Dockerfile
-
-    echo "" >>Dockerfile
-
     echo 'CMD ["fish"]' >>Dockerfile
+
+    # ==================================================
+    # Dev Container configuration
+    # ==================================================
+
+    printf '%s\n' \
+        '{' \
+        "  \"name\": \"$name\"," \
+        '  "build": {' \
+        '    "dockerfile": "../Dockerfile",' \
+        '    "context": "..",' \
+        '    "args": {' \
+        "      \"DEV_UID\": \"$HOST_UID\"," \
+        "      \"DEV_GID\": \"$HOST_GID\"" \
+        '    }' \
+        '  },' \
+        '  "workspaceFolder": "/workspace",' \
+        '  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",' \
+        '  "remoteUser": "developer",' \
+        '  "containerUser": "developer",' \
+        '  "overrideCommand": false' \
+        '}' \
+        >"$PROJECT_DIR/.devcontainer/devcontainer.json"
+
+    if test $status -ne 0
+
+        echo ""
+        echo "❌ Failed to create .devcontainer/devcontainer.json!"
+        return 1
+
+    end
 
     # ==================================================
     # Build image
@@ -467,10 +553,15 @@ function create-python-container --description "Create a secure Python developme
     echo "   Base image:"
     echo "   python:$PYTHON_VERSION-alpine"
     echo ""
+    echo "   Host UID: $HOST_UID"
+    echo "   Host GID: $HOST_GID"
+    echo ""
 
     sudo docker build \
         --pull \
-        -t $IMAGE_NAME .
+        --build-arg DEV_UID="$HOST_UID" \
+        --build-arg DEV_GID="$HOST_GID" \
+        -t "$IMAGE_NAME" .
 
     if test $status -ne 0
 
@@ -488,15 +579,15 @@ function create-python-container --description "Create a secure Python developme
     echo "Starting secure container..."
 
     sudo docker run -dit \
-        --name $CONTAINER_NAME \
-        --hostname $name \
+        --name "$CONTAINER_NAME" \
+        --hostname "$name" \
         --security-opt=no-new-privileges:true \
         --cap-drop=ALL \
         --memory="2g" \
         --cpus="2" \
-        -v "$PROJECT_DIR":/workspace \
-        -w /workspace \
-        $IMAGE_NAME
+        --mount "type=bind,source=$PROJECT_DIR,target=/workspace" \
+        --workdir /workspace \
+        "$IMAGE_NAME"
 
     if test $status -ne 0
 
@@ -507,6 +598,51 @@ function create-python-container --description "Create a secure Python developme
     end
 
     # ==================================================
+    # Verify container user
+    # ==================================================
+
+    echo ""
+    echo "Verifying container user..."
+
+    sudo docker exec \
+        "$CONTAINER_NAME" \
+        id
+
+    if test $status -ne 0
+
+        echo ""
+        echo "❌ Could not verify container user!"
+        return 1
+
+    end
+
+    # ==================================================
+    # Verify workspace permissions
+    # ==================================================
+
+    echo ""
+    echo "Verifying workspace permissions..."
+
+    sudo docker exec \
+        "$CONTAINER_NAME" \
+        sh -c 'touch /workspace/.container_write_test && rm /workspace/.container_write_test'
+
+    if test $status -ne 0
+
+        echo ""
+        echo "❌ Container cannot write to /workspace!"
+        echo ""
+        echo "Host UID/GID:"
+        echo "  UID: $HOST_UID"
+        echo "  GID: $HOST_GID"
+        echo ""
+
+        return 1
+    end
+
+    echo "✅ /workspace is writable."
+
+    # ==================================================
     # Create virtual environment
     # ==================================================
 
@@ -514,8 +650,8 @@ function create-python-container --description "Create a secure Python developme
     echo "Creating Python virtual environment..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        python -m venv /workspace/venv
+        "$CONTAINER_NAME" \
+        python -m venv /opt/venv
 
     if test $status -ne 0
 
@@ -533,8 +669,8 @@ function create-python-container --description "Create a secure Python developme
     echo "Upgrading pip..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/python \
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/python \
         -m pip install --upgrade pip
 
     if test $status -ne 0
@@ -553,8 +689,8 @@ function create-python-container --description "Create a secure Python developme
     echo "Installing uv via pip..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/python \
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/python \
         -m pip install --upgrade uv
 
     if test $status -ne 0
@@ -566,41 +702,43 @@ function create-python-container --description "Create a secure Python developme
     end
 
     # ==================================================
-    # Install project dependencies
+    # Install build dependency
     # ==================================================
 
     echo ""
-    echo "Installing project dependencies with uv..."
+    echo "Installing project build dependency..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/uv \
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/uv \
         pip install \
         hatchling
 
     if test $status -ne 0
 
         echo ""
-        echo "❌ Failed to install project dependencies!"
+        echo "❌ Failed to install hatchling!"
         return 1
 
     end
 
     # ==================================================
-    # Install development dependencies
+    # Install development tools
     # ==================================================
 
     echo ""
     echo "Installing development tools..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/uv \
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/uv \
         pip install \
         pytest \
         black \
         mypy \
-        bandit
+        bandit \
+        jupyter \
+        jupyterlab
 
     if test $status -ne 0
 
@@ -618,8 +756,8 @@ function create-python-container --description "Create a secure Python developme
     echo "Installing project..."
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/uv \
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/uv \
         pip install \
         -e /workspace
 
@@ -640,8 +778,8 @@ function create-python-container --description "Create a secure Python developme
     echo ""
 
     sudo docker exec \
-        $CONTAINER_NAME \
-        /workspace/venv/bin/pytest
+        "$CONTAINER_NAME" \
+        /opt/venv/bin/pytest
 
     if test $status -ne 0
 
@@ -662,16 +800,22 @@ function create-python-container --description "Create a secure Python developme
 
     set ACTUAL_PYTHON_VERSION (
         sudo docker exec \
-            $CONTAINER_NAME \
-            /workspace/venv/bin/python \
+            "$CONTAINER_NAME" \
+            /opt/venv/bin/python \
             --version
     )
 
     set UV_VERSION (
         sudo docker exec \
-            $CONTAINER_NAME \
-            /workspace/venv/bin/uv \
+            "$CONTAINER_NAME" \
+            /opt/venv/bin/uv \
             --version
+    )
+
+    set CONTAINER_USER (
+        sudo docker exec \
+            "$CONTAINER_NAME" \
+            id -un
     )
 
     # ==================================================
@@ -689,10 +833,16 @@ function create-python-container --description "Create a secure Python developme
     echo "Python actual:    $ACTUAL_PYTHON_VERSION"
     echo "uv:               $UV_VERSION"
     echo "Container:        $CONTAINER_NAME"
+    echo "Container user:   $CONTAINER_USER"
+    echo "Host UID:         $HOST_UID"
+    echo "Host GID:         $HOST_GID"
+    echo "Virtual env:      /opt/venv"
     echo ""
     echo "Project structure:"
     echo ""
     echo "$name/"
+    echo "├── .devcontainer/"
+    echo "│   └── devcontainer.json"
     echo "├── src/"
     echo "│   └── $PACKAGE_NAME/"
     echo "│       ├── __init__.py"
@@ -733,11 +883,18 @@ function create-python-container --description "Create a secure Python developme
     echo "Add dependency:"
     echo "  uv add <package>"
     echo ""
+    echo "Jupyter:"
+    echo "  jupyter lab --ip=0.0.0.0 --port=8888 --no-browser"
+    echo ""
     echo "Stop container:"
     echo "  sudo docker stop $CONTAINER_NAME"
     echo ""
     echo "Remove container:"
     echo "  sudo docker rm -f $CONTAINER_NAME"
+    echo ""
+    echo "Open with Neovim:"
+    echo "  cd $PROJECT_DIR"
+    echo "  nvim ."
     echo ""
     echo "Done!"
 
