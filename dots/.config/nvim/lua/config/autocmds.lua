@@ -1352,6 +1352,96 @@ vim.api.nvim_create_autocmd("FileType", {
 			":split | terminal python3 %<CR>",
 			{ desc = "Python Run (Split)", silent = true, buffer = true }
 		)
+
+		-- Python Run & Testing
+		vim.keymap.set("n", "<leader>rra", function()
+			local file = vim.fn.expand("%:p")
+			local dir = vim.fn.expand("%:p:h")
+
+			-- Suche nach Virtual Environments vom aktuellen Ordner nach oben
+			local function find_venv()
+				local current = dir
+
+				while current and current ~= "/" do
+					local candidates = {
+						current .. "/.venv/bin/python",
+						current .. "/venv/bin/python",
+						current .. "/env/bin/python",
+					}
+
+					for _, python in ipairs(candidates) do
+						if vim.fn.executable(python) == 1 then
+							return python
+						end
+					end
+
+					local parent = vim.fn.fnamemodify(current, ":h")
+
+					if parent == current then
+						break
+					end
+
+					current = parent
+				end
+
+				return nil
+			end
+
+			-- 1. Bereits aktiviertes VENV verwenden
+			local python = vim.env.VIRTUAL_ENV
+
+			if python then
+				local active_python = python .. "/bin/python"
+
+				if vim.fn.executable(active_python) == 1 then
+					python = active_python
+				else
+					python = nil
+				end
+			end
+
+			-- 2. Projekt-VENV suchen
+			if not python then
+				python = find_venv()
+			end
+
+			-- 3. Fallback: python3
+			if not python and vim.fn.executable("python3") == 1 then
+				python = "python3"
+			end
+
+			-- 4. Letzter Fallback: python
+			if not python and vim.fn.executable("python") == 1 then
+				python = "python"
+			end
+
+			-- Kein Python gefunden
+			if not python then
+				vim.notify(
+					"Kein Python-Interpreter gefunden!",
+					vim.log.levels.ERROR
+				)
+				return
+			end
+
+			-- Python-Version anzeigen
+			local version = vim.fn.system(python .. " --version"):gsub("\n", "")
+
+			-- Terminal öffnen und Datei ausführen
+			vim.cmd("split")
+			vim.cmd("terminal " .. python .. " " .. vim.fn.shellescape(file))
+
+			-- Information ausgeben
+			vim.notify(
+				"Python: " .. python .. "\n" .. version,
+				vim.log.levels.INFO
+			)
+		end, {
+			desc = "Python Run (Auto Venv)",
+			silent = true,
+			buffer = true,
+		})
+
 		vim.keymap.set(
 			"n",
 			"<leader>rrt",
@@ -1548,12 +1638,43 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		-- local opts = { noremap = true, silent = true, buffer = true }
 
-		vim.keymap.set(
-			"n",
-			"<leader>rcr",
-			":split | terminal gcc % -o %:r && ./%:r<CR>",
-			{ desc = "GCC Compile & Run (Split)", silent = true, buffer = true }
-		)
+		-- vim.keymap.set(
+		-- 	"n",
+		-- 	"<leader>rcr",
+		-- 	":split | terminal gcc % -o %:r && ./%:r<CR>",
+		-- 	{ desc = "GCC Compile & Run (Split)", silent = true, buffer = true }
+		-- )
+
+		vim.keymap.set("n", "<leader>rcr", function()
+			local file = vim.fn.expand("%:p")
+			local output = vim.fn.expand("%:t:r")
+			local dir = vim.fn.expand("%:p:h")
+
+			-- Datei speichern
+			vim.cmd("write")
+
+			-- GCC vorhanden?
+			if vim.fn.executable("gcc") ~= 1 then
+				vim.notify("gcc wurde nicht gefunden!", vim.log.levels.ERROR)
+				return
+			end
+
+			-- Kompilieren und anschließend ausführen
+			local cmd = string.format(
+				"cd %s && gcc %s -o %s && ./%s",
+				vim.fn.shellescape(dir),
+				vim.fn.shellescape(file),
+				vim.fn.shellescape(output),
+				vim.fn.shellescape(output)
+			)
+
+			vim.cmd("split")
+			vim.cmd("terminal " .. cmd)
+		end, {
+			desc = "GCC Compile & Run (Split)",
+			silent = true,
+			buffer = true,
+		})
 
 		vim.keymap.set(
 			"n",
@@ -1613,12 +1734,36 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		-- local opts = { noremap = true, silent = true, buffer = true }
 
-		vim.keymap.set(
-			"n",
-			"<leader>rpr",
-			":split | terminal g++ % -o %:r && ./%:r<CR>",
-			{ desc = "G++ Compile & Run (Split)", silent = true, buffer = true }
-		)
+		vim.keymap.set("n", "<leader>rpr", function()
+			local file = vim.fn.expand("%:p")
+			local output = vim.fn.expand("%:t:r")
+			local dir = vim.fn.expand("%:p:h")
+
+			-- Datei speichern
+			vim.cmd("write")
+
+			-- G++ vorhanden?
+			if vim.fn.executable("g++") ~= 1 then
+				vim.notify("g++ wurde nicht gefunden!", vim.log.levels.ERROR)
+				return
+			end
+
+			-- Kompilieren und anschließend ausführen
+			local cmd = string.format(
+				"cd %s && g++ %s -o %s && ./%s",
+				vim.fn.shellescape(dir),
+				vim.fn.shellescape(file),
+				vim.fn.shellescape(output),
+				vim.fn.shellescape(output)
+			)
+
+			vim.cmd("split")
+			vim.cmd("terminal " .. cmd)
+		end, {
+			desc = "G++ Compile & Run (Split)",
+			silent = true,
+			buffer = true,
+		})
 
 		vim.keymap.set(
 			"n",
