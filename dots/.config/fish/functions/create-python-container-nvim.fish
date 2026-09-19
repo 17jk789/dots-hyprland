@@ -363,7 +363,7 @@ function create-python-container-nvim --description "Create a secure Python deve
     # Enter project directory
     # ==================================================
 
-    cd "$PROJECT_DIR"
+    pushd "$PROJECT_DIR" >/dev/null
 
     if test $status -ne 0
 
@@ -517,25 +517,25 @@ function create-python-container-nvim --description "Create a secure Python deve
         '# System packages' \
         '# ==================================================' \
         '' \
-        'RUN apk add --no-cache \' \
-        '    fish \' \
-        '    git \' \
-        '    curl \' \
-        '    bash \' \
-        '    ca-certificates \' \
-        '    build-base \' \
-        '    gcc \' \
-        '    g++ \' \
-        '    clang \' \
-        '    time \' \
-        '    nodejs \' \
-        '    npm \' \
-        '    linux-headers \' \
-        '    libffi-dev \' \
-        '    openssl-dev \' \
-        '    ripgrep \' \
-        '    fd \' \
-        '    fontconfig \' \
+        "RUN apk add --no-cache \\" \
+        "    fish \\" \
+        "    git \\" \
+        "    curl \\" \
+        "    bash \\" \
+        "    ca-certificates \\" \
+        "    build-base \\" \
+        "    gcc \\" \
+        "    g++ \\" \
+        "    clang \\" \
+        "    time \\" \
+        "    nodejs \\" \
+        "    npm \\" \
+        "    linux-headers \\" \
+        "    libffi-dev \\" \
+        "    openssl-dev \\" \
+        "    ripgrep \\" \
+        "    fd \\" \
+        "    fontconfig \\" \
         '    unzip' \
         '' \
         '# ==================================================' \
@@ -550,47 +550,47 @@ function create-python-container-nvim --description "Create a secure Python deve
         '# Installed ONLY inside the container image.' \
         '# ==================================================' \
         '' \
-        'RUN if [ "$INSTALL_NERD_FONT" = "true" ]; then \' \
-        '      mkdir -p /usr/local/share/fonts/JetBrainsMono && \' \
-        '      curl -fL \' \
-        '        https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip \' \
-        '        -o /tmp/JetBrainsMono.zip && \' \
-        '      unzip -q /tmp/JetBrainsMono.zip \' \
-        '        -d /usr/local/share/fonts/JetBrainsMono && \' \
-        '      rm -f /tmp/JetBrainsMono.zip && \' \
-        '      fc-cache -f -v; \' \
+        "RUN if [ \"\$INSTALL_NERD_FONT\" = \"true\" ]; then \\" \
+        "      mkdir -p /usr/local/share/fonts/JetBrainsMono && \\" \
+        "      curl -fL \\" \
+        "        https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip \\" \
+        "        -o /tmp/JetBrainsMono.zip && \\" \
+        "      unzip -q /tmp/JetBrainsMono.zip \\" \
+        "        -d /usr/local/share/fonts/JetBrainsMono && \\" \
+        "      rm -f /tmp/JetBrainsMono.zip && \\" \
+        "      fc-cache -f -v; \\" \
         '    fi' \
         '' \
         '# ==================================================' \
         '# Developer user' \
         '# ==================================================' \
         '' \
-        'RUN addgroup -g $DEV_GID developer && \' \
+        "RUN addgroup -g \$DEV_GID developer && \\" \
         '    adduser -D -u $DEV_UID -G developer developer' \
         '' \
         '# ==================================================' \
         '# Python virtual environment' \
         '# ==================================================' \
         '' \
-        'RUN mkdir -p /opt/venv && \' \
+        "RUN mkdir -p /opt/venv && \\" \
         '    chown -R developer:developer /opt/venv' \
         '' \
         '# ==================================================' \
         '# Container-only Neovim directories' \
         '# ==================================================' \
         '' \
-        'RUN mkdir -p /home/developer/.config/nvim && \' \
-        '    mkdir -p /home/developer/.local/share/nvim && \' \
-        '    mkdir -p /home/developer/.local/state/nvim && \' \
-        '    mkdir -p /home/developer/.cache/nvim && \' \
+        "RUN mkdir -p /home/developer/.config/nvim && \\" \
+        "    mkdir -p /home/developer/.local/share/nvim && \\" \
+        "    mkdir -p /home/developer/.local/state/nvim && \\" \
+        "    mkdir -p /home/developer/.cache/nvim && \\" \
         '    chown -R developer:developer /home/developer' \
         '' \
         '# ==================================================' \
         '# Copy LazyVim configuration into container' \
         '# ==================================================' \
         '' \
-        'COPY --chown=developer:developer \' \
-        '    .devcontainer/nvim \' \
+        "COPY --chown=developer:developer \\" \
+        "    .devcontainer/nvim \\" \
         '    /home/developer/.config/nvim' \
         '' \
         '# ==================================================' \
@@ -613,7 +613,7 @@ function create-python-container-nvim --description "Create a secure Python deve
         >Dockerfile
 
     set DEVCONTAINER_STATUS $status
-    cd "$PROJECT_ROOT"
+    popd >/dev/null
 
     if test $DEVCONTAINER_STATUS -ne 0
 
@@ -670,11 +670,12 @@ function create-python-container-nvim --description "Create a secure Python deve
     echo "   Host GID:"
     echo "   $HOST_GID"
     echo ""
-    echo "   LazyVim:"
-    echo "   container-only"
-    echo ""
-    echo "   Python:"
-    echo "   LazyVim lang.python"
+    echo "   Neovim:"
+    if test "$INSTALL_NVIM" = true
+        echo "   enabled with copied host configuration"
+    else
+        echo "   disabled"
+    end
     echo ""
 
     if test "$INSTALL_NERD_FONT" = true
@@ -1099,9 +1100,11 @@ function create-python-container-nvim --description "Create a secure Python deve
     echo "  mypy"
     echo "  Bandit"
     echo ""
-    echo "Python LazyVim:"
-    echo "  lazyvim.plugins.extras.lang.python"
-    echo ""
+    if test "$INSTALL_NVIM" = true
+        echo "Python LazyVim:"
+        echo "  provided by copied host configuration"
+        echo ""
+    end
 
     if test "$INSTALL_NERD_FONT" = true
         echo "JetBrains Mono Nerd Font:"
