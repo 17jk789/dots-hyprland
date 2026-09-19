@@ -1531,7 +1531,7 @@
                 "de": "Installiert zusätzliche KIO-, Thumbnail- und Medienunterstützung für Dolphin unter Hyprland.",
                 "en": "Installs additional KIO, thumbnail and media support for Dolphin under Hyprland."
             },
-            "file": "159_install_dolphin_hyprland_support.json"
+            "file": "156_install_dolphin_hyprland_support.json"
         },
         {
             "id": "install_image_media_support",
@@ -1555,7 +1555,7 @@
                 "de": "Wähle eine Option für die Dolphin- und Bildunterstützung.",
                 "en": "Choose an option for Dolphin and image support."
             },
-            "file": "161_install_dolphin_support.json",
+            "file": "174_install_dolphin_support.json",
             "substeps": [
                 {
                     "id": "install_dolphin_base",
