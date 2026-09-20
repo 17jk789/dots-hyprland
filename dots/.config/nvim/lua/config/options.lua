@@ -8,6 +8,13 @@ vim.opt.relativenumber = true
 -- vim.opt.breakindent = true -- entspricht "wrappingIndent": "indent"
 -- vim.opt.colorcolumn = 80 -- nur visuelle Markierung bei Spalte 80
 
+vim.api.nvim_create_user_command("WrapToggle", function()
+    vim.opt.wrap = not vim.opt.wrap:get()
+    vim.opt.linebreak = vim.opt.wrap:get()
+    vim.opt.breakindent = vim.opt.wrap:get()
+    vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
+end, {})
+
 -- vim.cmd [[
 --   augroup NumberToggle
 --     autocmd!
