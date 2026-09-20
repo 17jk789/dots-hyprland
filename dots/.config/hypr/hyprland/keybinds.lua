@@ -737,7 +737,7 @@ hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Fir
 
 hl.bind(
 	"CTRL + SUPER + W",
-	hl.dsp.exec_cmd("flatpak run net.mullvad.MullvadBrowser"),
+	hl.dsp.exec_cmd("flatpak run net.mullvad.MullvadBrowser -P"),
 	{ description = "App: Mullvad Browser" }
 )
 
