@@ -2,6 +2,12 @@
 
 vim.opt.number = true
 vim.opt.relativenumber = true
+
+-- vim.opt.wrap = true
+-- vim.opt.linebreak = true -- bricht an Wortgrenzen
+-- vim.opt.breakindent = true -- entspricht "wrappingIndent": "indent"
+-- vim.opt.colorcolumn = 80 -- nur visuelle Markierung bei Spalte 80
+
 -- vim.cmd [[
 --   augroup NumberToggle
 --     autocmd!

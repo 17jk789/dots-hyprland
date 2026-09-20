@@ -49,6 +49,11 @@
     //     "editor.detectIndentation": false,
     //     "editor.formatOnSave": true
     // },
+    "[latex]": {
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 80,
+        "editor.wrappingIndent": "indent"
+    },
     "window.titleBarStyle": "custom",
     "window.nativeTabs": false,
     "window.restoreWindows": "all",
@@ -91,7 +96,7 @@
     "vim.colorcolumn": "80",
     "vim.showmatch": true,
     "vim.matchpairs": "(:),{:},[:],<:>",
-    "vim.wrap": false,
+    "vim.wrap": true,
     // "vim.autowrite": false, // Kein automatisches Schreiben,
     "vim.handleKeys": {
         "<C-b>": false,
@@ -191,11 +196,11 @@
         "#11111A",
         "#11111b"
     ],
-    "editor.wordWrap": "off",
+    "editor.wordWrap": "on",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#C5AAF1",
-        "statusBar.noFolderBackground": "#C5AAF1",
-        "statusBar.debuggingBackground": "#C5AAF1",
+        "statusBar.background": "#b4befe",
+        "statusBar.noFolderBackground": "#b4befe",
+        "statusBar.debuggingBackground": "#b4befe",
         "statusBar.foreground": "#11111b",
         "statusBar.debuggingForeground": "#11111b"
     },
@@ -240,7 +245,6 @@
     },
     "terminal.integrated.defaultProfile.linux": "fish"
 }
-
 // {
 //     // Editor
 //     "editor.mouseWheelZoom": true,
@@ -329,7 +333,7 @@
 //     "gitlens.ai.enabled": false,
 //
 //     // Material Icon Theme / Colors
-//     "material-code.primaryColor": "#9FD2E0",
+//     "material-code.primaryColor": "#4F4F64",
 //
 //     // Copilot deaktiviert
 //     "github.copilot.enable": {
