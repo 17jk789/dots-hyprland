@@ -134,6 +134,8 @@
       }
 
       .search {
+        position: relative;
+        z-index: 1000;
         display: flex;
         align-items: stretch;
         gap: 12px;
@@ -167,6 +169,171 @@
 
       .search input::placeholder {
         color: rgba(232, 242, 251, 0.45);
+      }
+
+      /* Suchmaschinen-Dropdown */
+      .search-engine-dropdown {
+        position: relative;
+        flex: 0 0 150px;
+      }
+
+      .search-engine-toggle {
+        width: 100%;
+        height: 100%;
+        min-height: 44px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+
+        padding: 0 14px;
+
+        background: rgba(5, 15, 28, 0.75);
+        border: 1px solid rgba(125, 211, 252, 0.18);
+        border-radius: 12px;
+
+        color: #e8f2fb;
+        font-size: 14px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.04),
+          0 4px 15px rgba(0, 0, 0, 0.25);
+
+        transition: all 0.2s ease;
+      }
+
+      .search-engine-toggle:hover {
+        border-color: rgba(125, 211, 252, 0.45);
+
+        box-shadow:
+          0 0 15px rgba(125, 211, 252, 0.12),
+          0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .search-engine-arrow {
+        font-size: 18px;
+        line-height: 1;
+        color: var(--accent);
+        transition: transform 0.2s ease;
+      }
+
+      .search-engine-dropdown.open .search-engine-arrow {
+        transform: rotate(180deg);
+      }
+
+      /* Dropdown-Liste */
+      .search-engine-menu {
+        position: absolute;
+
+        left: 0;
+        right: 0;
+        top: calc(100% + 10px);
+
+        padding: 10px;
+
+        background: rgba(7, 16, 33, 0.98);
+        border: 1px solid rgba(125, 211, 252, 0.28);
+        border-radius: 16px;
+
+        box-shadow:
+          0 18px 45px rgba(0, 0, 0, 0.65),
+          0 0 25px rgba(125, 211, 252, 0.08),
+          inset 0 0 20px rgba(125, 211, 252, 0.03);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(0.98);
+
+        transition:
+          opacity 0.18s ease,
+          transform 0.18s ease,
+          visibility 0.18s ease;
+
+        z-index: 9999;
+      }
+
+      .search-engine-dropdown.open .search-engine-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      /* einzelne Suchmaschine */
+      .search-engine-option {
+        width: 100%;
+        min-height: 46px;
+
+        display: flex;
+        align-items: center;
+
+        padding: 0 15px;
+        margin: 5px 0;
+
+        border: 1px solid transparent;
+        border-radius: 11px;
+
+        background: rgba(255, 255, 255, 0.025);
+
+        color: #dcecf7;
+        font-size: 15px;
+        font-weight: 600;
+
+        text-align: left;
+        cursor: pointer;
+
+        transition:
+          background 0.15s ease,
+          color 0.15s ease,
+          border-color 0.15s ease,
+          transform 0.15s ease;
+      }
+
+      .search-engine-option:first-child {
+        margin-top: 0;
+      }
+
+      .search-engine-option:last-child {
+        margin-bottom: 0;
+      }
+
+      .search-engine-option:hover {
+        background: rgba(125, 211, 252, 0.12);
+        border-color: rgba(125, 211, 252, 0.2);
+        color: var(--accent);
+        transform: translateX(2px);
+      }
+
+      .search-engine-option.active {
+        background: rgba(125, 211, 252, 0.16);
+        border-color: rgba(125, 211, 252, 0.25);
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .search-engine-option.active::after {
+        content: "✓";
+        margin-left: auto;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      /* Auf kleinen Bildschirmen */
+      @media (max-width: 600px) {
+        .search-engine-dropdown {
+          flex: 0 0 120px;
+        }
+
+        .search-engine-toggle {
+          padding: 0 10px;
+          font-size: 13px;
+        }
       }
 
       .search button {
@@ -944,17 +1111,83 @@
                 </button>
               </div>
             </div>
-            <form
-              class="search"
-              action="https://search.brave.com/search"
-              method="get"
-              target="_blank"
-            >
+            <form class="search" id="searchForm">
+              <div class="search-engine-dropdown" id="searchEngineDropdown">
+                <button
+                  type="button"
+                  class="search-engine-toggle"
+                  id="searchEngineToggle"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span id="searchEngineName">Brave</span>
+                  <span class="search-engine-arrow">⌄</span>
+                </button>
+
+                <div
+                  class="search-engine-menu"
+                  id="searchEngineMenu"
+                  role="listbox"
+                >
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Google"
+                    data-url="https://www.google.com/search"
+                    role="option"
+                  >
+                    Google
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option active"
+                    data-name="Brave"
+                    data-url="https://search.brave.com/search"
+                    role="option"
+                  >
+                    Brave
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="DuckDuckGo"
+                    data-url="https://duckduckgo.com/"
+                    role="option"
+                  >
+                    DuckDuckGo
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Bing"
+                    data-url="https://www.bing.com/search"
+                    role="option"
+                  >
+                    Bing
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Startpage"
+                    data-url="https://www.startpage.com/sp/search"
+                    role="option"
+                  >
+                    Startpage
+                  </button>
+                </div>
+              </div>
+
               <input
+                id="searchInput"
                 name="q"
-                placeholder="Suche (Brave Search) — Enter"
+                placeholder="Suchbegriff eingeben …"
                 autocomplete="off"
               />
+
               <button type="submit">Suchen</button>
             </form>
 
@@ -974,9 +1207,7 @@
                 target="_blank"
                 >17jk789</a
               >
-              <a class="btn" href="https://any.run/" target="_blank"
-                >ANY.RUN</a
-              >
+              <a class="btn" href="https://any.run/" target="_blank">ANY.RUN</a>
               <a class="btn" href="https://search.brave.com" target="_blank"
                 >Brave Search</a
               >
@@ -1004,7 +1235,10 @@
               <a class="btn" href="https://ipinfo.io" target="_blank"
                 >IP Info</a
               >
-              <a class="btn" href="https://speed.cloudflare.com/" target="_blank"
+              <a
+                class="btn"
+                href="https://speed.cloudflare.com/"
+                target="_blank"
                 >Speedtest</a
               >
               <a class="btn" href="https://dnsleaktest.com" target="_blank"
@@ -2669,6 +2903,81 @@ python3 -m http.server 8000
 
       updateClock();
       setInterval(updateClock, 1000);
+    </script>
+
+    <script>
+      const searchForm = document.getElementById("searchForm");
+      const searchInput = document.getElementById("searchInput");
+
+      const searchEngineDropdown = document.getElementById(
+        "searchEngineDropdown",
+      );
+
+      const searchEngineToggle = document.getElementById("searchEngineToggle");
+
+      const searchEngineName = document.getElementById("searchEngineName");
+
+      const searchEngineMenu = document.getElementById("searchEngineMenu");
+
+      let selectedSearchEngine = "https://search.brave.com/search";
+
+      /* Dropdown öffnen/schließen */
+      searchEngineToggle.addEventListener("click", function () {
+        const isOpen = searchEngineDropdown.classList.toggle("open");
+
+        searchEngineToggle.setAttribute("aria-expanded", isOpen);
+      });
+
+      /* Suchmaschine auswählen */
+      document
+        .querySelectorAll(".search-engine-option")
+        .forEach(function (option) {
+          option.addEventListener("click", function () {
+            selectedSearchEngine = option.dataset.url;
+
+            searchEngineName.textContent = option.dataset.name;
+
+            document
+              .querySelectorAll(".search-engine-option")
+              .forEach(function (item) {
+                item.classList.remove("active");
+              });
+
+            option.classList.add("active");
+
+            searchEngineDropdown.classList.remove("open");
+
+            searchEngineToggle.setAttribute("aria-expanded", "false");
+
+            searchInput.focus();
+          });
+        });
+
+      /* Klick außerhalb schließt Dropdown */
+      document.addEventListener("click", function (event) {
+        if (!searchEngineDropdown.contains(event.target)) {
+          searchEngineDropdown.classList.remove("open");
+
+          searchEngineToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      /* Suche */
+      searchForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const query = searchInput.value.trim();
+
+        if (!query) {
+          searchInput.focus();
+          return;
+        }
+
+        const searchUrl =
+          selectedSearchEngine + "?q=" + encodeURIComponent(query);
+
+        window.open(searchUrl, "_blank");
+      });
     </script>
   </body>
 </html>
