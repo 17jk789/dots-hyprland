@@ -1730,7 +1730,8 @@ sudo pacman -S brave-bin
 <summary>Installieren</summary>
 
 ```bash
-yay -S mullvad-browser-bin
+sudo pacman -S mullvad-browser-bin
+# yay -S mullvad-browser-bin
 # flatpak install --noninteractive flathub net.mullvad.MullvadBrowser
 ```
 
@@ -1786,7 +1787,8 @@ yay -S google-chrome
 <summary>Installieren</summary>
 
 ```bash
-yay -S librewolf-bin
+sudo pacman -S librewolf
+# yay -S librewolf-bin
 # flatpak install --noninteractive flathub io.gitlab.librewolf-community
 ```
 
