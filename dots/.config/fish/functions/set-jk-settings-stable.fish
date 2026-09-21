@@ -1,4 +1,4 @@
-function set-jk-settings --description "Configures the JK illogical-impulse settings for Hyprland"
+function set-jk-settings-stable --description "Configures the stable JK illogical-impulse settings for Hyprland"
 
     set -l config "$HOME/.config/illogical-impulse/config.json"
 
@@ -26,7 +26,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         },
         "palette": {
             "accentColor": "",
-            "type": "scheme-catppuccin-mocha"
+            "type": "auto"
         },
         "transparency": {
             "automatic": false,
