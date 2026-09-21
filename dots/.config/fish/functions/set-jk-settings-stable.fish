@@ -8,25 +8,13 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
 {
     "ai": {
         "extraModels": [
-            {
-                "api_format": "openai",
-                "description": "This is a custom model. Edit the config to add more! | Anyway, this is DeepSeek R1 Distill LLaMA 70B",
-                "endpoint": "https://openrouter.ai/api/v1/chat/completions",
-                "homepage": "https://openrouter.ai/deepseek/deepseek-r1-distill-llama-70b:free",
-                "icon": "spark-symbolic",
-                "key_get_link": "https://openrouter.ai/settings/keys",
-                "key_id": "openrouter",
-                "model": "deepseek/deepseek-r1-distill-llama-70b:free",
-                "name": "Custom: DS R1 Dstl. LLaMA 70B",
-                "requires_key": true
-            }
         ],
-        "systemPrompt": "## Style\n- Use casual tone, donx27t be formal!\n- Always be brief and to the point, unless asked otherwise\n- Donx27t repeat the userx27s question\n- Be approachable: Avoid using overly complicated, domain-specific terms and provide analogies when asked to explain a concept\n\n## Context (ignore when irrelevant)\n- You are a helpful and inspiring sidebar assistant on a {DISTRO} Linux system\n- Desktop environment: {DE}\n- Current date & time: {DATETIME}\n- Focused app: {WINDOWCLASS}\n\n## Presentation\n- Use Markdown features in your response: \n  - **Bold** text to **highlight keywords** in your response\n  - **Split long information into small sections** with an emoji at the start of it (for example `## 🐧 Linux`). Bullet points are preferred over long paragraphs, unless youx27re offering writing support or instructed otherwise by the user.\n- Asked to compare different options? You should firstly use a table to compare the main aspects, then elaborate or include relevant comments from online forums *after* the table. Make sure to provide a final recommendation for the userx27s use case!\n- Use LaTeX formatting for mathematical and scientific notations whenever appropriate. Enclose all LaTeX x27$$x27 delimiters. NEVER generate LaTeX code in a latex block unless the user explicitly asks for it. DO NOT use LaTeX for regular documents (resumes, letters, essays, CVs, etc.).\n\nThanks!\n",
+        "systemPrompt": "",
         "tool": "functions"
     },
     "appearance": {
-        "extraBackgroundTint": true,
-        "fakeScreenRounding": 2,
+        "extraBackgroundTint": false,
+        "fakeScreenRounding": 0,
         "fonts": {
             "expressive": "Space Grotesk",
             "iconNerd": "JetBrains Mono NF",
@@ -42,14 +30,14 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         },
         "transparency": {
             "automatic": false,
-            "backgroundTransparency": 0.39,
-            "contentTransparency": 0.86,
+            "backgroundTransparency": 0,
+            "contentTransparency": 0,
             "enable": false
         },
         "wallpaperTheming": {
-            "enableAppsAndShell": true,
-            "enableQtApps": true,
-            "enableTerminal": true,
+            "enableAppsAndShell": false,
+            "enableQtApps": false,
+            "enableTerminal": false,
             "terminalGenerationProps": {
                 "forceDarkMode": true,
                 "harmonizeThreshold": 100,
@@ -60,13 +48,13 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "apps": {
         "bluetooth": "kcmshell6 kcm_bluetooth",
-        "changePassword": "kitty -1 --hold=yes fish -i -c x27passwdx27",
+        "changePassword": "kitty -1 --hold=yes fish -i -c 'passwd'",
         "manageUser": "kcmshell6 kcm_users",
         "network": "kcmshell6 kcm_networkmanagement",
         "networkEthernet": "kcmshell6 kcm_networkmanagement",
         "taskManager": "plasma-systemmonitor --page-name Processes",
         "terminal": "kitty -1",
-        "update": "kitty -1 --hold=yes fish -i -c x27pkexec pacman -Syux27",
+        "update": "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'",
         "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
     },
     "audio": {
@@ -80,10 +68,10 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         "hideWhenFullscreen": true,
         "parallax": {
             "autoVertical": false,
-            "enableSidebar": true,
-            "enableWorkspace": true,
+            "enableSidebar": false,
+            "enableWorkspace": false,
             "vertical": false,
-            "widgetsFactor": 1.2,
+            "widgetsFactor": 1,
             "workspaceZoom": 1
         },
         "thumbnailPath": "",
@@ -105,8 +93,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
                     "useSineCookie": false
                 },
                 "digital": {
-                    "adaptiveAlignment": true,
-                    "animateChange": true,
+                    "adaptiveAlignment": false,
+                    "animateChange": false,
                     "font": {
                         "family": "Google Sans Flex",
                         "roundness": 0,
@@ -114,13 +102,13 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
                         "weight": 389.88893592746103,
                         "width": 103.78497292418773
                     },
-                    "showDate": true,
+                    "showDate": false,
                     "vertical": false
                 },
-                "enable": true,
+                "enable": false,
                 "placementStrategy": "leastBusy",
                 "quote": {
-                    "enable": true,
+                    "enable": false,
                     "text": "JK-Arch"
                 },
                 "showOnlyWhenLocked": false,
@@ -149,8 +137,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         },
         "borderless": false,
         "bottom": false,
-        "cornerStyle": 1,
-        "floatStyleShadow": true,
+        "cornerStyle": 0,
+        "floatStyleShadow": false,
         "indicators": {
             "notifications": {
                 "showUnreadCount": true
@@ -171,15 +159,15 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         },
         "topLeftIcon": "spark",
         "utilButtons": {
-            "showColorPicker": true,
+            "showColorPicker": false,
             "showDarkModeToggle": false,
             "showKeyboardToggle": false,
             "showMicToggle": false,
-            "showPerformanceProfileToggle": true,
-            "showScreenRecord": true,
-            "showScreenSnip": true
+            "showPerformanceProfileToggle": false,
+            "showScreenRecord": false,
+            "showScreenSnip": false
         },
-        "verbose": true,
+        "verbose": false,
         "vertical": false,
         "weather": {
             "city": "basel",
@@ -189,13 +177,13 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "useUSCS": false
         },
         "workspaces": {
-            "alwaysShowNumbers": true,
-            "monochromeIcons": true,
+            "alwaysShowNumbers": false,
+            "monochromeIcons": false,
             "numberMap": [
             ],
-            "showAppIcons": true,
+            "showAppIcons": false,
             "showNumberDelay": 300,
-            "shown": 20,
+            "shown": 10,
             "useNerdFont": false
         }
     },
@@ -222,13 +210,13 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "conflictKiller": {
         "autoKillNotificationDaemons": false,
-        "autoKillTrays": true
+        "autoKillTrays": false
     },
     "crosshair": {
         "code": "0;P;d;1;0l;10;0o;2;1b;0"
     },
     "dock": {
-        "enable": true,
+        "enable": false,
         "height": 60,
         "hoverRegionHeight": 2,
         "hoverToReveal": false,
@@ -242,7 +230,6 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "firefox-developer-edition",
             "brave-browser",
             "librewolf",
-            "tor browser",
             "mullvad browser",
             "mullvad-vpn",
             "kitty",
@@ -340,18 +327,18 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "lock": {
         "blur": {
-            "enable": true,
+            "enable": false,
             "extraZoom": 1.1,
             "radius": 100
         },
-        "centerClock": true,
+        "centerClock": false,
         "launchOnStartup": false,
-        "materialShapeChars": true,
+        "materialShapeChars": false,
         "security": {
             "requirePasswordToPower": true,
-            "unlockKeyring": true
+            "unlockKeyring": false
         },
-        "showLockedText": true,
+        "showLockedText": false,
         "useHyprlock": false
     },
     "media": {
@@ -380,12 +367,12 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "overlay": {
         "clickthroughOpacity": 0.8,
-        "darkenScreen": true,
+        "darkenScreen": false,
         "floatingImage": {
-            "imageSource": "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif",
+            "imageSource": "",
             "scale": 0.4
         },
-        "openingZoomAnimation": true
+        "openingZoomAnimation": false
     },
     "overview": {
         "centerIcons": true,
@@ -398,8 +385,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "panelFamily": "ii",
     "policies": {
-        "ai": 1,
-        "weeb": 1
+        "ai": 0,
+        "weeb": 0
     },
     "regionSelector": {
         "annotation": {
@@ -434,6 +421,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "search": {
         "engineBaseUrl": "https://www.google.com/search?q=",
+        "excludedSites": [
+        ],
         "imageSearch": {
             "imageSearchEngineBaseUrl": "https://lens.google.com/uploadbyurl?url=",
             "useCircleSelection": false
@@ -466,17 +455,17 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         "cornerOpen": {
             "bottom": false,
             "clickless": false,
-            "clicklessCornerEnd": true,
+            "clicklessCornerEnd": false,
             "clicklessCornerVerticalOffset": 1,
             "cornerRegionHeight": 5,
             "cornerRegionWidth": 250,
-            "enable": true,
-            "valueScroll": true,
+            "enable": false,
+            "valueScroll": false,
             "visualize": false
         },
-        "keepRightSidebarLoaded": true,
+        "keepRightSidebarLoaded": false,
         "quickSliders": {
-            "enable": true,
+            "enable": false,
             "showBrightness": true,
             "showMic": true,
             "showVolume": true
@@ -535,12 +524,12 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         },
         "translator": {
             "delay": 300,
-            "enable": true
+            "enable": false
         }
     },
     "sounds": {
-        "battery": true,
-        "pomodoro": true,
+        "battery": false,
+        "pomodoro": false,
         "theme": "freedesktop"
     },
     "time": {
@@ -558,7 +547,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     },
     "tray": {
         "filterPassive": true,
-        "invertPinnedItems": true,
+        "invertPinnedItems": false,
         "monochromeIcons": true,
         "pinnedItems": [
             "Fcitx",
@@ -572,7 +561,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     "updates": {
         "adviseUpdateThreshold": 75,
         "checkInterval": 120,
-        "enableCheck": true,
+        "enableCheck": false,
         "stronglyAdviseUpdateThreshold": 200
     },
     "waffles": {
@@ -580,20 +569,12 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "toggles": [
                 "network",
                 "bluetooth",
-                "easyEffects",
                 "powerProfile",
                 "idleInhibitor",
                 "nightLight",
                 "darkMode",
-                "antiFlashbang",
-                "cloudflareWarp",
                 "mic",
-                "musicRecognition",
-                "notifications",
-                "onScreenKeyboard",
-                "gameMode",
-                "screenSnip",
-                "colorPicker"
+                "notifications"
             ]
         },
         "bar": {
@@ -604,8 +585,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "force2CharDayOfWeek": true
         },
         "tweaks": {
-            "smootherMenuAnimations": true,
-            "smootherSearchBar": true,
+            "smootherMenuAnimations": false,
+            "smootherSearchBar": false,
             "switchHandlePositionFix": true
         }
     },
