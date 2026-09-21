@@ -737,13 +737,13 @@ hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Fir
 
 hl.bind(
 	"CTRL + SUPER + W",
-	hl.dsp.exec_cmd("flatpak run net.mullvad.MullvadBrowser -P"),
+	hl.dsp.exec_cmd("mullvad-browser -P"),
 	{ description = "App: Mullvad Browser" }
 )
 
 hl.bind(
 	"SUPER + SHIFT + W",
-	hl.dsp.exec_cmd("flatpak run io.gitlab.librewolf-community"),
+	hl.dsp.exec_cmd("librewolf"),
 	{ description = "App: LibreWolf" }
 )
 
@@ -752,7 +752,7 @@ hl.bind("SUPER + ALT + SHIFT + W", hl.dsp.exec_cmd("torbrowser-launcher"), { des
 hl.bind(
 	"ALT + space",
 	hl.dsp.exec_cmd(
-		'bash -c \'BROWSERS=(brave firefox "flatpak run io.gitlab.librewolf-community" "flatpak run net.mullvad.MullvadBrowser"); ${BROWSERS[$((RANDOM % ${#BROWSERS[@]}))]}\''
+		'bash -c \'BROWSERS=(brave firefox librewolf mullvad-browser); ${BROWSERS[$((RANDOM % ${#BROWSERS[@]}))]}\''
 	),
 	{ description = "App: Random browser" }
 )
