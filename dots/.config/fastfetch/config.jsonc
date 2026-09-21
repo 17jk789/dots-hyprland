@@ -2,8 +2,9 @@
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
     "logo": {
         "type": "auto",
-        // "source": "~/.config/fastfetch/arch.txt",
         "source": "blackarch",
+        // "source": "~/.config/fastfetch/arch.txt",
+        // "source": "~/Pictures/ba-logo-transp.png",
         "color": {
             "1": "#89b4fa",
             "2": "#b4befe",
