@@ -1179,17 +1179,30 @@
                 "en": "✨ Install Mullvad Browser"
             },
             "description": {
-                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten Mullvad Browser: yay oder Flatpak.",
-                "en": "Choose exactly one installation method for the privacy-focused Mullvad Browser: yay or Flatpak."
+                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten Mullvad Browser: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the privacy-focused Mullvad Browser: Pacman, yay, or Flatpak."
             },
             "file": "73_install_mullvad_browser.json",
             "substeps": [
                 {
+                    "id": "install_mullvad_browser_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "✨ Mullvad Browser über Pacman installieren",
+                        "en": "✨ Install Mullvad Browser with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über die offiziellen Paketquellen mit Pacman. Diese Methode ist nur für CachyOS vorgesehen.",
+                        "en": "Installs the Mullvad Browser from the official repositories using Pacman. This method is intended only for CachyOS."
+                    },
+                    "exclusive_group": "mullvad_browser_method"
+                },
+                {
                     "id": "install_mullvad_browser_yay",
                     "variant": "yay",
                     "name": {
-                        "de": "Mullvad Browser über yay installieren",
-                        "en": "Install Mullvad Browser with yay"
+                        "de": "✨ Mullvad Browser über yay installieren",
+                        "en": "✨ Install Mullvad Browser with yay"
                     },
                     "description": {
                         "de": "Installiert den Mullvad Browser über das AUR mit yay.",
@@ -1201,8 +1214,8 @@
                     "id": "install_mullvad_browser_flatpak",
                     "variant": "flatpak",
                     "name": {
-                        "de": "Mullvad Browser über Flatpak installieren",
-                        "en": "Install Mullvad Browser with Flatpak"
+                        "de": "✨ Mullvad Browser über Flatpak installieren",
+                        "en": "✨ Install Mullvad Browser with Flatpak"
                     },
                     "description": {
                         "de": "Installiert den Mullvad Browser über Flathub mit Flatpak.",
@@ -1240,8 +1253,8 @@
                     "id": "install_google_chrome_yay",
                     "variant": "yay",
                     "name": {
-                        "de": "Google Chrome über yay installieren",
-                        "en": "Install Google Chrome with yay"
+                        "de": "✨ Google Chrome über yay installieren",
+                        "en": "✨ Install Google Chrome with yay"
                     },
                     "description": {
                         "de": "Installiert Google Chrome über das AUR mit yay.",
@@ -1253,8 +1266,8 @@
                     "id": "install_google_chrome_flatpak",
                     "variant": "flatpak",
                     "name": {
-                        "de": "Google Chrome über Flatpak installieren",
-                        "en": "Install Google Chrome with Flatpak"
+                        "de": "✨ Google Chrome über Flatpak installieren",
+                        "en": "✨ Install Google Chrome with Flatpak"
                     },
                     "description": {
                         "de": "Installiert Google Chrome über Flathub mit Flatpak.",
@@ -1271,17 +1284,30 @@
                 "en": "✨ Install LibreWolf"
             },
             "description": {
-                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten LibreWolf Browser: yay oder Flatpak.",
-                "en": "Choose exactly one installation method for the privacy-focused LibreWolf browser: yay or Flatpak."
+                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten LibreWolf Browser: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the privacy-focused LibreWolf browser: Pacman, yay, or Flatpak."
             },
             "file": "75_install_librewolf.json",
             "substeps": [
                 {
+                    "id": "install_librewolf_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "✨ LibreWolf über Pacman installieren",
+                        "en": "✨ Install LibreWolf with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert LibreWolf über Pacman auf Arch-basierten Distributionen.",
+                        "en": "Installs LibreWolf using Pacman on Arch-based distributions."
+                    },
+                    "exclusive_group": "librewolf_method"
+                },
+                {
                     "id": "install_librewolf_yay",
                     "variant": "yay",
                     "name": {
-                        "de": "LibreWolf über yay installieren",
-                        "en": "Install LibreWolf with yay"
+                        "de": "✨ LibreWolf über yay installieren",
+                        "en": "✨ Install LibreWolf with yay"
                     },
                     "description": {
                         "de": "Installiert den LibreWolf Browser über das AUR mit yay.",
@@ -1293,8 +1319,8 @@
                     "id": "install_librewolf_flatpak",
                     "variant": "flatpak",
                     "name": {
-                        "de": "LibreWolf über Flatpak installieren",
-                        "en": "Install LibreWolf with Flatpak"
+                        "de": "✨ LibreWolf über Flatpak installieren",
+                        "en": "✨ Install LibreWolf with Flatpak"
                     },
                     "description": {
                         "de": "Installiert den LibreWolf Browser über Flathub mit Flatpak.",

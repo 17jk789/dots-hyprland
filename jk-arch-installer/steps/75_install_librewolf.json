@@ -1,6 +1,44 @@
 {
     "id": "install_librewolf",
     "variants": {
+        "pacman": {
+            "id": "install_librewolf_pacman",
+            "name": {
+                "de": "LibreWolf über Pacman installieren",
+                "en": "Install LibreWolf with Pacman"
+            },
+            "description": {
+                "de": "Installiert den datenschutzfokussierten LibreWolf Browser über Pacman.",
+                "en": "Installs the privacy-focused LibreWolf browser using Pacman."
+            },
+            "question": {
+                "de": "Soll LibreWolf über Pacman installiert werden?",
+                "en": "Should LibreWolf be installed using Pacman?"
+            },
+            "optional": false,
+            "exclusive_group": "librewolf_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert LibreWolf über Pacman.",
+                        "en": "Installs LibreWolf using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "librewolf"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
         "yay": {
             "id": "install_librewolf_yay",
             "name": {
@@ -15,7 +53,7 @@
                 "de": "Soll LibreWolf über yay installiert werden?",
                 "en": "Should LibreWolf be installed using yay?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "librewolf_method",
             "continue_on_error": false,
             "checks": [],

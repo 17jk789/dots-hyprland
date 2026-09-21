@@ -1,6 +1,44 @@
 {
     "id": "install_mullvad_browser",
     "variants": {
+        "pacman": {
+            "id": "install_mullvad_browser_pacman",
+            "name": {
+                "de": "Mullvad Browser über Pacman installieren",
+                "en": "Install Mullvad Browser with Pacman"
+            },
+            "description": {
+                "de": "Installiert den Mullvad Browser über die offiziellen Paketquellen mit Pacman.",
+                "en": "Installs the Mullvad Browser from the official repositories using Pacman."
+            },
+            "question": {
+                "de": "Soll der Mullvad Browser über Pacman installiert werden?",
+                "en": "Should the Mullvad Browser be installed using Pacman?"
+            },
+            "optional": false,
+            "exclusive_group": "mullvad_browser_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Mullvad Browser über Pacman.",
+                        "en": "Installs the Mullvad Browser using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "mullvad-browser-bin"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
         "yay": {
             "id": "install_mullvad_browser_yay",
             "name": {
@@ -15,7 +53,7 @@
                 "de": "Soll der Mullvad Browser über yay installiert werden?",
                 "en": "Should the Mullvad Browser be installed using yay?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "mullvad_browser_method",
             "continue_on_error": false,
             "checks": [],
