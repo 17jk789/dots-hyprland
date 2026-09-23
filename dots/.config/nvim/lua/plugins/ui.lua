@@ -142,9 +142,14 @@ return {
 		},
 		keys = {
 			{
-				"<leader>tt",
+				"<leader>tT",
 				function()
-					require("snacks").terminal()
+					require("snacks").terminal(nil, {
+						win = {
+							position = "bottom",
+							height = 0.35,
+						},
+					})
 				end,
 				desc = "Terminal",
 			},
