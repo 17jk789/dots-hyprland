@@ -6,13 +6,13 @@ vim.opt.relativenumber = true
 -- vim.opt.wrap = true
 -- vim.opt.linebreak = true -- bricht an Wortgrenzen
 -- vim.opt.breakindent = true -- entspricht "wrappingIndent": "indent"
--- vim.opt.colorcolumn = 80 -- nur visuelle Markierung bei Spalte 80
+-- vim.opt.colorcolumn = "80" -- nur visuelle Markierung bei Spalte 80
 
 vim.api.nvim_create_user_command("WrapToggle", function()
-    vim.opt.wrap = not vim.opt.wrap:get()
-    vim.opt.linebreak = vim.opt.wrap:get()
-    vim.opt.breakindent = vim.opt.wrap:get()
-    vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
+	vim.opt.wrap = not vim.opt.wrap:get()
+	vim.opt.linebreak = vim.opt.wrap:get()
+	vim.opt.breakindent = vim.opt.wrap:get()
+	vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
 end, {})
 
 -- vim.cmd [[
@@ -238,13 +238,13 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 vim.lsp.config("roslyn_ls", {
-  cmd = { "true" }, -- harmless no-op
-  filetypes = {},
-  root_dir = function()
-    return nil
-  end,
-  single_file_support = false,
-  handlers = {
-    ["textDocument/publishDiagnostics"] = function() end,
-  },
+	cmd = { "true" }, -- harmless no-op
+	filetypes = {},
+	root_dir = function()
+		return nil
+	end,
+	single_file_support = false,
+	handlers = {
+		["textDocument/publishDiagnostics"] = function() end,
+	},
 })
