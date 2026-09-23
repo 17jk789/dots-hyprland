@@ -1,17 +1,27 @@
 gui:
   nerdFontsVersion: "3"
   showFileIcons: true
+
+  # Git information
   showBranchCommitHash: true
   showDivergenceFromBaseBranch: arrowAndNumber
+
+  # UI
   showBottomLine: true
   showPanelJumps: true
-  showRandomTip: true
+  showRandomTip: false
+  showCommandLog: false
+
+  # Diff
   splitDiff: auto
   border: rounded
+
+  # Panels
   expandedSidePanel: files
   showFileTree: true
-  sidePanelWidth: 0.15
-  showCommandLog: true
+  sidePanelWidth: 0.20
+
+  # Catppuccin Mocha
   theme:
     activeBorderColor:
       - "#89b4fa"
@@ -40,25 +50,69 @@ gui:
     defaultFgColor:
       - "#cdd6f4"
 
-  authorColors:
-    "*": "#b4befe"
+  # authorColors:
+  #   "*": "#b4befe"
+
 git:
+  # Delta = Haupt-Diff-Renderer
   diffRenderers:
-    - colorArg: always
-      command: delta --paging=never --navigate --line-numbers --side-by-side --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - name: "delta"
+      type: "stdinFilter"
+      colorArg: "always"
+      command: >-
+        delta
+        --paging=never
+        --navigate
+        --line-numbers
+        --side-by-side
+        --true-color=always
+        --syntax-theme="Catppuccin-mocha"
+        --hyperlinks
+        --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+        --file-decoration-style=none
+        --hunk-header-style=file
+        --commit-style=bold
+
+  # Git behaviour
+  autoFetch: true
+  autoRefresh: true
+
+  # Better commit UX
+  commit:
+    autoWrapCommitMessage: true
+    autoWrapWidth: 72
+
 os:
   editCommand: nvim
-  editCommandTemplate: "{{editor}} +{{line}} {{filename}}"
+  editCommandTemplate: >-
+    nvim --server {{server}}
+    --remote-send '<C-\><C-n>:e {{filename}}<CR>'
+
 customCommands:
+
+  # B = blame current file
   - key: "B"
     context: "files"
-    command: "git blame -w {{.SelectedFile.Name}}"
+    description: "Git blame current file"
+    command: "git blame -w -- {{.SelectedFile.Name}}"
     output: terminal
+
+  # G = complete git graph
   - key: "G"
     context: "localBranches"
-    command: "git log --graph --decorate --all --oneline --date-order"
+    description: "Git graph"
+    command: >-
+      git log
+      --graph
+      --decorate
+      --all
+      --oneline
+      --date-order
     output: terminal
+
+  # F = file history
   - key: "F"
     context: "files"
+    description: "File history"
     command: "git log --follow -- {{.SelectedFile.Name}}"
     output: terminal
