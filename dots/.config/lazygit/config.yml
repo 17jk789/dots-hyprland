@@ -66,7 +66,6 @@ git:
         --line-numbers
         --side-by-side
         --true-color=always
-        --syntax-theme="Catppuccin-mocha"
         --hyperlinks
         --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
         --file-decoration-style=none
