@@ -96,11 +96,13 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Den Discord-Client (Vesktop) über den Paketmanager installieren](#den-discord-client-vesktop-über-den-paketmanager-installieren)
     - [Den Signal Messenger installieren](#den-signal-messenger-installieren)
     - [Den Firefox Browser installieren](#den-firefox-browser-installieren)
+      - [Firefox-Theme Catppuccin installieren](#firefox-theme-catppuccin-installieren)
     - [Den Brave Browser über yay installieren](#den-brave-browser-über-yay-installieren)
     - [✨ Den datenschutzfokussierten Mullvad Browser installieren](#-den-datenschutzfokussierten-mullvad-browser-installieren)
 - [✨ Tor Browser installieren und einrichten](#-tor-browser-installieren-und-einrichten)
     - [✨ Google Chrome über den AUR-Helfer installieren](#-google-chrome-über-den-aur-helfer-installieren)
     - [✨ Den datenschutzfokussierten LibreWolf Browser installieren](#-den-datenschutzfokussierten-librewolf-browser-installieren)
+      - [LibreWolf-Theme Catppuccin installieren](#librewolf-theme-catppuccin-installieren)
     - [✨ Die Firefox Developer Edition installieren](#-die-firefox-developer-edition-installieren)
     - [Das grafische Archivierungsprogramm Ark installieren](#das-grafische-archivierungsprogramm-ark-installieren)
     - [Den erweiterten KDE-Texteditor Kate installieren](#den-erweiterten-kde-texteditor-kate-installieren)
@@ -1718,7 +1720,7 @@ sudo pacman -S firefox
 
 2. Öffnen Sie einfach den folgenden Link in Firefox, um das Catppuccin-Theme zu importieren:
 
-`https://color.firefox.com/?theme=XQAAAAKSAgAAAAAAAABBqYhm849SCicxcUHkAiuG_ebZUZXOFqn__Zl9jfuHgrpjdPXOwAbM0YwauFfrAndLfWmHngCbYu9aNBifXVaFEjrVQ5-mgPmWL-Hc_DfazrQENlcOWPPKCwLFoptW_Yy2UVch4AmPMsltdrLayZyEGHY59M8Tcyx3oZr_oyjxQAmfQ5XDRtcwmFnUcCFfDwfSuXh8Yuqb0IB5cTSyky5UGy6esgY6pGN5k9yEkRIeWM24oQeUr7lCnJ43rmssmCiWPaJT1zxezaxewaPZUtQ0sgGH3lzXlKrEZCo1sm1BQFhyUk74mgGXNyf36rx4Fj62KqwfMuQn5ZYKS_X1dzbv4U4fL4rOqG3ylheegwONk7AxGyj5NBYA-15YEBhnhbwmY8EoZZCx1eJn-nhqns3ztu6pd__itwLr`
+`https://color.firefox.com/?theme=XQAAAAKIBAAAAAAAAABBqYhm849SCicxcUhA3DJozHnOMuotJJEgvcajvXXzbLRJ0F_F447xQs-L1kFlGgDKq4IIvWciiy4upwJKgUnUuoFzOpzRTee96ZfRONrwxQSYysWh_ma3QSMYv0zZpLv8XMOvIV_qpACwq2OgZ1z9xSlavydmJJev054ySeZzGtmgWrNUvJqNOAsQbyBWY7w2l3fhFgW2qxx4tJIAxrL1trg8wc6irH9ucbs1e5toXkQ7re8sllEIkOU40yE1hdPUJwvTgxq39WIjDLpg_izcrQURjhO4grdbFg9rigcAgqwrEXjjtdjJXeTf2Y0JKOy0nT4W52DED42vgrB-rDCbmYO9QhNCXOSqGBCwasUidE0Ozu0CFbStrxLFoG-ZwOeWIs9Di8-7JXHmMkt3IGWYdahLQgRybpP9baffPyrx9sVvfxesjWEEFRJJ1Zj8KLhKm_3MlLOUI2WBSRilhx7i2bWEr28XtWO9qXN9PRj6UwCtf9wJcAEFxq1WwpGCWr0H5aquYWf9ZyT2rnA5tGqBTi1FUHuE5M5-eLjR2_wnyC1yePK_zdRYBKA54r_6K7xpc73Zv__rEaAM`
 
 ### Den Brave Browser über yay installieren
 
@@ -1808,7 +1810,7 @@ sudo pacman -S librewolf
 
 2. Öffnen Sie einfach den folgenden Link in LibreWolf, um das Catppuccin-Theme zu importieren:
 
-`https://color.firefox.com/?theme=XQAAAAKSAgAAAAAAAABBqYhm849SCicxcUHkAiuG_ebZUZXOFqn__Zl9jfuHgrpjdPXOwAbM0YwauFfrAndLfWmHngCbYu9aNBifXVaFEjrVQ5-mgPmWL-Hc_DfazrQENlcOWPPKCwLFoptW_Yy2UVch4AmPMsltdrLayZyEGHY59M8Tcyx3oZr_oyjxQAmfQ5XDRtcwmFnUcCFfDwfSuXh8Yuqb0IB5cTSyky5UGy6esgY6pGN5k9yEkRIeWM24oQeUr7lCnJ43rmssmCiWPaJT1zxezaxewaPZUtQ0sgGH3lzXlKrEZCo1sm1BQFhyUk74mgGXNyf36rx4Fj62KqwfMuQn5ZYKS_X1dzbv4U4fL4rOqG3ylheegwONk7AxGyj5NBYA-15YEBhnhbwmY8EoZZCx1eJn-nhqns3ztu6pd__itwLr`
+`https://color.firefox.com/?theme=XQAAAAKIBAAAAAAAAABBqYhm849SCicxcUhA3DJozHnOMuotJJEgvcajvXXzbLRJ0F_F447xQs-L1kFlGgDKq4IIvWciiy4upwJKgUnUuoFzOpzRTee96ZfRONrwxQSYysWh_ma3QSMYv0zZpLv8XMOvIV_qpACwq2OgZ1z9xSlavydmJJev054ySeZzGtmgWrNUvJqNOAsQbyBWY7w2l3fhFgW2qxx4tJIAxrL1trg8wc6irH9ucbs1e5toXkQ7re8sllEIkOU40yE1hdPUJwvTgxq39WIjDLpg_izcrQURjhO4grdbFg9rigcAgqwrEXjjtdjJXeTf2Y0JKOy0nT4W52DED42vgrB-rDCbmYO9QhNCXOSqGBCwasUidE0Ozu0CFbStrxLFoG-ZwOeWIs9Di8-7JXHmMkt3IGWYdahLQgRybpP9baffPyrx9sVvfxesjWEEFRJJ1Zj8KLhKm_3MlLOUI2WBSRilhx7i2bWEr28XtWO9qXN9PRj6UwCtf9wJcAEFxq1WwpGCWr0H5aquYWf9ZyT2rnA5tGqBTi1FUHuE5M5-eLjR2_wnyC1yePK_zdRYBKA54r_6K7xpc73Zv__rEaAM`
 
 ### ✨ Die Firefox Developer Edition installieren
 
