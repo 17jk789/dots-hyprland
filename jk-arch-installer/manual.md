@@ -1712,6 +1712,14 @@ sudo pacman -S firefox
 # flatpak install --noninteractive flathub org.mozilla.firefox
 ```
 
+#### Firefox-Theme Catppuccin installieren
+
+1. Installieren Sie das [Firefox Color](https://addons.mozilla.org/en-GB/firefox/addon/firefox-color/) Add-on.
+
+2. Öffnen Sie einfach den folgenden Link in Firefox, um das Catppuccin-Theme zu importieren:
+
+`https://color.firefox.com/?theme=XQAAAAKSAgAAAAAAAABBqYhm849SCicxcUHkAiuG_ebZUZXOFqn__Zl9jfuHgrpjdPXOwAbM0YwauFfrAndLfWmHngCbYu9aNBifXVaFEjrVQ5-mgPmWL-Hc_DfazrQENlcOWPPKCwLFoptW_Yy2UVch4AmPMsltdrLayZyEGHY59M8Tcyx3oZr_oyjxQAmfQ5XDRtcwmFnUcCFfDwfSuXh8Yuqb0IB5cTSyky5UGy6esgY6pGN5k9yEkRIeWM24oQeUr7lCnJ43rmssmCiWPaJT1zxezaxewaPZUtQ0sgGH3lzXlKrEZCo1sm1BQFhyUk74mgGXNyf36rx4Fj62KqwfMuQn5ZYKS_X1dzbv4U4fL4rOqG3ylheegwONk7AxGyj5NBYA-15YEBhnhbwmY8EoZZCx1eJn-nhqns3ztu6pd__itwLr`
+
 ### Den Brave Browser über yay installieren
 
 > **Brave** ist ein datenschutzfokussierter Webbrowser, der Tracking und Werbung blockiert und auf Chromium basiert. Er bietet zusätzliche Funktionen wie integrierten Werbeblocker, HTTPS Everywhere und Schutz vor Fingerprinting.
@@ -1793,6 +1801,14 @@ sudo pacman -S librewolf
 ```
 
 </details>
+
+#### LibreWolf-Theme Catppuccin installieren
+
+1. Installieren Sie das [Firefox Color](https://addons.mozilla.org/en-GB/firefox/addon/firefox-color/) Add-on.
+
+2. Öffnen Sie einfach den folgenden Link in LibreWolf, um das Catppuccin-Theme zu importieren:
+
+`https://color.firefox.com/?theme=XQAAAAKSAgAAAAAAAABBqYhm849SCicxcUHkAiuG_ebZUZXOFqn__Zl9jfuHgrpjdPXOwAbM0YwauFfrAndLfWmHngCbYu9aNBifXVaFEjrVQ5-mgPmWL-Hc_DfazrQENlcOWPPKCwLFoptW_Yy2UVch4AmPMsltdrLayZyEGHY59M8Tcyx3oZr_oyjxQAmfQ5XDRtcwmFnUcCFfDwfSuXh8Yuqb0IB5cTSyky5UGy6esgY6pGN5k9yEkRIeWM24oQeUr7lCnJ43rmssmCiWPaJT1zxezaxewaPZUtQ0sgGH3lzXlKrEZCo1sm1BQFhyUk74mgGXNyf36rx4Fj62KqwfMuQn5ZYKS_X1dzbv4U4fL4rOqG3ylheegwONk7AxGyj5NBYA-15YEBhnhbwmY8EoZZCx1eJn-nhqns3ztu6pd__itwLr`
 
 ### ✨ Die Firefox Developer Edition installieren
 
