@@ -88,6 +88,58 @@ return {
 	},
 
 	-- DIFFVIEW (GitLens Diff UI Ersatz)
+--   {
+--     "sindrets/diffview.nvim",
+
+--     dependencies = {
+--       "nvim-lua/plenary.nvim",
+--     },
+
+--     cmd = {
+--       "DiffviewOpen",
+--       "DiffviewClose",
+--       "DiffviewFileHistory",
+--     },
+
+--     opts = {
+--       enhanced_diff_hl = true,
+--       use_icons = true,
+--       show_help_hints = true,
+
+--       view = {
+--         default = {
+--           layout = "diff2_horizontal",
+--         },
+
+--         merge_tool = {
+--           layout = "diff3_horizontal",
+--         },
+
+--         file_history = {
+--           layout = "diff2_horizontal",
+--         },
+--       },
+
+--       file_panel = {
+--         listing_style = "tree",
+--         win_config = {
+--           position = "left",
+--           width = 35,
+--         },
+--       },
+
+--       file_history_panel = {
+--         log_options = {
+--           git = {
+--             single_file = {
+--               diff_merges = "combined",
+--             },
+--           },
+--         },
+--       },
+--     },
+--   },
+
 	{
 		"sindrets/diffview.nvim",
 		dependencies = "nvim-lua/plenary.nvim",
@@ -160,10 +212,14 @@ return {
 	-- 	},
 	-- },
 
+  -- LAZYGIT
+  -- Snacks is only responsible for opening LazyGit.
   {
     "folke/snacks.nvim",
+
     priority = 1000,
     lazy = false,
+
     opts = {
       lazygit = {
         enabled = true,
@@ -172,6 +228,7 @@ return {
         win = {
           width = 0,
           height = 0,
+          border = "rounded",
         },
 
         config = {
@@ -184,6 +241,7 @@ return {
           git = {
             paging = {
               colorArg = "always",
+
               pager = table.concat({
                 "delta",
                 "--paging=never",
@@ -212,13 +270,22 @@ return {
       {
         "<leader>gg",
         function()
+          Snacks.lazygit({
+            cwd = LazyVim.root.git(),
+          })
+        end,
+        desc = "LazyGit (Root Dir)",
+      },
+
+      {
+        "<leader>gG",
+        function()
           Snacks.lazygit()
         end,
-        desc = "LazyGit",
+        desc = "LazyGit (cwd)",
       },
     },
   },
-
 }
 
 -- :Gitsigns toggle_current_line_blame
