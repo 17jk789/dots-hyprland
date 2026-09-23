@@ -896,15 +896,16 @@ vim.api.nvim_create_autocmd("FileType", {
 			":split | terminal sh -c './gradlew build && ./gradlew run'<CR>",
 			{ desc = "Gradle Build & Run (Split)", silent = true, buffer = true }
 		)
-		vim.keymap.set(
-			"n",
-			"<leader>rrpo",
-			":split | terminal sh -c './gradlew run --args=\"client 0.0.0.0:1234\"'<CR>",
-			{
-				desc = "Gradle: Run Client",
-				silent = true,
-			}
-		)
+		-- War für ein Programmierprojekt gedacht, das einen Server und einen Client hatte. Brauchte man nicht mehr, daher auskommentiert.
+		-- vim.keymap.set(
+		-- 	"n",
+		-- 	"<leader>rrpo",
+		-- 	":split | terminal sh -c './gradlew run --args=\"client 0.0.0.0:1234\"'<CR>",
+		-- 	{
+		-- 		desc = "Gradle: Run Client",
+		-- 		silent = true,
+		-- 	}
+		-- )
 		vim.keymap.set(
 			"n",
 			"<leader>rrr",
@@ -1417,10 +1418,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 			-- Kein Python gefunden
 			if not python then
-				vim.notify(
-					"Kein Python-Interpreter gefunden!",
-					vim.log.levels.ERROR
-				)
+				vim.notify("Kein Python-Interpreter gefunden!", vim.log.levels.ERROR)
 				return
 			end
 
@@ -1432,10 +1430,7 @@ vim.api.nvim_create_autocmd("FileType", {
 			vim.cmd("terminal " .. python .. " " .. vim.fn.shellescape(file))
 
 			-- Information ausgeben
-			vim.notify(
-				"Python: " .. python .. "\n" .. version,
-				vim.log.levels.INFO
-			)
+			vim.notify("Python: " .. python .. "\n" .. version, vim.log.levels.INFO)
 		end, {
 			desc = "Python Run (Auto Venv)",
 			silent = true,
