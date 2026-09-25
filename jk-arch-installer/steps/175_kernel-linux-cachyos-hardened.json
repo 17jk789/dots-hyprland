@@ -1,0 +1,37 @@
+{
+    "id": "install_linux_cachyos_hardened",
+    "name": {
+        "de": "linux-cachyos-hardened installieren",
+        "en": "Install linux-cachyos-hardened"
+    },
+    "description": {
+        "de": "Installiert den gehärteten CachyOS-Linux-Kernel mit pacman.",
+        "en": "Installs the hardened CachyOS Linux kernel using pacman."
+    },
+    "question": {
+        "de": "Soll linux-cachyos-hardened installiert werden?",
+        "en": "Do you want to install linux-cachyos-hardened?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert den gehärteten CachyOS-Linux-Kernel mit pacman.",
+                "en": "Installs the hardened CachyOS Linux kernel using pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "linux-cachyos-hardened"
+            ],
+            "requires_root": true,
+            "distros": [
+                "cachyos"
+            ]
+        }
+    ]
+}

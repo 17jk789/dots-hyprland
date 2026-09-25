@@ -94,6 +94,18 @@
             ]
         },
         {
+            "id": "install_linux_cachyos_hardened",
+            "name": {
+                "de": "✨ linux-cachyos-hardened installieren",
+                "en": "✨ Install linux-cachyos-hardened"
+            },
+            "description": {
+                "de": "Installiert den gehärteten linux-cachyos-hardened Kernel. Dieser Kernel ist speziell für CachyOS vorgesehen und bietet zusätzliche Sicherheits-Härtungen gegenüber dem Standard-Kernel.",
+                "en": "Installs the hardened linux-cachyos-hardened kernel. This kernel is specifically intended for CachyOS and provides additional security hardening compared to the standard kernel."
+            },
+            "file": "175_kernel-linux-cachyos-hardened.json"
+        },
+        {
             "id": "install_yay",
             "name": {
                 "de": "✨ yay installieren",
