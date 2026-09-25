@@ -24,6 +24,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Die Firewall sofort einschalten und dauerhaft aktivieren](#die-firewall-sofort-einschalten-und-dauerhaft-aktivieren)
     - [UFW später verwalten](#ufw-später-verwalten)
     - [Die end-4/jk-arch Hyperland Konfiguration herunterladen und die Installation starten](#die-end-4jk-arch-hyperland-konfiguration-herunterladen-und-die-installation-starten)
+    - [✨ Den CachyOS Hardened Kernel installieren](#-den-cachyos-hardened-kernel-installieren)
     - [Den Quellcode von yay herunterladen und das Programm bauen und installieren](#den-quellcode-von-yay-herunterladen-und-das-programm-bauen-und-installieren)
     - [Kern-Werkzeuge und Entwickler-Tools installieren](#kern-werkzeuge-und-entwickler-tools-installieren)
       - [Basis-Tools](#basis-tools)
@@ -478,6 +479,18 @@ Wenn alles für dich passt, kannst du die Installation starten:
 ```
 
 > **Wichtig**: Lies dir die Ausgaben des Installers durch und bestätige nur Schritte, bei denen du weißt, was sie machen. Ein Installationsscript solltest du grundsätzlich nicht blind mit sudo oder Root-Rechten ausführen.
+
+### ✨ Den CachyOS Hardened Kernel installieren
+
+> `linux-cachyos-hardened` ist ein gehärteter Linux-Kernel für CachyOS, der zusätzliche Sicherheits-Härtungen gegenüber einem normalen Kernel bietet.
+
+Der Kernel kann auf einem CachyOS-System direkt über pacman installiert werden:
+
+```bash
+sudo pacman -S linux-cachyos-hardened
+```
+
+Nach der Installation steht der `linux-cachyos-hardened` Kernel beim nächsten Neustart über den Bootloader zur Auswahl.
 
 ### Den Quellcode von yay herunterladen und das Programm bauen und installieren
 
