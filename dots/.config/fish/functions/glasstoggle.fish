@@ -27,6 +27,7 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
         echo "  personal [OPACITY]   Enable personal glass mode"
         echo "  normal [OPACITY]     Enable normal glass mode"
         echo "  illogical [OPACITY]  Toggle Illogical Impulse transparency"
+        echo "  shadow               Toggle Hyprland window shadows"
         echo "  off                  Disable glass mode and transparency"
         echo "  reset                Reset glass mode and transparency"
         echo "  default              Reset glass mode and transparency"
@@ -48,10 +49,10 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
 
     switch $argv[1]
 
-        case full personal normal illogical
+        case full personal normal illogical shadow
             set mode $argv[1]
 
-            if test (count $argv) -gt 1
+            if test "$mode" != shadow; and test (count $argv) -gt 1
                 set opacity $argv[2]
             end
 
@@ -62,6 +63,52 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
             # Allow "glasstoggle 0.85" as shorthand for normal mode.
             set opacity $argv[1]
 
+    end
+
+
+    # ============================================================
+    # SHADOW TOGGLE ONLY
+    # ============================================================
+
+    if test "$mode" = shadow
+
+        if not test -f "$general_file"
+            notify-send \
+                "Glass Toggle" \
+                "general.lua not found."
+
+            return 1
+        end
+
+        set shadow_enabled (sed -n \
+            '/^[[:space:]]*shadow = {/,/^[[:space:]]*},/ s/^[[:space:]]*enabled = \(true\|false\),/\1/p' \
+            "$general_file" | head -n 1)
+
+        if test "$shadow_enabled" = true
+            sed -i \
+                '/^[[:space:]]*shadow = {/,/^[[:space:]]*},/ s/^[[:space:]]*enabled = true,/enabled = false,/' \
+                "$general_file"
+            set shadow_notification "Hyprland shadows OFF"
+        else if test "$shadow_enabled" = false
+            sed -i \
+                '/^[[:space:]]*shadow = {/,/^[[:space:]]*},/ s/^[[:space:]]*enabled = false,/enabled = true,/' \
+                "$general_file"
+            set shadow_notification "Hyprland shadows ON"
+        else
+            notify-send \
+                "Glass Toggle" \
+                "shadow.enabled not found in general.lua."
+
+            return 1
+        end
+
+        hyprctl reload
+
+        notify-send \
+            "Glass Toggle" \
+            "$shadow_notification"
+
+        return 0
     end
 
 
@@ -325,6 +372,65 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
                 return 1
             end
 
+            # Transparency OFF also restores terminal opacity.
+            set opacity 1.0
+
+            if test -f "$kitty_config"
+                if grep -q '^[[:space:]]*background_opacity[[:space:]]' "$kitty_config"
+                    sed -i \
+                        's/^[[:space:]]*background_opacity[[:space:]].*/background_opacity 1.0/' \
+                        "$kitty_config"
+                end
+            end
+
+            if test -f "$alacritty_config"
+                set tmp_file (mktemp)
+
+                awk '
+                BEGIN {
+                    in_window = 0
+                }
+
+                /^\[window\][[:space:]]*$/ {
+                    in_window = 1
+                    print
+                    next
+                }
+
+                /^\[/ {
+                    in_window = 0
+                    print
+                    next
+                }
+
+                {
+                    if (in_window && $0 ~ /^[[:space:]]*opacity[[:space:]]*=/) {
+                        print "opacity = 1.0"
+                        next
+                    }
+
+                    print
+                }
+                ' "$alacritty_config" > "$tmp_file"
+
+                mv "$tmp_file" "$alacritty_config"
+            end
+
+            # Restore the global no-blur rule when Illogical transparency is off.
+            sed -i \
+                '\|^hl\.window_rule({match = {class = "\.\*" }, no_blur = true })$|d' \
+                "$rules_file"
+
+            set tmp_file (mktemp)
+
+            printf '%s\n' \
+                'hl.window_rule({match = {class = ".*" }, no_blur = true })' \
+                '' \
+                (cat "$rules_file") \
+                > "$tmp_file"
+
+            mv "$tmp_file" "$rules_file"
+
             notify-send \
                 "Glass Toggle" \
                 "Illogical transparency OFF / Kitty opacity $opacity / Alacritty opacity $opacity"
@@ -355,6 +461,11 @@ function glasstoggle --description "Toggle Hyprland glass mode, Illogical Impuls
 
             return 1
         end
+
+        # Remove the global no-blur rule while Illogical transparency is on.
+        sed -i \
+            '\|^hl\.window_rule({match = {class = "\.\*" }, no_blur = true })$|d' \
+            "$rules_file"
 
         notify-send \
             "Glass Toggle" \
