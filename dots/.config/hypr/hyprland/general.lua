@@ -1,3 +1,5 @@
+-- Mehr gesten, schneller animation, mehr perfomace, noch besser galss
+
 -- MONITOR CONFIG
 hl.monitor({
 	output = "",
@@ -72,12 +74,12 @@ hl.config({
 		}
 	},
 	decoration = {
-        -- 2 = circle, higher = squircle, 4 = very obvious squircle
-        -- Fuck clearly visible squircles. 100% Apple brainrot.
+		-- 2 = circle, higher = squircle, 4 = very obvious squircle
+		-- Fuck clearly visible squircles. 100% Apple brainrot.
 		rounding_power = 2.5,
 		rounding = 18,
 
-		fullscreen_opacity = 0.85,
+		fullscreen_opacity = 0.9,
 
 		-- active_opacity = 0.85,
 		-- inactive_opacity = 0.75,
@@ -90,9 +92,9 @@ hl.config({
 			size = 10,
 			passes = 3,
 			brightness = 1.1,
-			noise = 0.01,
+			noise = 0.008,
 			contrast = 1.3,
-			vibrancy = 0.1,
+			vibrancy = 0.18,
 			vibrancy_darkness = 0.0,
 
 			-- Glass Mode: ignore_opacity aktivieren
@@ -108,12 +110,12 @@ hl.config({
 		},
 		shadow = {
 			enabled = true,
-			range = 20,
-			offset = { 0, 12 },
-			render_power = 2,
-			color = "rgba(00000055)"
+			range = 250,
+			offset = { 0, 25 },
+			render_power = 3,
+			color = "rgba(00000030)"
 		},
-        -- Dim
+		-- Dim
 		dim_inactive = false,
 		dim_strength = 0.15,
 		dim_special = 0.2
@@ -176,33 +178,33 @@ hl.animation({
 })
 hl.animation({
 	leaf = "fadeIn",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedDecel"
 })
 hl.animation({
 	leaf = "windowsOut",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedDecel",
 	style = "popin 90%"
 })
 hl.animation({
 	leaf = "fadeOut",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedDecel"
 })
 hl.animation({
 	leaf = "windowsMove",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedDecel",
 	style = "slide"
 })
 hl.animation({
 	leaf = "border",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedDecel"
 })
@@ -217,7 +219,7 @@ hl.animation({
 })
 hl.animation({
 	leaf = "layersOut",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "menu_accel",
 	style = "popin 94%"
@@ -225,13 +227,13 @@ hl.animation({
 -- fade
 hl.animation({
 	leaf = "fadeLayersIn",
-	enabled = true,
-	speed = 0.5,
+	enabled = false,
+	speed = 1,
 	bezier = "menu_decel"
 })
 hl.animation({
 	leaf = "fadeLayersOut",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "stall"
 })
@@ -253,7 +255,7 @@ hl.animation({
 })
 hl.animation({
 	leaf = "specialWorkspaceOut",
-	enabled = true,
+	enabled = false,
 	speed = 1,
 	bezier = "emphasizedAccel",
 	style = "slidevert"
@@ -293,7 +295,7 @@ hl.config({
 		animate_manual_resizes = false,
 		animate_mouse_windowdragging = false,
 		enable_swallow = false,
-		swallow_regex = "(foot|kitty|allacritty|Alacritty)",
+		swallow_regex = "(foot|kitty|ghostty|allacritty|Alacritty)",
 		on_focus_under_fullscreen = 2,
 		allow_session_lock_restore = true,
 		session_lock_xray = true,
