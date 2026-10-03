@@ -1,53 +1,190 @@
 {
     "id": "install_fail2ban",
     "name": {
-        "de": "Fail2ban installieren",
-        "en": "Install Fail2ban"
+        "de": "Fail2Ban installieren",
+        "en": "Install Fail2Ban"
     },
     "description": {
-        "de": "Installiert Fail2ban als zusätzliche Schutzschicht für das System. Die eigentliche Konfiguration von Schutzregeln (Jails) muss anschließend manuell durchgeführt werden.",
-        "en": "Installs Fail2ban as an additional system protection layer. The actual configuration of protection rules (jails) must be performed manually afterwards."
+        "de": "Wähle zwischen verschiedenen Fail2Ban-Installations- und Konfigurationsvarianten.",
+        "en": "Choose between different Fail2Ban installation and configuration variants."
     },
     "question": {
-        "de": "Soll Fail2ban installiert und aktiviert werden?",
-        "en": "Should Fail2ban be installed and enabled?"
+        "de": "Welche Fail2Ban-Variante soll verwendet werden?",
+        "en": "Which Fail2Ban variant should be used?"
     },
     "optional": true,
     "continue_on_error": false,
     "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert Fail2ban.",
-                "en": "Installs Fail2ban."
-            },
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "fail2ban"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+    "variants": {
+        "install_only": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Fail2Ban ohne zusätzliche Konfiguration.",
+                        "en": "Installs Fail2Ban without additional configuration."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "fail2ban"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
             ]
         },
-        {
-            "description": {
-                "de": "Aktiviert den Fail2ban-Dienst und startet ihn sofort.",
-                "en": "Enables and immediately starts the Fail2ban service."
-            },
-            "command": [
-                "systemctl",
-                "enable",
-                "--now",
-                "fail2ban"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+        "with_config": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Fail2Ban.",
+                        "en": "Installs Fail2Ban."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "fail2ban"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Erstellt die lokale Fail2Ban-Konfiguration für SSH.",
+                        "en": "Creates the local Fail2Ban configuration for SSH."
+                    },
+                    "command": [
+                        "sh",
+                        "-c",
+                        "cat > /etc/fail2ban/jail.local <<'EOF'\n[DEFAULT]\nbantime = 1h\nfindtime = 10m\nmaxretry = 5\nbanaction = nftables-multiport\n\n[sshd]\nenabled = true\nport = ssh\nbackend = systemd\nEOF"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert und startet Fail2Ban.",
+                        "en": "Enables and starts Fail2Ban."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "fail2ban.service"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Überprüft den Status des SSH-Jails.",
+                        "en": "Checks the status of the SSH jail."
+                    },
+                    "command": [
+                        "fail2ban-client",
+                        "status",
+                        "sshd"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "install_only_enable": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Fail2Ban.",
+                        "en": "Installs Fail2Ban."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "fail2ban"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert und startet Fail2Ban ohne zusätzliche Konfiguration.",
+                        "en": "Enables and starts Fail2Ban without additional configuration."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "fail2ban.service"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "with_config_no_enable": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Fail2Ban.",
+                        "en": "Installs Fail2Ban."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "fail2ban"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Erstellt die lokale Fail2Ban-Konfiguration für SSH.",
+                        "en": "Creates the local Fail2Ban configuration for SSH."
+                    },
+                    "command": [
+                        "sh",
+                        "-c",
+                        "cat > /etc/fail2ban/jail.local <<'EOF'\n[DEFAULT]\nbantime = 1h\nfindtime = 10m\nmaxretry = 5\nbanaction = nftables-multiport\n\n[sshd]\nenabled = true\nport = ssh\nbackend = systemd\nEOF"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

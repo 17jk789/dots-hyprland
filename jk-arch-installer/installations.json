@@ -20,14 +20,108 @@
         {
             "id": "rate_mirrors",
             "name": {
-                "de": "Schnellste Mirrors finden",
-                "en": "Find fastest mirrors"
+                "de": "Mirrors neu bewerten",
+                "en": "Rerate mirrors"
             },
             "description": {
-                "de": "Ermittelt die schnellsten CachyOS-Mirror-Server.",
-                "en": "Finds the fastest CachyOS mirror servers."
+                "de": "Wähle genau eine Option: Arch oder CachyOS, jeweils mit oder ohne System-Update.",
+                "en": "Choose exactly one option: Arch or CachyOS, with or without a system update."
             },
-            "file": "02_rate_mirrors.json"
+            "file": "02_rate_mirrors.json",
+            "substeps": [
+                {
+                    "id": "rate_mirrors_arch",
+                    "variant": "arch",
+                    "name": {
+                        "de": "Arch Mirrors neu bewerten",
+                        "en": "Rerate Arch mirrors"
+                    },
+                    "description": {
+                        "de": "Bewertet die Arch-Mirrors neu.",
+                        "en": "Rerates the Arch mirrors."
+                    },
+                    "exclusive_group": "rate_mirrors_method"
+                },
+                {
+                    "id": "rate_mirrors_cachyos",
+                    "variant": "cachyos",
+                    "name": {
+                        "de": "CachyOS Mirrors neu bewerten",
+                        "en": "Rerate CachyOS mirrors"
+                    },
+                    "description": {
+                        "de": "Bewertet die CachyOS-Mirrors neu.",
+                        "en": "Rerates the CachyOS mirrors."
+                    },
+                    "exclusive_group": "rate_mirrors_method"
+                },
+                {
+                    "id": "rate_mirrors_arch_update",
+                    "variant": "arch_update",
+                    "name": {
+                        "de": "Arch Mirrors neu bewerten + Update",
+                        "en": "Rerate Arch mirrors + update"
+                    },
+                    "description": {
+                        "de": "Bewertet die Arch-Mirrors neu und aktualisiert anschließend das System.",
+                        "en": "Rerates the Arch mirrors and then updates the system."
+                    },
+                    "exclusive_group": "rate_mirrors_method"
+                },
+                {
+                    "id": "rate_mirrors_cachyos_update",
+                    "variant": "cachyos_update",
+                    "name": {
+                        "de": "CachyOS Mirrors neu bewerten + Update",
+                        "en": "Rerate CachyOS mirrors + update"
+                    },
+                    "description": {
+                        "de": "Bewertet die CachyOS-Mirrors neu und aktualisiert anschließend das System.",
+                        "en": "Rerates the CachyOS mirrors and then updates the system."
+                    },
+                    "exclusive_group": "rate_mirrors_method"
+                }
+            ]
+        },
+        {
+            "id": "install_gnome",
+            "name": {
+                "de": "GNOME Desktop installieren",
+                "en": "Install GNOME desktop"
+            },
+            "description": {
+                "de": "Wähle zwischen GNOME und GNOME mit zusätzlichen Paketen.",
+                "en": "Choose between GNOME and GNOME with additional packages."
+            },
+            "file": "176_install_gnome.json",
+            "substeps": [
+                {
+                    "id": "install_gnome_standard",
+                    "variant": "standard",
+                    "name": {
+                        "de": "GNOME installieren",
+                        "en": "Install GNOME"
+                    },
+                    "description": {
+                        "de": "Installiert die normale GNOME-Desktopumgebung.",
+                        "en": "Installs the standard GNOME desktop environment."
+                    },
+                    "exclusive_group": "gnome_variant"
+                },
+                {
+                    "id": "install_gnome_extra",
+                    "variant": "extra",
+                    "name": {
+                        "de": "GNOME mit Extras installieren",
+                        "en": "Install GNOME with extras"
+                    },
+                    "description": {
+                        "de": "Installiert GNOME inklusive zusätzlicher GNOME-Pakete.",
+                        "en": "Installs GNOME including additional GNOME packages."
+                    },
+                    "exclusive_group": "gnome_variant"
+                }
+            ]
         },
         {
             "id": "cloudflare_dns",
@@ -94,16 +188,44 @@
             ]
         },
         {
-            "id": "install_linux_cachyos_hardened",
+            "id": "install_linux_hardened",
             "name": {
-                "de": "✨ linux-cachyos-hardened installieren",
-                "en": "✨ Install linux-cachyos-hardened"
+                "de": "✨ Hardened Kernel installieren",
+                "en": "✨ Install hardened kernel"
             },
             "description": {
-                "de": "Installiert den gehärteten linux-cachyos-hardened Kernel. Dieser Kernel ist speziell für CachyOS vorgesehen und bietet zusätzliche Sicherheits-Härtungen gegenüber dem Standard-Kernel.",
-                "en": "Installs the hardened linux-cachyos-hardened kernel. This kernel is specifically intended for CachyOS and provides additional security hardening compared to the standard kernel."
+                "de": "Wähle zwischen dem Arch linux-hardened oder dem CachyOS linux-cachyos-hardened Kernel.",
+                "en": "Choose between the Arch linux-hardened or CachyOS linux-cachyos-hardened kernel."
             },
-            "file": "175_kernel-linux-cachyos-hardened.json"
+            "file": "175_kernel-linux-hardened.json",
+            "substeps": [
+                {
+                    "id": "install_linux_arch_hardened",
+                    "variant": "arch_hardened",
+                    "name": {
+                        "de": "✨ Arch linux-hardened installieren",
+                        "en": "✨ Install Arch linux-hardened"
+                    },
+                    "description": {
+                        "de": "Installiert den gehärteten Arch linux-hardened Kernel inklusive Header.",
+                        "en": "Installs the hardened Arch linux-hardened kernel including headers."
+                    },
+                    "exclusive_group": "hardened_kernel"
+                },
+                {
+                    "id": "install_linux_cachyos_hardened",
+                    "variant": "cachyos_hardened",
+                    "name": {
+                        "de": "✨ linux-cachyos-hardened installieren",
+                        "en": "✨ Install linux-cachyos-hardened"
+                    },
+                    "description": {
+                        "de": "Installiert den gehärteten linux-cachyos-hardened Kernel inklusive Header.",
+                        "en": "Installs the hardened linux-cachyos-hardened kernel including headers."
+                    },
+                    "exclusive_group": "hardened_kernel"
+                }
+            ]
         },
         {
             "id": "install_yay",
@@ -3485,26 +3607,134 @@
         {
             "id": "install_apparmor",
             "name": {
-                "de": "AppArmor installieren",
-                "en": "Install AppArmor"
+                "de": "AppArmor / SELinux installieren",
+                "en": "Install AppArmor / SELinux"
             },
             "description": {
-                "de": "Installiert AppArmor und die AppArmor-Profile. Die weitere Einrichtung und Härtung von AppArmor muss anschließend manuell anhand des offiziellen Manuals und der Dokumentation durchgeführt werden. Profile und Kernel-Parameter sollten nicht blind übernommen werden.",
-                "en": "Installs AppArmor and the AppArmor profiles. Further AppArmor configuration and hardening must then be performed manually according to the official manual and documentation. Profiles and kernel parameters should not be applied blindly."
+                "de": "Wähle AppArmor für Arch Linux oder CachyOS sowie SELinux für Arch Linux, jeweils mit oder ohne Konfiguration.",
+                "en": "Choose AppArmor for Arch Linux or CachyOS and SELinux for Arch Linux, each with or without configuration."
             },
-            "file": "165_install_apparmor.json"
+            "file": "165_install_apparmor.json",
+            "substeps": [
+                {
+                    "id": "install_apparmor_arch",
+                    "variant": "apparmor_arch",
+                    "name": {
+                        "de": "AppArmor – Arch Linux",
+                        "en": "AppArmor – Arch Linux"
+                    },
+                    "description": {
+                        "de": "Installiert AppArmor unter Arch Linux ohne zusätzliche Konfiguration.",
+                        "en": "Installs AppArmor on Arch Linux without additional configuration."
+                    },
+                    "exclusive_group": "security_lsm"
+                },
+                {
+                    "id": "install_apparmor_arch_config",
+                    "variant": "apparmor_arch_config",
+                    "name": {
+                        "de": "AppArmor – Arch Linux + Konfiguration",
+                        "en": "AppArmor – Arch Linux + configuration"
+                    },
+                    "description": {
+                        "de": "Installiert AppArmor unter Arch Linux und führt anschließend config-app-armor.py aus.",
+                        "en": "Installs AppArmor on Arch Linux and then runs config-app-armor.py."
+                    },
+                    "exclusive_group": "security_lsm"
+                },
+                {
+                    "id": "install_apparmor_cachyos",
+                    "variant": "apparmor_cachyos",
+                    "name": {
+                        "de": "AppArmor – CachyOS",
+                        "en": "AppArmor – CachyOS"
+                    },
+                    "description": {
+                        "de": "Installiert AppArmor und AppArmor.d unter CachyOS ohne zusätzliche Konfiguration.",
+                        "en": "Installs AppArmor and AppArmor.d on CachyOS without additional configuration."
+                    },
+                    "exclusive_group": "security_lsm"
+                },
+                {
+                    "id": "install_apparmor_cachyos_config",
+                    "variant": "apparmor_cachyos_config",
+                    "name": {
+                        "de": "AppArmor – CachyOS + Konfiguration",
+                        "en": "AppArmor – CachyOS + configuration"
+                    },
+                    "description": {
+                        "de": "Installiert AppArmor und AppArmor.d unter CachyOS und führt anschließend config-app-armor-cachy.py aus.",
+                        "en": "Installs AppArmor and AppArmor.d on CachyOS and then runs config-app-armor-cachy.py."
+                    },
+                    "exclusive_group": "security_lsm"
+                },
+                {
+                    "id": "install_selinux",
+                    "variant": "selinux",
+                    "name": {
+                        "de": "SELinux – Arch Linux",
+                        "en": "SELinux – Arch Linux"
+                    },
+                    "description": {
+                        "de": "Installiert die SELinux-Basisumgebung unter Arch Linux ohne zusätzliche Konfiguration.",
+                        "en": "Installs the SELinux base environment on Arch Linux without additional configuration."
+                    },
+                    "exclusive_group": "security_lsm"
+                },
+                {
+                    "id": "install_selinux_config",
+                    "variant": "selinux_config",
+                    "name": {
+                        "de": "SELinux – Arch Linux + Konfiguration",
+                        "en": "SELinux – Arch Linux + configuration"
+                    },
+                    "description": {
+                        "de": "Installiert die SELinux-Basisumgebung unter Arch Linux und führt anschließend config-selinux.py aus.",
+                        "en": "Installs the SELinux base environment on Arch Linux and then runs config-selinux.py."
+                    },
+                    "exclusive_group": "security_lsm"
+                }
+            ]
         },
         {
             "id": "install_fail2ban",
             "name": {
-                "de": "Fail2ban installieren",
-                "en": "Install Fail2ban"
+                "de": "Fail2Ban installieren",
+                "en": "Install Fail2Ban"
             },
             "description": {
-                "de": "Installiert Fail2ban als zusätzliche Sicherheitsschicht zum Schutz vor Brute-Force-Angriffen. Die weitere Einrichtung und Anpassung von Jails muss anschließend manuell anhand der offiziellen Dokumentation durchgeführt werden.",
-                "en": "Installs Fail2ban as an additional security layer against brute-force attacks. Further configuration and customization of jails must then be performed manually according to the official documentation."
+                "de": "Wähle zwischen einer reinen Installation oder der Installation mit grundlegender SSH-Konfiguration.",
+                "en": "Choose between a plain installation or installation with basic SSH configuration."
             },
-            "file": "171_install_fail2ban.json"
+            "file": "171_install_fail2ban.json",
+            "substeps": [
+                {
+                    "id": "install_fail2ban_only",
+                    "variant": "install_only",
+                    "name": {
+                        "de": "Fail2Ban installieren",
+                        "en": "Install Fail2Ban"
+                    },
+                    "description": {
+                        "de": "Installiert Fail2Ban ohne zusätzliche Konfiguration.",
+                        "en": "Installs Fail2Ban without additional configuration."
+                    },
+                    "exclusive_group": "fail2ban_config"
+                },
+                {
+                    "id": "install_fail2ban_config",
+                    "variant": "with_config",
+                    "name": {
+                        "de": "Fail2Ban installieren und konfigurieren",
+                        "en": "Install and configure Fail2Ban"
+                    },
+                    "description": {
+                        "de": "Installiert Fail2Ban und richtet einen grundlegenden SSH-Schutz ein.",
+                        "en": "Installs Fail2Ban and configures basic SSH protection."
+                    },
+                    "exclusive_group": "fail2ban_config"
+                }
+            ]
         },
         {
             "id": "disable_sshd",

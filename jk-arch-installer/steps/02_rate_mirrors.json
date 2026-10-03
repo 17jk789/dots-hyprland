@@ -1,33 +1,205 @@
 {
     "id": "rate_mirrors",
+
     "name": {
         "de": "Schnellste Mirrors finden",
         "en": "Find fastest mirrors"
     },
+
     "description": {
-        "de": "Ermittelt die schnellsten CachyOS-Mirror-Server.",
-        "en": "Finds the fastest CachyOS mirror servers."
+        "de": "Ermittelt die schnellsten Arch- oder CachyOS-Mirror-Server und kann anschließend das System aktualisieren.",
+        "en": "Finds the fastest Arch or CachyOS mirror servers and can optionally update the system afterwards."
     },
+
     "question": {
-        "de": "Sollen die schnellsten CachyOS-Mirrors ermittelt werden?",
-        "en": "Do you want to find the fastest CachyOS mirrors?"
+        "de": "Sollen die schnellsten Mirrors ermittelt werden?",
+        "en": "Do you want to find the fastest mirrors?"
     },
+
     "optional": true,
+
     "continue_on_error": true,
+
     "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Testet die verfügbaren CachyOS-Mirrors und wählt die schnellsten aus.",
-                "en": "Tests the available CachyOS mirrors and selects the fastest ones."
-            },
-            "command": [
-                "cachyos-rate-mirrors"
-            ],
-            "requires_root": true,
-            "distros": [
-                "cachyos"
+
+    "variants": {
+
+        "arch": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Reflector.",
+                        "en": "Installs Reflector."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "reflector"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Testet die verfügbaren Arch-Mirrors und wählt die schnellsten aus.",
+                        "en": "Tests the available Arch mirrors and selects the fastest ones."
+                    },
+                    "command": [
+                        "reflector",
+                        "--latest",
+                        "20",
+                        "--sort",
+                        "rate",
+                        "--save",
+                        "/etc/pacman.d/mirrorlist"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+
+        "cachyos": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert das CachyOS-Mirror-Ranking-Werkzeug.",
+                        "en": "Installs the CachyOS mirror ranking tool."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "cachyos-rate-mirrors"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Testet die verfügbaren CachyOS-Mirrors und wählt die schnellsten aus.",
+                        "en": "Tests the available CachyOS mirrors and selects the fastest ones."
+                    },
+                    "command": [
+                        "cachyos-rate-mirrors"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+
+        "arch_update": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Reflector.",
+                        "en": "Installs Reflector."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "reflector"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Testet die verfügbaren Arch-Mirrors und wählt die schnellsten aus.",
+                        "en": "Tests the available Arch mirrors and selects the fastest ones."
+                    },
+                    "command": [
+                        "reflector",
+                        "--latest",
+                        "20",
+                        "--sort",
+                        "rate",
+                        "--save",
+                        "/etc/pacman.d/mirrorlist"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktualisiert anschließend das Arch-System.",
+                        "en": "Then updates the Arch system."
+                    },
+                    "command": [
+                        "pacman",
+                        "-Syu",
+                        "--noconfirm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+
+        "cachyos_update": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert das CachyOS-Mirror-Ranking-Werkzeug.",
+                        "en": "Installs the CachyOS mirror ranking tool."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "cachyos-rate-mirrors"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Testet die verfügbaren CachyOS-Mirrors und wählt die schnellsten aus.",
+                        "en": "Tests the available CachyOS mirrors and selects the fastest ones."
+                    },
+                    "command": [
+                        "cachyos-rate-mirrors"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktualisiert anschließend das CachyOS-System.",
+                        "en": "Then updates the CachyOS system."
+                    },
+                    "command": [
+                        "pacman",
+                        "-Syu",
+                        "--noconfirm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

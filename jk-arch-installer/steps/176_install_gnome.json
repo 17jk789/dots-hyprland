@@ -1,0 +1,97 @@
+{
+    "id": "install_gnome",
+    "name": {
+        "de": "GNOME Desktop installieren",
+        "en": "Install GNOME desktop"
+    },
+    "description": {
+        "de": "Installiert GNOME und aktiviert GDM.",
+        "en": "Installs GNOME and enables GDM."
+    },
+    "question": {
+        "de": "Welche GNOME-Installation soll verwendet werden?",
+        "en": "Which GNOME installation should be used?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "variants": {
+        "standard": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GNOME.",
+                        "en": "Installs GNOME."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "gnome"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert GDM und startet den Display-Manager sofort.",
+                        "en": "Enables GDM and starts the display manager immediately."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "gdm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "extra": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GNOME mit zusätzlichen GNOME-Paketen.",
+                        "en": "Installs GNOME with additional GNOME packages."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "gnome",
+                        "gnome-extra"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert GDM und startet den Display-Manager sofort.",
+                        "en": "Enables GDM and starts the display manager immediately."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "gdm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        }
+    }
+}

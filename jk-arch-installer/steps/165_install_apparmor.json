@@ -1,54 +1,305 @@
 {
     "id": "install_apparmor",
     "name": {
-        "de": "AppArmor installieren",
-        "en": "Install AppArmor"
+        "de": "AppArmor / SELinux installieren",
+        "en": "Install AppArmor / SELinux"
     },
     "description": {
-        "de": "Installiert AppArmor und die AppArmor-Profile. Die weitere Einrichtung und Härtung von AppArmor muss anschließend manuell anhand des offiziellen Manuals und der Dokumentation durchgeführt werden. Profile und Kernel-Parameter sollten nicht blind übernommen werden.",
-        "en": "Installs AppArmor and the AppArmor profiles. Further AppArmor configuration and hardening must then be performed manually according to the official manual and documentation. Profiles and kernel parameters should not be applied blindly."
+        "de": "Installiert AppArmor oder SELinux abhängig von der gewählten Variante.",
+        "en": "Installs AppArmor or SELinux depending on the selected variant."
     },
     "question": {
-        "de": "Soll AppArmor installiert und aktiviert werden?",
-        "en": "Should AppArmor be installed and enabled?"
+        "de": "Welche Sicherheitslösung und Konfiguration soll verwendet werden?",
+        "en": "Which security solution and configuration should be used?"
     },
     "optional": true,
     "continue_on_error": false,
     "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert AppArmor und die AppArmor-Profile.",
-                "en": "Installs AppArmor and the AppArmor profiles."
-            },
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "apparmor",
-                "apparmor.d"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+    "variants": {
+        "apparmor_arch": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert AppArmor unter Arch Linux.",
+                        "en": "Installs AppArmor on Arch Linux."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "apparmor"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
             ]
         },
-        {
-            "description": {
-                "de": "Aktiviert den AppArmor-Dienst und startet ihn sofort.",
-                "en": "Enables and immediately starts the AppArmor service."
-            },
-            "command": [
-                "systemctl",
-                "enable",
-                "--now",
-                "apparmor"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+        "apparmor_arch_config": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert AppArmor unter Arch Linux.",
+                        "en": "Installs AppArmor on Arch Linux."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "apparmor"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert und startet den AppArmor-Dienst.",
+                        "en": "Enables and starts the AppArmor service."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "apparmor.service"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Führt die Arch-Linux-AppArmor-Konfiguration aus.",
+                        "en": "Runs the Arch Linux AppArmor configuration."
+                    },
+                    "command": [
+                        "python",
+                        "/root/dots-hyprland/jk-arch-installer/scripts/config-app-armor.py"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+        "apparmor_cachyos": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert AppArmor und die AppArmor.d-Profile unter CachyOS.",
+                        "en": "Installs AppArmor and the AppArmor.d profiles on CachyOS."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "apparmor",
+                        "apparmor.d"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "apparmor_cachyos_config": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert AppArmor und die AppArmor.d-Profile unter CachyOS.",
+                        "en": "Installs AppArmor and the AppArmor.d profiles on CachyOS."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "apparmor",
+                        "apparmor.d"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktiviert und startet den AppArmor-Dienst.",
+                        "en": "Enables and starts the AppArmor service."
+                    },
+                    "command": [
+                        "systemctl",
+                        "enable",
+                        "--now",
+                        "apparmor.service"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Führt die CachyOS-AppArmor-Konfiguration aus.",
+                        "en": "Runs the CachyOS AppArmor configuration."
+                    },
+                    "command": [
+                        "python",
+                        "/root/dots-hyprland/jk-arch-installer/scripts/config-app-armor-cachy.py"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "selinux": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu.",
+                        "en": "Adds the unofficial SELinux repository for Arch Linux."
+                    },
+                    "command": [
+                        "sh",
+                        "-c",
+                        "if ! grep -q '^\\[selinux\\]$' /etc/pacman.conf; then printf '\\n[selinux]\\nServer = https://github.com/archlinuxhardened/selinux/releases/download/ArchLinux-SELinux\\nSigLevel = Never\\n' >> /etc/pacman.conf; fi"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktualisiert die Paketdatenbanken und führt ein vollständiges Systemupdate durch.",
+                        "en": "Updates the package databases and performs a full system upgrade."
+                    },
+                    "command": [
+                        "pacman",
+                        "-Syu",
+                        "--noconfirm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert die SELinux-Basisumgebung.",
+                        "en": "Installs the SELinux base environment."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "base-selinux",
+                        "base-devel-selinux"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+        "selinux_config": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu.",
+                        "en": "Adds the unofficial SELinux repository for Arch Linux."
+                    },
+                    "command": [
+                        "sh",
+                        "-c",
+                        "if ! grep -q '^\\[selinux\\]$' /etc/pacman.conf; then printf '\\n[selinux]\\nServer = https://github.com/archlinuxhardened/selinux/releases/download/ArchLinux-SELinux\\nSigLevel = Never\\n' >> /etc/pacman.conf; fi"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Aktualisiert die Paketdatenbanken und führt ein vollständiges Systemupdate durch.",
+                        "en": "Updates the package databases and performs a full system upgrade."
+                    },
+                    "command": [
+                        "pacman",
+                        "-Syu",
+                        "--noconfirm"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert die SELinux-Basisumgebung.",
+                        "en": "Installs the SELinux base environment."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "base-selinux",
+                        "base-devel-selinux"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Installiert SELinux-Werkzeuge für Verwaltung, Richtlinien und Dateikontexte.",
+                        "en": "Installs SELinux tools for management, policy handling and file contexts."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "selinux-python",
+                        "policycoreutils",
+                        "semodule-utils",
+                        "setools",
+                        "restorecond"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Führt die SELinux-Konfiguration aus.",
+                        "en": "Runs the SELinux configuration."
+                    },
+                    "command": [
+                        "python",
+                        "/root/dots-hyprland/jk-arch-installer/scripts/config-selinux.py"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }

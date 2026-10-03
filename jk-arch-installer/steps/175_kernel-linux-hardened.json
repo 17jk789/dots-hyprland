@@ -1,0 +1,61 @@
+{
+    "id": "install_linux_hardened",
+    "name": {
+        "de": "Hardened Kernel installieren",
+        "en": "Install hardened kernel"
+    },
+    "description": {
+        "de": "Installiert einen gehärteten Kernel für Arch oder CachyOS.",
+        "en": "Installs a hardened kernel for Arch or CachyOS."
+    },
+    "question": {
+        "de": "Welcher Hardened Kernel soll installiert werden?",
+        "en": "Which hardened kernel should be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "variants": {
+        "arch_hardened": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert linux-hardened und die zugehörigen Header.",
+                        "en": "Installs linux-hardened and its headers."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "linux-hardened",
+                        "linux-hardened-headers"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+        "cachyos_hardened": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den gehärteten linux-cachyos-hardened Kernel.",
+                        "en": "Installs the hardened linux-cachyos-hardened kernel."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--noconfirm",
+                        "linux-cachyos-hardened"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        }
+    }
+}
