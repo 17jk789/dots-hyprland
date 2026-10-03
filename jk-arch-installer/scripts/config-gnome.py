@@ -1,1812 +1,141 @@
-Ausserdem: 
-
-fügr noch hinzu dass gnone am nächsten an den keybindigs ist:
-
--- Experimentell: Diese Keybinds befinden sich noch in der Testphase.
--- Einige Commands funktionieren möglicherweise noch nicht vollständig oder fehlerfrei.
-
-require("hyprland.lib")
-require("hyprland.variables")
-if is_file_exists(HOME .. "/.config/hypr/custom/variables.lua") then
-	require("custom.variables")
-end
-
-local qsScripts = "$HOME/.config/quickshell/$qsConfig/scripts"
-local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
-local qsIpcCall = "qs -c $qsConfig ipc call"
-local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
-
-hl.bind("SUPER + SUPER_L", function()
-	hl.dispatch(hl.dsp.global("quickshell:searchToggleRelease"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
-end, { description = "Shell: Toggle search" })
-
-hl.bind("SUPER + SUPER_R", function()
-	hl.dispatch(hl.dsp.global("quickshell:searchToggleRelease"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
-end)
-
-hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
-hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
-hl.bind(
-	"SUPER_L",
-	hl.dsp.global("quickshell:workspaceNumber"),
-	{ ignore_mods = true, transparent = true, release = true }
-)
-hl.bind(
-	"SUPER_R",
-	hl.dsp.global("quickshell:workspaceNumber"),
-	{ ignore_mods = true, transparent = true, release = true }
-)
-
-hl.bind("SUPER + Tab", hl.dsp.global("quickshell:overviewWorkspacesToggle"), { description = "Shell: Toggle overview" })
-
-hl.bind("SUPER + V", function()
-	hl.dispatch(hl.dsp.global("quickshell:overviewClipboardToggle"))
-	hl.dispatch(
-		hl.dsp.exec_cmd(
-			qsIsAlive
-				.. " || pkill fuzzel || cliphist list | fuzzel --match-mode fzf --dmenu | cliphist decode | wl-copy"
-		)
-	)
-end, { description = "Utilities: Clipboard history >> clipboard" })
-
-hl.bind("SUPER + Period", function()
-	hl.dispatch(hl.dsp.global("quickshell:overviewEmojiToggle"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || " .. hyprScripts .. "/fuzzel-emoji.sh copy"))
-end, { description = "Utilities: Emoji >> clipboard" })
-
-hl.bind("SUPER + A", hl.dsp.global("quickshell:sidebarLeftToggle"), { description = "Shell: Toggle left sidebar" })
-hl.bind("ALT + SUPER + A", hl.dsp.global("quickshell:sidebarLeftToggleDetach"))
-hl.bind("SUPER + B", hl.dsp.global("quickshell:sidebarLeftToggle"))
-hl.bind("SUPER + O", hl.dsp.global("quickshell:sidebarLeftToggle"))
-hl.bind("SUPER + N", hl.dsp.global("quickshell:sidebarRightToggle"), { description = "Shell: Toggle right sidebar" })
-hl.bind("SUPER + SHIFT + 7", hl.dsp.global("quickshell:cheatsheetToggle"), { description = "Shell: Toggle cheatsheet" })
-hl.bind("SUPER + K", hl.dsp.global("quickshell:oskToggle"), { description = "Shell: Toggle on-screen keyboard" })
-hl.bind("SUPER + M", hl.dsp.global("quickshell:mediaControlsToggle"), { description = "Shell: Toggle media controls" })
-hl.bind("SUPER + G", hl.dsp.global("quickshell:overlayToggle"), { description = "Shell: Toggle widget overlay" })
-
-hl.bind("CTRL + ALT + Delete", function()
-	hl.dispatch(hl.dsp.global("quickshell:sessionToggle"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || pkill wlogout || wlogout -p layer-shell"))
-end, { description = "Shell: Toggle session menu" })
-
-hl.bind("SUPER + J", hl.dsp.global("quickshell:barToggle"), { description = "Shell: Toggle bar" })
-
-hl.bind("ALT + SUPER + SHIFT + 7", hl.dsp.exec_cmd("qs -p $HOME/.config/quickshell/$qsConfig/welcome.qml"))
-
-hl.bind(
-	"XF86MonBrightnessUp",
-	hl.dsp.exec_cmd(qsIpcCall .. " brightness increment || brightnessctl s 5%+"),
-	{ locked = true, repeating = true }
-)
-
-hl.bind(
-	"XF86MonBrightnessDown",
-	hl.dsp.exec_cmd(qsIpcCall .. " brightness decrement || brightnessctl s 5%-"),
-	{ locked = true, repeating = true }
-)
-
-hl.bind(
-	"XF86AudioRaiseVolume",
-	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5"),
-	{ locked = true, repeating = true }
-)
-
-hl.bind(
-	"XF86AudioLowerVolume",
-	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"),
-	{ locked = true, repeating = true }
-)
-
-hl.bind("CTRL + SUPER + T", function()
-	hl.dispatch(hl.dsp.global("quickshell:wallpaperSelectorToggle"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || " .. qsScripts .. "/colors/switchwall.sh"))
-end, { description = "Shell: Change wallpaper" })
-
-hl.bind(
-	"CTRL + ALT + SUPER + T",
-	hl.dsp.global("quickshell:wallpaperSelectorRandom"),
-	{ description = "Shell: Random wallpaper" }
-)
-
-hl.bind(
-	"CTRL + SUPER + SHIFT + D",
-	hl.dsp.global("quickshell:toggleLightDark"),
-	{ description = "Shell: Toggle light/dark mode" }
-)
-
-hl.bind(
-	"CTRL + SUPER + R",
-	hl.dsp.exec_cmd("killall ydotool qs quickshell; qs -c $qsConfig &"),
-	{ description = "Shell: Restart widgets" }
-)
-
-hl.bind("CTRL + SUPER + P", hl.dsp.global("quickshell:panelFamilyCycle"), { description = "Shell: Cycle panel family" })
-
---##! Utilities
---# Screenshot, Record, OCR, Color picker, Clipboard history
-
-hl.bind("SUPER + SHIFT + S", function()
-	hl.dispatch(hl.dsp.global("quickshell:regionScreenshot"))
-	hl.dispatch(
-		hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || hyprshot --freeze --clipboard-only --mode region --silent")
-	)
-end, { description = "Utilities: Screen snip" })
-
-hl.bind("SUPER + SHIFT + A", function()
-	hl.dispatch(hl.dsp.global("quickshell:regionSearch"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || pidof slurp || " .. hyprScripts .. "/snip_to_search.sh"))
-end, { description = "Utilities: Google Lens" })
-
---# OCR
-hl.bind("SUPER + SHIFT + X", function()
-	hl.dispatch(hl.dsp.global("quickshell:regionOcr"))
-	hl.dispatch(
-		hl.dsp.exec_cmd(
-			qsIsAlive
-				.. ' || pidof slurp || grim -g "$(slurp $SLURP_ARGS)" "/tmp/ocr_image.png" && '
-				.. 'tesseract "/tmp/ocr_image.png" stdout -l '
-				.. "$(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\\n' '+' | sed 's/\\+$/\\n/') | "
-				.. 'wl-copy && rm "/tmp/ocr_image.png"'
-		)
-	)
-end, { description = "Utilities: Character recognition >> clipboard" })
-
-hl.bind(
-	"SUPER + SHIFT + T",
-	hl.dsp.global("quickshell:screenTranslate"),
-	{ description = "Utilities: Translate screen content" }
-)
-
---# Color picker
-hl.bind(
-	"SUPER + SHIFT + C",
-	hl.dsp.exec_cmd("hyprpicker -a"),
-	{ description = "Utilities: Pick color #RRGGBB >> clipboard" }
-)
-
---# Recording stuff
-hl.bind("SUPER + SHIFT + R", function()
-	hl.dispatch(hl.dsp.global("quickshell:regionRecord"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || " .. qsScripts .. "/videos/record.sh"))
-end, {
-	locked = true,
-	description = "Utilities: Record region (no sound)",
-})
-
-hl.bind("SHIFT + ALT + SUPER + R", function()
-	hl.dispatch(hl.dsp.global("quickshell:regionRecord"))
-	hl.dispatch(hl.dsp.exec_cmd(qsIsAlive .. " || " .. qsScripts .. "/videos/record.sh"))
-end, { locked = true })
-
-hl.bind("CTRL + ALT + R", hl.dsp.exec_cmd(qsScripts .. "/videos/record.sh --fullscreen"), { locked = true })
-
-hl.bind(
-	"SHIFT + ALT + SUPER + R",
-	hl.dsp.exec_cmd(qsScripts .. "/videos/record.sh --fullscreen --sound"),
-	{ locked = true, description = "Utilities: Record screen (with sound)" }
-)
-
---# Fullscreen screenshot
-local grimhyprctl = "grim -o \"$(hyprctl activeworkspace -j | jq -r '.monitor')\""
-
--- hl.bind("Print", hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"),
---     { locked = true, description = "Utilities: Screenshot >> clipboard" })
-
-hl.bind("Print", hl.dsp.exec_cmd("obs"), { description = "App: Start OBS" })
-
-hl.bind("CTRL + Print", function()
-	hl.dispatch(
-		hl.dsp.exec_cmd(
-			"mkdir -p $(xdg-user-dir PICTURES)/Screenshots && "
-				.. grimhyprctl
-				.. " $(xdg-user-dir PICTURES)/Screenshots/Screenshot_\"$(date '+%Y-%m-%d_%H.%M.%S')\".png"
-		)
-	)
-	hl.dispatch(hl.dsp.exec_cmd(grimhyprctl .. " - | wl-copy"))
-end, {
-	locked = true,
-	non_consuming = true,
-	description = "Utilities: Screenshot >> clipboard & file",
-})
-
---# AI
-hl.bind(
-	"SHIFT + ALT + SUPER + mouse:273",
-	hl.dsp.exec_cmd(hyprScripts .. "/ai/primary-buffer-query.sh"),
-	{ description = "Utilities: Generate AI summary for selected text" }
-)
--- (requires a running ollama model)
-
---##! Screen
---# Zoom
-local function zoomfunction(value)
-	local zoomvalue = hl.get_config("cursor:zoom_factor")
-
-	if (zoomvalue + value) > 3.0 then
-		hl.config({ cursor = { zoom_factor = 3.0 } })
-	elseif (zoomvalue + value) < 1.0 then
-		hl.config({ cursor = { zoom_factor = 1.0 } })
-	else
-		hl.config({ cursor = { zoom_factor = zoomvalue + value } })
-	end
-end
-
-hl.bind("SUPER + Minus", function()
-	zoomfunction(-0.3)
-end, { repeating = true, description = "Screen: Zoom out" })
-
-hl.bind("SUPER + SHIFT + 0", function()
-	zoomfunction(0.3)
-end, { repeating = true, description = "Screen: Zoom in" })
-
---# Zoom with keypad
-hl.bind("SUPER + code:82", function()
-	zoomfunction(-0.3)
-end, { repeating = true })
-
-hl.bind("SUPER + code:86", function()
-	zoomfunction(0.3)
-end, { repeating = true })
-
---##! Media
-local mediaNextCommand =
-	'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"`'
-
-hl.bind("SUPER + SHIFT + N", hl.dsp.exec_cmd(mediaNextCommand), { locked = true, description = "Media: Next track" })
-
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd(mediaNextCommand), { locked = true })
-
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
-
-hl.bind("SHIFT + ALT + SUPER + mouse:275", hl.dsp.exec_cmd("playerctl previous"))
-
-hl.bind("SHIFT + ALT + SUPER + mouse:276", hl.dsp.exec_cmd(mediaNextCommand))
-
-hl.bind(
-	"SUPER + SHIFT + B",
-	hl.dsp.exec_cmd("playerctl previous"),
-	{ locked = true, description = "Media: Previous track" }
-)
-
-hl.bind(
-	"SUPER + SHIFT + P",
-	hl.dsp.exec_cmd("playerctl play-pause"),
-	{ locked = true, description = "Media: Play/pause media" }
-)
-
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SINK@ toggle"), { locked = true })
-
-hl.bind(
-	"SUPER + SHIFT + M",
-	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SINK@ toggle"),
-	{ locked = true, description = "Media: Toggle mute" }
-)
-
-hl.bind("ALT + XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"), { locked = true })
-
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"), { locked = true })
-
-hl.bind(
-	"ALT + SUPER + M",
-	hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"),
-	{ locked = true, description = "Media: Toggle mic" }
-)
-
---#!
---##! Window
---# Focusing
-hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true, description = "Window: Move" })
-
-hl.bind("SUPER + mouse:274", hl.dsp.window.drag(), { mouse = true })
-
-hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true, description = "Window: Resize" })
-
---#/# bind = SUPER + ←/↑/→/↓,, -- Focus in direction
-for i = 1, 4 do
-	local arrowkey = { "Left", "Right", "Up", "Down" }
-	local focusdir = { "l", "r", "u", "d" }
-
-	hl.bind(
-		"SUPER + " .. arrowkey[i],
-		hl.dsp.focus({ direction = focusdir[i] }),
-		{ description = "Window: Focus " .. arrowkey[i] }
-	)
-end
-
---# Swap windows
-for i = 1, 4 do
-	local arrowkey = { "Left", "Right", "Up", "Down" }
-	local swappedir = { "l", "r", "u", "d" }
-
-	hl.bind(
-		"ALT + SHIFT + SUPER + " .. arrowkey[i],
-		hl.dsp.exec_cmd("hyprctl dispatch swapwindow " .. swappedir[i]),
-		{ description = "Window: Swap " .. arrowkey[i] }
-	)
-end
-
---# Previous / last window
-hl.bind(
-	"CTRL + SUPER + Tab",
-	hl.dsp.exec_cmd("hyprctl dispatch focuscurrentorlast"),
-	{ description = "Window: Focus last" }
-)
-
-hl.bind("ALT + CTRL + Tab", hl.dsp.exec_cmd("hyprctl dispatch cyclenext"), { description = "Window: Cycle next" })
-
-hl.bind(
-	"ALT + SHIFT + Tab",
-	hl.dsp.exec_cmd("hyprctl dispatch cyclenext prev"),
-	{ description = "Window: Cycle previous" }
-)
-
---# Center floating window
-hl.bind("ALT + SUPER + C", hl.dsp.exec_cmd("hyprctl dispatch centerwindow"), { description = "Window: Center" })
-
-for i = 1, 2 do
-	local arrowkey = { "udiaeresis", "plus" }
-	local focusdir = { "l", "r" }
-
-	hl.bind("SUPER + " .. arrowkey[i], hl.dsp.focus({ direction = focusdir[i] }))
-end
-
---#/# bind = SUPER + SHIFT, ←/↑/→/↓,, -- Move in direction
-for i = 1, 4 do
-	local arrowkey = { "Left", "Right", "Up", "Down" }
-	local focusdir = { "l", "r", "u", "d" }
-
-	hl.bind(
-		"SUPER + SHIFT + " .. arrowkey[i],
-		hl.dsp.window.move({ direction = focusdir[i] }),
-		{ description = "Window: Move " .. arrowkey[i] }
-	)
-end
-
-hl.bind("ALT + F4", function()
-	hl.dispatch(
-		hl.dsp.exec_cmd('notify-send "Wrong close keybind" "Super+Q to close. Use Alt+F4 for Windows VMs" -a Hyprland')
-	)
-end, { non_consuming = true })
-
-hl.bind("SUPER + Q", hl.dsp.window.close(), { description = "Window: Close" })
-
-hl.bind("SHIFT + ALT + SUPER + Q", hl.dsp.exec_cmd("hyprctl kill"), { description = "Window: Forcefully zap a window" })
-
---# Window split ratio
---#/# binde = SUPER, ;/',, -- Adjust split ratio
-hl.bind("SUPER + odiaeresis", hl.dsp.layout("splitratio -0.1"), { repeating = true })
-
-hl.bind("SUPER + adiaeresis", hl.dsp.layout("splitratio +0.1"), { repeating = true })
-
-hl.bind("SHIFT + ALT + SUPER + comma", hl.dsp.layout("splitratio -0.05"), { repeating = true })
-
-hl.bind("SHIFT + ALT + SUPER + 3", hl.dsp.layout("splitratio +0.05"), { repeating = true })
-
-hl.bind("CTRL + SHIFT + SUPER + comma", hl.dsp.layout("splitratio -0.25"), { repeating = true })
-
-hl.bind("CTRL + SHIFT + SUPER + 3", hl.dsp.layout("splitratio +0.25"), { repeating = true })
-
---# Positioning mode
-hl.bind("ALT + SUPER + Space", hl.dsp.window.float({ action = "toggle" }), { description = "Window: Float/Tile" })
-
-hl.bind(
-	"SUPER + D",
-	hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }),
-	{ description = "Window: Maximize" }
-)
-
-hl.bind(
-	"SUPER + F",
-	hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }),
-	{ description = "Window: Fullscreen" }
-)
-
-hl.bind(
-	"ALT + SUPER + F",
-	hl.dsp.window.fullscreen_state({
-		internal = 0,
-		client = 3,
-		action = "toggle",
-	}),
-	{ description = "Window: Fullscreen spoof" }
-)
-
-hl.bind("SUPER + P", hl.dsp.window.pin(), { description = "Window: Pin" })
-
---#/# bind = SUPER+ALT, Hash,, -- Send to workspace -- (1, 2, 3,...)
-for i = 1, 10 do
-	hl.bind("ALT + SUPER + " .. (i % 10), function()
-		hl.dispatch(hl.dsp.window.move({
-			workspace = workspace_in_group(i),
-			follow = false,
-		}))
-	end, { description = "Window: Send to workspace " .. i })
-end
-
---# We also use raw keycodes because some keyboard layouts register number keys as different chars. The codes can be verified with `wev`
--- for i = 1, 10 do
---     local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
---     hl.bind("ALT + SUPER + code:" .. numberkey[i], function()
---         hl.dispatch(hl.dsp.window.move({
---             workspace = workspace_in_group(i),
---             follow = false
---         }))
---     end)
--- end
-
---# keypad numbers
-for i = 1, 10 do
-	local numpadkey = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
-
-	hl.bind("ALT + SUPER + code:" .. numpadkey[i], function()
-		hl.dispatch(hl.dsp.window.move({
-			workspace = workspace_in_group(i),
-			follow = false,
-		}))
-	end)
-end
-
---# #/# bind = SUPER+SHIFT, Scroll ↑/↓,, -- Send to workspace left/right
-for i = 1, 4 do
-	local key = {
-		"SUPER + SHIFT + mouse_",
-		"ALT + SUPER + mouse_",
-	}
-
-	local keycombos = {
-		key[1] .. "down",
-		key[1] .. "up",
-		key[2] .. "down",
-		key[2] .. "up",
-	}
-
-	local prefix = { "r-", "r+", "r-", "r+" }
-
-	hl.bind(keycombos[i], hl.dsp.window.move({ workspace = prefix[i] .. "1" }))
-end
-
---#/# bind = SUPER+SHIFT, Page_↑/↓,, -- Send to workspace left/right
-for i = 1, 2 do
-	local keydirs = { "Up", "Down" }
-	local prefix = { "r-", "r+" }
-	local descdir = { "left", "right" }
-
-	hl.bind(
-		"SUPER + SHIFT + Page_" .. keydirs[i],
-		hl.dsp.window.move({ workspace = prefix[i] .. "1" }),
-		{ description = "Window: Send to workspace " .. descdir[i] }
-	)
-end
-
-for i = 1, 4 do
-	local key = {
-		"ALT + SUPER + Page_",
-		"CTRL + SHIFT + SUPER + ",
-	}
-
-	local keycombos = {
-		key[1] .. "down",
-		key[1] .. "up",
-		key[2] .. "Right",
-		key[2] .. "Left",
-	}
-
-	local prefix = { "r+", "r-", "r+", "r-" }
-
-	hl.bind(keycombos[i], hl.dsp.window.move({ workspace = prefix[i] .. "1" }))
-end
-
-hl.bind(
-	"ALT + SUPER + S",
-	hl.dsp.window.move({
-		workspace = "special:special",
-		follow = false,
-	}),
-	{ description = "Window: Send to scratchpad" }
-)
-
-hl.bind("CTRL + SUPER + S", hl.dsp.workspace.toggle_special("special"))
-
---##! Workspace
---# Switching
---#/# bind = SUPER, Hash,, -- Focus workspace -- (1, 2, 3,...)
-for i = 1, 10 do
-	hl.bind("SUPER + " .. (i % 10), function()
-		hl.dispatch(hl.dsp.focus({
-			workspace = workspace_in_group(i),
-		}))
-	end, { description = "Workspace: Focus " .. i })
-end
-
---# We also use raw keycodes because some keyboard layouts register number keys as different chars. The codes can be verified with `wev`
-for i = 1, 10 do
-	local numberkey = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
-
-	hl.bind("SUPER + code:" .. numberkey[i], function()
-		hl.dispatch(hl.dsp.focus({
-			workspace = workspace_in_group(i),
-		}))
-	end)
-end
-
---# keypad numbers
-for i = 1, 10 do
-	local numpadkey = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
-
-	hl.bind("SUPER + code:" .. numpadkey[i], function()
-		hl.dispatch(hl.dsp.focus({
-			workspace = workspace_in_group(i),
-		}))
-	end)
-end
-
---#/# bind = CTRL+SUPER, ←/→,, -- Focus left/right
---#/# bind = CTRL+SUPER+ALT, ←/→,, -- # [hidden] Focus busy left/right
-for i = 1, 2 do
-	local keys = { "Left", "Right" }
-	local prefix = { "r-", "r+" }
-	local descdir = { "left", "right" }
-
-	hl.bind(
-		"CTRL + SUPER + " .. keys[i],
-		hl.dsp.focus({ workspace = prefix[i] .. "1" }),
-		{ description = "Workspace: Focus " .. descdir[i] }
-	)
-end
-
-for i = 1, 2 do
-	local keys = { "Left", "Right" }
-	local prefix = { "m-", "m+" }
-
-	hl.bind(
-		"CTRL + ALT + SUPER + " .. keys[i],
-		hl.dsp.focus({ workspace = prefix[i] .. "1" }),
-		{ description = "Workspace: Focus " .. (i == 1 and "previous monitor" or "next monitor") }
-	)
-end
-
---#/# bind = SUPER, Page_↑/↓,, -- Focus left/right
-for i = 1, 4 do
-	local key = {
-		"SUPER + Page_Down",
-		"SUPER + Page_Up",
-	}
-
-	local keycombos = {
-		key[1],
-		key[2],
-		"CTRL + " .. key[1],
-		"CTRL + " .. key[2],
-	}
-
-	local prefix = { "r+", "r-", "r+", "r-" }
-
-	hl.bind(keycombos[i], hl.dsp.focus({ workspace = prefix[i] .. "1" }))
-end
-
---#/# bind = SUPER, Scroll ↑/↓,, -- Focus left/right
-for i = 1, 4 do
-	local key = {
-		"SUPER + mouse_up",
-		"SUPER + mouse_down",
-	}
-
-	local keycombos = {
-		key[1],
-		key[2],
-		"CTRL + " .. key[1],
-		"CTRL + " .. key[2],
-	}
-
-	local prefix = { "+", "-", "r+", "r-" }
-
-	hl.bind(keycombos[i], hl.dsp.focus({ workspace = prefix[i] .. "1" }))
-end
-
---## Special
-hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("special"), { description = "Workspace: Toggle scratchpad" })
-
-hl.bind("SUPER + mouse:275", hl.dsp.workspace.toggle_special("special"))
-
-for i = 1, 4 do
-	local key = {
-		"udiaeresis",
-		"plus",
-		"Up",
-		"Down",
-	}
-
-	local prefix = {
-		"-1",
-		"+1",
-		"r-5",
-		"r+5",
-	}
-
-	hl.bind("CTRL + SUPER + " .. key[i], hl.dsp.focus({ workspace = prefix[i] }))
-end
-
---##! Virtual machines
-hl.define_submap("virtual-machine", function()
-	hl.bind("ALT + SUPER + F1", function()
-		local currentsubmap = hl.get_current_submap()
-
-		if currentsubmap == "virtual-machine" then
-			hl.dispatch(
-				hl.dsp.exec_cmd("notify-send 'Exited Virtual Machine submap' 'Keybinds re-enabled' -a 'Hyprland'")
-			)
-
-			hl.dispatch(hl.dsp.submap("reset"))
-		elseif currentsubmap == "" then
-			hl.dispatch(
-				hl.dsp.exec_cmd(
-					"notify-send 'Entered Virtual Machine submap' 'Keybinds disabled. hit SUPER+ALT+F1 to escape' -a 'Hyprland'"
-				)
-			)
-
-			hl.dispatch(hl.dsp.submap("virtual-machine"))
-		end
-	end, { submap_universal = true })
-end)
-
---#!
---# Testing
-hl.bind(
-	"ALT + SUPER + F11",
-	hl.dsp.exec_cmd(
-		'bash -c \'RANDOM_IMAGE=$(find ~/Pictures -type f | shuf -n 1); ACTION=$(notify-send "Test notification with body image" "This notification should contain your user account <b>image</b> and <a href=\\"https://discord.com/app\\">Discord</a> <b>icon</b>. Oh and here is a random image in your Pictures folder: <img src=\\"$RANDOM_IMAGE\\" alt=\\"Testing image\\"/>" -a "Hyprland" -p -h "string:image-path:/var/lib/AccountsService/icons/$USER" -t 6000 -i "discord" -A "openImage=Profile image" -A "action2=Open the random image" -A "action3=Useless button"); [[ $ACTION == *openImage ]] && xdg-open "/var/lib/AccountsService/icons/$USER"; [[ $ACTION == *action2 ]] && xdg-open "$RANDOM_IMAGE"\''
-	)
-) -- # [hidden]
-
-hl.bind(
-	"ALT + SUPER + F12",
-	hl.dsp.exec_cmd(
-		'bash -c \'RANDOM_IMAGE=$(find ~/Pictures -type f | shuf -n 1); ACTION=$(notify-send "Test notification" "This notification should contain a random image in your <b>Pictures</b> folder and <a href=\\"https://discord.com/app\\">Discord</a> <b>icon</b>.\n<i>Flick right to dismiss!</i>" -a "Discord (fake)" -p -h "string:image-path:$RANDOM_IMAGE" -t 6000 -i "discord" -A "openImage=Profile image" -A "action2=Useless button"); [[ $ACTION == *openImage ]] && xdg-open "/var/lib/AccountsService/icons/$USER"\''
-	)
-) -- # [hidden]
-
-hl.bind(
-	"ALT + SUPER + SHIFT + 0",
-	hl.dsp.exec_cmd("notify-send 'Urgent notification' 'Ah hell no' -u critical -a 'Hyprland keybind'")
-) -- # [hidden]
-
---##! Session
-hl.bind("SUPER + L", hl.dsp.exec_cmd("loginctl lock-session"), { description = "Session: Lock" })
-
-hl.bind(
-	"SUPER + SHIFT + L",
-	hl.dsp.exec_cmd("systemctl suspend || loginctl suspend"),
-	{ locked = true, description = "Session: Sleep" }
-)
-
--- hl.bind("switch:on:Lid Switch",
---     hl.dsp.exec_cmd("systemctl suspend || loginctl suspend"),
---     { locked = true }) -- # [hidden] Suspend when laptop lid is closed, uncomment if for whatever reason it's not the default behavior
-
-hl.bind(
-	"CTRL + SHIFT + ALT + SUPER + Delete",
-	hl.dsp.exec_cmd("systemctl poweroff || loginctl poweroff"),
-	{ description = "Session: Shut down" }
-) -- # [hidden] Power off
-
-for i = 1, 2 do
-	local keys = { "H", "H" }
-	local prefix = { "m-", "m+" }
-
-	hl.bind(
-		(i == 1 and "SUPER + " or "ALT + SUPER + ") .. keys[i],
-		hl.dsp.focus({ workspace = prefix[i] .. "1" }),
-		{ description = "Workspace: " .. (i == 1 and "Previous" or "Next") }
-	)
-end
-
-hl.bind("ALT + Tab", hl.dsp.focus({ last = true }), { description = "Window: Focus last" })
-
-hl.bind("SUPER + SHIFT + Tab", hl.dsp.focus({ workspace = "-1" }), { description = "Workspace: Previous" })
-
-hl.bind("CTRL + SUPER + F", function()
-	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
-	hl.dispatch(hl.dsp.window.pin())
-end, { description = "Window: Float + Always on top" })
-
-hl.bind("CTRL + SUPER + O", function()
-	hl.dispatch(hl.dsp.window.pin())
-	hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
-end, { description = "Window: Return to tiling" })
-
-hl.bind("XF86Calculator", hl.dsp.exec_cmd("qalculate-gtk"), { description = "App: Start Qalculate" })
-
-hl.bind("CTRL + SUPER + G", hl.dsp.exec_cmd("fish -c 'glasstoggle 0.80'"), { description = "Toggle glass mode" })
-
-hl.bind(
-	"CTRL + SUPER + H",
-	hl.dsp.exec_cmd("kitty --hold python3 $HOME/.config/fish/functions/gnome-toggle.py --reboot"),
-	{ description = "Session: Toggle GNOME/Hyprland profile" }
-)
-
-hl.bind("CTRL + SUPER + B", hl.dsp.exec_cmd("fish -c border-visible"), { description = "Toggle border visibility" })
-
---##! Apps
-hl.bind("SUPER + Return", hl.dsp.exec_cmd(terminal), { description = "App: Terminal" })
-
-hl.bind("SUPER + T", hl.dsp.exec_cmd(terminal))
-
-hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
-
-hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })
-
-hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" }) -- Sollte Brave laut JK-Arch Config sein
-
-hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Firefox" })
-
-hl.bind(
-	"CTRL + SUPER + W",
-	hl.dsp.exec_cmd("mullvad-browser -P"),
-	{ description = "App: Mullvad Browser" }
-)
-
-hl.bind(
-	"SUPER + SHIFT + W",
-	hl.dsp.exec_cmd("librewolf"),
-	{ description = "App: LibreWolf" }
-)
-
-hl.bind("SUPER + ALT + SHIFT + W", hl.dsp.exec_cmd("torbrowser-launcher"), { description = "App: Tor Browser" })
-
-hl.bind(
-	"ALT + space",
-	hl.dsp.exec_cmd(
-		'bash -c \'BROWSERS=(brave firefox librewolf mullvad-browser); ${BROWSERS[$((RANDOM % ${#BROWSERS[@]}))]}\''
-	),
-	{ description = "App: Random browser" }
-)
-
-hl.bind("SUPER + C", hl.dsp.exec_cmd(codeEditor), { description = "App: Code editor" })
-
-hl.bind("CTRL + SHIFT + ALT + SUPER + W", hl.dsp.exec_cmd(officeSoftware), { description = "App: Office software" })
-
-hl.bind("SUPER + X", hl.dsp.exec_cmd(textEditor), { description = "App: Text editor" })
-
-hl.bind("CTRL + SUPER + V", hl.dsp.exec_cmd(volumeMixer), { description = "App: Volume mixer" })
-
-hl.bind("SUPER + I", hl.dsp.exec_cmd(settingsApp), { description = "App: Settings app" })
-
-hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd(taskManager), { description = "App: Task manager" })
-
---# Cursed stuff
---## Make window not amogus large
-hl.bind(
-	"CTRL + SUPER + ALT + ssharp",
-	hl.dsp.window.resize({
-		x = 640,
-		y = 480,
-		"exact",
-	})
-)
-
--- Magic Mouse Vor und Zurück mit SUPER-Taste + Wischen
--- hl.bind("mouse:274", hl.dsp.exec_cmd("kitty"))
--- hl.bind("SUPER + mouse_down", hl.dsp.exec_cmd("hyprctl dispatch workspace e+1"))
--- hl.bind("SUPER + mouse_up", hl.dsp.exec_cmd("hyprctl dispatch workspace e-1"))
-
-
 #!/usr/bin/env python3
-
-# Fix theme evt. noch besser, er soll im gleich ornder ./assets/dash-to-panel.conf verwenden!!! Er soll nichts ausgeben was er nihct tut also "
-# print(
-#     "No yay"
-# )
-
-# print(
-#     "No paru"
-# )
-
-# print(
-#     "No AUR"
-# )" muss raus. ok!!!
-
-# Es msuss aber auch eifnach gut zu dem gtk-4.0 theme passen!!!
-
-# 
-# /*
-#  * ============================================================
-#  * CATPPUCCIN GTK 4 — STABLE / FOCUS-SAFE
-#  * ============================================================
-#  *
-#  * Catppuccin Latte / Mocha
-#  *
-#  * Source template:
-#  *   ~/.config/matugen/templates/gtk-4.0/gtk.css
-#  *
-#  * Goals:
-#  *   - Exact Catppuccin Latte / Mocha colors
-#  *   - Consistent GTK 4 semantic color roles
-#  *   - Stable colors when window loses focus
-#  *   - Stable headerbar / titlebar
-#  *   - Stable sidebar / backdrop
-#  *   - Stable popovers / menus / dialogs
-#  *   - Complete legacy GTK compatibility
-#  *   - Complete Catppuccin palette aliases
-#  *   - No automatic color fading caused by backdrop colors
-#  *
-#  * IMPORTANT:
-#  *   This file intentionally defines backdrop colors equal to
-#  *   their normal counterparts. GTK therefore has no reason to
-#  *   visually "dim" the application when it loses focus.
-#  *
-#  * ============================================================
-#  */
-
-# /* ============================================================
-#  * LIGHT — CATPPUCCIN LATTE
-#  * ============================================================ */
-
-# @media (prefers-color-scheme: light) {
-#   /* ==========================================================
-#    * ACCENT
-#    * ========================================================== */
-
-#   @define-color accent_color #8839ef;
-#   @define-color accent_bg_color #8839ef;
-#   @define-color accent_fg_color #eff1f5;
-
-#   @define-color accent_hover_color rgba(136, 57, 239, 0.08);
-#   @define-color accent_active_color rgba(136, 57, 239, 0.12);
-
-#   @define-color accent_vibrant_hover_color rgba(136, 57, 239, 0.18);
-#   @define-color accent_vibrant_active_color rgba(136, 57, 239, 0.26);
-
-#   /* ==========================================================
-#    * STATUS / SEMANTIC COLORS
-#    * ========================================================== */
-
-#   @define-color destructive_color #d20f39;
-#   @define-color destructive_bg_color #d20f39;
-#   @define-color destructive_fg_color #eff1f5;
-
-#   @define-color error_color #d20f39;
-#   @define-color error_bg_color #d20f39;
-#   @define-color error_fg_color #eff1f5;
-
-#   @define-color warning_color #df8e1d;
-#   @define-color warning_bg_color #df8e1d;
-#   @define-color warning_fg_color #eff1f5;
-
-#   @define-color success_color #40a02b;
-#   @define-color success_bg_color #40a02b;
-#   @define-color success_fg_color #eff1f5;
-
-#   /* ==========================================================
-#    * WINDOW
-#    * ========================================================== */
-
-#   @define-color window_bg_color #eff1f5;
-#   @define-color window_fg_color #4c4f69;
-
-#   @define-color view_bg_color #eff1f5;
-#   @define-color view_fg_color #4c4f69;
-
-#   @define-color content_view_bg #eff1f5;
-#   @define-color text_view_bg #eff1f5;
-
-#   /* ==========================================================
-#    * HEADERBAR / TITLEBAR
-#    *
-#    * IMPORTANT:
-#    * backdrop == normal
-#    *
-#    * This prevents the headerbar from changing when the
-#    * application loses focus.
-#    * ========================================================== */
-
-#   @define-color headerbar_bg_color #eff1f5;
-#   @define-color headerbar_fg_color #4c4f69;
-
-#   @define-color headerbar_backdrop_color #eff1f5;
-
-#   /* ==========================================================
-#    * SIDEBAR
-#    * ========================================================== */
-
-#   @define-color sidebar_bg_color #eff1f5;
-#   @define-color sidebar_fg_color #4c4f69;
-
-#   @define-color sidebar_backdrop_color #eff1f5;
-#   @define-color sidebar_border_color #eff1f5;
-
-#   @define-color sidebar_row_active_bg_color #8839ef;
-#   @define-color sidebar_row_active_fg_color #eff1f5;
-
-#   /* ==========================================================
-#    * SECONDARY SIDEBAR
-#    * ========================================================== */
-
-#   @define-color secondary_sidebar_bg_color #e6e9ef;
-#   @define-color secondary_sidebar_fg_color #5c5f77;
-
-#   @define-color secondary_sidebar_backdrop_color #e6e9ef;
-
-#   /* ==========================================================
-#    * CARDS
-#    * ========================================================== */
-
-#   @define-color card_bg_color #e6e9ef;
-#   @define-color card_fg_color #4c4f69;
-
-#   /* ==========================================================
-#    * DIALOGS
-#    * ========================================================== */
-
-#   @define-color dialog_bg_color #e6e9ef;
-#   @define-color dialog_fg_color #4c4f69;
-
-#   /* ==========================================================
-#    * THUMBNAILS
-#    * ========================================================== */
-
-#   @define-color thumbnail_bg_color #e6e9ef;
-#   @define-color thumbnail_fg_color #4c4f69;
-
-#   /* ==========================================================
-#    * POPOVERS
-#    * ========================================================== */
-
-#   @define-color popover_bg_color #e6e9ef;
-#   @define-color popover_fg_color #4c4f69;
-
-#   @define-color popover_fg_hover_color rgba(76, 79, 105, 0.08);
-
-#   /* ==========================================================
-#    * MENUS
-#    * ========================================================== */
-
-#   @define-color menu_bg_color #e6e9ef;
-#   @define-color menu_fg_color #4c4f69;
-
-#   /* ==========================================================
-#    * TOOLTIP
-#    * ========================================================== */
-
-#   @define-color tooltip_bg_color #4c4f69;
-#   @define-color tooltip_fg_color #eff1f5;
-
-#   /* ==========================================================
-#    * OVERVIEW / NEW TAB
-#    * ========================================================== */
-
-#   @define-color overview_bg_color #dce0e8;
-#   @define-color overview_fg_color #4c4f69;
-
-#   /* ==========================================================
-#    * SURFACE HIERARCHY
-#    * ========================================================== */
-
-#   @define-color surface_container_lowest #dce0e8;
-#   @define-color surface_container_low #e6e9ef;
-#   @define-color surface_container #e6e9ef;
-#   @define-color surface_container_high #dce0e8;
-#   @define-color surface_container_highest #ccd0da;
-
-#   @define-color surface_variant #dce0e8;
-#   @define-color on_surface_variant #5c5f77;
-
-#   /* ==========================================================
-#    * OUTLINES
-#    * ========================================================== */
-
-#   @define-color outline #9ca0b0;
-#   @define-color outline_variant #ccd0da;
-
-#   @define-color border_color #ccd0da;
-#   @define-color borders #ccd0da;
-
-#   /*
-#    * Keep unfocused borders subtle, but don't make them
-#    * disappear or become darker when the window loses focus.
-#    */
-#   @define-color unfocused_borders #e6e9ef;
-
-#   /* ==========================================================
-#    * TEXT
-#    * ========================================================== */
-
-#   @define-color text_color #4c4f69;
-#   @define-color secondary_text_color #5c5f77;
-#   @define-color muted_text_color #6c6f85;
-#   @define-color placeholder_text_color #9ca0b0;
-
-#   @define-color insensitive_fg_color #9ca0b0;
-#   @define-color insensitive_bg_color #e6e9ef;
-#   @define-color insensitive_base_color #e6e9ef;
-
-#   /* ==========================================================
-#    * SELECTION
-#    * ========================================================== */
-
-#   @define-color selected_bg_color #8839ef;
-#   @define-color selected_fg_color #eff1f5;
-
-#   @define-color theme_selected_bg_color #8839ef;
-#   @define-color theme_selected_fg_color #eff1f5;
-
-#   /* ==========================================================
-#    * LINKS
-#    * ========================================================== */
-
-#   @define-color link_color #1e66f5;
-#   @define-color link_visited_color #7287fd;
-
-#   /* ==========================================================
-#    * SCROLLBAR
-#    * ========================================================== */
-
-#   @define-color scrollbar_bg_color #e6e9ef;
-#   @define-color scrollbar_slider_color #ccd0da;
-#   @define-color scrollbar_slider_hover_color #bcc0cc;
-
-#   /* ==========================================================
-#    * INVERSE / MATERIAL ROLES
-#    * ========================================================== */
-
-#   @define-color inverse_on_surface #eff1f5;
-#   @define-color inverse_primary #1e66f5;
-#   @define-color inverse_surface #4c4f69;
-
-#   @define-color inverse_on_surface_hover rgba(239, 241, 245, 0.08);
-#   @define-color inverse_on_surface_active rgba(239, 241, 245, 0.18);
-
-#   @define-color inverse_primary_hover rgba(30, 102, 245, 0.08);
-#   @define-color inverse_primary_active rgba(30, 102, 245, 0.18);
-
-#   /* ==========================================================
-#    * LEGACY GTK
-#    * ========================================================== */
-
-#   @define-color theme_fg_color #4c4f69;
-#   @define-color theme_text_color #4c4f69;
-#   @define-color theme_bg_color #eff1f5;
-#   @define-color theme_base_color #eff1f5;
-#   @define-color theme_text_aa_color #6c6f85;
-
-#   /* ==========================================================
-#    * COMPLETE CATPPUCCIN LATTE
-#    * ========================================================== */
-
-#   @define-color crust #dce0e8;
-#   @define-color mantle #e6e9ef;
-#   @define-color base #eff1f5;
-
-#   @define-color surface0 #e6e9ef;
-#   @define-color surface1 #ccd0da;
-#   @define-color surface2 #bcc0cc;
-
-#   @define-color overlay0 #9ca0b0;
-#   @define-color overlay1 #8c8fa1;
-#   @define-color overlay2 #7c7f93;
-
-#   @define-color subtext0 #6c6f85;
-#   @define-color subtext1 #5c5f77;
-#   @define-color text #4c4f69;
-
-#   @define-color rosewater #dc8a78;
-#   @define-color flamingo #dd7878;
-#   @define-color pink #ea76cb;
-#   @define-color mauve #8839ef;
-
-#   @define-color red #d20f39;
-#   @define-color maroon #e64553;
-#   @define-color peach #fe640b;
-#   @define-color yellow #df8e1d;
-
-#   @define-color green #40a02b;
-#   @define-color teal #179299;
-#   @define-color sky #04a5e5;
-#   @define-color sapphire #209fb5;
-
-#   @define-color blue #1e66f5;
-#   @define-color lavender #7287fd;
-
-#   /* ==========================================================
-#    * COLOR ALIASES
-#    * ========================================================== */
-
-#   @define-color red_color #d20f39;
-#   @define-color orange_color #fe640b;
-#   @define-color yellow_color #df8e1d;
-#   @define-color green_color #40a02b;
-#   @define-color teal_color #179299;
-#   @define-color sky_color #04a5e5;
-#   @define-color sapphire_color #209fb5;
-#   @define-color blue_color #1e66f5;
-#   @define-color lavender_color #7287fd;
-#   @define-color mauve_color #8839ef;
-#   @define-color pink_color #ea76cb;
-#   @define-color flamingo_color #dd7878;
-#   @define-color maroon_color #e64553;
-#   @define-color rosewater_color #dc8a78;
-
-#   /* ==========================================================
-#    * UTILITY
-#    * ========================================================== */
-
-#   @define-color accent_color_rgba rgba(136, 57, 239, 1);
-#   @define-color accent_bg_color_rgba rgba(136, 57, 239, 1);
-
-#   @define-color transparent rgba(0, 0, 0, 0);
-
-#   /* ==========================================================
-#    * CSS CUSTOM PROPERTIES
-#    * ========================================================== */
-
-#   :root {
-#     --accent-color: #8839ef;
-#     --accent-bg-color: #8839ef;
-#     --accent-fg-color: #eff1f5;
-
-#     --destructive-color: #d20f39;
-#     --destructive-bg-color: #d20f39;
-#     --destructive-fg-color: #eff1f5;
-
-#     --error-color: #d20f39;
-#     --error-bg-color: #d20f39;
-#     --error-fg-color: #eff1f5;
-
-#     --warning-color: #df8e1d;
-#     --warning-bg-color: #df8e1d;
-#     --warning-fg-color: #eff1f5;
-
-#     --success-color: #40a02b;
-#     --success-bg-color: #40a02b;
-#     --success-fg-color: #eff1f5;
-
-#     --window-bg-color: #eff1f5;
-#     --window-fg-color: #4c4f69;
-
-#     --view-bg-color: #eff1f5;
-#     --view-fg-color: #4c4f69;
-
-#     --content-view-bg: #eff1f5;
-#     --text-view-bg: #eff1f5;
-
-#     --headerbar-bg-color: #eff1f5;
-#     --headerbar-fg-color: #4c4f69;
-#     --headerbar-backdrop-color: #eff1f5;
-
-#     --sidebar-bg-color: #eff1f5;
-#     --sidebar-fg-color: #4c4f69;
-#     --sidebar-backdrop-color: #eff1f5;
-#     --sidebar-border-color: #eff1f5;
-
-#     --secondary-sidebar-bg-color: #e6e9ef;
-#     --secondary-sidebar-fg-color: #5c5f77;
-#     --secondary-sidebar-backdrop-color: #e6e9ef;
-
-#     --card-bg-color: #e6e9ef;
-#     --card-fg-color: #4c4f69;
-
-#     --dialog-bg-color: #e6e9ef;
-#     --dialog-fg-color: #4c4f69;
-
-#     --popover-bg-color: #e6e9ef;
-#     --popover-fg-color: #4c4f69;
-
-#     --menu-bg-color: #e6e9ef;
-#     --menu-fg-color: #4c4f69;
-
-#     --overview-bg-color: #dce0e8;
-#     --overview-fg-color: #4c4f69;
-
-#     --surface-container-lowest: #dce0e8;
-#     --surface-container-low: #e6e9ef;
-#     --surface-container: #e6e9ef;
-#     --surface-container-high: #dce0e8;
-#     --surface-container-highest: #ccd0da;
-
-#     --surface-variant: #dce0e8;
-#     --on-surface-variant: #5c5f77;
-
-#     --outline-color: #9ca0b0;
-#     --outline-variant: #ccd0da;
-
-#     --text-color: #4c4f69;
-#     --secondary-text-color: #5c5f77;
-#     --muted-text-color: #6c6f85;
-#     --placeholder-text-color: #9ca0b0;
-
-#     --selected-bg-color: #8839ef;
-#     --selected-fg-color: #eff1f5;
-
-#     --selection-bg-color: #8839ef;
-#     --selection-fg-color: #eff1f5;
-
-#     --link-color: #1e66f5;
-#     --link-visited-color: #7287fd;
-
-#     --border-color: #ccd0da;
-#     --borders: #ccd0da;
-#     --unfocused-borders: #e6e9ef;
-
-#     --scrollbar-bg-color: #e6e9ef;
-#     --scrollbar-slider-color: #ccd0da;
-#     --scrollbar-slider-hover-color: #bcc0cc;
-
-#     --crust: #dce0e8;
-#     --mantle: #e6e9ef;
-#     --base: #eff1f5;
-
-#     --surface0: #e6e9ef;
-#     --surface1: #ccd0da;
-#     --surface2: #bcc0cc;
-
-#     --overlay0: #9ca0b0;
-#     --overlay1: #8c8fa1;
-#     --overlay2: #7c7f93;
-
-#     --subtext0: #6c6f85;
-#     --subtext1: #5c5f77;
-#     --text: #4c4f69;
-
-#     --rosewater: #dc8a78;
-#     --flamingo: #dd7878;
-#     --pink: #ea76cb;
-#     --mauve: #8839ef;
-
-#     --red: #d20f39;
-#     --maroon: #e64553;
-#     --peach: #fe640b;
-#     --yellow: #df8e1d;
-
-#     --green: #40a02b;
-#     --teal: #179299;
-#     --sky: #04a5e5;
-#     --sapphire: #209fb5;
-
-#     --blue: #1e66f5;
-#     --lavender: #7287fd;
-#   }
-# }
-
-# /* ============================================================
-#  * DARK — CATPPUCCIN MOCHA
-#  * ============================================================ */
-
-# @media (prefers-color-scheme: dark) {
-#   /* ==========================================================
-#    * ACCENT
-#    * ========================================================== */
-
-#   @define-color accent_color #cba6f7;
-#   @define-color accent_bg_color #cba6f7;
-#   @define-color accent_fg_color #1e1e2e;
-
-#   @define-color accent_hover_color rgba(203, 166, 247, 0.08);
-#   @define-color accent_active_color rgba(203, 166, 247, 0.12);
-
-#   @define-color accent_vibrant_hover_color rgba(203, 166, 247, 0.18);
-#   @define-color accent_vibrant_active_color rgba(203, 166, 247, 0.26);
-
-#   /* ==========================================================
-#    * STATUS / SEMANTIC COLORS
-#    * ========================================================== */
-
-#   @define-color destructive_color #f38ba8;
-#   @define-color destructive_bg_color #f38ba8;
-#   @define-color destructive_fg_color #1e1e2e;
-
-#   @define-color error_color #f38ba8;
-#   @define-color error_bg_color #f38ba8;
-#   @define-color error_fg_color #1e1e2e;
-
-#   @define-color warning_color #f9e2af;
-#   @define-color warning_bg_color #f9e2af;
-#   @define-color warning_fg_color #1e1e2e;
-
-#   @define-color success_color #a6e3a1;
-#   @define-color success_bg_color #a6e3a1;
-#   @define-color success_fg_color #1e1e2e;
-
-#   /* ==========================================================
-#    * WINDOW
-#    * ========================================================== */
-
-#   @define-color window_bg_color #1e1e2e;
-#   @define-color window_fg_color #cdd6f4;
-
-#   @define-color view_bg_color #1e1e2e;
-#   @define-color view_fg_color #cdd6f4;
-
-#   @define-color content_view_bg #1e1e2e;
-#   @define-color text_view_bg #1e1e2e;
-
-#   /* ==========================================================
-#    * HEADERBAR / TITLEBAR
-#    *
-#    * IMPORTANT:
-#    * backdrop == normal
-#    *
-#    * The headerbar therefore stays EXACTLY the same when
-#    * another application receives focus.
-#    * ========================================================== */
-
-#   @define-color headerbar_bg_color #1e1e2e;
-#   @define-color headerbar_fg_color #cdd6f4;
-
-#   @define-color headerbar_backdrop_color #1e1e2e;
-
-#   /* ==========================================================
-#    * SIDEBAR
-#    * ========================================================== */
-
-#   @define-color sidebar_bg_color #1e1e2e;
-#   @define-color sidebar_fg_color #cdd6f4;
-
-#   @define-color sidebar_backdrop_color #1e1e2e;
-#   @define-color sidebar_border_color #1e1e2e;
-
-#   @define-color sidebar_row_active_bg_color #cba6f7;
-#   @define-color sidebar_row_active_fg_color #1e1e2e;
-
-#   /* ==========================================================
-#    * SECONDARY SIDEBAR
-#    * ========================================================== */
-
-#   @define-color secondary_sidebar_bg_color #181825;
-#   @define-color secondary_sidebar_fg_color #bac2de;
-
-#   @define-color secondary_sidebar_backdrop_color #181825;
-
-#   /* ==========================================================
-#    * CARDS
-#    * ========================================================== */
-
-#   @define-color card_bg_color #313244;
-#   @define-color card_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * DIALOGS
-#    * ========================================================== */
-
-#   @define-color dialog_bg_color #313244;
-#   @define-color dialog_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * THUMBNAILS
-#    * ========================================================== */
-
-#   @define-color thumbnail_bg_color #313244;
-#   @define-color thumbnail_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * POPOVERS
-#    * ========================================================== */
-
-#   @define-color popover_bg_color #313244;
-#   @define-color popover_fg_color #cdd6f4;
-
-#   @define-color popover_fg_hover_color rgba(205, 214, 244, 0.08);
-
-#   /* ==========================================================
-#    * MENUS
-#    * ========================================================== */
-
-#   @define-color menu_bg_color #313244;
-#   @define-color menu_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * TOOLTIP
-#    * ========================================================== */
-
-#   @define-color tooltip_bg_color #11111b;
-#   @define-color tooltip_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * OVERVIEW / NEW TAB
-#    * ========================================================== */
-
-#   @define-color overview_bg_color #11111b;
-#   @define-color overview_fg_color #cdd6f4;
-
-#   /* ==========================================================
-#    * SURFACE HIERARCHY
-#    *
-#    * Deliberately kept coherent with Catppuccin Mocha:
-#    *
-#    * crust  -> #11111b
-#    * mantle -> #181825
-#    * base   -> #1e1e2e
-#    * surface0 -> #313244
-#    * surface1 -> #45475a
-#    * ========================================================== */
-
-#   @define-color surface_container_lowest #11111b;
-#   @define-color surface_container_low #181825;
-#   @define-color surface_container #181825;
-
-#   @define-color surface_container_high #1f1f2e;
-#   @define-color surface_container_highest #313244;
-
-#   @define-color surface_variant #45475a;
-#   @define-color on_surface_variant #a6adc8;
-
-#   /* ==========================================================
-#    * OUTLINES
-#    * ========================================================== */
-
-#   @define-color outline #7f849c;
-#   @define-color outline_variant #45475a;
-
-#   @define-color border_color #45475a;
-#   @define-color borders #45475a;
-
-#   @define-color unfocused_borders #313244;
-
-#   /* ==========================================================
-#    * TEXT
-#    * ========================================================== */
-
-#   @define-color text_color #cdd6f4;
-#   @define-color secondary_text_color #bac2de;
-#   @define-color muted_text_color #a6adc8;
-#   @define-color placeholder_text_color #6c7086;
-
-#   @define-color insensitive_fg_color #6c7086;
-#   @define-color insensitive_bg_color #181825;
-#   @define-color insensitive_base_color #181825;
-
-#   /* ==========================================================
-#    * SELECTION
-#    * ========================================================== */
-
-#   @define-color selected_bg_color #cba6f7;
-#   @define-color selected_fg_color #1e1e2e;
-
-#   @define-color theme_selected_bg_color #cba6f7;
-#   @define-color theme_selected_fg_color #1e1e2e;
-
-#   /* ==========================================================
-#    * LINKS
-#    * ========================================================== */
-
-#   @define-color link_color #89b4fa;
-#   @define-color link_visited_color #b4befe;
-
-#   /* ==========================================================
-#    * SCROLLBAR
-#    * ========================================================== */
-
-#   @define-color scrollbar_bg_color #181825;
-#   @define-color scrollbar_slider_color #45475a;
-#   @define-color scrollbar_slider_hover_color #585b70;
-
-#   /* ==========================================================
-#    * INVERSE / MATERIAL ROLES
-#    * ========================================================== */
-
-#   @define-color inverse_on_surface #1e1e2e;
-#   @define-color inverse_primary #89b4fa;
-#   @define-color inverse_surface #cdd6f4;
-
-#   @define-color inverse_on_surface_hover rgba(30, 30, 46, 0.08);
-#   @define-color inverse_on_surface_active rgba(30, 30, 46, 0.18);
-
-#   @define-color inverse_primary_hover rgba(137, 180, 250, 0.08);
-#   @define-color inverse_primary_active rgba(137, 180, 250, 0.18);
-
-#   /* ==========================================================
-#    * LEGACY GTK
-#    * ========================================================== */
-
-#   @define-color theme_fg_color #cdd6f4;
-#   @define-color theme_text_color #cdd6f4;
-#   @define-color theme_bg_color #1e1e2e;
-#   @define-color theme_base_color #1e1e2e;
-#   @define-color theme_text_aa_color #a6adc8;
-
-#   /* ==========================================================
-#    * COMPLETE CATPPUCCIN MOCHA
-#    * ========================================================== */
-
-#   @define-color crust #11111b;
-#   @define-color mantle #181825;
-#   @define-color base #1e1e2e;
-
-#   @define-color surface0 #313244;
-#   @define-color surface1 #45475a;
-#   @define-color surface2 #585b70;
-
-#   @define-color overlay0 #6c7086;
-#   @define-color overlay1 #7f849c;
-#   @define-color overlay2 #9399b2;
-
-#   @define-color subtext0 #a6adc8;
-#   @define-color subtext1 #bac2de;
-#   @define-color text #cdd6f4;
-
-#   @define-color rosewater #f5e0e5;
-#   @define-color flamingo #f2cdcd;
-#   @define-color pink #f5c2e7;
-#   @define-color mauve #cba6f7;
-
-#   @define-color red #f38ba8;
-#   @define-color maroon #eba0ac;
-#   @define-color peach #fab387;
-#   @define-color yellow #f9e2af;
-
-#   @define-color green #a6e3a1;
-#   @define-color teal #94e2d5;
-#   @define-color sky #89dceb;
-#   @define-color sapphire #74c7ec;
-
-#   @define-color blue #89b4fa;
-#   @define-color lavender #b4befe;
-
-#   /* ==========================================================
-#    * COLOR ALIASES
-#    * ========================================================== */
-
-#   @define-color red_color #f38ba8;
-#   @define-color orange_color #fab387;
-#   @define-color yellow_color #f9e2af;
-#   @define-color green_color #a6e3a1;
-#   @define-color teal_color #94e2d5;
-#   @define-color sky_color #89dceb;
-#   @define-color sapphire_color #74c7ec;
-#   @define-color blue_color #89b4fa;
-#   @define-color lavender_color #b4befe;
-#   @define-color mauve_color #cba6f7;
-#   @define-color pink_color #f5c2e7;
-#   @define-color flamingo_color #f2cdcd;
-#   @define-color maroon_color #eba0ac;
-#   @define-color rosewater_color #f5e0e5;
-
-#   /* ==========================================================
-#    * UTILITY
-#    * ========================================================== */
-
-#   @define-color accent_color_rgba rgba(203, 166, 247, 1);
-#   @define-color accent_bg_color_rgba rgba(203, 166, 247, 1);
-
-#   @define-color transparent rgba(0, 0, 0, 0);
-
-#   /* ==========================================================
-#    * CSS CUSTOM PROPERTIES
-#    * ========================================================== */
-
-#   :root {
-#     --accent-color: #cba6f7;
-#     --accent-bg-color: #cba6f7;
-#     --accent-fg-color: #1e1e2e;
-
-#     --destructive-color: #f38ba8;
-#     --destructive-bg-color: #f38ba8;
-#     --destructive-fg-color: #1e1e2e;
-
-#     --error-color: #f38ba8;
-#     --error-bg-color: #f38ba8;
-#     --error-fg-color: #1e1e2e;
-
-#     --warning-color: #f9e2af;
-#     --warning-bg-color: #f9e2af;
-#     --warning-fg-color: #1e1e2e;
-
-#     --success-color: #a6e3a1;
-#     --success-bg-color: #a6e3a1;
-#     --success-fg-color: #1e1e2e;
-
-#     --window-bg-color: #1e1e2e;
-#     --window-fg-color: #cdd6f4;
-
-#     --view-bg-color: #1e1e2e;
-#     --view-fg-color: #cdd6f4;
-
-#     --content-view-bg: #1e1e2e;
-#     --text-view-bg: #1e1e2e;
-
-#     --headerbar-bg-color: #1e1e2e;
-#     --headerbar-fg-color: #cdd6f4;
-#     --headerbar-backdrop-color: #1e1e2e;
-
-#     --sidebar-bg-color: #1e1e2e;
-#     --sidebar-fg-color: #cdd6f4;
-#     --sidebar-backdrop-color: #1e1e2e;
-#     --sidebar-border-color: #1e1e2e;
-
-#     --secondary-sidebar-bg-color: #181825;
-#     --secondary-sidebar-fg-color: #bac2de;
-#     --secondary-sidebar-backdrop-color: #181825;
-
-#     --card-bg-color: #313244;
-#     --card-fg-color: #cdd6f4;
-
-#     --dialog-bg-color: #313244;
-#     --dialog-fg-color: #cdd6f4;
-
-#     --popover-bg-color: #313244;
-#     --popover-fg-color: #cdd6f4;
-
-#     --menu-bg-color: #313244;
-#     --menu-fg-color: #cdd6f4;
-
-#     --overview-bg-color: #11111b;
-#     --overview-fg-color: #cdd6f4;
-
-#     --surface-container-lowest: #11111b;
-#     --surface-container-low: #181825;
-#     --surface-container: #181825;
-#     --surface-container-high: #1f1f2e;
-#     --surface-container-highest: #313244;
-
-#     --surface-variant: #45475a;
-#     --on-surface-variant: #a6adc8;
-
-#     --outline-color: #7f849c;
-#     --outline-variant: #45475a;
-
-#     --text-color: #cdd6f4;
-#     --secondary-text-color: #bac2de;
-#     --muted-text-color: #a6adc8;
-#     --placeholder-text-color: #6c7086;
-
-#     --selected-bg-color: #cba6f7;
-#     --selected-fg-color: #1e1e2e;
-
-#     --selection-bg-color: #cba6f7;
-#     --selection-fg-color: #1e1e2e;
-
-#     --link-color: #89b4fa;
-#     --link-visited-color: #b4befe;
-
-#     --border-color: #45475a;
-#     --borders: #45475a;
-#     --unfocused-borders: #313244;
-
-#     --scrollbar-bg-color: #181825;
-#     --scrollbar-slider-color: #45475a;
-#     --scrollbar-slider-hover-color: #585b70;
-
-#     --crust: #11111b;
-#     --mantle: #181825;
-#     --base: #1e1e2e;
-
-#     --surface0: #313244;
-#     --surface1: #45475a;
-#     --surface2: #585b70;
-
-#     --overlay0: #6c7086;
-#     --overlay1: #7f849c;
-#     --overlay2: #9399b2;
-
-#     --subtext0: #a6adc8;
-#     --subtext1: #bac2de;
-#     --text: #cdd6f4;
-
-#     --rosewater: #f5e0e5;
-#     --flamingo: #f2cdcd;
-#     --pink: #f5c2e7;
-#     --mauve: #cba6f7;
-
-#     --red: #f38ba8;
-#     --maroon: #eba0ac;
-#     --peach: #fab387;
-#     --yellow: #f9e2af;
-
-#     --green: #a6e3a1;
-#     --teal: #94e2d5;
-#     --sky: #89dceb;
-#     --sapphire: #74c7ec;
-
-#     --blue: #89b4fa;
-#     --lavender: #b4befe;
-#   }
-# }
-
+# -*- coding: utf-8 -*-
 
 """
-======================================================================
-CATPPUCCIN MOCHA — GNOME SHELL 50 / 51
-======================================================================
+===============================================================================
+ GNOME 50 / 51
+ CATPPUCCIN MOCHA + HYPRLAND-STYLE KEYBINDINGS
+===============================================================================
 
-A modular GNOME Shell color theme for Arch Linux.
+Ein vollständiger GNOME-Installer für Arch Linux.
 
-Inspired by the architecture of:
-    Marble Shell Theme
-    Catppuccin GTK Theme
-
-DESIGN GOALS
-------------
-
-* Catppuccin Mocha palette
-* GNOME Shell 50 / 51
-* Modular CSS architecture
-* Colors only
-* No GTK 3 modification
-* No GTK 4 / Libadwaita modification
-* No application theme modification
-* No font modification
-* No layout modification
-* No geometry modification
-* No animation modification
-* No Dash-to-Panel configuration
-* No shortcut modification
-* pacman only for optional packages
-
-FILES
+ZIELE
 -----
 
-~/.local/share/gnome-shell/extensions/
-    catppuccin-mocha-colors@local/
+1. Catppuccin Mocha für GNOME Shell 50 / 51
+2. Modulare GNOME-Shell-CSS-Struktur
+3. Hyprland-Keybindings als Referenz
+4. GNOME-Keybindings so nah wie möglich an Hyprland
+5. Native GNOME-Funktionen bevorzugen
+6. Custom GNOME Shortcuts für Hyprland-Funktionen verwenden
+7. Vorhandene GNOME-Keybindings sichern
+8. Restore-Funktion bereitstellen
+9. Keine yay / paru / AUR-Abhängigkeit
+10. pacman nur für optionale Pakete
+11. GTK 3 / GTK 4 / Libadwaita nicht verändern
+12. Fonts nicht verändern
+13. Keine Anwendungsthemes verändern
+14. Keine GNOME-Geometrie verändern
+15. Keine GNOME-Animationen verändern
 
-        metadata.json
-        extension.js
+WICHTIG
+-------
 
-        stylesheet.css
-        colors.css
-        app.css
-        panel.css
-        popup-menu.css
-        quick-settings.css
-        calendar.css
-        notifications.css
-        overview.css
-        dash.css
-        dialogs.css
-        search.css
-        widgets.css
-        osd.css
+Dieses Script konfiguriert tatsächlich GNOME-Shortcuts.
 
-IMPORTANT
----------
+Die visuelle Theme-Konfiguration und die Keybinding-Konfiguration
+sind logisch getrennt, werden aber von demselben Installer verwaltet.
 
-This script does NOT install User Themes.
+Die Hyprland-Konfiguration ist die Referenz für die gewünschte
+Bedienlogik.
 
-It uses a small GNOME Shell extension which loads the
-theme stylesheet directly with St.Theme.
+GNOME kann Hyprland-spezifische Funktionen nicht 1:1 nativ ersetzen.
+Für solche Funktionen werden Custom Shortcuts verwendet.
 
-The theme is therefore independent of GTK 3 and GTK 4.
+Beispiele:
 
-======================================================================
+    Quickshell
+    Hyprctl
+    cliphist
+    hyprshot
+    hyprpicker
+    grim
+    slurp
+    playerctl
+    wl-copy
+    OCR
+    Übersetzung
+    Recording
+    OBS
+    Scratchpad
+    VM-Submap
+
+Diese Programme werden NICHT automatisch installiert.
+Ein Shortcut wird nur eingerichtet, wenn sein Command sinnvoll
+definiert ist.
+
+INSTALLATION
+------------
+
+    python3 gnome-hyprland-installer.py
+
+RESTORE
+-------
+
+    python3 gnome-hyprland-installer.py --restore
+
+THEME ENTFERNEN
+---------------
+
+    python3 gnome-hyprland-installer.py --remove
+
+KEYBINDINGS NUR INSTALLIEREN
+----------------------------
+
+    python3 gnome-hyprland-installer.py --keybindings-only
+
+THEME NUR INSTALLIEREN
+----------------------
+
+    python3 gnome-hyprland-installer.py --theme-only
+
+===============================================================================
 """
 
 from __future__ import annotations
 
+import argparse
+import ast
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Iterable
 
 
-# ======================================================================
-# CONFIGURATION
-# ======================================================================
+# =============================================================================
+# PATHS
+# =============================================================================
 
 HOME = Path.home()
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+ASSETS_DIR = SCRIPT_DIR / "assets"
+
+DASH_TO_PANEL_CONF = ASSETS_DIR / "dash-to-panel.conf"
+
+BACKUP_DIR = HOME / ".local" / "share" / "gnome-hyprland-installer" / "backups"
+
+BACKUP_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
 
 UUID = "catppuccin-mocha-colors@local"
 
 EXTENSION_NAME = "Catppuccin Mocha Shell Colors"
 
-EXTENSION_DIR = (
-    HOME
-    / ".local"
-    / "share"
-    / "gnome-shell"
-    / "extensions"
-    / UUID
-)
+EXTENSION_DIR = HOME / ".local" / "share" / "gnome-shell" / "extensions" / UUID
 
 
-# ======================================================================
+# =============================================================================
 # CATPPUCCIN MOCHA
-# ======================================================================
+# =============================================================================
 
 COLORS = {
     "rosewater": "#f5e0e5",
@@ -1823,28 +152,89 @@ COLORS = {
     "sapphire": "#74c7ec",
     "blue": "#89b4fa",
     "lavender": "#b4befe",
-
     "text": "#cdd6f4",
     "subtext1": "#bac2de",
     "subtext0": "#a6adc8",
-
     "overlay2": "#9399b2",
     "overlay1": "#7f849c",
     "overlay0": "#6c7086",
-
     "surface2": "#585b70",
     "surface1": "#45475a",
     "surface0": "#313244",
-
     "base": "#1e1e2e",
     "mantle": "#181825",
     "crust": "#11111b",
 }
 
 
-# ======================================================================
-# HELPERS
-# ======================================================================
+# =============================================================================
+# ARGUMENTS
+# =============================================================================
+
+parser = argparse.ArgumentParser(
+    description=("GNOME 50/51 Catppuccin Mocha theme + Hyprland-style keybindings")
+)
+
+parser.add_argument(
+    "--restore",
+    action="store_true",
+    help="Restore the latest GNOME keybinding backup",
+)
+
+parser.add_argument(
+    "--remove",
+    action="store_true",
+    help="Remove the installed Catppuccin GNOME Shell extension",
+)
+
+parser.add_argument(
+    "--theme-only",
+    action="store_true",
+    help="Install only the GNOME Shell theme",
+)
+
+parser.add_argument(
+    "--keybindings-only",
+    action="store_true",
+    help="Install only the GNOME keybindings",
+)
+
+args = parser.parse_args()
+
+
+# =============================================================================
+# OUTPUT
+# =============================================================================
+
+
+def title(text: str) -> None:
+    print()
+    print("=" * 78)
+    print(text)
+    print("=" * 78)
+    print()
+
+
+def info(text: str) -> None:
+    print(f"[INFO] {text}")
+
+
+def ok(text: str) -> None:
+    print(f"[OK]   {text}")
+
+
+def warn(text: str) -> None:
+    print(f"[WARN] {text}")
+
+
+def error(text: str) -> None:
+    print(f"[ERROR] {text}")
+
+
+# =============================================================================
+# COMMAND HELPERS
+# =============================================================================
+
 
 def command_exists(command: str) -> bool:
     return shutil.which(command) is not None
@@ -1857,38 +247,136 @@ def run(
     capture: bool = False,
 ) -> subprocess.CompletedProcess:
 
-    print("$", " ".join(command))
+    if capture:
+        return subprocess.run(
+            command,
+            check=check,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+    print("$ " + " ".join(command))
 
     return subprocess.run(
         command,
         check=check,
         text=True,
-        capture_output=capture,
     )
 
 
-def ask_yes_no(question: str) -> bool:
-
-    while True:
-
-        try:
-            answer = input(
-                f"{question} [y/n]: "
-            ).strip().lower()
-
-        except EOFError:
-            return False
-
-        if answer in {"y", "yes"}:
-            return True
-
-        if answer in {"n", "no"}:
-            return False
-
-        print("Please answer y or n.")
+def shell_command(command: str) -> str:
+    return command
 
 
-def package_installed(package: str) -> bool:
+def require_commands(
+    commands: Iterable[str],
+) -> None:
+
+    missing = [command for command in commands if not command_exists(command)]
+
+    if missing:
+        error("Required commands are missing:")
+
+        for command in missing:
+            print(f"  - {command}")
+
+        sys.exit(1)
+
+
+# =============================================================================
+# ROOT CHECK
+# =============================================================================
+
+if os.geteuid() == 0:
+    error("Dieses Script darf nicht als root ausgeführt werden.")
+
+    error("sudo wird nur intern für pacman verwendet.")
+
+    sys.exit(1)
+
+
+# =============================================================================
+# REQUIRED GNOME TOOLS
+# =============================================================================
+
+require_commands(
+    [
+        "gsettings",
+        "gnome-extensions",
+    ]
+)
+
+
+# =============================================================================
+# GNOME VERSION
+# =============================================================================
+
+
+def get_gnome_shell_version() -> str:
+
+    if not command_exists("gnome-shell"):
+        return "unknown"
+
+    result = run(
+        [
+            "gnome-shell",
+            "--version",
+        ],
+        check=False,
+        capture=True,
+    )
+
+    value = result.stdout.strip() or result.stderr.strip()
+
+    return value or "unknown"
+
+
+GNOME_VERSION = get_gnome_shell_version()
+
+
+def get_gnome_major_version() -> int | None:
+
+    match = re.search(
+        r"(\d+)",
+        GNOME_VERSION,
+    )
+
+    if not match:
+        return None
+
+    return int(match.group(1))
+
+
+GNOME_MAJOR = get_gnome_major_version()
+
+
+# =============================================================================
+# VERSION VALIDATION
+# =============================================================================
+
+title("GNOME 50 / 51 — ENVIRONMENT CHECK")
+
+print(f"GNOME Shell: {GNOME_VERSION}")
+
+if GNOME_MAJOR in {50, 51}:
+    ok("GNOME Shell 50/51 erkannt.")
+
+else:
+    warn("Dieses Script ist für GNOME Shell 50/51 ausgelegt.")
+
+    if GNOME_MAJOR is not None:
+        warn(f"Erkannte Major-Version: {GNOME_MAJOR}")
+
+
+# =============================================================================
+# PACMAN
+# =============================================================================
+
+
+def package_installed(
+    package: str,
+) -> bool:
 
     result = subprocess.run(
         [
@@ -1904,91 +392,1202 @@ def package_installed(package: str) -> bool:
     return result.returncode == 0
 
 
-def pacman_install(*packages: str) -> None:
+def pacman_install(
+    *packages: str,
+) -> bool:
 
-    packages = tuple(
-        package
-        for package in packages
-        if package
-    )
+    if not command_exists("pacman"):
+        warn("pacman nicht gefunden.")
+
+        return False
+
+    packages = [package for package in packages if package]
 
     if not packages:
-        return
+        return True
 
-    run(
+    result = run(
         [
             "sudo",
             "pacman",
             "-S",
             "--needed",
             *packages,
-        ]
-    )
-
-
-def extension_exists() -> bool:
-
-    result = run(
-        [
-            "gnome-extensions",
-            "info",
-            UUID,
         ],
         check=False,
-        capture=True,
     )
 
     return result.returncode == 0
 
 
-def extension_enabled() -> bool:
+# =============================================================================
+# BACKUP
+# =============================================================================
+
+
+def timestamp() -> str:
+    return datetime.now().strftime("%Y%m%d-%H%M%S")
+
+
+def backup_file(
+    name: str,
+    content: str,
+) -> Path:
+
+    path = BACKUP_DIR / f"{timestamp()}-{name}"
+
+    path.write_text(
+        content,
+        encoding="utf-8",
+    )
+
+    return path
+
+
+# =============================================================================
+# GSETTINGS HELPERS
+# =============================================================================
+
+
+def gsettings_get(
+    schema: str,
+    key: str,
+) -> str:
 
     result = run(
         [
-            "gnome-extensions",
-            "info",
-            UUID,
+            "gsettings",
+            "get",
+            schema,
+            key,
         ],
         check=False,
         capture=True,
     )
 
-    output = (
-        result.stdout
-        + "\n"
-        + result.stderr
-    ).lower()
+    return result.stdout.strip()
+
+
+def gsettings_set(
+    schema: str,
+    key: str,
+    value: str,
+) -> bool:
+
+    result = run(
+        [
+            "gsettings",
+            "set",
+            schema,
+            key,
+            value,
+        ],
+        check=False,
+    )
+
+    return result.returncode == 0
+
+
+# =============================================================================
+# GNOME SHORTCUT SCHEMA
+# =============================================================================
+
+MEDIA_KEYS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
+
+WM_SCHEMA = "org.gnome.desktop.wm.keybindings"
+
+SHELL_SCHEMA = "org.gnome.shell.keybindings"
+
+INTERFACE_SCHEMA = "org.gnome.desktop.interface"
+
+CUSTOM_KEYBINDINGS_KEY = "custom-keybindings"
+
+
+# =============================================================================
+# BACKUP GNOME KEYBINDINGS
+# =============================================================================
+
+
+def backup_keybindings() -> Path:
+
+    title("BACKUP — EXISTING GNOME KEYBINDINGS")
+
+    data = {
+        "created": datetime.now().isoformat(),
+        "gnome_version": GNOME_VERSION,
+        "wm": {},
+        "shell": {},
+        "media": {},
+        "interface": {},
+        "custom": {},
+    }
+
+    for schema, target in [
+        (WM_SCHEMA, data["wm"]),
+        (SHELL_SCHEMA, data["shell"]),
+        (MEDIA_KEYS_SCHEMA, data["media"]),
+        (INTERFACE_SCHEMA, data["interface"]),
+    ]:
+        result = run(
+            [
+                "gsettings",
+                "list-recursively",
+                schema,
+            ],
+            check=False,
+            capture=True,
+        )
+
+        if result.returncode != 0:
+            continue
+
+        for line in result.stdout.splitlines():
+            parts = line.split(
+                " ",
+                2,
+            )
+
+            if len(parts) != 3:
+                continue
+
+            _, key, value = parts
+
+            target[key] = value
+
+    custom = gsettings_get(
+        WM_SCHEMA,
+        CUSTOM_KEYBINDINGS_KEY,
+    )
+
+    data["custom"] = custom
+
+    path = backup_file(
+        "gnome-keybindings.json",
+        json.dumps(
+            data,
+            indent=2,
+            ensure_ascii=False,
+        ),
+    )
+
+    ok(f"Keybinding-Backup erstellt: {path}")
+
+    return path
+
+
+# =============================================================================
+# CUSTOM SHORTCUT MANAGEMENT
+# =============================================================================
+
+
+def get_custom_keybindings() -> list[str]:
+
+    raw = gsettings_get(
+        WM_SCHEMA,
+        CUSTOM_KEYBINDINGS_KEY,
+    )
+
+    if not raw:
+        return []
+
+    try:
+        value = ast.literal_eval(raw)
+
+        if isinstance(value, list):
+            return [str(item) for item in value]
+
+    except Exception:
+        pass
+
+    return []
+
+
+def gvariant_string(
+    value: str,
+) -> str:
 
     return (
-        "state: enabled" in output
-        or "status: enabled" in output
+        "'"
+        + value.replace(
+            "'",
+            "\\'",
+        )
+        + "'"
     )
 
 
-def disable_extension() -> None:
+def set_custom_keybindings(
+    paths: list[str],
+) -> bool:
 
-    run(
-        [
-            "gnome-extensions",
-            "disable",
-            UUID,
-        ],
-        check=False,
+    value = (
+        "@as []"
+        if not paths
+        else "[" + ", ".join(gvariant_string(path) for path in paths) + "]"
+    )
+
+    return gsettings_set(
+        WM_SCHEMA,
+        CUSTOM_KEYBINDINGS_KEY,
+        value,
     )
 
 
-def enable_extension() -> bool:
+def set_custom_entry(
+    path: str,
+    name: str,
+    command: str,
+    binding: str,
+) -> bool:
 
-    result = run(
-        [
-            "gnome-extensions",
-            "enable",
-            UUID,
-        ],
-        check=False,
+    schema = f"org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:{path}"
+
+    # GNOME's schema is normally accessed by the
+    # relocatable path through gsettings.
+    #
+    # Using gsettings directly keeps this compatible
+    # with standard GNOME settings storage.
+
+    success = True
+
+    success &= gsettings_set(
+        schema,
+        "name",
+        gvariant_string(name),
     )
 
-    return result.returncode == 0
+    success &= gsettings_set(
+        schema,
+        "command",
+        gvariant_string(command),
+    )
+
+    success &= gsettings_set(
+        schema,
+        "binding",
+        gvariant_string(binding),
+    )
+
+    return bool(success)
+
+
+# =============================================================================
+# GNOME CUSTOM SHORTCUT IMPLEMENTATION
+# =============================================================================
+
+CUSTOM_BASE = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
+
+
+def custom_path(index: int) -> str:
+
+    return CUSTOM_BASE + f"custom{index}/"
+
+
+def custom_schema(
+    path: str,
+) -> str:
+
+    return f"org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:{path}"
+
+
+def configure_custom_shortcuts(
+    shortcuts: list[dict[str, str]],
+) -> int:
+
+    existing = get_custom_keybindings()
+
+    # We deliberately create a dedicated block at the
+    # end of the custom-keybinding list.
+    #
+    # Existing user shortcuts remain in place.
+
+    start_index = 0
+
+    while custom_path(start_index) in existing:
+        start_index += 1
+
+    paths = list(existing)
+
+    configured = 0
+
+    for offset, item in enumerate(shortcuts):
+        index = start_index + offset
+
+        path = custom_path(index)
+
+        schema = custom_schema(path)
+
+        success = True
+
+        success &= gsettings_set(
+            schema,
+            "name",
+            gvariant_string(item["name"]),
+        )
+
+        success &= gsettings_set(
+            schema,
+            "command",
+            gvariant_string(item["command"]),
+        )
+
+        success &= gsettings_set(
+            schema,
+            "binding",
+            gvariant_string(item["binding"]),
+        )
+
+        if success:
+            paths.append(path)
+
+            configured += 1
+
+        else:
+            warn(f"Custom Shortcut konnte nicht eingerichtet werden: {item['name']}")
+
+    if not set_custom_keybindings(paths):
+        error("custom-keybindings konnte nicht gesetzt werden.")
+
+    return configured
+
+
+# =============================================================================
+# COMMAND AVAILABILITY
+# =============================================================================
+
+
+def command_or_skip(
+    command: str,
+) -> bool:
+
+    # We intentionally do not try to parse complex shell
+    # pipelines here. If the command begins with bash/sh,
+    # it is treated as an external shell command.
+
+    first = command.strip().split(
+        None,
+        1,
+    )[0]
+
+    if first in {
+        "bash",
+        "sh",
+        "fish",
+        "python",
+        "python3",
+        "kitty",
+        "alacritty",
+        "wezterm",
+        "gnome-terminal",
+        "xdg-open",
+    }:
+        return command_exists(first)
+
+    return command_exists(first)
+
+
+# =============================================================================
+# APPLICATION COMMAND DETECTION
+# =============================================================================
+
+
+def first_available(
+    commands: list[str],
+) -> str | None:
+
+    for command in commands:
+        first = command.split(
+            None,
+            1,
+        )[0]
+
+        if command_exists(first):
+            return command
+
+    return None
+
+
+TERMINAL_COMMAND = first_available(
+    [
+        "kitty",
+        "foot",
+        "alacritty",
+        "wezterm",
+        "gnome-terminal",
+    ]
+)
+
+BROWSER_COMMAND = first_available(
+    [
+        "brave",
+        "firefox",
+        "librewolf",
+        "chromium",
+    ]
+)
+
+FILE_MANAGER_COMMAND = first_available(
+    [
+        "nautilus",
+        "thunar",
+        "dolphin",
+        "pcmanfm",
+    ]
+)
+
+
+# =============================================================================
+# HYPRLAND -> GNOME SHORTCUT DEFINITIONS
+# =============================================================================
+#
+# Diese Tabelle bildet deine Lua-Konfiguration auf GNOME ab.
+#
+# Syntax:
+#
+#   <Super>
+#   <Shift>
+#   <Control>
+#   <Alt>
+#
+# GNOME verwendet "<Super>" statt "SUPER".
+# =============================================================================
+
+CUSTOM_SHORTCUTS: list[dict[str, str]] = []
+
+
+def add_shortcut(
+    name: str,
+    binding: str,
+    command: str,
+) -> None:
+
+    CUSTOM_SHORTCUTS.append(
+        {
+            "name": name,
+            "binding": binding,
+            "command": command,
+        }
+    )
+
+
+# =============================================================================
+# QUICK / SHELL
+# =============================================================================
+
+if command_exists("fuzzel"):
+    add_shortcut(
+        "Hyprland: Search / Fuzzel",
+        "<Super>space",
+        "fuzzel",
+    )
+
+
+if command_exists("qs"):
+    add_shortcut(
+        "Hyprland: Quickshell Search",
+        "<Super>space",
+        "qs",
+    )
+
+
+add_shortcut(
+    "Hyprland: Overview",
+    "<Super>Tab",
+    "bash -c 'gnome-extensions prefs org.gnome.shell.extensions.dash-to-panel 2>/dev/null || true'",
+)
+
+
+# =============================================================================
+# CLIPBOARD
+# =============================================================================
+
+if command_exists("cliphist") and command_exists("fuzzel"):
+    add_shortcut(
+        "Utilities: Clipboard history",
+        "<Super>v",
+        "bash -c 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy'",
+    )
+
+
+# =============================================================================
+# EMOJI
+# =============================================================================
+
+if command_exists("fuzzel") and command_exists("wl-copy"):
+    emoji_script = (
+        HOME / ".config" / "hypr" / "hyprland" / "scripts" / "fuzzel-emoji.sh"
+    )
+
+    if emoji_script.exists():
+        add_shortcut(
+            "Utilities: Emoji",
+            "<Super>period",
+            f"{emoji_script} copy",
+        )
+
+
+# =============================================================================
+# GNOME / SHELL UTILITIES
+# =============================================================================
+
+add_shortcut(
+    "Shell: Cheatsheet",
+    "<Super><Shift>7",
+    'bash -c \'notify-send "Hyprland / GNOME Keybindings" "Use the configured Hyprland-compatible shortcuts."\'',
+)
+
+add_shortcut(
+    "Shell: On-screen keyboard",
+    "<Super>k",
+    "bash -c 'gsettings set org.gnome.desktop.a11y.applications screen-keyboard-enabled true'",
+)
+
+
+# =============================================================================
+# MEDIA OVERLAY
+# =============================================================================
+
+if command_exists("playerctl"):
+    add_shortcut(
+        "Media: Toggle media controls",
+        "<Super>m",
+        "playerctl play-pause",
+    )
+
+
+# =============================================================================
+# SESSION MENU
+# =============================================================================
+
+add_shortcut(
+    "Session: GNOME session menu",
+    "<Control><Alt>Delete",
+    "bash -c 'gnome-session-quit --logout-dialog'",
+)
+
+
+# =============================================================================
+# WALLPAPER
+# =============================================================================
+
+if command_exists("gsettings"):
+    add_shortcut(
+        "Shell: Wallpaper",
+        "<Control><Super>t",
+        "bash -c 'gnome-control-center background 2>/dev/null || true'",
+    )
+
+
+# =============================================================================
+# LIGHT / DARK
+# =============================================================================
+
+add_shortcut(
+    "Shell: Toggle light/dark mode",
+    "<Control><Super><Shift>d",
+    "bash -c 'v=$(gsettings get org.gnome.desktop.interface color-scheme); if [[ \"$v\" == *prefer-dark* ]]; then gsettings set org.gnome.desktop.interface color-scheme prefer-light; else gsettings set org.gnome.desktop.interface color-scheme prefer-dark; fi'",
+)
+
+
+# =============================================================================
+# RESTART QUICKSHELL
+# =============================================================================
+
+if command_exists("qs"):
+    add_shortcut(
+        "Shell: Restart Quickshell widgets",
+        "<Control><Super>r",
+        "bash -c 'pkill -x quickshell 2>/dev/null || true; pkill -x qs 2>/dev/null || true; qs -c \"$qsConfig\" &'",
+    )
+
+
+# =============================================================================
+# SCREENSHOT
+# =============================================================================
+
+if command_exists("gnome-screenshot"):
+    add_shortcut(
+        "Utilities: Screenshot",
+        "Print",
+        "gnome-screenshot",
+    )
+
+elif command_exists("gnome-screenshot"):
+    add_shortcut(
+        "Utilities: Screenshot",
+        "Print",
+        "gnome-screenshot",
+    )
+
+
+if command_exists("grim") and command_exists("slurp"):
+    add_shortcut(
+        "Utilities: Screen snip",
+        "<Super><Shift>s",
+        "bash -c 'grim -g \"$(slurp)\" - | wl-copy'",
+    )
+
+
+# =============================================================================
+# GOOGLE LENS / REGION SEARCH
+# =============================================================================
+
+SNIP_SEARCH = HOME / ".config" / "hypr" / "hyprland" / "scripts" / "snip_to_search.sh"
+
+if SNIP_SEARCH.exists():
+    add_shortcut(
+        "Utilities: Google Lens",
+        "<Super><Shift>a",
+        str(SNIP_SEARCH),
+    )
+
+
+# =============================================================================
+# OCR
+# =============================================================================
+
+if (
+    command_exists("grim")
+    and command_exists("slurp")
+    and command_exists("tesseract")
+    and command_exists("wl-copy")
+):
+    add_shortcut(
+        "Utilities: OCR",
+        "<Super><Shift>x",
+        "bash -c 'grim -g \"$(slurp)\" /tmp/gnome-ocr.png && tesseract /tmp/gnome-ocr.png stdout 2>/dev/null | wl-copy; rm -f /tmp/gnome-ocr.png'",
+    )
+
+
+# =============================================================================
+# TRANSLATION
+# =============================================================================
+
+add_shortcut(
+    "Utilities: Translate screen",
+    "<Super><Shift>t",
+    'bash -c \'notify-send "Screen Translation" "Configure your translation command here."\'',
+)
+
+
+# =============================================================================
+# COLOR PICKER
+# =============================================================================
+
+if command_exists("hyprpicker"):
+    add_shortcut(
+        "Utilities: Color picker",
+        "<Super><Shift>c",
+        "hyprpicker -a",
+    )
+
+
+# =============================================================================
+# RECORDING
+# =============================================================================
+
+RECORD_SCRIPT = HOME / ".config" / "quickshell" / "scripts" / "videos" / "record.sh"
+
+if RECORD_SCRIPT.exists():
+    add_shortcut(
+        "Utilities: Record region",
+        "<Super><Shift>r",
+        str(RECORD_SCRIPT),
+    )
+
+    add_shortcut(
+        "Utilities: Record screen",
+        "<Control><Alt>r",
+        f"{RECORD_SCRIPT} --fullscreen",
+    )
+
+    add_shortcut(
+        "Utilities: Record screen with sound",
+        "<Shift><Alt><Super>r",
+        f"{RECORD_SCRIPT} --fullscreen --sound",
+    )
+
+
+# =============================================================================
+# OBS
+# =============================================================================
+
+if command_exists("obs"):
+    add_shortcut(
+        "App: OBS",
+        "Print",
+        "obs",
+    )
+
+
+# =============================================================================
+# MEDIA
+# =============================================================================
+
+if command_exists("playerctl"):
+    add_shortcut(
+        "Media: Next track",
+        "<Super><Shift>n",
+        "playerctl next",
+    )
+
+    add_shortcut(
+        "Media: Previous track",
+        "<Super><Shift>b",
+        "playerctl previous",
+    )
+
+    add_shortcut(
+        "Media: Play / pause",
+        "<Super><Shift>p",
+        "playerctl play-pause",
+    )
+
+    add_shortcut(
+        "Media: Mute",
+        "<Super><Shift>m",
+        "wpctl set-mute @DEFAULT_SINK@ toggle",
+    )
+
+
+# =============================================================================
+# WINDOW MANAGEMENT
+# =============================================================================
+
+add_shortcut(
+    "Window: Close",
+    "<Super>q",
+    "bash -c 'wmctrl -c :ACTIVE: 2>/dev/null || gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.display.get_focus_window().delete(global.get_current_time());\" >/dev/null 2>&1'",
+)
+
+
+add_shortcut(
+    "Window: Maximize",
+    "<Super>d",
+    "bash -c 'wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz'",
+)
+
+
+add_shortcut(
+    "Window: Fullscreen",
+    "<Super>f",
+    "bash -c 'wmctrl -r :ACTIVE: -b toggle,fullscreen'",
+)
+
+
+add_shortcut(
+    "Window: Float",
+    "<Alt><Super>space",
+    'bash -c \'notify-send "GNOME" "Floating windows require a GNOME Shell extension or Mutter-specific workflow."\'',
+)
+
+
+add_shortcut(
+    "Window: Pin",
+    "<Super>p",
+    'bash -c \'notify-send "GNOME" "Always-on-top requires GNOME/Mutter extension support."\'',
+)
+
+
+# =============================================================================
+# WORKSPACE 1–10
+# =============================================================================
+
+for i in range(
+    1,
+    11,
+):
+    digit = "0" if i == 10 else str(i)
+
+    add_shortcut(
+        f"Workspace: Focus {i}",
+        f"<Super>{digit}",
+        f"bash -c 'wmctrl -s {i - 1}'",
+    )
+
+    add_shortcut(
+        f"Window: Send to workspace {i}",
+        f"<Alt><Super>{digit}",
+        f"bash -c 'wmctrl -r :ACTIVE: -t {i - 1}'",
+    )
+
+
+# =============================================================================
+# WORKSPACE NAVIGATION
+# =============================================================================
+
+add_shortcut(
+    "Workspace: Previous",
+    "<Control><Super>Left",
+    "bash -c 'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.workspace_manager.get_active_workspace().get_neighbor(Meta.MotionDirection.LEFT).activate(global.get_current_time());\" >/dev/null 2>&1'",
+)
+
+add_shortcut(
+    "Workspace: Next",
+    "<Control><Super>Right",
+    "bash -c 'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.workspace_manager.get_active_workspace().get_neighbor(Meta.MotionDirection.RIGHT).activate(global.get_current_time());\" >/dev/null 2>&1'",
+)
+
+
+# =============================================================================
+# WORKSPACE PAGE UP/DOWN
+# =============================================================================
+
+add_shortcut(
+    "Workspace: Previous Page",
+    "<Super>Page_Up",
+    'bash -c \'wmctrl -s $(($(wmctrl -d | awk "$2==\\"*\\" {print $1}") - 1))\'',
+)
+
+add_shortcut(
+    "Workspace: Next Page",
+    "<Super>Page_Down",
+    'bash -c \'wmctrl -s $(($(wmctrl -d | awk "$2==\\"*\\" {print $1}") + 1))\'',
+)
+
+
+# =============================================================================
+# SCRATCHPAD
+# =============================================================================
+
+add_shortcut(
+    "Workspace: Toggle scratchpad",
+    "<Super>s",
+    'bash -c \'notify-send "GNOME Scratchpad" "A GNOME extension is required for a true Hyprland-style special workspace."\'',
+)
+
+add_shortcut(
+    "Window: Send to scratchpad",
+    "<Alt><Super>s",
+    'bash -c \'notify-send "GNOME Scratchpad" "A GNOME extension is required for a true Hyprland-style special workspace."\'',
+)
+
+
+# =============================================================================
+# WINDOW FOCUS
+# =============================================================================
+
+add_shortcut(
+    "Window: Focus left",
+    "<Super>Left",
+    "bash -c 'wmctrl -r :ACTIVE: -e 0,-1,-1,-1,-1'",
+)
+
+add_shortcut(
+    "Window: Focus right",
+    "<Super>Right",
+    "bash -c 'wmctrl -r :ACTIVE: -e 0,-1,-1,-1,-1'",
+)
+
+
+# =============================================================================
+# APPLICATIONS
+# =============================================================================
+
+if TERMINAL_COMMAND:
+    add_shortcut(
+        "App: Terminal",
+        "<Super>Return",
+        TERMINAL_COMMAND,
+    )
+
+    add_shortcut(
+        "App: Terminal",
+        "<Super>t",
+        TERMINAL_COMMAND,
+    )
+
+    add_shortcut(
+        "App: Terminal",
+        "<Control><Alt>t",
+        TERMINAL_COMMAND,
+    )
+
+
+if FILE_MANAGER_COMMAND:
+    add_shortcut(
+        "App: File manager",
+        "<Super>e",
+        FILE_MANAGER_COMMAND,
+    )
+
+
+if BROWSER_COMMAND:
+    add_shortcut(
+        "App: Browser",
+        "<Super>w",
+        BROWSER_COMMAND,
+    )
+
+
+if command_exists("firefox"):
+    add_shortcut(
+        "App: Firefox",
+        "<Super><Alt>w",
+        "firefox",
+    )
+
+
+if command_exists("mullvad-browser"):
+    add_shortcut(
+        "App: Mullvad Browser",
+        "<Control><Super>w",
+        "mullvad-browser -P",
+    )
+
+
+if command_exists("librewolf"):
+    add_shortcut(
+        "App: LibreWolf",
+        "<Super><Shift>w",
+        "librewolf",
+    )
+
+
+if command_exists("torbrowser-launcher"):
+    add_shortcut(
+        "App: Tor Browser",
+        "<Super><Alt><Shift>w",
+        "torbrowser-launcher",
+    )
+
+
+if command_exists("qalculate-gtk"):
+    add_shortcut(
+        "App: Qalculate",
+        "XF86Calculator",
+        "qalculate-gtk",
+    )
+
+
+# =============================================================================
+# SETTINGS
+# =============================================================================
+
+add_shortcut(
+    "App: Settings",
+    "<Super>i",
+    "gnome-control-center",
+)
+
+
+# =============================================================================
+# TASK MANAGER
+# =============================================================================
+
+if command_exists("gnome-system-monitor"):
+    add_shortcut(
+        "App: Task manager",
+        "<Control><Shift>Escape",
+        "gnome-system-monitor",
+    )
+
+
+# =============================================================================
+# VOLUME
+# =============================================================================
+
+add_shortcut(
+    "Media: Volume up",
+    "XF86AudioRaiseVolume",
+    "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5",
+)
+
+add_shortcut(
+    "Media: Volume down",
+    "XF86AudioLowerVolume",
+    "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
+)
+
+add_shortcut(
+    "Media: Mute",
+    "XF86AudioMute",
+    "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+)
+
+add_shortcut(
+    "Media: Microphone mute",
+    "XF86AudioMicMute",
+    "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+)
+
+
+# =============================================================================
+# MEDIA KEYS
+# =============================================================================
+
+if command_exists("playerctl"):
+    add_shortcut(
+        "Media: Play / pause",
+        "XF86AudioPlay",
+        "playerctl play-pause",
+    )
+
+    add_shortcut(
+        "Media: Play / pause",
+        "XF86AudioPause",
+        "playerctl play-pause",
+    )
+
+    add_shortcut(
+        "Media: Next",
+        "XF86AudioNext",
+        "playerctl next",
+    )
+
+    add_shortcut(
+        "Media: Previous",
+        "XF86AudioPrev",
+        "playerctl previous",
+    )
+
+
+# =============================================================================
+# SESSION
+# =============================================================================
+
+add_shortcut(
+    "Session: Lock",
+    "<Super>l",
+    "loginctl lock-session",
+)
+
+add_shortcut(
+    "Session: Suspend",
+    "<Super><Shift>l",
+    "systemctl suspend",
+)
+
+add_shortcut(
+    "Session: Logout",
+    "<Control><Alt>Delete",
+    "gnome-session-quit --logout",
+)
+
+
+# =============================================================================
+# GNOME DARK MODE
+# =============================================================================
+
+add_shortcut(
+    "GNOME: Toggle dark mode",
+    "<Control><Super><Shift>d",
+    "bash -c 'if [[ \"$(gsettings get org.gnome.desktop.interface color-scheme)\" == *prefer-dark* ]]; then gsettings set org.gnome.desktop.interface color-scheme prefer-light; else gsettings set org.gnome.desktop.interface color-scheme prefer-dark; fi'",
+)
+
+
+# =============================================================================
+# GLASS / BORDER / GNOME TOGGLE
+# =============================================================================
+
+GNOME_TOGGLE_SCRIPT = HOME / ".config" / "fish" / "functions" / "gnome-toggle.py"
+
+if GNOME_TOGGLE_SCRIPT.exists():
+    add_shortcut(
+        "Session: Toggle GNOME / Hyprland profile",
+        "<Control><Super>h",
+        f"kitty --hold python3 {GNOME_TOGGLE_SCRIPT} --reboot",
+    )
+
+
+# =============================================================================
+# FILTER INVALID DUPLICATES
+# =============================================================================
+
+
+def deduplicate_shortcuts(
+    shortcuts: list[dict[str, str]],
+) -> list[dict[str, str]]:
+
+    seen: set[tuple[str, str]] = set()
+
+    result = []
+
+    for item in shortcuts:
+        key = (
+            item["binding"],
+            item["name"],
+        )
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+
+        result.append(item)
+
+    return result
+
+
+CUSTOM_SHORTCUTS = deduplicate_shortcuts(CUSTOM_SHORTCUTS)
+
+
+# =============================================================================
+# PRINT KEYBINDING PLAN
+# =============================================================================
+
+
+def print_keybinding_plan() -> None:
+
+    title("HYPRLAND → GNOME KEYBINDING PLAN")
+
+    print("Ziel:")
+
+    print("  GNOME 50/51 soll sich bei der Bedienung")
+
+    print("  so nah wie möglich an deiner Hyprland-")
+
+    print("  Keybinding-Konfiguration verhalten.")
+
+    print()
+
+    print(f"Geplante Custom Shortcuts: {len(CUSTOM_SHORTCUTS)}")
+
+    print()
+
+    for item in CUSTOM_SHORTCUTS:
+        print(f"  {item['binding']:<30}{item['name']}")
+
+
+# =============================================================================
+# INSTALL KEYBINDINGS
+# =============================================================================
+
+
+def install_keybindings() -> None:
+
+    print_keybinding_plan()
+
+    backup_keybindings()
+
+    title("INSTALLING GNOME KEYBINDINGS")
+
+    configured = configure_custom_shortcuts(CUSTOM_SHORTCUTS)
+
+    print()
+
+    ok(f"{configured} Custom Shortcuts eingerichtet.")
+
+    print()
+
+    print("Keybinding-Ziel:")
+
+    print("  GNOME 50 / 51")
+
+    print("  möglichst nah an Hyprland")
+
+    print()
+
+    print("Native GNOME-Funktionen bleiben bevorzugt.")
+
+    print("Hyprland-spezifische Funktionen werden")
+
+    print("über Custom Shortcuts angebunden.")
+
+
+# =============================================================================
+# THEME FILE WRITER
+# =============================================================================
 
 
 def write_file(
@@ -1996,358 +1595,24 @@ def write_file(
     content: str,
 ) -> None:
 
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     path.write_text(
         content.rstrip() + "\n",
         encoding="utf-8",
     )
 
-    print(
-        f"  wrote {path.name:<24} "
-        f"{path.stat().st_size:>7} bytes"
-    )
+    print(f"[WRITE] {path}")
 
 
-# ======================================================================
-# ROOT CHECK
-# ======================================================================
+# =============================================================================
+# GNOME EXTENSION
+# =============================================================================
 
-if os.geteuid() == 0:
-
-    print()
-    print("Do NOT run this script as root.")
-    print("The script uses sudo only when pacman needs it.")
-    print()
-
-    sys.exit(1)
-
-
-# ======================================================================
-# COMMAND CHECK
-# ======================================================================
-
-required_commands = [
-    "pacman",
-    "gsettings",
-    "gnome-extensions",
-]
-
-for command in required_commands:
-
-    if not command_exists(command):
-
-        print()
-        print(
-            f"[ERROR] Required command not found: {command}"
-        )
-        print()
-
-        if command == "pacman":
-            print("This installer is intended for Arch Linux.")
-
-        elif command == "gsettings":
-            print("Install the GNOME desktop components.")
-
-        elif command == "gnome-extensions":
-            print("Install gnome-shell.")
-
-        sys.exit(1)
-
-
-# ======================================================================
-# GNOME VERSION
-# ======================================================================
-
-if command_exists("gnome-shell"):
-
-    result = run(
-        [
-            "gnome-shell",
-            "--version",
-        ],
-        check=False,
-        capture=True,
-    )
-
-    shell_version = (
-        result.stdout.strip()
-        or result.stderr.strip()
-    )
-
-else:
-
-    shell_version = "unknown"
-
-
-# ======================================================================
-# HEADER
-# ======================================================================
-
-print()
-print("=" * 78)
-print("       CATPPUCCIN MOCHA — GNOME SHELL")
-print("                    COLOR THEME")
-print("=" * 78)
-print()
-
-print("Detected Shell:")
-print(f"  {shell_version}")
-print()
-
-print("Architecture:")
-print("  Modular CSS")
-print("  Catppuccin color tokens")
-print("  Direct St.Theme stylesheet loading")
-print()
-
-print("Untouched:")
-print("  GTK 3")
-print("  GTK 4 / Libadwaita")
-print("  Application themes")
-print("  Fonts")
-print("  Font sizes")
-print("  Width")
-print("  Height")
-print("  Padding")
-print("  Margins")
-print("  Spacing")
-print("  Border radius")
-print("  Shadows")
-print("  Animations")
-print("  Transitions")
-print("  Shortcuts")
-print("  Dash-to-Panel settings")
-print()
-
-
-# ======================================================================
-# OPTIONAL PAPIRUS
-# ======================================================================
-
-print("=" * 78)
-print("[1/8] OPTIONAL ICON THEME")
-print("=" * 78)
-print()
-
-use_papirus = False
-
-if package_installed("papirus-icon-theme"):
-
-    print("Papirus icon theme is already installed.")
-    print()
-
-    use_papirus = ask_yes_no(
-        "Use Papirus-Dark?"
-    )
-
-else:
-
-    print(
-        "papirus-icon-theme is not installed."
-    )
-
-    print()
-
-    install = ask_yes_no(
-        "Install papirus-icon-theme?"
-    )
-
-    if install:
-
-        pacman_install(
-            "papirus-icon-theme"
-        )
-
-        if package_installed(
-            "papirus-icon-theme"
-        ):
-
-            print(
-                "[OK] Papirus-Dark installed."
-            )
-
-            use_papirus = True
-
-        else:
-
-            print(
-                "[WARNING] Papirus installation failed."
-            )
-
-    else:
-
-        print(
-            "Papirus installation skipped."
-        )
-
-
-# ======================================================================
-# GNOME DARK MODE
-# ======================================================================
-
-print()
-print("=" * 78)
-print("[2/8] GNOME COLOR SCHEME")
-print("=" * 78)
-print()
-
-run(
-    [
-        "gsettings",
-        "set",
-        "org.gnome.desktop.interface",
-        "color-scheme",
-        "prefer-dark",
-    ]
-)
-
-print(
-    "[OK] GNOME dark color scheme selected."
-)
-
-if use_papirus:
-
-    run(
-        [
-            "gsettings",
-            "set",
-            "org.gnome.desktop.interface",
-            "icon-theme",
-            "Papirus-Dark",
-        ]
-    )
-
-    print(
-        "[OK] Papirus-Dark selected."
-    )
-
-else:
-
-    print(
-        "[OK] Existing icon theme preserved."
-    )
-
-
-# ======================================================================
-# EXTENSION STATE
-# ======================================================================
-
-print()
-print("=" * 78)
-print("[3/8] EXTENSION STATE")
-print("=" * 78)
-print()
-
-was_enabled = extension_enabled()
-
-if was_enabled:
-
-    print(
-        "[INFO] Existing theme extension is enabled."
-    )
-
-    print(
-        "[INFO] Disabling before replacement..."
-    )
-
-    disable_extension()
-
-else:
-
-    print(
-        "[INFO] Theme extension is not enabled."
-    )
-
-
-# ======================================================================
-# BACKUP
-# ======================================================================
-
-print()
-print("=" * 78)
-print("[4/8] BACKUP / INSTALL DIRECTORY")
-print("=" * 78)
-print()
-
-EXTENSION_DIR.parent.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
-if EXTENSION_DIR.exists():
-
-    timestamp = datetime.now().strftime(
-        "%Y%m%d-%H%M%S"
-    )
-
-    backup_dir = EXTENSION_DIR.with_name(
-        f"{UUID}.backup-{timestamp}"
-    )
-
-    print(
-        "Existing installation detected."
-    )
-
-    print(
-        "Backup:"
-    )
-
-    print(
-        f"  {backup_dir}"
-    )
-
-    shutil.copytree(
-        EXTENSION_DIR,
-        backup_dir,
-    )
-
-    shutil.rmtree(
-        EXTENSION_DIR
-    )
-
-EXTENSION_DIR.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
-
-# ======================================================================
-# 5. METADATA
-# ======================================================================
-
-print()
-print("=" * 78)
-print("[5/8] GENERATING MODULAR THEME")
-print("=" * 78)
-print()
-
-metadata = {
-    "uuid": UUID,
-    "name": EXTENSION_NAME,
-    "description": (
-        "Catppuccin Mocha color theme for "
-        "GNOME Shell 50 and 51"
-    ),
-    "version": 10,
-    "shell-version": [
-        "50",
-        "51",
-    ],
-}
-
-write_file(
-    EXTENSION_DIR / "metadata.json",
-    json.dumps(
-        metadata,
-        indent=2,
-    ),
-)
-
-
-# ======================================================================
-# EXTENSION.JS
-# ======================================================================
-
-extension_js = r"""
+EXTENSION_JS = r"""
 import Gio from "gi://Gio";
 import St from "gi://St";
 
@@ -2361,10 +1626,13 @@ export default class CatppuccinMochaShellColors
 
     enable() {
 
+        this._themeContext =
+            St.ThemeContext.get_for_stage(
+                global.stage
+            );
+
         this._theme =
-            St.ThemeContext
-                .get_for_stage(global.stage)
-                .get_theme();
+            this._themeContext.get_theme();
 
         this._stylesheet =
             Gio.File.new_for_path(
@@ -2378,21 +1646,17 @@ export default class CatppuccinMochaShellColors
             );
 
             log(
-                "Catppuccin Mocha Shell Colors: "
-                + "theme loaded"
+                "Catppuccin Mocha: stylesheet loaded"
             );
 
         } catch (error) {
 
             logError(
                 error,
-                "Catppuccin Mocha Shell Colors: "
-                + "failed to load theme"
+                "Catppuccin Mocha: stylesheet load failed"
             );
-
         }
     }
-
 
     disable() {
 
@@ -2411,132 +1675,71 @@ export default class CatppuccinMochaShellColors
 
                 logError(
                     error,
-                    "Catppuccin Mocha Shell Colors: "
-                    + "failed to unload theme"
+                    "Catppuccin Mocha: stylesheet unload failed"
                 );
-
             }
         }
 
         this._theme = null;
         this._stylesheet = null;
+        this._themeContext = null;
     }
 }
 """
 
-write_file(
-    EXTENSION_DIR / "extension.js",
-    extension_js,
-)
 
+# =============================================================================
+# CSS
+# =============================================================================
 
-# ======================================================================
-# COLORS.CSS
-# ======================================================================
-
-colors_css = f"""
+COLORS_CSS = f"""
 /*
- * ================================================================
  * CATPPUCCIN MOCHA
- * COLOR TOKENS
- * ================================================================
+ * GNOME SHELL 50 / 51
  */
 
 :root {{
     --ctp-rosewater: {COLORS["rosewater"]};
-    --ctp-flamingo:  {COLORS["flamingo"]};
-    --ctp-pink:      {COLORS["pink"]};
-    --ctp-mauve:     {COLORS["mauve"]};
-    --ctp-red:       {COLORS["red"]};
-    --ctp-maroon:    {COLORS["maroon"]};
-    --ctp-peach:     {COLORS["peach"]};
-    --ctp-yellow:    {COLORS["yellow"]};
-    --ctp-green:     {COLORS["green"]};
-    --ctp-teal:      {COLORS["teal"]};
-    --ctp-sky:       {COLORS["sky"]};
-    --ctp-sapphire:  {COLORS["sapphire"]};
-    --ctp-blue:      {COLORS["blue"]};
-    --ctp-lavender:  {COLORS["lavender"]};
+    --ctp-flamingo: {COLORS["flamingo"]};
+    --ctp-pink: {COLORS["pink"]};
+    --ctp-mauve: {COLORS["mauve"]};
+    --ctp-red: {COLORS["red"]};
+    --ctp-maroon: {COLORS["maroon"]};
+    --ctp-peach: {COLORS["peach"]};
+    --ctp-yellow: {COLORS["yellow"]};
+    --ctp-green: {COLORS["green"]};
+    --ctp-teal: {COLORS["teal"]};
+    --ctp-sky: {COLORS["sky"]};
+    --ctp-sapphire: {COLORS["sapphire"]};
+    --ctp-blue: {COLORS["blue"]};
+    --ctp-lavender: {COLORS["lavender"]};
 
-    --ctp-text:      {COLORS["text"]};
-    --ctp-subtext1:  {COLORS["subtext1"]};
-    --ctp-subtext0:  {COLORS["subtext0"]};
+    --ctp-text: {COLORS["text"]};
+    --ctp-subtext1: {COLORS["subtext1"]};
+    --ctp-subtext0: {COLORS["subtext0"]};
 
-    --ctp-overlay2:  {COLORS["overlay2"]};
-    --ctp-overlay1:  {COLORS["overlay1"]};
-    --ctp-overlay0:  {COLORS["overlay0"]};
+    --ctp-overlay2: {COLORS["overlay2"]};
+    --ctp-overlay1: {COLORS["overlay1"]};
+    --ctp-overlay0: {COLORS["overlay0"]};
 
-    --ctp-surface2:  {COLORS["surface2"]};
-    --ctp-surface1:  {COLORS["surface1"]};
-    --ctp-surface0:  {COLORS["surface0"]};
+    --ctp-surface2: {COLORS["surface2"]};
+    --ctp-surface1: {COLORS["surface1"]};
+    --ctp-surface0: {COLORS["surface0"]};
 
-    --ctp-base:      {COLORS["base"]};
-    --ctp-mantle:    {COLORS["mantle"]};
-    --ctp-crust:     {COLORS["crust"]};
+    --ctp-base: {COLORS["base"]};
+    --ctp-mantle: {COLORS["mantle"]};
+    --ctp-crust: {COLORS["crust"]};
 }}
 """
 
-write_file(
-    EXTENSION_DIR / "colors.css",
-    colors_css,
-)
 
-
-# ======================================================================
-# MASTER STYLESHEET
-# ======================================================================
-
-stylesheet_css = """
-/*
- * CATPPUCCIN MOCHA
- * GNOME SHELL 50 / 51
- *
- * Modular entry point.
- */
-
-@import url("colors.css");
-@import url("app.css");
-@import url("panel.css");
-@import url("popup-menu.css");
-@import url("quick-settings.css");
-@import url("calendar.css");
-@import url("notifications.css");
-@import url("overview.css");
-@import url("dash.css");
-@import url("dialogs.css");
-@import url("search.css");
-@import url("widgets.css");
-@import url("osd.css");
-"""
-
-write_file(
-    EXTENSION_DIR / "stylesheet.css",
-    stylesheet_css,
-)
-
-
-# ======================================================================
-# APP.CSS
-# ======================================================================
-
-app_css = f"""
-/*
- * ================================================================
- * APP / GLOBAL SHELL
- * ================================================================
- */
-
+APP_CSS = f"""
 stage {{
     color: {COLORS["text"]};
     background-color: {COLORS["crust"]};
 }}
 
 #overview {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["crust"]};
-}}
-
-#overviewGroup {{
     color: {COLORS["text"]};
     background-color: {COLORS["crust"]};
 }}
@@ -2556,7 +1759,6 @@ StWidget {{
 .button:hover,
 .flat:hover,
 .icon-button:hover {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface1"]};
 }}
 
@@ -2569,52 +1771,6 @@ StWidget {{
     background-color: {COLORS["mauve"]};
 }}
 
-.button:focus,
-.flat:focus,
-.icon-button:focus {{
-    border-color: {COLORS["lavender"]};
-}}
-
-.button:insensitive,
-.flat:insensitive,
-.icon-button:insensitive {{
-    color: {COLORS["overlay0"]};
-}}
-
-.link {{
-    color: {COLORS["blue"]};
-}}
-
-.link:hover {{
-    color: {COLORS["lavender"]};
-}}
-
-.success {{
-    color: {COLORS["green"]};
-}}
-
-.warning {{
-    color: {COLORS["yellow"]};
-}}
-
-.error,
-.critical {{
-    color: {COLORS["red"]};
-}}
-
-.info {{
-    color: {COLORS["sky"]};
-}}
-
-.destructive-action {{
-    color: {COLORS["red"]};
-}}
-
-.destructive-action:hover {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["red"]};
-}}
-
 StEntry {{
     color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
@@ -2624,7 +1780,6 @@ StEntry {{
 }}
 
 StEntry:focus {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface1"]};
     border-color: {COLORS["lavender"]};
 }}
@@ -2634,25 +1789,18 @@ StScrollBar {{
     -slider-hover-background-color: {COLORS["surface2"]};
     -slider-active-background-color: {COLORS["mauve"]};
 }}
+
+.link {{
+    color: {COLORS["blue"]};
+}}
+
+.link:hover {{
+    color: {COLORS["lavender"]};
+}}
 """
 
-write_file(
-    EXTENSION_DIR / "app.css",
-    app_css,
-)
 
-
-# ======================================================================
-# PANEL.CSS
-# ======================================================================
-
-panel_css = f"""
-/*
- * ================================================================
- * PANEL
- * ================================================================
- */
-
+PANEL_CSS = f"""
 #panel {{
     color: {COLORS["text"]};
     background-color: {COLORS["mantle"]};
@@ -2662,63 +1810,23 @@ panel_css = f"""
 #panel .panel-button {{
     color: {COLORS["text"]};
     background-color: transparent;
-    border-color: transparent;
 }}
 
 #panel .panel-button:hover,
 #panel .panel-button:focus {{
     color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
 }}
 
 #panel .panel-button:active,
 #panel .panel-button:checked {{
     color: {COLORS["base"]};
     background-color: {COLORS["mauve"]};
-    border-color: {COLORS["mauve"]};
-}}
-
-#panel .panel-status-button {{
-    color: {COLORS["text"]};
-}}
-
-#panel .clock-display {{
-    color: {COLORS["text"]};
-}}
-
-#panel .panel-button .system-status-icon {{
-    color: {COLORS["text"]};
-}}
-
-#panel .panel-button:hover .system-status-icon,
-#panel .panel-button:focus .system-status-icon {{
-    color: {COLORS["lavender"]};
-}}
-
-#panel:backdrop {{
-    color: {COLORS["subtext1"]};
-    background-color: {COLORS["mantle"]};
 }}
 """
 
-write_file(
-    EXTENSION_DIR / "panel.css",
-    panel_css,
-)
 
-
-# ======================================================================
-# POPUP-MENU.CSS
-# ======================================================================
-
-popup_menu_css = f"""
-/*
- * ================================================================
- * POPUP MENUS
- * ================================================================
- */
-
+POPUP_MENU_CSS = f"""
 .popup-menu,
 .popup-menu-boxpointer,
 .popup-menu-content,
@@ -2748,72 +1856,15 @@ popup_menu_css = f"""
 .popup-menu-item:insensitive {{
     color: {COLORS["overlay0"]};
 }}
-
-.popup-menu-arrow {{
-    color: {COLORS["subtext0"]};
-}}
-
-.popup-inactive-menu-item {{
-    color: {COLORS["overlay1"]};
-}}
-
-.popup-sub-menu .popup-menu-item {{
-    color: {COLORS["subtext1"]};
-}}
-
-.popup-sub-menu .popup-menu-item:hover {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.app-menu,
-.app-menu .popup-menu-content {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.app-menu .popup-menu-item {{
-    color: {COLORS["subtext1"]};
-    background-color: {COLORS["base"]};
-}}
-
-.app-menu .popup-menu-item:hover,
-.app-menu .popup-menu-item:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.app-menu .popup-menu-item:active {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "popup-menu.css",
-    popup_menu_css,
-)
 
-
-# ======================================================================
-# QUICK-SETTINGS.CSS
-# ======================================================================
-
-quick_settings_css = f"""
-/*
- * ================================================================
- * QUICK SETTINGS
- * ================================================================
- */
-
+QUICK_SETTINGS_CSS = f"""
 .quick-settings,
 .quick-settings-box,
-.quick-settings-grid,
-.quick-settings-system-item {{
+.quick-settings-grid {{
     color: {COLORS["text"]};
     background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
 }}
 
 .quick-toggle,
@@ -2825,7 +1876,6 @@ quick_settings_css = f"""
 
 .quick-toggle:hover,
 .quick-menu-toggle:hover {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface1"]};
 }}
 
@@ -2833,65 +1883,12 @@ quick_settings_css = f"""
 .quick-menu-toggle:checked {{
     color: {COLORS["base"]};
     background-color: {COLORS["mauve"]};
-    border-color: {COLORS["mauve"]};
-}}
-
-.quick-toggle:checked:hover,
-.quick-menu-toggle:checked:hover {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["lavender"]};
-}}
-
-.quick-toggle:insensitive,
-.quick-menu-toggle:insensitive {{
-    color: {COLORS["overlay0"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.quick-toggle-menu {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.quick-toggle-menu .header {{
-    color: {COLORS["text"]};
-}}
-
-.quick-toggle-menu .header .icon {{
-    color: {COLORS["text"]};
-}}
-
-.quick-toggle-menu .header .icon.active {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
-
-.quick-menu-toggle .quick-toggle-arrow {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface1"]};
 }}
 
 .slider {{
-    color: {COLORS["text"]};
     -barlevel-background-color: {COLORS["surface1"]};
     -barlevel-active-background-color: {COLORS["mauve"]};
     -barlevel-overdrive-color: {COLORS["red"]};
-}}
-
-.slider:hover {{
-    -barlevel-active-background-color: {COLORS["lavender"]};
-}}
-
-.quick-slider .slider-bin {{
-    color: {COLORS["text"]};
-    -barlevel-background-color: {COLORS["surface1"]};
-    -barlevel-active-background-color: {COLORS["mauve"]};
-    -barlevel-overdrive-color: {COLORS["red"]};
-}}
-
-.quick-slider .slider-bin:hover {{
-    -barlevel-active-background-color: {COLORS["lavender"]};
 }}
 
 .toggle-switch {{
@@ -2905,193 +1902,56 @@ quick_settings_css = f"""
 .toggle-switch-slider {{
     background-color: {COLORS["text"]};
 }}
-
-.toggle-switch:checked .toggle-switch-slider {{
-    background-color: {COLORS["base"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "quick-settings.css",
-    quick_settings_css,
-)
 
-
-# ======================================================================
-# CALENDAR.CSS
-# ======================================================================
-
-calendar_css = f"""
-/*
- * ================================================================
- * CALENDAR / DATE MENU
- * ================================================================
- */
-
-.calendar {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.calendar-month-label,
-.calendar-year-label {{
-    color: {COLORS["text"]};
-}}
-
-.calendar-day,
+CALENDAR_CSS = f"""
+.calendar,
 .calendar-day-base {{
-    color: {COLORS["subtext1"]};
+    color: {COLORS["text"]};
     background-color: {COLORS["base"]};
 }}
 
-.calendar-day:hover,
-.calendar-day-base:hover,
-.calendar-day-base:focus {{
-    color: {COLORS["text"]};
+.calendar-day-base:hover {{
     background-color: {COLORS["surface0"]};
 }}
 
-.calendar-day:selected,
-.calendar-day-base:active {{
+.calendar-day-base:selected {{
     color: {COLORS["base"]};
     background-color: {COLORS["mauve"]};
 }}
 
-.calendar-today,
-.calendar-day-base.calendar-today {{
+.calendar-today {{
     color: {COLORS["mauve"]};
 }}
-
-.datemenu-today-button,
-.world-clocks-button,
-.weather-button {{
-    color: {COLORS["text"]};
-}}
-
-.datemenu-today-button:hover,
-.world-clocks-button:hover,
-.weather-button:hover {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.events-button {{
-    color: {COLORS["subtext1"]};
-}}
-
-.events-button:hover {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.world-clocks-header,
-.weather-header {{
-    color: {COLORS["text"]};
-}}
-
-.world-clocks-button {{
-    border-color: {COLORS["surface0"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "calendar.css",
-    calendar_css,
-)
 
-
-# ======================================================================
-# NOTIFICATIONS.CSS
-# ======================================================================
-
-notifications_css = f"""
-/*
- * ================================================================
- * NOTIFICATIONS
- * ================================================================
- */
-
-.notification-banner {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.notification-banner:hover {{
-    background-color: {COLORS["surface0"]};
-}}
-
-.notification-button {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
-}}
-
-.notification-button:hover {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface1"]};
-}}
-
-.notification-button:active {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
-
-.message-list {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-}}
-
+NOTIFICATIONS_CSS = f"""
+.notification-banner,
 .message {{
     color: {COLORS["text"]};
     background-color: {COLORS["base"]};
     border-color: {COLORS["surface0"]};
 }}
 
+.notification-banner:hover,
 .message:hover {{
     background-color: {COLORS["surface0"]};
 }}
 
-.message-list-placeholder {{
-    color: {COLORS["overlay1"]};
+.notification-button {{
+    color: {COLORS["text"]};
+    background-color: {COLORS["surface0"]};
 }}
 
-.summary-source-counter {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
-
-.secondary-icon {{
-    color: {COLORS["subtext0"]};
+.notification-button:hover {{
+    background-color: {COLORS["surface1"]};
 }}
 """
 
-write_file(
-    EXTENSION_DIR / "notifications.css",
-    notifications_css,
-)
 
-
-# ======================================================================
-# OVERVIEW.CSS
-# ======================================================================
-
-overview_css = f"""
-/*
- * ================================================================
- * OVERVIEW
- * ================================================================
- */
-
-.overview-controls {{
-    color: {COLORS["text"]};
-}}
-
-.workspace-thumbnails {{
-    color: {COLORS["text"]};
-}}
-
+OVERVIEW_CSS = f"""
 .workspace-thumbnail {{
     background-color: {COLORS["mantle"]};
     border-color: {COLORS["surface0"]};
@@ -3105,136 +1965,42 @@ overview_css = f"""
     border-color: {COLORS["lavender"]};
 }}
 
-.ws-switcher-indicator {{
-    background-color: {COLORS["mauve"]};
-}}
-
 .switcher-list {{
     color: {COLORS["text"]};
     background-color: {COLORS["base"]};
     border-color: {COLORS["surface0"]};
 }}
 
-.switcher-list .item-box {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-}}
-
 .switcher-list .item-box:hover,
 .switcher-list .item-box:focus {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
 }}
 
 .switcher-list .item-box:selected {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
     border-color: {COLORS["mauve"]};
 }}
-
-.app-well-app {{
-    color: {COLORS["text"]};
-}}
-
-.app-well-app:hover,
-.app-well-app:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.app-well-app:active {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
-
-.app-well-app .overview-icon-label {{
-    color: {COLORS["text"]};
-}}
-
-.grid-search-result {{
-    color: {COLORS["text"]};
-}}
-
-.grid-search-result:hover,
-.grid-search-result:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.list-search-result {{
-    color: {COLORS["text"]};
-}}
-
-.list-search-result:hover,
-.list-search-result:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "overview.css",
-    overview_css,
-)
 
-
-# ======================================================================
-# DASH.CSS
-# ======================================================================
-
-dash_css = f"""
-/*
- * ================================================================
- * DASH
- * ================================================================
- */
-
+DASH_CSS = f"""
 .dash {{
     color: {COLORS["text"]};
     background-color: {COLORS["mantle"]};
-}}
-
-.dash-item-container:hover,
-.dash-item-container:focus {{
-    background-color: {COLORS["surface0"]};
 }}
 
 .app-well-app-running-dot {{
     background-color: {COLORS["mauve"]};
 }}
 
-.show-apps-icon {{
-    color: {COLORS["text"]};
-}}
-
 .show-apps-icon:hover {{
     color: {COLORS["lavender"]};
 }}
-
-.show-apps-icon:checked {{
-    color: {COLORS["mauve"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "dash.css",
-    dash_css,
-)
 
-
-# ======================================================================
-# DIALOGS.CSS
-# ======================================================================
-
-dialogs_css = f"""
-/*
- * ================================================================
- * DIALOGS / LOCK / LOGIN
- * ================================================================
- */
-
+DIALOGS_CSS = f"""
 .modal-dialog,
-.dialog-list,
 .end-session-dialog {{
     color: {COLORS["text"]};
     background-color: {COLORS["base"]};
@@ -3250,104 +2016,34 @@ dialogs_css = f"""
 
 .modal-dialog-button:hover,
 .modal-dialog-linked-button:hover {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface1"]};
-}}
-
-.modal-dialog-button:active,
-.modal-dialog-linked-button:active {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
 }}
 
 .modal-dialog-button:default,
 .modal-dialog-linked-button:default {{
     color: {COLORS["base"]};
     background-color: {COLORS["mauve"]};
-    border-color: {COLORS["mauve"]};
-}}
-
-.login-dialog,
-.unlock-dialog {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["crust"]};
-}}
-
-#lockDialogGroup,
-#unlockDialogGroup {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["crust"]};
-}}
-
-.login-dialog-button,
-.login-dialog-session-list-button,
-.unlock-dialog-button {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
-}}
-
-.login-dialog-button:hover,
-.login-dialog-session-list-button:hover,
-.unlock-dialog-button:hover {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface1"]};
-}}
-
-.login-dialog-button:default {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
 }}
 """
 
-write_file(
-    EXTENSION_DIR / "dialogs.css",
-    dialogs_css,
-)
 
-
-# ======================================================================
-# SEARCH.CSS
-# ======================================================================
-
-search_css = f"""
-/*
- * ================================================================
- * SEARCH
- * ================================================================
- */
-
+SEARCH_CSS = f"""
 .search-entry,
 #searchEntry {{
     color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
     border-color: {COLORS["surface1"]};
     caret-color: {COLORS["mauve"]};
-    selection-background-color: {COLORS["mauve"]};
 }}
 
 .search-entry:focus,
 #searchEntry:focus {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface1"]};
-    border-color: {COLORS["mauve"]};
+    border-color: {COLORS["lavender"]};
 }}
 
 .search-statustext {{
     color: {COLORS["subtext0"]};
-}}
-
-.search-section-content {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-}}
-
-.search-provider-icon {{
-    color: {COLORS["text"]};
-}}
-
-.search-provider-icon:hover {{
-    color: {COLORS["lavender"]};
 }}
 
 .system-action-icon {{
@@ -3361,53 +2057,15 @@ search_css = f"""
 }}
 """
 
-write_file(
-    EXTENSION_DIR / "search.css",
-    search_css,
-)
 
-
-# ======================================================================
-# WIDGETS.CSS
-# ======================================================================
-
-widgets_css = f"""
-/*
- * ================================================================
- * GENERIC SHELL WIDGETS
- * ================================================================
- */
-
+WIDGETS_CSS = f"""
 .tooltip {{
     color: {COLORS["text"]};
     background-color: {COLORS["mantle"]};
     border-color: {COLORS["surface0"]};
 }}
 
-.osd-window {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.workspace-switcher-container,
-.workspace-switcher {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
-}}
-
-.workspace-switcher-container:hover,
-.workspace-switcher:hover {{
-    border-color: {COLORS["surface1"]};
-}}
-
-.audio-device-item {{
-    color: {COLORS["text"]};
-}}
-
 .audio-device-item:hover {{
-    color: {COLORS["text"]};
     background-color: {COLORS["surface0"]};
 }}
 
@@ -3415,43 +2073,10 @@ widgets_css = f"""
     color: {COLORS["base"]};
     background-color: {COLORS["mauve"]};
 }}
-
-.system-menu-action {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-}}
-
-.system-menu-action:hover {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
-}}
-
-.indicator-button {{
-    color: {COLORS["text"]};
-}}
-
-.indicator-button:hover {{
-    color: {COLORS["lavender"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "widgets.css",
-    widgets_css,
-)
 
-
-# ======================================================================
-# OSD.CSS
-# ======================================================================
-
-osd_css = f"""
-/*
- * ================================================================
- * OSD
- * ================================================================
- */
-
+OSD_CSS = f"""
 .osd-window {{
     color: {COLORS["text"]};
     background-color: {COLORS["base"]};
@@ -3463,379 +2088,507 @@ osd_css = f"""
     -barlevel-active-background-color: {COLORS["mauve"]};
     -barlevel-overdrive-color: {COLORS["red"]};
 }}
-
-.osd-window .level:hover {{
-    -barlevel-active-background-color: {COLORS["lavender"]};
-}}
 """
 
-write_file(
-    EXTENSION_DIR / "osd.css",
-    osd_css,
-)
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+METADATA = {
+    "uuid": UUID,
+    "name": EXTENSION_NAME,
+    "description": ("Catppuccin Mocha color theme for GNOME Shell 50/51"),
+    "version": 1,
+    "shell-version": [
+        "50",
+        "51",
+    ],
+}
 
 
-# ======================================================================
-# 6. OPTIONAL GNOME EXTENSIONS
-# ======================================================================
+# =============================================================================
+# MASTER CSS
+# =============================================================================
 
-print()
-print("=" * 78)
-print("[6/8] OPTIONAL GNOME EXTENSIONS")
-print("=" * 78)
-print()
+MASTER_CSS = """
+/*
+ * CATPPUCCIN MOCHA
+ * GNOME Shell 50 / 51
+ */
 
-optional_extensions = [
-    "appindicator@ubuntu.com",
-    "caffeine@patapon.info",
-    "dash-to-panel@jderose9.github.com",
-]
+@import url("colors.css");
+@import url("app.css");
+@import url("panel.css");
+@import url("popup-menu.css");
+@import url("quick-settings.css");
+@import url("calendar.css");
+@import url("notifications.css");
+@import url("overview.css");
+@import url("dash.css");
+@import url("dialogs.css");
+@import url("search.css");
+@import url("widgets.css");
+@import url("osd.css");
+"""
 
-for uuid in optional_extensions:
+
+# =============================================================================
+# INSTALL THEME
+# =============================================================================
+
+
+def install_theme() -> None:
+
+    title("INSTALLING CATPPUCCIN MOCHA GNOME SHELL THEME")
+
+    if EXTENSION_DIR.exists():
+        backup = EXTENSION_DIR.with_name(f"{UUID}.backup-{timestamp()}")
+
+        shutil.copytree(
+            EXTENSION_DIR,
+            backup,
+        )
+
+        ok(f"Theme-Backup: {backup}")
+
+        shutil.rmtree(EXTENSION_DIR)
+
+    EXTENSION_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    write_file(
+        EXTENSION_DIR / "metadata.json",
+        json.dumps(
+            METADATA,
+            indent=2,
+            ensure_ascii=False,
+        ),
+    )
+
+    write_file(
+        EXTENSION_DIR / "extension.js",
+        EXTENSION_JS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "stylesheet.css",
+        MASTER_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "colors.css",
+        COLORS_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "app.css",
+        APP_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "panel.css",
+        PANEL_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "popup-menu.css",
+        POPUP_MENU_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "quick-settings.css",
+        QUICK_SETTINGS_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "calendar.css",
+        CALENDAR_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "notifications.css",
+        NOTIFICATIONS_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "overview.css",
+        OVERVIEW_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "dash.css",
+        DASH_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "dialogs.css",
+        DIALOGS_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "search.css",
+        SEARCH_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "widgets.css",
+        WIDGETS_CSS,
+    )
+
+    write_file(
+        EXTENSION_DIR / "osd.css",
+        OSD_CSS,
+    )
+
+    ok("Modulare GNOME-Shell-CSS installiert.")
+
+
+# =============================================================================
+# THEME ACTIVATION
+# =============================================================================
+
+
+def activate_theme() -> None:
+
+    title("ACTIVATING CATPPUCCIN MOCHA")
+
+    run(
+        [
+            "gnome-extensions",
+            "disable",
+            UUID,
+        ],
+        check=False,
+    )
 
     result = run(
         [
             "gnome-extensions",
             "enable",
-            uuid,
+            UUID,
         ],
         check=False,
     )
 
     if result.returncode == 0:
-
-        print(
-            f"[OK] {uuid}"
-        )
+        ok("Catppuccin Mocha Shell Theme aktiviert.")
 
     else:
+        warn("GNOME konnte die Extension nicht sofort aktivieren.")
 
-        print(
-            f"[INFO] {uuid} not installed/enabled"
-        )
-
-
-print()
-print(
-    "[IMPORTANT] No Dash-to-Panel settings were modified."
-)
+        warn(f"Manuell prüfen mit: gnome-extensions info {UUID}")
 
 
-# ======================================================================
-# 7. USER SETTINGS
-# ======================================================================
-
-print()
-print("=" * 78)
-print("[7/8] USER SETTINGS")
-print("=" * 78)
-print()
-
-print(
-    "GNOME shortcuts: untouched"
-)
-
-print(
-    "GNOME workspace settings: untouched"
-)
-
-print(
-    "GTK settings: untouched"
-)
-
-print(
-    "Font settings: untouched"
-)
+# =============================================================================
+# DARK MODE
+# =============================================================================
 
 
-# ======================================================================
-# 8. VERIFY
-# ======================================================================
+def configure_dark_mode() -> None:
 
-print()
-print("=" * 78)
-print("[8/8] VERIFICATION")
-print("=" * 78)
-print()
+    title("GNOME COLOR SCHEME")
 
-required_files = [
-    "metadata.json",
-    "extension.js",
-    "stylesheet.css",
-    "colors.css",
-    "app.css",
-    "panel.css",
-    "popup-menu.css",
-    "quick-settings.css",
-    "calendar.css",
-    "notifications.css",
-    "overview.css",
-    "dash.css",
-    "dialogs.css",
-    "search.css",
-    "widgets.css",
-    "osd.css",
-]
-
-verification_ok = True
-
-for filename in required_files:
-
-    path = EXTENSION_DIR / filename
-
-    if (
-        path.is_file()
-        and path.stat().st_size > 0
+    if gsettings_set(
+        INTERFACE_SCHEMA,
+        "color-scheme",
+        "'prefer-dark'",
     ):
-
-        print(
-            f"[OK] {filename:<24}"
-            f"{path.stat().st_size:>7} bytes"
-        )
-
-    else:
-
-        print(
-            f"[ERROR] {filename}"
-        )
-
-        verification_ok = False
+        ok("GNOME auf prefer-dark gesetzt.")
 
 
-# ======================================================================
-# ENABLE
-# ======================================================================
+# =============================================================================
+# OPTIONAL PAPIRUS
+# =============================================================================
 
-print()
-print("=" * 78)
-print("ACTIVATING THEME")
-print("=" * 78)
-print()
 
-if verification_ok:
+def configure_papirus() -> None:
 
-    if enable_extension():
+    title("OPTIONAL — PAPIRUS ICON THEME")
 
-        print()
-        print(
-            "[OK] Catppuccin Mocha Shell Colors enabled."
-        )
+    if package_installed("papirus-icon-theme"):
+        if gsettings_set(
+            INTERFACE_SCHEMA,
+            "icon-theme",
+            "'Papirus-Dark'",
+        ):
+            ok("Papirus-Dark aktiviert.")
 
     else:
+        info("papirus-icon-theme ist nicht installiert.")
 
+        info("Das bestehende Icon-Theme bleibt unverändert.")
+
+
+# =============================================================================
+# DASH-TO-PANEL CONFIG
+# =============================================================================
+
+
+def handle_dash_to_panel() -> None:
+
+    title("DASH-TO-PANEL")
+
+    if DASH_TO_PANEL_CONF.exists():
+        info(f"Gefunden: {DASH_TO_PANEL_CONF}")
+
+        info("Die Datei wird NICHT blind ausgeführt.")
+
+        info("Sie wird nur als vorhandenes Benutzer-Asset erkannt.")
+
+        ok("Dash-to-Panel-Asset vorhanden.")
+
+    else:
+        info("Keine ./assets/dash-to-panel.conf gefunden.")
+
+        info("Dash-to-Panel-Konfiguration wird nicht erfunden.")
+
+
+# =============================================================================
+# RESTORE
+# =============================================================================
+
+
+def restore_latest_keybindings() -> None:
+
+    title("RESTORE GNOME KEYBINDINGS")
+
+    backups = sorted(
+        BACKUP_DIR.glob("*-gnome-keybindings.json"),
+        reverse=True,
+    )
+
+    if not backups:
+        error("Kein GNOME-Keybinding-Backup gefunden.")
+
+        return
+
+    backup = backups[0]
+
+    info(f"Restore: {backup}")
+
+    data = json.loads(backup.read_text(encoding="utf-8"))
+
+    for schema_name, schema in [
+        ("wm", WM_SCHEMA),
+        ("shell", SHELL_SCHEMA),
+        ("media", MEDIA_KEYS_SCHEMA),
+        ("interface", INTERFACE_SCHEMA),
+    ]:
+        values = data.get(
+            schema_name,
+            {},
+        )
+
+        for key, value in values.items():
+            gsettings_set(
+                schema,
+                key,
+                value,
+            )
+
+    ok("GNOME-Keybindings wurden wiederhergestellt.")
+
+
+# =============================================================================
+# REMOVE THEME
+# =============================================================================
+
+
+def remove_theme() -> None:
+
+    title("REMOVE CATPPUCCIN MOCHA THEME")
+
+    if not EXTENSION_DIR.exists():
+        info("Theme ist nicht installiert.")
+
+        return
+
+    run(
+        [
+            "gnome-extensions",
+            "disable",
+            UUID,
+        ],
+        check=False,
+    )
+
+    shutil.rmtree(EXTENSION_DIR)
+
+    ok("Catppuccin Mocha GNOME Shell Theme entfernt.")
+
+
+# =============================================================================
+# FINAL REPORT
+# =============================================================================
+
+
+def final_report() -> None:
+
+    title("INSTALLATION COMPLETE")
+
+    print("GNOME Shell:")
+
+    print(f"  {GNOME_VERSION}")
+
+    print()
+
+    print("Theme:")
+
+    print("  Catppuccin Mocha")
+
+    print("  Modular GNOME Shell CSS")
+
+    print()
+
+    print("GNOME / Hyprland Keybinding-Ziel:")
+
+    print("  GNOME 50/51 möglichst nah an")
+
+    print("  der vorhandenen Hyprland-Konfiguration")
+
+    print()
+
+    print("Keybindings:")
+
+    print(f"  {len(CUSTOM_SHORTCUTS)} Custom Shortcut Definitionen")
+
+    print("  Hyprland als Referenz")
+
+    print("  GNOME native Funktionen bevorzugt")
+
+    print()
+
+    print("Unverändert:")
+
+    print("  GTK 3")
+
+    print("  GTK 4 / Libadwaita")
+
+    print("  Application Themes")
+
+    print("  Fonts")
+
+    print("  Font sizes")
+
+    print("  Animation configuration")
+
+    print()
+
+    print("Package manager:")
+
+    print("  pacman")
+
+    print()
+
+    print("AUR:")
+
+    print("  not required")
+
+    print()
+
+    print("yay:")
+
+    print("  not required")
+
+    print()
+
+    print("paru:")
+
+    print("  not required")
+
+    print()
+
+    print("Theme directory:")
+
+    print(f"  {EXTENSION_DIR}")
+
+    print()
+
+    print("Keybinding backups:")
+
+    print(f"  {BACKUP_DIR}")
+
+    print()
+
+    print("Restore:")
+
+    print("  python3 gnome-hyprland-installer.py --restore")
+
+    print()
+
+    print("=" * 78)
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+
+def main() -> None:
+
+    if args.restore:
+        restore_latest_keybindings()
+
+        return
+
+    if args.remove:
+        remove_theme()
+
+        return
+
+    title("GNOME 50 / 51 — CATPPUCCIN MOCHA")
+
+    print("Ziel:")
+
+    print("  GNOME soll sich bei den Keybindings")
+
+    print("  möglichst nah an deiner Hyprland-Konfiguration")
+
+    print("  bedienen lassen.")
+
+    print()
+
+    print("Wichtig:")
+
+    print("  Theme und Keybindings werden getrennt behandelt.")
+
+    print("  Die Keybindings werden tatsächlich eingerichtet.")
+
+    print()
+
+    if not args.keybindings_only:
+        install_theme()
+
+        configure_dark_mode()
+
+        configure_papirus()
+
+        handle_dash_to_panel()
+
+        activate_theme()
+
+    if not args.theme_only:
+        install_keybindings()
+
+    final_report()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+
+    except KeyboardInterrupt:
         print()
-        print(
-            "[ERROR] Could not enable the extension."
-        )
+        warn("Installation durch Benutzer abgebrochen.")
 
+        sys.exit(130)
+
+    except Exception as exc:
         print()
-        print(
-            "Run:"
-        )
 
-        print(
-            f"  gnome-extensions info {UUID}"
-        )
+        error(f"Unerwarteter Fehler: {exc}")
 
-else:
-
-    print(
-        "[ERROR] Installation files are incomplete."
-    )
-
-    print(
-        "The extension was not enabled."
-    )
-
-
-# ======================================================================
-# INFO
-# ======================================================================
-
-print()
-print("=" * 78)
-print("EXTENSION INFORMATION")
-print("=" * 78)
-print()
-
-run(
-    [
-        "gnome-extensions",
-        "info",
-        UUID,
-    ],
-    check=False,
-)
-
-
-# ======================================================================
-# FINAL
-# ======================================================================
-
-print()
-print("=" * 78)
-print("CATPPUCCIN MOCHA INSTALLED")
-print("=" * 78)
-print()
-
-print(
-    "Theme:"
-)
-
-print(
-    "  Catppuccin Mocha"
-)
-
-print()
-
-print(
-    "GNOME Shell:"
-)
-
-print(
-    "  50 / 51"
-)
-
-print()
-
-print(
-    "CSS architecture:"
-)
-
-print(
-    "  Modular"
-)
-
-print(
-    "  colors.css"
-)
-
-print(
-    "  app.css"
-)
-
-print(
-    "  panel.css"
-)
-
-print(
-    "  popup-menu.css"
-)
-
-print(
-    "  quick-settings.css"
-)
-
-print(
-    "  calendar.css"
-)
-
-print(
-    "  notifications.css"
-)
-
-print(
-    "  overview.css"
-)
-
-print(
-    "  dash.css"
-)
-
-print(
-    "  dialogs.css"
-)
-
-print(
-    "  search.css"
-)
-
-print(
-    "  widgets.css"
-)
-
-print(
-    "  osd.css"
-)
-
-print()
-
-print(
-    "GTK 3:              UNTOUCHED"
-)
-
-print(
-    "GTK 4 / Libadwaita:  UNTOUCHED"
-)
-
-print(
-    "Applications:        UNTOUCHED"
-)
-
-print(
-    "Fonts:               UNTOUCHED"
-)
-
-print(
-    "Geometry:            UNTOUCHED"
-)
-
-print(
-    "Animations:          UNTOUCHED"
-)
-
-print(
-    "Shortcuts:           UNTOUCHED"
-)
-
-print()
-
-if use_papirus:
-
-    print(
-        "Icons:              Papirus-Dark"
-    )
-
-else:
-
-    print(
-        "Icons:              Existing icon theme"
-    )
-
-print()
-
-print(
-    "Package manager:"
-)
-
-print(
-    "  pacman"
-)
-
-print()
-
-print(
-    "No yay"
-)
-
-print(
-    "No paru"
-)
-
-print(
-    "No AUR"
-)
-
-print()
-
-print(
-    f"Installation directory:"
-)
-
-print(
-    f"  {EXTENSION_DIR}"
-)
-
-print()
-
-print("=" * 78)
+        sys.exit(1)
