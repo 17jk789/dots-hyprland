@@ -18,13 +18,16 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
   - [Entwicklung Plugins](#entwicklung-plugins)
     - [Zum Startpunkt wechseln](#zum-startpunkt-wechseln)
     - [Die schnellsten Mirrors finden](#die-schnellsten-mirrors-finden)
+      - [Die schnellsten Mirrors unter Arch Linux](#die-schnellsten-mirrors-unter-arch-linux)
+      - [Die schnellsten Mirrors unter CachyOS](#die-schnellsten-mirrors-unter-cachyos)
     - [✨ DNS temporär auf Cloudflare (1.1.1.1) setzen](#-dns-temporär-auf-cloudflare-1111-setzen)
     - [Das System aktualisieren](#das-system-aktualisieren)
     - [Die Werkzeuge für den Bau von Software installieren](#die-werkzeuge-für-den-bau-von-software-installieren)
     - [Die Firewall sofort einschalten und dauerhaft aktivieren](#die-firewall-sofort-einschalten-und-dauerhaft-aktivieren)
     - [UFW später verwalten](#ufw-später-verwalten)
     - [Die end-4/jk-arch Hyperland Konfiguration herunterladen und die Installation starten](#die-end-4jk-arch-hyperland-konfiguration-herunterladen-und-die-installation-starten)
-    - [✨ Den CachyOS Hardened Kernel installieren](#-den-cachyos-hardened-kernel-installieren)
+    - [✨ Den Hardened Kernel installieren](#-den-hardened-kernel-installieren)
+    - [GNOME DE als Backup zu Hyprland](#gnome-de-als-backup-zu-hyprland)
     - [Den Quellcode von yay herunterladen und das Programm bauen und installieren](#den-quellcode-von-yay-herunterladen-und-das-programm-bauen-und-installieren)
     - [Kern-Werkzeuge und Entwickler-Tools installieren](#kern-werkzeuge-und-entwickler-tools-installieren)
       - [Basis-Tools](#basis-tools)
@@ -286,7 +289,10 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
   - [5. ✨ Rootkits mit Rootkit Hunter überprüfen](#5--rootkits-mit-rootkit-hunter-überprüfen)
   - [6. ✨ Zusätzliche Rootkit-Prüfung mit chkrootkit](#6--zusätzliche-rootkit-prüfung-mit-chkrootkit)
   - [7. ✨ System mit Lynis überprüfen](#7--system-mit-lynis-überprüfen)
-  - [✨ AppArmor sauber aktivieren](#-apparmor-sauber-aktivieren)
+  - [AppArmor und SELinux](#apparmor-und-selinux)
+    - [AppArmor unter Arch Linux](#apparmor-unter-arch-linux)
+    - [AppArmor unter CachyOS](#apparmor-unter-cachyos)
+    - [SELinux unter Arch Linux](#selinux-unter-arch-linux)
   - [✨ Fail2ban sauber aktivieren](#-fail2ban-sauber-aktivieren)
   - [✨ SSH-Server deaktivieren](#-ssh-server-deaktivieren)
 - [✨ Arch Linux AUR auf Malware überprüfen](#-arch-linux-aur-auf-malware-überprüfen)
@@ -310,7 +316,17 @@ cd ~
 
 ### Die schnellsten Mirrors finden
 
-> Nur bei CachyOS, sonst überspringen.
+#### Die schnellsten Mirrors unter Arch Linux
+
+> Für Arch Linux können die offiziellen Mirrors mit `reflector` aktualisiert und nach Geschwindigkeit sortiert werden.
+
+```bash
+sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+```
+
+#### Die schnellsten Mirrors unter CachyOS
+
+> Nur bei CachyOS verwenden, unter Arch Linux überspringen.
 
 ```bash
 sudo cachyos-rate-mirrors
@@ -480,17 +496,141 @@ Wenn alles für dich passt, kannst du die Installation starten:
 
 > **Wichtig**: Lies dir die Ausgaben des Installers durch und bestätige nur Schritte, bei denen du weißt, was sie machen. Ein Installationsscript solltest du grundsätzlich nicht blind mit sudo oder Root-Rechten ausführen.
 
-### ✨ Den CachyOS Hardened Kernel installieren
+### ✨ Den Hardened Kernel installieren
 
-> `linux-cachyos-hardened` ist ein gehärteter Linux-Kernel für CachyOS, der zusätzliche Sicherheits-Härtungen gegenüber einem normalen Kernel bietet.
+> Ein **Hardened Kernel** ist ein gehärteter Linux-Kernel, der zusätzliche Sicherheitsmaßnahmen gegenüber einem normalen Kernel bietet. Die konkrete Kernel-Variante hängt von der verwendeten Distribution ab:
+>
+> * **Arch Linux:** `linux-hardened`
+> * **CachyOS:** `linux-cachyos-hardened`
 
-Der Kernel kann auf einem CachyOS-System direkt über pacman installiert werden:
+<details>
+<summary>✨ Arch Linux</summary>
+
+Unter Arch Linux wird der Hardened Kernel zusammen mit den zugehörigen Headern installiert:
+
+```bash
+sudo pacman -S linux-hardened linux-hardened-headers
+```
+
+Nach der Installation steht der `linux-hardened` Kernel beim nächsten Neustart über den Bootloader zur Auswahl.
+
+</details>
+
+<details>
+<summary>✨ CachyOS</summary>
+
+Unter CachyOS wird der Hardened Kernel direkt über `pacman` installiert:
 
 ```bash
 sudo pacman -S linux-cachyos-hardened
 ```
 
 Nach der Installation steht der `linux-cachyos-hardened` Kernel beim nächsten Neustart über den Bootloader zur Auswahl.
+
+</details>
+
+### GNOME DE als Backup zu Hyprland
+
+> **GNOME** ist eine vollständige Desktop-Umgebung für Linux und kann zusätzlich zu **Hyprland** installiert werden.
+>
+> In diesem Setup dient GNOME als **Backup- bzw. Fallback-Desktop**. Falls Hyprland nach einer Änderung der Konfiguration, einem Update oder einem anderen Problem nicht mehr ordnungsgemäß startet, kann über **GDM** auf eine vollständige GNOME-Sitzung ausgewichen werden.
+>
+> Die Installation ist sowohl unter **Arch Linux** als auch unter **CachyOS** möglich.
+
+<details>
+<summary>✨ GNOME installieren</summary>
+
+Für die normale GNOME-Installation:
+
+```bash
+sudo pacman -S --needed gnome
+```
+
+Dadurch wird die GNOME-Desktopumgebung mit den benötigten Standardkomponenten installiert.
+
+</details>
+
+<details>
+<summary>✨ GNOME mit zusätzlichen Paketen installieren</summary>
+
+Wer eine umfangreichere GNOME-Installation mit zusätzlichen GNOME-Anwendungen und Komponenten möchte, kann zusätzlich `gnome-extra` installieren:
+
+```bash
+sudo pacman -S --needed gnome gnome-extra
+```
+
+> `gnome-extra` enthält zusätzliche GNOME-Anwendungen und Komponenten, die nicht Bestandteil der grundlegenden `gnome`-Paketgruppe sind.
+
+</details>
+
+<details>
+<summary>✨ GDM aktivieren</summary>
+
+GNOME verwendet **GDM (GNOME Display Manager)** als grafischen Login-Manager.
+
+GDM kann aktiviert und direkt gestartet werden:
+
+```bash
+sudo systemctl enable --now gdm
+```
+
+Dadurch wird GDM automatisch beim Systemstart gestartet und steht unmittelbar als grafischer Login-Manager zur Verfügung.
+
+</details>
+
+<details>
+<summary>✨ Zwischen Hyprland und GNOME wechseln</summary>
+
+Wenn sowohl **Hyprland** als auch **GNOME** installiert sind, können beide Desktop-Umgebungen parallel auf demselben System verwendet werden.
+
+Am GDM-Anmeldebildschirm kann über das Sitzungsmenü die gewünschte Desktop-Sitzung ausgewählt werden:
+
+* **Hyprland**
+* **GNOME**
+
+> Die genaue Bezeichnung der Sitzungen kann abhängig von der installierten Konfiguration leicht variieren.
+
+</details>
+
+<details>
+<summary>✨ GNOME als Backup-Desktop verwenden</summary>
+
+GNOME kann insbesondere dann als Fallback verwendet werden, wenn Hyprland aufgrund einer fehlerhaften Konfiguration nicht mehr startet.
+
+Beispielsweise:
+
+1. GDM zeigt den grafischen Login-Bildschirm an.
+2. Im Sitzungsmenü wird **GNOME** ausgewählt.
+3. Die GNOME-Sitzung wird gestartet.
+4. Die fehlerhafte Hyprland-Konfiguration kann anschließend korrigiert werden.
+5. Nach der Fehlerbehebung kann wieder **Hyprland** als Sitzung ausgewählt werden.
+
+Dadurch bleibt eine vollständige grafische Arbeitsumgebung verfügbar, selbst wenn die Hyprland-Konfiguration vorübergehend nicht funktioniert.
+
+</details>
+
+<details>
+<summary>✨ GNOME und Hyprland parallel verwenden</summary>
+
+Die Installation von GNOME entfernt Hyprland nicht.
+
+Beide Desktop-Umgebungen können parallel installiert sein:
+
+```text
+Linux-System
+│
+├── Hyprland
+│   └── Haupt-Desktop
+│
+└── GNOME
+    └── Backup-/Fallback-Desktop
+```
+
+Hyprland bleibt weiterhin die primäre Desktop-Umgebung, während GNOME als zusätzliche grafische Umgebung zur Fehlerbehebung und als Fallback zur Verfügung steht.
+
+> **Hinweis:** GNOME und Hyprland können teilweise gemeinsame Systemkomponenten, Standardanwendungen und Benutzerkonfigurationen verwenden. Änderungen innerhalb einer Desktop-Umgebung können daher unter Umständen Auswirkungen auf die andere Umgebung haben.
+
+</details>
 
 ### Den Quellcode von yay herunterladen und das Programm bauen und installieren
 
@@ -5470,23 +5610,48 @@ sudo lynis audit system
 
 > Nach dem Scan zeigt Lynis Empfehlungen und mögliche Sicherheitsverbesserungen an. Die Ergebnisse sollten einzeln geprüft werden, bevor Änderungen am System vorgenommen werden.
 
-## ✨ AppArmor sauber aktivieren
+## AppArmor und SELinux
+
+Diese Anleitung beschreibt die Einrichtung von **AppArmor unter Arch Linux**, **AppArmor unter CachyOS** sowie **SELinux unter Arch Linux**.
+
+> **Wichtig:** AppArmor und SELinux sind Mandatory-Access-Control-Systeme (MAC). Sie ergänzen die normalen Linux-Dateirechte (DAC) um zusätzliche Sicherheitsregeln. Eine fehlerhafte Policy kann dazu führen, dass Anwendungen oder Systemdienste nicht mehr wie erwartet funktionieren.
+
+---
+
+### AppArmor unter Arch Linux
 
 > **AppArmor** ist ein Mandatory-Access-Control-System (MAC), das Anwendungen anhand von Sicherheitsprofilen auf bestimmte Dateien, Verzeichnisse und Systemressourcen beschränkt.
 >
-> Unter CachyOS beziehungsweise Arch Linux kann AppArmor zusätzlich zur normalen Linux-Berechtigungsverwaltung eingesetzt werden.
+> AppArmor ergänzt die normale Linux-Berechtigungsverwaltung und ersetzt diese nicht.
 
 <details>
-<summary>✨ AppArmor installieren und aktivieren</summary>
+<summary>✨ AppArmor installieren</summary>
+
+Installiere AppArmor und die zusätzlichen AppArmor.d-Profile:
 
 ```bash
 sudo pacman -S apparmor apparmor.d
 ```
 
-> Anschließend wird der AppArmor-Dienst aktiviert und direkt gestartet:
+> `apparmor` stellt die AppArmor-Benutzerwerkzeuge und Bibliotheken bereit.
+>
+> `apparmor.d` stellt zusätzliche Profile zur Verfügung.
+
+</details>
+
+<details>
+<summary>✨ AppArmor-Dienst aktivieren</summary>
+
+Aktiviere und starte den AppArmor-Dienst:
 
 ```bash
-sudo systemctl enable --now apparmor
+sudo systemctl enable --now apparmor.service
+```
+
+Anschließend kann geprüft werden, ob der Dienst läuft:
+
+```bash
+systemctl status apparmor.service
 ```
 
 </details>
@@ -5494,54 +5659,60 @@ sudo systemctl enable --now apparmor
 <details>
 <summary>✨ AppArmor im Kernel aktivieren</summary>
 
-> Damit AppArmor bereits beim Systemstart als Linux Security Module (LSM) geladen wird, muss es in der Kernel-Kommandozeile aktiviert werden.
->
-> Bei einem System mit **Limine** wird dazu die Limine-Konfiguration geöffnet:
+Damit AppArmor bei jedem Systemstart als Linux Security Module (LSM) aktiviert wird, muss es in der Kernel-Kommandozeile enthalten sein.
+
+ArchWiki verwendet dafür:
+
+```text
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf
+```
+
+Dabei sollte `apparmor` das erste größere LSM in der Liste sein.
+
+Bei Verwendung von **Limine** kann die Konfiguration beispielsweise über:
 
 ```bash
 sudo nvim /boot/limine.conf
 ```
 
-> In der entsprechenden `cmdline`-Zeile wird `apparmor` zur LSM-Liste hinzugefügt:
+bearbeitet werden.
+
+In der entsprechenden `cmdline`-Zeile wird die LSM-Konfiguration ergänzt:
 
 ```ini
 lsm=landlock,lockdown,yama,integrity,apparmor,bpf
 ```
 
-> Beispiel:
+Beispiel:
 
 ```ini
-# CachyOS Limine theme
+/+Arch
+    //vmlinuz-linux
+    //initramfs-linux.img
 
-...
-
-/+CachyOS
-  //linux-cachyos
-
-  ...
-
-  cmdline: quiet nowatchdog splash rw rootflags=subvol=/@ ... lsm=landlock,lockdown,yama,integrity,apparmor,bpf
-
+    cmdline: quiet rw rootflags=subvol=/@ ... lsm=landlock,lockdown,yama,integrity,apparmor,bpf
 ```
 
-> Die vorhandenen Kernel-Parameter sollten dabei **nicht ersetzt**, sondern lediglich um die benötigte LSM-Konfiguration ergänzt werden.
+> **Wichtig:** Bereits vorhandene Kernelparameter dürfen dabei nicht entfernt werden.
+>
+> Die `lsm=`-Angabe sollte als Teil der vorhandenen Kernel-Kommandozeile ergänzt werden.
 
-<!-- sudo limine-update -->
+Nach einer Änderung an der Bootloader-Konfiguration sollte das System neu gestartet werden.
 
 </details>
 
 <details>
 <summary>✨ AppArmor-Profil-Caching aktivieren</summary>
 
-> AppArmor kann seine kompilierten Profile zwischenspeichern. Dadurch kann der Start von AppArmor beschleunigt werden, insbesondere wenn viele Profile geladen werden.
+AppArmor kann kompilierte Profile zwischenspeichern. Dadurch müssen Profile beim Systemstart nicht jedes Mal vollständig neu verarbeitet werden.
 
-Konfigurationsdatei öffnen:
+Öffne:
 
 ```bash
 sudo nvim /etc/apparmor/parser.conf
 ```
 
-Folgende Einstellungen eintragen:
+Aktiviere das Caching:
 
 ```ini
 write-cache
@@ -5549,30 +5720,471 @@ Optimize=compress-fast
 cache-loc /etc/apparmor/earlypolicy/
 ```
 
-> Das Caching reduziert den Aufwand, AppArmor-Profile bei jedem Systemstart erneut zu verarbeiten. Die genaue Cache-Konfiguration kann je nach verwendeter AppArmor-Version und Distribution variieren. Der Standard-Cache von AppArmor liegt bei aktuellen Versionen unter `/var/cache/apparmor`.
+> AppArmor verwendet standardmäßig einen Cache unter `/var/cache/apparmor/`. Ein eigener `cache-loc` kann verwendet werden, wenn die Profile beispielsweise bereits früh im Bootvorgang verfügbar sein sollen.
 
 </details>
 
 <details>
 <summary>✨ AppArmor überprüfen</summary>
 
-> Nach der Konfiguration wird das System neu gestartet:
+Nach der Konfiguration sollte das System neu gestartet werden:
 
 ```bash
 sudo reboot
 ```
 
-> Nach dem Neustart kann überprüft werden, ob AppArmor aktiv ist:
+Nach dem Neustart kann überprüft werden, ob AppArmor vom Kernel aktiviert wurde:
+
+```bash
+sudo aa-enabled
+```
+
+Erwartet wird:
+
+```text
+Yes
+```
+
+Anschließend kann der Status der geladenen Profile angezeigt werden:
 
 ```bash
 sudo aa-status
 ```
 
-> Zusätzlich kann überprüft werden, ob der AppArmor-Dienst erfolgreich gestartet wurde:
+Zusätzlich:
 
 ```bash
-systemctl status apparmor
+systemctl status apparmor.service
 ```
+
+Die aktuell vom Kernel geladenen LSMs können ebenfalls überprüft werden:
+
+```bash
+cat /sys/kernel/security/lsm
+```
+
+Dort sollte `apparmor` enthalten sein.
+
+</details>
+
+---
+
+### AppArmor unter CachyOS
+
+> CachyOS dokumentiert für ein grundlegendes AppArmor-Setup ebenfalls die Kombination aus `apparmor`, `apparmor.d`, dem LSM-Kernelparameter und aktiviertem Profil-Caching.
+
+<details>
+<summary>✨ AppArmor installieren</summary>
+
+Installiere AppArmor und die AppArmor.d-Profile:
+
+```bash
+sudo pacman -S apparmor apparmor.d
+```
+
+</details>
+
+<details>
+<summary>✨ AppArmor-Dienst aktivieren</summary>
+
+Aktiviere und starte den AppArmor-Dienst:
+
+```bash
+sudo systemctl enable --now apparmor.service
+```
+
+Status überprüfen:
+
+```bash
+systemctl status apparmor.service
+```
+
+</details>
+
+<details>
+<summary>✨ AppArmor im Kernel aktivieren</summary>
+
+Damit AppArmor beim Booten als LSM geladen wird, muss der Kernelparameter:
+
+```text
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf
+```
+
+gesetzt werden. CachyOS verwendet genau diese LSM-Reihenfolge in seiner AppArmor-Anleitung.
+
+Bei einem System mit **Limine** kann die Konfiguration beispielsweise geöffnet werden:
+
+```bash
+sudo nvim /boot/limine.conf
+```
+
+Beispiel:
+
+```ini
+# CachyOS Limine theme
+
+...
+
+/+CachyOS
+    //linux-cachyos
+
+    ...
+
+    cmdline: quiet nowatchdog splash rw rootflags=subvol=/@ ... lsm=landlock,lockdown,yama,integrity,apparmor,bpf
+```
+
+> **Wichtig:** Vorhandene Kernelparameter nicht ersetzen.
+>
+> Die `lsm=`-Konfiguration wird zusätzlich zur vorhandenen Kernel-Kommandozeile gesetzt.
+
+CachyOS weist darauf hin, dass die Bootloader-Konfiguration je nach Setup auch über die entsprechende Limine-Konfiguration bzw. `/etc/default/limine` verwaltet werden kann.
+
+</details>
+
+<details>
+<summary>✨ AppArmor-Profil-Caching aktivieren</summary>
+
+Öffne:
+
+```bash
+sudo nvim /etc/apparmor/parser.conf
+```
+
+Füge folgende Konfiguration hinzu:
+
+```ini
+write-cache
+Optimize=compress-fast
+cache-loc /etc/apparmor/earlypolicy/
+```
+
+Diese Konfiguration entspricht der aktuellen CachyOS-Dokumentation für das AppArmor-Caching.
+
+</details>
+
+<details>
+<summary>✨ System neu starten</summary>
+
+Starte das System neu:
+
+```bash
+sudo reboot
+```
+
+</details>
+
+<details>
+<summary>✨ AppArmor überprüfen</summary>
+
+Nach dem Neustart:
+
+```bash
+sudo aa-enabled
+```
+
+Danach:
+
+```bash
+sudo aa-status
+```
+
+Zusätzlich:
+
+```bash
+systemctl status apparmor.service
+```
+
+Und die aktuell geladenen LSMs:
+
+```bash
+cat /sys/kernel/security/lsm
+```
+
+Dort sollte unter anderem:
+
+```text
+apparmor
+```
+
+erscheinen.
+
+</details>
+
+---
+
+### SELinux unter Arch Linux
+
+> **SELinux** ist ebenfalls ein Mandatory-Access-Control-System. Im Gegensatz zu AppArmor arbeitet SELinux mit Sicherheitskontexten, Labels und einer umfassenden Policy.
+>
+> **CachyOS wird in dieser Anleitung nicht berücksichtigt.** Der folgende Abschnitt gilt ausschließlich für Arch Linux.
+
+> **Hinweis:** SELinux ist unter Arch Linux nicht Teil des offiziellen Supportmodells. Die SELinux-Benutzerlandschaft und Policy-Unterstützung werden über das inoffizielle `archlinuxhardened/selinux`-Projekt bereitgestellt.
+
+<details>
+<summary>✨ SELinux-Repository hinzufügen</summary>
+
+Öffne die Pacman-Konfiguration:
+
+```bash
+sudo nvim /etc/pacman.conf
+```
+
+Füge das inoffizielle SELinux-Repository hinzu:
+
+```ini
+[selinux]
+Server = https://github.com/archlinuxhardened/selinux/releases/download/ArchLinux-SELinux
+SigLevel = Never
+```
+
+> **Sicherheits-Hinweis:** Dieses Repository ist nicht signiert. `SigLevel = Never` bedeutet, dass Pacman für dieses Repository keine Paketsignaturprüfung durchführt.
+>
+> Das ist die von `archlinuxhardened/selinux` für dessen Binary-Repository dokumentierte Konfiguration.
+
+Danach kann die Paketdatenbank aktualisiert werden:
+
+```bash
+sudo pacman -Syu
+```
+
+</details>
+
+<details>
+<summary>✨ SELinux-Basis installieren</summary>
+
+Installiere die SELinux-Varianten der Basis-Pakete:
+
+```bash
+sudo pacman -S --needed base-selinux base-devel-selinux
+```
+
+Diese Pakete stellen die SELinux-kompatible Basisumgebung bereit.
+
+> Für eine vollständige SELinux-Integration müssen zusätzlich SELinux-kompatible Varianten weiterer Systempakete berücksichtigt werden. Dazu gehören je nach Setup beispielsweise PAM-, systemd-, util-linux-, coreutils-, shadow-, sudo- und weitere Pakete.
+>
+> Die einfache Installation von `base-selinux` und `base-devel-selinux` allein ist daher nicht automatisch gleichbedeutend mit einer vollständig SELinux-integrierten Arch-Installation.
+
+</details>
+
+<details>
+<summary>✨ SELinux-Werkzeuge installieren</summary>
+
+Für Verwaltung, Policy-Verarbeitung und Dateikontexte:
+
+```bash
+sudo pacman -S --needed \
+    selinux-python \
+    policycoreutils \
+    semodule-utils \
+    setools \
+    restorecond
+```
+
+Wichtige Werkzeuge sind beispielsweise:
+
+```bash
+sestatus
+getenforce
+setenforce
+restorecon
+semanage
+semodule
+```
+
+</details>
+
+<details>
+<summary>✨ SELinux als LSM aktivieren</summary>
+
+Damit SELinux beim Systemstart als Linux Security Module aktiviert wird, muss der Kernelparameter:
+
+```text
+lsm=landlock,lockdown,yama,integrity,selinux,bpf
+```
+
+gesetzt werden.
+
+ArchWiki weist ausdrücklich darauf hin, dass `selinux` dabei das erste größere LSM in der Liste sein sollte.
+
+Bei Verwendung von Limine kann beispielsweise:
+
+```bash
+sudo nvim /boot/limine.conf
+```
+
+geöffnet werden.
+
+Beispiel:
+
+```ini
+/+Arch
+    //vmlinuz-linux
+    //initramfs-linux.img
+
+    cmdline: quiet rw rootflags=subvol=/@ ... lsm=landlock,lockdown,yama,integrity,selinux,bpf
+```
+
+> **Wichtig:** Bereits vorhandene Kernelparameter dürfen nicht entfernt werden.
+>
+> Ergänze lediglich die benötigte `lsm=`-Konfiguration.
+
+Nach dem Ändern der Kernelparameter ist ein Neustart erforderlich.
+
+</details>
+
+<details>
+<summary>✨ SELinux-Konfiguration erstellen</summary>
+
+Die zentrale SELinux-Konfiguration befindet sich unter:
+
+```text
+/etc/selinux/config
+```
+
+Für die initiale Einrichtung kann SELinux zunächst im **permissive**-Modus betrieben werden:
+
+```ini
+SELINUX=permissive
+SELINUXTYPE=refpolicy
+```
+
+`permissive` bedeutet, dass SELinux-Verletzungen protokolliert werden, die Zugriffe jedoch zunächst nicht wie im `enforcing`-Modus blockiert werden.
+
+> Dies ist insbesondere bei einer erstmaligen Einrichtung sinnvoll, damit zunächst Policy-Probleme und fehlende Dateikontexte erkannt und behoben werden können.
+
+</details>
+
+<details>
+<summary>✨ restorecond aktivieren</summary>
+
+Aktiviere den Dienst für die automatische Überwachung bestimmter Dateikontexte:
+
+```bash
+sudo systemctl enable --now restorecond.service
+```
+
+Status überprüfen:
+
+```bash
+systemctl status restorecond.service
+```
+
+</details>
+
+<details>
+<summary>✨ SELinux-Dateikontexte setzen</summary>
+
+Nach dem ersten Neustart sollten die Dateikontexte des Systems überprüft bzw. wiederhergestellt werden.
+
+Dazu:
+
+```bash
+sudo restorecon -r /
+```
+
+> Je nach Größe des Systems kann dieser Vorgang einige Zeit dauern.
+
+</details>
+
+<details>
+<summary>✨ SELinux überprüfen</summary>
+
+Nach dem Neustart:
+
+```bash
+getenforce
+```
+
+Bei der initialen Konfiguration sollte beispielsweise:
+
+```text
+Permissive
+```
+
+angezeigt werden.
+
+Detaillierte Informationen:
+
+```bash
+sudo sestatus
+```
+
+Die aktuell geladenen LSMs können überprüft werden:
+
+```bash
+cat /sys/kernel/security/lsm
+```
+
+Dort sollte `selinux` enthalten sein.
+
+Beispielsweise:
+
+```text
+landlock,lockdown,yama,integrity,selinux,bpf
+```
+
+</details>
+
+<details>
+<summary>✨ SELinux schrittweise auf Enforcing umstellen</summary>
+
+**Nicht sofort auf `enforcing` wechseln**, wenn das System noch nicht vollständig eingerichtet und getestet wurde.
+
+Zunächst sollte überprüft werden, ob:
+
+```bash
+getenforce
+```
+
+folgendes ergibt:
+
+```text
+Permissive
+```
+
+Anschließend sollten SELinux-Logs und AVC-Meldungen überprüft werden.
+
+Erst wenn die Policy und die Dateikontexte korrekt funktionieren, kann für einen Testlauf:
+
+```bash
+sudo setenforce 1
+```
+
+verwendet werden.
+
+Danach:
+
+```bash
+getenforce
+```
+
+sollte:
+
+```text
+Enforcing
+```
+
+anzeigen.
+
+Wenn das System weiterhin ordnungsgemäß funktioniert, kann der dauerhafte Modus in:
+
+```text
+/etc/selinux/config
+```
+
+von:
+
+```ini
+SELINUX=permissive
+```
+
+auf:
+
+```ini
+SELINUX=enforcing
+```
+
+geändert werden.
 
 </details>
 
