@@ -1,31 +1,26 @@
 #!/usr/bin/env python3
 """
-Arch Linux + Hyprland unattended installer.
+ARCH LINUX + HYPRLAND SECURE INSTALLER
+======================================
 
-Run ONLY from the official Arch Linux ISO as root.
+Run from the official Arch Linux ISO as root.
 
-The installer asks for exactly:
-  1. Language
-  2. Keyboard layout
-  3. Target disk
-  4. Username
-  5. Password twice
+Design goals:
+- UEFI + GPT only
+- Btrfs with sensible subvolumes
+- Optional LUKS2 full-disk encryption
+- systemd-boot + UKI on UEFI
+- NetworkManager + PipeWire/WirePlumber
+- Hyprland desktop
+- CPU microcode + automatic GPU packages
+- zram
+- no autologin
+- no AUR, no third-party repos
+- AppArmor/UFW/fail2ban deliberately NOT configured here
 
-After that it runs unattended.
-
-The Python file is already part of the user's existing dotfiles checkout.
-This script does not clone, download, or install another dotfiles repository.
-
-Architecture:
-  - Python collects the five answers.
-  - Python installs/updates archinstall in the live ISO.
-  - Python generates a current archinstall guided configuration.
-  - archinstall performs the complete disk partitioning, filesystem creation,
-    Btrfs subvolume creation, base installation, fstab, bootloader, users,
-    locale, kernel and package installation.
-  - archinstall custom_commands finish the installed Hyprland system.
+WARNING:
+The selected target disk is completely erased.
 """
-
 from __future__ import annotations
 
 import getpass
@@ -33,1000 +28,565 @@ import json
 import os
 import platform
 import re
+import shutil
 import socket
 import subprocess
 import sys
 import time
-import uuid
 from pathlib import Path
-from typing import NoReturn
-
 
 WORK = Path("/root/arch-hyprland-installer")
-CONFIG = WORK / "user_configuration.json"
-CREDS = WORK / "user_credentials.json"
 LOG = WORK / "installer.log"
+TARGET = Path("/mnt")
 
-LANGUAGES = [
-    ("de", "German", "de_DE.UTF-8"),
-    ("en", "English", "en_US.UTF-8"),
+BASE = [
+    "base", "linux", "linux-firmware", "btrfs-progs",
+    "cryptsetup", "dosfstools", "efibootmgr", "sudo", "networkmanager",
+    "polkit", "fish",
+    "pipewire", "pipewire-audio", "pipewire-pulse", "wireplumber",
+    "bluez", "bluez-utils",
+    "xdg-utils", "xdg-user-dirs", "xdg-user-dirs-gtk",
+    "xdg-desktop-portal", "xdg-desktop-portal-hyprland",
+    "hyprland", "hyprcursor", "hyprpolkitagent",
+    "waybar", "mako", "grim", "slurp", "wl-clipboard",
+    "pavucontrol", "network-manager-applet", "blueman",
+    "thunar", "file-roller", "unzip", "tar",
+    "ttf-dejavu", "ttf-liberation", "noto-fonts", "noto-fonts-emoji",
+    "otf-font-awesome", "zram-generator",
 ]
 
-KEYBOARDS = [
-    ("de", "German (DE)"),
-    ("us", "English (US)"),
-    ("gb", "English (UK)"),
-    ("fr", "French (FR)"),
-    ("es", "Spanish (ES)"),
-    ("it", "Italian (IT)"),
-]
-
-CORE_PACKAGES = [
-    # Vollständige Arch-Basis / Administration
-    "base",
-    "base-devel",
-    "linux",
-    "linux-firmware",
-    "btrfs-progs",
-    "dosfstools",
-    "sudo",
-    "networkmanager",
-    "git",
-    "curl",
-    "wget",
-    "openssh",
-    "vim",
-    "nano",
-    "bash-completion",
-    "man-db",
-    "man-pages",
-    "texinfo",
-    "which",
-    "polkit",
-    "polkit-gnome",
-    # Audio / Bluetooth
-    "pipewire",
-    "pipewire-audio",
-    "pipewire-pulse",
-    "wireplumber",
-    "bluez",
-    "bluez-utils",
-    # XDG / Wayland
-    "xdg-utils",
-    "xdg-user-dirs",
-    "xdg-user-dirs-gtk",
-    "xdg-desktop-portal",
-    "xdg-desktop-portal-hyprland",
-    # Hyprland-Stack
-    "hyprland",
-    "hyprpaper",
-    "hyprlock",
-    "hypridle",
-    "hyprpicker",
-    "hyprcursor",
-    "hyprpolkitagent",
-    "quickshell",
-    # Desktop-Anwendungen / Dienstprogramme
-    "kitty",
-    "waybar",
-    "wofi",
-    "mako",
-    "grim",
-    "slurp",
-    "wl-clipboard",
-    "qt5-wayland",
-    "qt6-wayland",
-    "qt6ct",
-    "brightnessctl",
-    "playerctl",
-    "pavucontrol",
-    "network-manager-applet",
-    "blueman",
-    "thunar",
-    "file-roller",
-    "unzip",
-    "unrar",
-    "tar",
-    "gzip",
-    "btop",
-    "fastfetch",
-    "jq",
-    "firefox",
-    # Python / Build-Werkzeuge
-    "python",
-    "python-pip",
-    "python-gobject",
-    "python-pywal",
-    "meson",
-    "ninja",
-    "cmake",
-    "gcc",
-    "make",
-    "pkgconf",
-    # Schriftarten
-    "ttf-dejavu",
-    "ttf-liberation",
-    "noto-fonts",
-    "noto-fonts-emoji",
-    "otf-font-awesome",
-    # zram
-    "zram-generator",
-]
-
-GPU_PACKAGES = {
-    "amd": [
-        "mesa",
-        "vulkan-radeon",
-        "lib32-mesa",
-        "lib32-vulkan-radeon",
-    ],
-    "intel": [
-        "mesa",
-        "vulkan-intel",
-        "lib32-mesa",
-        "lib32-vulkan-intel",
-    ],
-    "nvidia": [
-        "nvidia",
-        "nvidia-utils",
-        "lib32-nvidia-utils",
-    ],
+GPU = {
+    "amd": ["mesa", "vulkan-radeon", "lib32-mesa", "lib32-vulkan-radeon"],
+    "intel": ["mesa", "vulkan-intel", "lib32-mesa", "lib32-vulkan-intel"],
+    "nvidia": ["nvidia", "nvidia-utils", "lib32-nvidia-utils"],
 }
 
-MICROCODE = {
-    "AuthenticAMD": "amd-ucode",
-    "GenuineIntel": "intel-ucode",
-}
+MICROCODE = {"AuthenticAMD": "amd-ucode", "GenuineIntel": "intel-ucode"}
 
+def die(msg: str) -> "NoReturn":
+    print(f"\nERROR: {msg}", file=sys.stderr)
+    raise SystemExit(1)
 
-def die(message: str, code: int = 1) -> NoReturn:
-    print(f"\n\033[1;31m[ERROR]\033[0m {message}", file=sys.stderr)
-    raise SystemExit(code)
+def log(msg: str) -> None:
+    WORK.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a", encoding="utf-8") as f:
+        f.write(msg + "\n")
 
-
-def info(message: str) -> None:
-    print(f"\033[36m[INFO]\033[0m {message}")
-
-
-def ok(message: str) -> None:
-    print(f"\033[32m[ OK ]\033[0m {message}")
-
-
-def warn(message: str) -> None:
-    print(f"\033[33m[WARN]\033[0m {message}")
-
-
-def run(
-    cmd: list[str],
-    *,
-    check: bool = True,
-    capture: bool = False,
-    input_text: str | None = None,
-    env: dict[str, str] | None = None,
-) -> subprocess.CompletedProcess[str]:
+def run(cmd: list[str], *, check=True, capture=False, input_text=None) -> subprocess.CompletedProcess[str]:
     shown = " ".join(cmd)
     print(f"\033[90m$ {shown}\033[0m")
-
-    with LOG.open("a", encoding="utf-8") as log:
-        log.write(f"$ {shown}\n")
-        proc = subprocess.run(
-            cmd,
-            check=False,
-            text=True,
-            input=input_text,
-            stdout=subprocess.PIPE if capture else None,
-            stderr=subprocess.STDOUT if capture else None,
-            env=env,
-        )
-
-        if capture and proc.stdout:
-            log.write(proc.stdout)
-
-    if check and proc.returncode != 0:
-        die(f"Command failed ({proc.returncode}): {shown}")
-
-    return proc
-
+    log("$ " + shown)
+    p = subprocess.run(
+        cmd, text=True, input=input_text,
+        stdout=subprocess.PIPE if capture else None,
+        stderr=subprocess.STDOUT if capture else None,
+        check=False,
+    )
+    if capture and p.stdout:
+        log(p.stdout)
+    if check and p.returncode:
+        die(f"Command failed ({p.returncode}): {shown}")
+    return p
 
 def require_root() -> None:
     if os.geteuid() != 0:
-        die("Please run this in the official Arch ISO terminal as root.")
+        die("Run this installer as root.")
 
+def require_uefi() -> None:
+    if not Path("/sys/firmware/efi").exists():
+        die("UEFI mode is required. Boot the official Arch ISO in UEFI mode.")
 
-def read_os_release() -> dict[str, str]:
-    result: dict[str, str] = {}
+def require_archiso() -> None:
+    if not Path("/run/archiso").exists() and not Path("/etc/arch-release").exists():
+        die("This does not look like the official Arch ISO.")
 
+def internet() -> None:
     try:
-        for line in Path("/etc/os-release").read_text(encoding="utf-8").splitlines():
-            if "=" in line:
-                key, value = line.split("=", 1)
-                result[key] = value.strip().strip('"')
+        socket.create_connection(("archlinux.org", 443), timeout=5).close()
     except OSError:
-        pass
+        die("No internet connection.")
 
-    return result
+def sync_clock() -> None:
+    run(["timedatectl", "set-ntp", "true"], check=False)
 
-
-def check_arch_iso() -> None:
-    os_release = read_os_release()
-
-    looks_like_arch = (
-        os_release.get("ID") in {"arch", "archiso"}
-        or Path("/run/archiso").exists()
-        or Path("/etc/arch-release").exists()
-    )
-
-    if not looks_like_arch:
-        die("This does not appear to be the official Arch Linux ISO.")
-
-    if platform.machine() != "x86_64":
-        die("This installer currently supports x86_64 only.")
-
-
-def network_ok() -> bool:
-    for host in ("archlinux.org", "github.com"):
-        try:
-            with socket.create_connection((host, 443), timeout=5):
-                return True
-        except OSError:
-            continue
-
-    return False
-
-
-def select_language() -> tuple[str, str]:
-    print("\n=== LANGUAGE ===")
-
-    for index, (_, name, _) in enumerate(LANGUAGES, 1):
-        print(f"  {index}) {name}")
-
-    while True:
-        answer = input("Selection [1-2]: ").strip()
-
-        if answer in {"1", "2"}:
-            code, _, locale = LANGUAGES[int(answer) - 1]
-            return code, locale
-
-        warn("Invalid selection.")
-
-
-def select_keyboard() -> str:
-    print("\n=== KEYBOARD ===")
-
-    for index, (_, name) in enumerate(KEYBOARDS, 1):
-        print(f"  {index}) {name}")
-
-    while True:
-        answer = input(f"Selection [1-{len(KEYBOARDS)}]: ").strip()
-
-        if answer.isdigit() and 1 <= int(answer) <= len(KEYBOARDS):
-            return KEYBOARDS[int(answer) - 1][0]
-
-        warn("Invalid selection.")
-
-
-def get_block_devices() -> list[dict]:
-    proc = run(
-        [
-            "lsblk",
-            "-J",
-            "-b",
-            "-o",
-            "NAME,KNAME,PATH,SIZE,TYPE,MODEL,TRAN,RM,RO,MOUNTPOINTS",
-        ],
-        capture=True,
-    )
-
+def cpu_vendor() -> str:
     try:
-        return json.loads(proc.stdout)["blockdevices"]
-    except Exception as exc:
-        die(f"Could not process lsblk output: {exc}")
-
-
-def human_size(size: int) -> str:
-    value = float(size)
-
-    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
-        if value < 1024 or unit == "TiB":
-            return f"{value:.1f} {unit}"
-        value /= 1024
-
-    return str(size)
-
-
-def select_disk() -> str:
-    devices = [
-        device
-        for device in get_block_devices()
-        if device.get("type") == "disk"
-        and device.get("path")
-        and str(device.get("rm", 0)) == "0"
-        and str(device.get("ro", 0)) == "0"
-        and not str(device.get("path", "")).startswith("/dev/loop")
-    ]
-
-    if not devices:
-        die("No suitable internal drive found.")
-
-    print("\n=== TARGET DISK ===")
-
-    for index, device in enumerate(devices, 1):
-        print(
-            f"  {index}) "
-            f"{device['path']:<18} "
-            f"{human_size(int(device.get('size', 0))):>10}  "
-            f"{str(device.get('tran') or '?'):<5} "
-            f"{device.get('model') or 'unknown'}"
-        )
-
-    while True:
-        answer = input(f"Selection [1-{len(devices)}]: ").strip()
-
-        if answer.isdigit() and 1 <= int(answer) <= len(devices):
-            selected = devices[int(answer) - 1]
-            path = str(selected["path"])
-            size = int(selected.get("size", 0))
-
-            if size < 32 * 1024**3:
-                die(
-                    f"{path} is too small at {human_size(size)}. "
-                    "At least 32 GiB is recommended."
-                )
-
-            print(
-                f"\n\033[1;31m"
-                f"WARNING: {path} ({human_size(size)}) will be "
-                f"completely erased.\033[0m"
-            )
-            print("No further input will be required after this point.")
-
-            return path
-
-        warn("Invalid selection.")
-
-
-def validate_username(username: str) -> bool:
-    return bool(re.fullmatch(r"[a-z_][a-z0-9_-]{0,31}", username))
-
-
-def select_user() -> tuple[str, str]:
-    print("\n=== USER ===")
-
-    while True:
-        username = input("Username: ").strip().lower()
-
-        if validate_username(username):
-            break
-
-        warn(
-            "Invalid username. Allowed characters are a-z, 0-9, _ and -. "
-            "It must start with a-z or _."
-        )
-
-    while True:
-        password1 = getpass.getpass("Password: ")
-        password2 = getpass.getpass("Repeat password: ")
-
-        if not password1:
-            warn("The password cannot be empty.")
-            continue
-
-        if password1 != password2:
-            warn("The passwords do not match.")
-            continue
-
-        return username, password1
-
-
-def detect_cpu_vendor() -> str:
-    try:
-        cpuinfo = Path("/proc/cpuinfo").read_text(errors="ignore")
+        s = Path("/proc/cpuinfo").read_text(errors="ignore")
     except OSError:
         return ""
-
-    if "AuthenticAMD" in cpuinfo:
-        return "AuthenticAMD"
-
-    if "GenuineIntel" in cpuinfo:
-        return "GenuineIntel"
-
+    for v in MICROCODE:
+        if v in s:
+            return v
     return ""
 
-
-def detect_gpu() -> str:
-    proc = run(["lspci"], capture=True, check=False)
-    text = (proc.stdout or "").lower()
-
-    if "nvidia" in text:
+def gpu_vendor() -> str:
+    p = run(["lspci"], capture=True, check=False)
+    s = (p.stdout or "").lower()
+    if "nvidia" in s:
         return "nvidia"
-
-    if "amd" in text or "advanced micro devices" in text or "radeon" in text:
+    if "advanced micro devices" in s or "amd/ati" in s or "radeon" in s:
         return "amd"
-
-    if "intel" in text:
+    if "intel" in s:
         return "intel"
-
     return "unknown"
 
+def disk_list() -> list[dict]:
+    p = run(["lsblk", "-J", "-b", "-o", "PATH,SIZE,TYPE,MODEL,TRAN,RM,RO,MOUNTPOINTS"],
+            capture=True)
+    return json.loads(p.stdout)["blockdevices"]
 
-def get_disk_size_bytes(disk: str) -> int:
-    for device in get_block_devices():
-        if device.get("path") == disk and device.get("type") == "disk":
-            return int(device.get("size", 0))
+def size(n: int) -> str:
+    x = float(n)
+    for u in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if x < 1024 or u == "TiB":
+            return f"{x:.1f} {u}"
+        x /= 1024
+    return str(n)
 
-    die(f"Could not determine the size of {disk}.")
+def choose_disk() -> str:
+    ds = [d for d in disk_list()
+          if d.get("type") == "disk" and d.get("path")
+          and str(d.get("rm", 0)) == "0" and str(d.get("ro", 0)) == "0"
+          and not str(d["path"]).startswith("/dev/loop")]
+    if not ds:
+        die("No writable internal disk found.")
+    print("\nTARGET DISKS:")
+    for i, d in enumerate(ds, 1):
+        print(f"  {i}) {d['path']:15} {size(int(d.get('size',0))):>10} "
+              f"{d.get('tran') or '?':5} {d.get('model') or 'unknown'}")
+    while True:
+        a = input(f"Select disk [1-{len(ds)}]: ").strip()
+        if a.isdigit() and 1 <= int(a) <= len(ds):
+            d = ds[int(a)-1]
+            path = d["path"]
+            if int(d.get("size", 0)) < 32 * 1024**3:
+                die("At least 32 GiB is required.")
+            print(f"\n\033[1;31m!!! {path} WILL BE COMPLETELY ERASED !!!\033[0m")
+            confirm = input("Type ERASE to continue: ")
+            if confirm == "ERASE":
+                return path
+        print("Invalid selection or confirmation.")
 
+def choose_language() -> tuple[str, str, str]:
+    print("\nLANGUAGE: 1) German  2) English")
+    while True:
+        a = input("Selection [1-2]: ").strip()
+        if a == "1": return "de_DE.UTF-8", "de_DE.UTF-8", "de"
+        if a == "2": return "en_US.UTF-8", "en_US.UTF-8", "en"
 
-def package_exists(package: str) -> bool:
-    return (
-        run(
-            ["pacman", "-Si", package],
-            capture=True,
-            check=False,
-        ).returncode
-        == 0
-    )
+def choose_keyboard() -> str:
+    choices = ["de", "us", "gb", "fr", "es", "it"]
+    print("\nKEYBOARD:")
+    for i, x in enumerate(choices, 1):
+        print(f"  {i}) {x}")
+    while True:
+        a = input("Selection: ").strip()
+        if a.isdigit() and 1 <= int(a) <= len(choices):
+            return choices[int(a)-1]
 
+def choose_encryption() -> bool:
+    print("\nDISK ENCRYPTION:")
+    print("  1) LUKS2 full-disk encryption (recommended)")
+    print("  2) No disk encryption")
+    while True:
+        a = input("Selection [1-2]: ").strip()
+        if a == "1": return True
+        if a == "2": return False
 
-def available_packages(packages: list[str]) -> list[str]:
-    available: list[str] = []
+def valid_user(u: str) -> bool:
+    return bool(re.fullmatch(r"[a-z_][a-z0-9_-]{0,31}", u))
 
-    for package in packages:
-        if package_exists(package):
-            available.append(package)
-        else:
-            warn(f"Package not found in the current repository: {package}")
+def choose_user() -> tuple[str, str]:
+    while True:
+        u = input("\nUsername: ").strip().lower()
+        if valid_user(u): break
+        print("Invalid username.")
+    while True:
+        p1 = getpass.getpass("User password: ")
+        p2 = getpass.getpass("Repeat user password: ")
+        if p1 and p1 == p2:
+            return u, p1
+        print("Passwords do not match or are empty.")
 
-    return available
+def choose_luks_password() -> str:
+    print("\nLUKS2 password protects the disk at boot.")
+    print("Use a long unique passphrase. Do NOT reuse your login password.")
+    while True:
+        p1 = getpass.getpass("LUKS2 passphrase: ")
+        p2 = getpass.getpass("Repeat LUKS2 passphrase: ")
+        if len(p1) >= 12 and p1 == p2:
+            return p1
+        print("Passphrases must match and be at least 12 characters.")
 
+def pkg_available(pkg: str) -> bool:
+    return run(["pacman", "-Si", pkg], capture=True, check=False).returncode == 0
 
-def install_archinstall_live() -> None:
-    info("Updating the package database of the Arch ISO …")
-    run(["pacman", "-Sy", "--noconfirm"])
+def packages_for(gpu: str, cpu: str) -> list[str]:
+    out = list(BASE)
+    if cpu in MICROCODE:
+        out.append(MICROCODE[cpu])
+    if gpu in GPU:
+        out += GPU[gpu]
+    # Keep linux-hardened optional; don't make NVIDIA recovery dependent on it.
+    return list(dict.fromkeys(out))
 
-    info("Installing archinstall and the required live environment tools …")
-    run(
-        [
-            "pacman",
-            "-S",
-            "--noconfirm",
-            "--needed",
-            "archinstall",
-            "gptfdisk",
-            "btrfs-progs",
-            "dosfstools",
-            "util-linux",
-            "openssl",
-        ]
-    )
+def wipe_disk(disk: str) -> None:
+    run(["swapoff", "-a"], check=False)
+    run(["umount", "-R", str(TARGET)], check=False)
+    run(["cryptsetup", "close", "cryptroot"], check=False)
+    run(["wipefs", "-af", disk])
+    run(["sgdisk", "--zap-all", disk])
+    run(["sgdisk", "-og", disk])
 
+def part_path(disk: str, number: int) -> str:
+    return f"{disk}p{number}" if "nvme" in disk or "mmcblk" in disk else f"{disk}{number}"
 
-def archinstall_version() -> str:
-    proc = run(
-        ["archinstall", "--version"],
-        capture=True,
-        check=False,
-    )
+def partition(disk: str) -> tuple[str, str]:
+    # 1 GiB ESP, rest Linux filesystem. GPT alignment is handled by sgdisk.
+    run(["sgdisk", "-n", "1:1MiB:+1GiB", "-t", "1:ef00", "-c", "1:EFI", disk])
+    run(["sgdisk", "-n", "2:0:0", "-t", "2:8300", "-c", "2:CRYPTROOT", disk])
+    run(["partprobe", disk], check=False)
+    time.sleep(2)
+    return part_path(disk, 1), part_path(disk, 2)
 
-    match = re.search(
-        r"(\d+\.\d+(?:\.\d+)?)",
-        proc.stdout or "",
-    )
-
-    if match:
-        return match.group(1)
-
-    return "3.0.10"
-
-
-def uuid_string() -> str:
-    return str(uuid.uuid4())
-
-
-def size_spec_bytes(value: int) -> dict:
-    return {
-        "sector_size": {
-            "unit": "B",
-            "value": 512,
-        },
-        "unit": "B",
-        "value": value,
-    }
-
-
-def start_spec_mib(value: int) -> dict:
-    return {
-        "sector_size": {
-            "unit": "B",
-            "value": 512,
-        },
-        "unit": "MiB",
-        "value": value,
-    }
-
-
-def make_partition(
-    *,
-    fs_type: str,
-    mountpoint: str | None,
-    flags: list[str],
-    start_mib: int,
-    size_bytes: int,
-    btrfs: list[dict] | None = None,
-    mount_options: list[str] | None = None,
-) -> dict:
-    return {
-        "btrfs": btrfs or [],
-        "dev_path": None,
-        "flags": flags,
-        "fs_type": fs_type,
-        "mount_options": mount_options or [],
-        "mountpoint": mountpoint,
-        "obj_id": uuid_string(),
-        "size": size_spec_bytes(size_bytes),
-        "start": start_spec_mib(start_mib),
-        "status": "create",
-        "type": "primary",
-    }
-
-
-def build_disk_config(
-    disk: str,
-    uefi: bool,
-) -> dict:
-    total_bytes = get_disk_size_bytes(disk)
-
-    # Eine kleine Ausrichtungsreserve am Ende des Laufwerks beibehalten.
-    usable_bytes = total_bytes - 4 * 1024**2
-
-    if usable_bytes < 32 * 1024**3:
-        die("The target disk is too small for this installation.")
-
-    partitions: list[dict] = []
-
-    if uefi:
-        # GPT + 1 MiB alignment + 1 GiB EFI System Partition.
-        efi_size = 1 * 1024**3
-        root_start_mib = 1025
-
-        partitions.append(
-            make_partition(
-                fs_type="fat32",
-                mountpoint="/boot",
-                flags=["boot", "esp"],
-                start_mib=1,
-                size_bytes=efi_size,
-            )
-        )
+def mkfs_and_mount(esp: str, rootpart: str, encrypted: bool, luks_password: str | None) -> tuple[str, str]:
+    run(["mkfs.fat", "-F", "32", esp])
+    if encrypted:
+        run(["cryptsetup", "luksFormat", "--type", "luks2",
+             "--pbkdf", "argon2id", "--batch-mode", "--key-file=-", rootpart],
+            input_text=luks_password + "\n")
+        run(["cryptsetup", "open", "--key-file=-", rootpart, "cryptroot"],
+            input_text=luks_password + "\n")
+        luks_password = None
+        crypt = "/dev/mapper/cryptroot"
     else:
-        # GPT BIOS boot partition for GRUB.
-        bios_size = 2 * 1024**2
-        root_start_mib = 3
+        crypt = rootpart
 
-        partitions.append(
-            make_partition(
-                fs_type="fat32",
-                mountpoint=None,
-                flags=["bios_grub"],
-                start_mib=1,
-                size_bytes=bios_size,
-            )
-        )
+    run(["mkfs.btrfs", "-f", crypt])
+    run(["mount", crypt, str(TARGET)])
+    for name in ("@", "@home", "@log", "@cache", "@snapshots", "@tmp"):
+        run(["btrfs", "subvolume", "create", str(TARGET / name)])
+    run(["umount", str(TARGET)])
 
-    root_start_bytes = root_start_mib * 1024**2
-    root_size = usable_bytes - root_start_bytes
-
-    if root_size < 30 * 1024**3:
-        die("Too little space remains for Arch Linux after the boot partition.")
-
-    subvolumes = [
-        {"mountpoint": "/", "name": "@"},
-        {"mountpoint": "/home", "name": "@home"},
-        {"mountpoint": "/var/log", "name": "@log"},
-        {"mountpoint": "/var/cache/pacman/pkg", "name": "@cache"},
-        {"mountpoint": "/.snapshots", "name": "@snapshots"},
-        {"mountpoint": "/tmp", "name": "@tmp"},
+    opts = "compress=zstd:3,noatime"
+    mounts = [
+        ("@", "/", opts),
+        ("@home", "/home", opts),
+        ("@log", "/var/log", opts),
+        ("@cache", "/var/cache/pacman/pkg", opts),
+        ("@snapshots", "/.snapshots", opts),
+        ("@tmp", "/tmp", opts),
     ]
+    run(["mount", "-o", opts + ",subvol=@", crypt, str(TARGET)])
+    for subvol, mp, options in mounts[1:]:
+        dest = TARGET / mp.lstrip("/")
+        dest.mkdir(parents=True, exist_ok=True)
+        run(["mount", "-o", options + f",subvol={subvol}", crypt, str(dest)])
+    (TARGET / "efi").mkdir(exist_ok=True)
+    run(["mount", esp, str(TARGET / "efi")])
+    return crypt, opts
 
-    partitions.append(
-        make_partition(
-            fs_type="btrfs",
-            mountpoint=None,
-            flags=[],
-            start_mib=root_start_mib,
-            size_bytes=root_size,
-            btrfs=subvolumes,
-            mount_options=[
-                "compress=zstd:3",
-                "noatime",
-            ],
-        )
-    )
-
-    return {
-        "config_type": "manual_partitioning",
-        "device_modifications": [
-            {
-                "device": disk,
-                "partitions": partitions,
-                "wipe": True,
-            }
-        ],
-    }
-
-
-def crypt_password(password: str) -> str:
-    proc = subprocess.run(
-        ["openssl", "passwd", "-6", "-stdin"],
-        input=password + "\n",
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-
-    if proc.returncode != 0 or not proc.stdout.strip():
-        die("The password could not be hashed.")
-
-    return proc.stdout.strip()
-
-
-def shell_quote(value: str) -> str:
-    return "'" + value.replace("'", "'\"'\"'") + "'"
-
-
-def build_custom_commands(
-    username: str,
-    locale: str,
-    keyboard: str,
-) -> list[str]:
-    profile = (
-        'if [ -z "${DISPLAY:-}" ] && '
-        '[ -z "${WAYLAND_DISPLAY:-}" ] && '
-        '[ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then '
-        "exec Hyprland; "
-        "fi"
-    )
-
-    profile_command = "bash -c " + shell_quote(
-        "PROFILE=/home/" + username + "/.bash_profile; "
-        'touch "$PROFILE"; '
-        "grep -qxF " + shell_quote(profile) + ' "$PROFILE" || '
-        "printf '%s\\n' " + shell_quote(profile) + ' >> "$PROFILE"; '
-        "chown " + username + ":" + username + ' "$PROFILE"'
-    )
-
-    zram_command = "bash -c " + shell_quote(
-        "install -d -m 0755 /etc/systemd; "
-        "printf '%s\\n' "
-        "'[zram0]' "
-        "'zram-size = ram / 2' "
-        "'compression-algorithm = zstd' "
-        "> /etc/systemd/zram-generator.conf"
-    )
-
-    getty_command = "bash -c " + shell_quote(
-        "install -d -m 0755 "
-        "/etc/systemd/system/getty@tty1.service.d; "
-        "printf '%s\\n' "
-        "'[Service]' "
-        "'ExecStart=' " + f"'ExecStart=-/sbin/agetty --autologin {username} "
-        "--noclear %I $TERM' " + "> /etc/systemd/system/getty@tty1.service.d/"
-        "autologin.conf"
-    )
-
-    locale_command = "bash -c " + shell_quote(
-        "printf 'LANG=%s\\n' " + shell_quote(locale) + " > /etc/locale.conf; "
-        "printf 'KEYMAP=%s\\n' " + shell_quote(keyboard) + " > /etc/vconsole.conf; "
-        "locale-gen"
-    )
-
-    xdg_command = "bash -c " + shell_quote(
-        "su - " + username + " -c 'xdg-user-dirs-update'"
-    )
-
-    return [
-        "systemctl enable NetworkManager.service",
-        "systemctl enable bluetooth.service",
-        "systemctl enable systemd-timesyncd.service",
-        zram_command,
-        "systemctl enable systemd-zram-setup@zram0.service",
-        locale_command,
-        getty_command,
-        profile_command,
-        xdg_command,
-        "mkinitcpio -P",
-    ]
-
-
-def build_configuration(
-    *,
-    disk: str,
-    uefi: bool,
-    language: str,
-    locale: str,
-    keyboard: str,
-    username: str,
-    packages: list[str],
-) -> dict:
-    version = archinstall_version()
-    bootloader = "Systemd-boot" if uefi else "Grub"
-
-    return {
-        "additional-repositories": ["multilib"],
-        "app_config": {
-            "audio_config": {
-                "audio": "pipewire",
-            },
-            "bluetooth_config": {
-                "enabled": True,
-            },
-        },
-        "archinstall-language": ("German" if language == "de" else "English"),
-        "auth_config": {},
-        "bootloader": bootloader,
-        "bootloader_config": {
-            "bootloader": bootloader,
-            "uki": False,
-            "removable": False,
-        },
-        "config_version": version,
-        "custom_commands": build_custom_commands(
-            username,
-            locale,
-            keyboard,
-        ),
-        "debug": False,
-        "disk_config": build_disk_config(disk, uefi),
-        "disk_encryption": None,
-        "hostname": "archlinux",
-        "kernels": ["linux"],
-        "locale_config": {
-            "kb_layout": keyboard,
-            "sys_enc": "UTF-8",
-            "sys_lang": locale,
-        },
-        "network_config": {
-            "type": "nm",
-        },
-        "no_pkg_lookups": False,
-        "ntp": True,
-        "offline": False,
-        "packages": packages,
-        "parallel_downloads": 0,
-        "profile_config": {
-            "gfx_driver": None,
-            "greeter": None,
-            "profile": {
-                "custom_settings": {},
-                "details": [],
-                "main": "Minimal",
-            },
-        },
-        "save_config": None,
-        "script": "guided",
-        "silent": True,
-        "skip_ntp": False,
-        "skip_version_check": False,
-        "swap": False,
-        "timezone": "Europe/Berlin",
-        "uki": False,
-        "version": version,
-    }
-
-
-def write_configuration(
-    config: dict,
-    username: str,
-    password: str,
-) -> None:
-    WORK.mkdir(parents=True, exist_ok=True)
-
-    CONFIG.write_text(
-        json.dumps(config, indent=2),
-        encoding="utf-8",
-    )
-
-    CREDS.write_text(
-        json.dumps(
-            {
-                "users": [
-                    {
-                        "username": username,
-                        "enc_password": crypt_password(password),
-                        "sudo": True,
-                    }
-                ]
-            },
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
-
-    os.chmod(CREDS, 0o600)
-    os.chmod(CONFIG, 0o600)
-
-
-def validate_configuration() -> None:
-    if not CONFIG.exists():
-        die("The archinstall configuration was not created.")
-
-    if not CREDS.exists():
-        die("The archinstall credentials were not created.")
-
-    try:
-        config = json.loads(CONFIG.read_text(encoding="utf-8"))
-        creds = json.loads(CREDS.read_text(encoding="utf-8"))
-    except Exception as exc:
-        die(f"Configuration files are not valid JSON: {exc}")
-
-    required = [
-        "disk_config",
-        "kernels",
-        "locale_config",
-        "packages",
-        "silent",
-        "bootloader",
-    ]
-
-    missing = [key for key in required if key not in config]
+def pacstrap(disk: str, pkgs: list[str]) -> None:
+    # Install only packages that exist in the current official repositories.
+    missing = [p for p in pkgs if not pkg_available(p)]
     if missing:
-        die(f"Missing archinstall configuration fields: {missing}")
+        die("Unavailable packages in current Arch repos: " + ", ".join(missing))
+    run(["pacstrap", "-K", str(TARGET)] + pkgs)
 
-    if config["silent"] is not True:
-        die("The archinstall configuration is not silent.")
+def gen_fstab() -> None:
+    # Append generated UUID-based mounts to the target fstab.
+    run(["bash", "-c", f"genfstab -U {TARGET} > {TARGET}/etc/fstab"])
 
-    if not creds.get("users"):
-        die("No user found in the archinstall credentials.")
+def chroot(cmd: str, check=True) -> subprocess.CompletedProcess[str]:
+    return run(["arch-chroot", str(TARGET), "bash", "-euc", cmd], check=check)
 
+def setup_base(locale: str, keyboard: str, username: str, user_password: str,
+               encrypted: bool, rootpart: str, gpu: str, cpu: str) -> None:
+    # locale and timezone
+    chroot(f"""
+sed -i 's/^#\\({re.escape(locale)}\\)/\\1/' /etc/locale.gen
+locale-gen
+printf 'LANG={locale}\\n' > /etc/locale.conf
+printf 'KEYMAP={keyboard}\\n' > /etc/vconsole.conf
+ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+hwclock --systohc
+printf 'archlinux\\n' > /etc/hostname
+cat > /etc/hosts <<'EOF'
+127.0.0.1 localhost
+::1 localhost
+127.0.1.1 archlinux.localdomain archlinux
+EOF
+""")
+    # mkinitcpio: systemd initrd + sd-encrypt for LUKS2.
+    if encrypted:
+        hooks = "base systemd autodetect microcode modconf kms keyboard sd-vconsole block sd-encrypt filesystems fsck"
+    else:
+        hooks = "base systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems fsck"
+    chroot(f"""
+sed -i 's/^HOOKS=.*/HOOKS=({hooks})/' /etc/mkinitcpio.conf
+""")
+    if encrypted:
+        # Get UUID from installed target, not from assumptions about device naming.
+        luks_uuid = subprocess.check_output(
+            ["blkid", "-s", "UUID", "-o", "value", rootpart], text=True
+        ).strip()
+        chroot(f"printf 'rd.luks.name={luks_uuid}=cryptroot\\\\n' > /etc/crypttab.initramfs")
+    # UKI configuration
+    chroot(r"""
+mkdir -p /efi/EFI/Linux /etc/kernel
+printf 'layout=uki\nuki_generator=mkinitcpio\n' > /etc/kernel/install.conf
+""")
+    # cmdline based on filesystem UUID and LUKS UUID.
+    btrfs_uuid = subprocess.check_output(
+        ["blkid", "-s", "UUID", "-o", "value",
+         str(rootpart if not encrypted else Path("/dev/mapper/cryptroot"))], text=True
+    ).strip()
+    if encrypted:
+        luks_uuid = subprocess.check_output(
+            ["blkid", "-s", "UUID", "-o", "value", rootpart], text=True
+        ).strip()
+        cmdline = f"rd.luks.name={luks_uuid}=cryptroot root=UUID={btrfs_uuid} rootflags=subvol=@ rw"
+    else:
+        cmdline = f"root=UUID={btrfs_uuid} rootflags=subvol=@ rw"
+    chroot(f"printf '%s\\n' {shq(cmdline)} > /etc/kernel/cmdline")
 
-def run_archinstall() -> None:
-    info("Starting archinstall fully automated now …")
+    # user; password is transferred through a mode-600 temporary file, not argv.
+    chroot(f"useradd -m -G wheel,audio,video,input,storage {shq(username)}")
+    pwfile = TARGET / "root" / ".arch-installer-user-pw"
+    pwfile.write_text(f"{username}:{user_password}\\n", encoding="utf-8")
+    os.chmod(pwfile, 0o600)
+    chroot("chpasswd < /root/.arch-installer-user-pw")
+    try:
+        pwfile.unlink()
+    except FileNotFoundError:
+        pass
+    chroot("printf '%s\\n' '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/10-wheel")
+    chroot("chmod 440 /etc/sudoers.d/10-wheel")
 
-    print(
-        "\n\033[1;32m"
-        "NO FURTHER USER INPUT FROM THIS POINT.\n"
-        "archinstall will handle partitioning, filesystem creation,\n"
-        "Btrfs subvolumes, Arch installation and bootloader.\n"
-        "\033[0m"
-    )
+    # services
+    for service in ("NetworkManager.service", "bluetooth.service", "systemd-timesyncd.service"):
+        chroot(f"systemctl enable {service}")
 
-    run(
-        [
-            "archinstall",
-            "--config",
-            str(CONFIG),
-            "--creds",
-            str(CREDS),
-            "--silent",
-        ]
-    )
+    # zram
+    chroot(r"""
+cat > /etc/systemd/zram-generator.conf <<'EOF'
+[zram0]
+zram-size = ram / 2
+compression-algorithm = zstd
+swap-priority = 100
+EOF
+""")
 
+    # Basic secure sysctl defaults that are low-risk for desktop use.
+    chroot(r"""
+cat > /etc/sysctl.d/90-desktop-security.conf <<'EOF'
+kernel.kptr_restrict = 2
+kernel.dmesg_restrict = 1
+kernel.unprivileged_bpf_disabled = 1
+fs.protected_fifos = 2
+fs.protected_regular = 2
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+EOF
+sysctl --system || true
+""")
+
+    # Polkit agent + Hyprland session. No autologin.
+    chroot(f"""
+install -d -m 700 /home/{username}/.config/hypr
+cat > /home/{username}/.config/hypr/hyprland.conf <<'EOF'
+monitor=,preferred,auto,1
+$terminal = kitty
+$menu = wofi --show drun
+exec-once = waybar
+exec-once = nm-applet --indicator
+exec-once = hyprpolkitagent
+exec-once = mako
+input {{
+    kb_layout = {keyboard}
+    follow_mouse = 1
+    sensitivity = 0
+}}
+general {{
+    gaps_in = 5
+    gaps_out = 10
+    border_size = 2
+    layout = dwindle
+}}
+decoration {{
+    rounding = 8
+}}
+misc {{
+    disable_hyprland_logo = true
+}}
+bind = SUPER, RETURN, exec, $terminal
+bind = SUPER, D, exec, $menu
+bind = SUPER, Q, killactive
+bind = SUPER, M, exit
+bind = SUPER, L, exec, hyprlock
+EOF
+chown -R {username}:{username} /home/{username}/.config
+chmod 700 /home/{username}
+""")
+
+    # Hyprlock config
+    chroot(f"""
+cat > /home/{username}/.config/hypr/hyprlock.conf <<'EOF'
+general {{
+    hide_cursor = true
+}}
+background {{
+    monitor =
+    color = rgba(17,17,17,1)
+}}
+input-field {{
+    monitor =
+    size = 250, 50
+    outline_thickness = 2
+    dots_size = 0.2
+    dots_spacing = 0.2
+    dots_center = true
+    outer_color = rgb(aaaaaa)
+    inner_color = rgb(222222)
+    font_color = rgb(ffffff)
+    fade_on_empty = false
+    placeholder_text = <i>Password...</i>
+}}
+EOF
+chown {username}:{username} /home/{username}/.config/hypr/hyprlock.conf
+""")
+
+    # User environment: start Hyprland only after a normal tty login.
+    chroot(f"""
+cat > /home/{username}/.bash_profile <<'EOF'
+if [ -z "${{WAYLAND_DISPLAY:-}}" ] && [ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then
+    exec Hyprland
+fi
+EOF
+chown {username}:{username} /home/{username}/.bash_profile
+""")
+
+def shq(s: str) -> str:
+    return "'" + s.replace("'", "'\"'\"'") + "'"
+
+def setup_bootloader() -> None:
+    chroot(r"""
+bootctl --esp-path=/efi install
+mkdir -p /efi/EFI/Linux /etc/kernel
+cat > /efi/loader/loader.conf <<'EOF'
+default @saved
+timeout 3
+console-mode auto
+editor no
+EOF
+""")
+    # Build UKI after kernel and config are present.
+    chroot("mkinitcpio -P")
+    # Ensure a UKI exists. If preset support changed, kernel-install is the fallback.
+    if not list((TARGET / "efi/EFI/Linux").glob("*.efi")):
+        modules = [p for p in (TARGET / "usr/lib/modules").iterdir() if p.is_dir()]
+        if modules:
+            ver = sorted(modules, key=lambda p: p.name)[-1].name
+            chroot(f"kernel-install add {shq(ver)} {shq('/usr/lib/modules/' + ver + '/vmlinuz')}", check=False)
+    if not list((TARGET / "efi/EFI/Linux").glob("*.efi")):
+        die("No UKI was generated in /efi/EFI/Linux.")
+    chroot("bootctl status", check=False)
 
 def cleanup() -> None:
-    for path in (CREDS, CONFIG):
-        try:
-            path.unlink()
-        except FileNotFoundError:
-            pass
-
     run(["sync"], check=False)
-
-
-def unmount_target() -> None:
-    for mountpoint in (
-        "/mnt/archinstall",
-        "/mnt",
-    ):
-        if os.path.ismount(mountpoint):
-            run(["umount", "-R", mountpoint], check=False)
-
+    run(["umount", "-R", str(TARGET)], check=False)
+    run(["cryptsetup", "close", "cryptroot"], check=False)
 
 def main() -> None:
     require_root()
+    require_archiso()
+    require_uefi()
+    internet()
+    sync_clock()
 
     WORK.mkdir(parents=True, exist_ok=True)
-    LOG.write_text(
-        f"Arch Linux + Hyprland installer started: {time.ctime()}\n",
-        encoding="utf-8",
-    )
+    LOG.write_text(f"Started {time.ctime()}\n", encoding="utf-8")
 
-    print(
-        """
-\033[1;36m============================================================
-       ARCH LINUX + HYPRLAND ULTIMATE INSTALLER
-============================================================\033[0m
+    print("""
+============================================================
+       ARCH LINUX + HYPRLAND SECURE INSTALLER
+============================================================
+UEFI + GPT + Btrfs + optional LUKS2 + systemd-boot + UKI
+No AUR. No third-party repositories. No autologin.
+AppArmor/UFW/fail2ban are intentionally left for later.
+============================================================
+""")
 
-This installer replaces manual archinstall interaction.
+    locale, _, lang = choose_language()
+    keyboard = choose_keyboard()
+    encrypted = choose_encryption()
+    disk = choose_disk()
+    username, user_password = choose_user()
+    luks_password = choose_luks_password() if encrypted else None
 
-Input:
-  1. Language
-  2. Keyboard layout
-  3. Target disk
-  4. Username
-  5. Password twice
+    cpu = cpu_vendor()
+    gpu = gpu_vendor()
+    print(f"\nDetected CPU: {cpu or 'unknown'}")
+    print(f"Detected GPU: {gpu}")
 
-After that, the entire installation runs automatically.
-"""
-    )
+    pkgs = packages_for(gpu, cpu)
+    missing = [p for p in pkgs if not pkg_available(p)]
+    if missing:
+        print("\nWARNING: packages unavailable:")
+        print(" ".join(missing))
+        if input("Abort? [Y/n]: ").strip().lower() != "n":
+            die("Aborted because required packages are unavailable.")
 
-    check_arch_iso()
+    wipe_disk(disk)
+    esp, rootpart = partition(disk)
+    mkfs_and_mount(esp, rootpart, encrypted, luks_password)
 
-    if not network_ok():
-        die(
-            "No internet connection. "
-            "Connect the official Arch ISO to the internet first."
-        )
+    # Passwords are no longer needed after formatting/user creation.
+    pacstrap(disk, pkgs)
+    gen_fstab()
+    setup_base(locale, keyboard, username, user_password, encrypted, rootpart, gpu, cpu)
+    setup_bootloader()
 
-    language, locale = select_language()
-    keyboard = select_keyboard()
-    disk = select_disk()
-    username, password = select_user()
+    # Optional hardening kernel installed only as an additional recovery choice.
+    chroot("pacman -S --noconfirm --needed linux-hardened", check=False)
+    chroot("mkinitcpio -P", check=False)
 
-    uefi = Path("/sys/firmware/efi").exists()
-    cpu = detect_cpu_vendor()
-    gpu = detect_gpu()
-
-    print("\n=== AUTOMATIC HARDWARE DETECTION ===")
-    print(f"CPU      : {cpu or 'unknown'}")
-    print(f"GPU      : {gpu}")
-    print(f"Firmware : {'UEFI' if uefi else 'BIOS'}")
-    print(f"Disk     : {disk}")
-    print(f"User     : {username}")
-    print()
-
-    install_archinstall_live()
-
-    packages = list(CORE_PACKAGES)
-
-    if cpu in MICROCODE:
-        packages.append(MICROCODE[cpu])
-
-    if gpu in GPU_PACKAGES:
-        packages.extend(GPU_PACKAGES[gpu])
-
-    packages = list(dict.fromkeys(packages))
-
-    info("Checking package names in the current Arch repository …")
-    packages = available_packages(packages)
-
-    if "base" not in packages or "linux" not in packages:
-        die(
-            "The required Arch base packages are not available. "
-            "Installation is being aborted for safety."
-        )
-
-    config = build_configuration(
-        disk=disk,
-        uefi=uefi,
-        language=language,
-        locale=locale,
-        keyboard=keyboard,
-        username=username,
-        packages=packages,
-    )
-
-    write_configuration(config, username, password)
-    validate_configuration()
-
-    # Das Passwort wird von Python nach dem Schreiben der Credentials nicht mehr benötigt.
-    # Es wird absichtlich nicht protokolliert.
-    password = ""
-
-    run_archinstall()
-
+    # Remove transient installer state.
+    shutil.rmtree(WORK, ignore_errors=True)
     cleanup()
-    unmount_target()
 
-    ok("Arch Linux + Hyprland has been installed completely.")
-    print("\nThe system will now reboot. Remove the Arch USB stick afterward.")
+    print("""
+============================================================
+INSTALLATION COMPLETE
+============================================================
+Remove the Arch ISO/USB and reboot.
 
-    time.sleep(3)
-    run(["reboot", "now"], check=False)
+Encrypted installation:
+  Enter your LUKS2 passphrase at boot.
 
+Desktop:
+  Log in normally on tty1.
+  Hyprland starts automatically after the normal user login.
+
+Next security stages can be added separately:
+  1. AppArmor
+  2. UFW/nftables firewall
+  3. Fail2ban
+  4. Secure Boot with sbctl
+  5. Optional TPM2/FIDO2 unlock
+============================================================
+""")
+    input("Press Enter to reboot...")
+    run(["reboot"])
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        die("Installation aborted.")
+        print("\nAborted.")
+        sys.exit(130)
