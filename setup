@@ -45,6 +45,545 @@ For each <subcommand>, use -h for details:
 ${STY_BOLD}${STY_CYAN}Access ${STY_UNDERLINE}https://ii.clsty.link${STY_RST} ${STY_BOLD}${STY_CYAN}for documentation about illogical-impulse.${STY_RST}
 "
 }
+
+###############################################################################
+# JK GRAY ARCH
+# RESPONSIBLE SECURITY GATE v2.0
+#
+# Purpose:
+#   Evaluate whether the operator demonstrates responsible decision-making
+#   around authorization, scope, consent, privacy, proportionality,
+#   harm-minimization, evidence handling, disclosure and accountability.
+#
+# Important:
+#   This is NOT a psychological test.
+#   It cannot determine whether somebody is "Black Hat".
+#   It evaluates declared decisions in security scenarios.
+#
+# Safety properties:
+#   - No destructive actions
+#   - No disk/file deletion
+#   - No privilege escalation
+#   - No network activity
+#   - No collection of personal information
+#   - Critical violations cause immediate failure
+###############################################################################
+
+run_ethics_gate() {
+
+    local score=0
+    local max_score=0
+    local failures=0
+    local critical_failures=0
+    local answered=0
+    local MAX_ATTEMPTS=3
+
+    # -------------------------------------------------------------------------
+    # Persistent safety-gate attempts
+    # Stored outside the repository so the counter survives a failed run.
+    # -------------------------------------------------------------------------
+
+    local ATTEMPT_DIR="${HOME}/.cache/jk-gray-linux"
+    local ATTEMPT_FILE="${ATTEMPT_DIR}/safety-gate-attempts"
+
+    mkdir -p -- "$ATTEMPT_DIR"
+
+    local test_attempts=0
+
+    if [[ -f "$ATTEMPT_FILE" ]]; then
+        read -r test_attempts < "$ATTEMPT_FILE"
+
+        # Protect against corrupt/non-numeric state.
+        if [[ ! "$test_attempts" =~ ^[0-9]+$ ]]; then
+            test_attempts=0
+        fi
+    fi
+
+    cleanup_failed_repository() {
+        local REPO_DIR="${HOME}/dots-hyperland"
+
+        if [[ -z "${HOME:-}" ]]; then
+            printf "${STY_RED}[ ERROR ] HOME is not set. Refusing deletion.${STY_RST}\n"
+            return 1
+        fi
+
+        if [[ "$REPO_DIR" != "${HOME}/dots-hyperland" ]]; then
+            printf "${STY_RED}[ ERROR ] Unsafe repository path. Refusing deletion.${STY_RST}\n"
+            return 1
+        fi
+
+        if [[ "$REPO_DIR" == "/" || "$REPO_DIR" == "$HOME" ]]; then
+            printf "${STY_RED}[ ERROR ] Refusing to delete unsafe path: %s${STY_RST}\n" "$REPO_DIR"
+            return 1
+        fi
+
+        if [[ ! -d "$REPO_DIR" ]]; then
+            printf "${STY_RED}[ ERROR ] Repository directory does not exist: %s${STY_RST}\n" "$REPO_DIR"
+            return 1
+        fi
+
+        printf "${STY_YELLOW}[ CLEANUP ] Removing %s ...${STY_RST}\n" "$REPO_DIR"
+
+        rm -rf -- "$REPO_DIR"
+
+        if [[ -e "$REPO_DIR" || -L "$REPO_DIR" ]]; then
+            printf "${STY_RED}[ ERROR ] Repository could not be completely removed.${STY_RST}\n"
+            return 1
+        fi
+
+        printf "${STY_GREEN}[ CLEANUP ] Repository removed.${STY_RST}\n"
+        return 0
+    }
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '              JK GRAY LINUX - RESPONSIBLE SECURITY GATE'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "${STY_BOLD}Purpose & Security Policy${STY_RST}\n\n"
+
+    printf "JK Gray Linux is a security-focused Linux environment intended for\n"
+    printf "AUTHORIZED security testing, defensive security work, research,\n"
+    printf "education, auditing and laboratory environments.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}${STY_GREEN}INTENDED USERS${STY_RST}\n"
+    printf "  • security professionals and penetration testers\n"
+    printf "  • system and network administrators\n"
+    printf "  • defensive security / blue-team personnel\n"
+    printf "  • authorized security researchers\n"
+    printf "  • students and educators in controlled laboratories\n"
+    printf "  • organizations testing systems they own or are explicitly authorized to test\n"
+    printf "\n"
+
+    printf "${STY_BOLD}${STY_RED}NOT INTENDED FOR${STY_RST}\n"
+    printf "  • unauthorized access to computer systems or networks\n"
+    printf "  • attacking systems, accounts or infrastructure without permission\n"
+    printf "  • credential theft, credential abuse or account takeover\n"
+    printf "  • malware deployment or destructive attacks\n"
+    printf "  • ransomware, extortion or sabotage\n"
+    printf "  • unauthorized surveillance or interception\n"
+    printf "  • data theft, exfiltration or privacy violations\n"
+    printf "  • bypassing security controls without explicit authorization\n"
+    printf "  • attacks against third-party infrastructure without permission\n"
+    printf "  • attacks against critical or safety-sensitive infrastructure without\n"
+    printf "    explicit authorization, documented scope and appropriate safeguards\n"
+    printf "\n"
+
+    printf "${STY_BOLD}AUTHORIZATION REQUIREMENT${STY_RST}\n"
+    printf "\n"
+    printf "Before performing any security test, you must have appropriate\n"
+    printf "authorization from the system owner or another legally authorized party.\n"
+    printf "\n"
+    printf "Authorization must cover the relevant:\n"
+    printf "  • systems and assets\n"
+    printf "  • IP addresses, domains and applications\n"
+    printf "  • accounts and identities\n"
+    printf "  • testing methods\n"
+    printf "  • time window\n"
+    printf "  • permitted actions\n"
+    printf "  • data handling requirements\n"
+    printf "\n"
+
+    printf "${STY_BOLD}SCOPE DISCIPLINE${STY_RST}\n"
+    printf "\n"
+    printf "A security test must remain within its documented scope.\n"
+    printf "Finding a vulnerability does NOT automatically authorize exploitation\n"
+    printf "of additional systems, accounts, services or networks.\n"
+    printf "\n"
+    printf "If the scope is unclear: STOP, verify authorization and obtain clarification.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}THIRD-PARTY SYSTEMS${STY_RST}\n"
+    printf "\n"
+    printf "Systems belonging to another person, company, provider or organization\n"
+    printf "are NOT considered authorized merely because they are reachable,\n"
+    printf "publicly accessible, vulnerable or technically exploitable.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}CREDENTIALS & SECRETS${STY_RST}\n"
+    printf "\n"
+    printf "Possession of a password, token, API key, cookie, private key or other\n"
+    printf "credential does NOT by itself establish permission to use it.\n"
+    printf "\n"
+    printf "Credentials discovered during testing must be handled according to\n"
+    printf "the agreed rules, minimized, protected and reported responsibly.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}CRITICAL & SAFETY-SENSITIVE SYSTEMS${STY_RST}\n"
+    printf "\n"
+    printf "Extra caution is required for systems where testing could affect\n"
+    printf "health, safety, public services, emergency operations, industrial\n"
+    printf "control, transportation, energy, telecommunications or other\n"
+    printf "critical functions.\n"
+    printf "\n"
+    printf "Do not perform disruptive or potentially dangerous testing against\n"
+    printf "such systems without explicit authorization, appropriate safeguards,\n"
+    printf "defined limits and an agreed incident/rollback procedure.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}DATA & PRIVACY${STY_RST}\n"
+    printf "\n"
+    printf "Collect only the information necessary for the authorized security task.\n"
+    printf "Avoid unnecessary personal data, credentials, confidential documents\n"
+    printf "and unrelated system information.\n"
+    printf "\n"
+    printf "Protect collected evidence and remove it when it is no longer required\n"
+    printf "under the applicable rules or engagement agreement.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}RESPONSIBLE DISCLOSURE${STY_RST}\n"
+    printf "\n"
+    printf "Security findings should be documented accurately and communicated\n"
+    printf "through an appropriate reporting channel.\n"
+    printf "\n"
+    printf "Do not publicly disclose sensitive information merely to demonstrate\n"
+    printf "technical capability or obtain attention.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}HARM MINIMIZATION${STY_RST}\n"
+    printf "\n"
+    printf "Choose the least disruptive method that can achieve the authorized\n"
+    printf "security objective.\n"
+    printf "\n"
+    printf "Technical capability does NOT create authorization.\n"
+    printf "Access does NOT imply permission.\n"
+    printf "A vulnerability does NOT imply permission to exploit it.\n"
+    printf "Anonymity or privacy tooling does NOT create authorization.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}${STY_YELLOW}IMPORTANT${STY_RST}\n"
+    printf "\n"
+    printf "JK Gray Linux does not determine whether a person is a 'white hat',\n"
+    printf "'black hat' or otherwise trustworthy. This gate evaluates only the\n"
+    printf "security decisions and principles declared by the user.\n"
+    printf "\n"
+    printf "Passing this gate does NOT grant permission to access, test, exploit,\n"
+    printf "monitor or modify any system.\n"
+    printf "\n"
+    printf "The user remains responsible for obtaining authorization and complying\n"
+    printf "with applicable laws, contracts, policies and engagement rules.\n"
+    printf "\n"
+
+    printf "${STY_BOLD}${STY_RED}"
+    printf '%s\n' '==============================================================================='
+    printf "  IF YOU DO NOT HAVE AUTHORIZATION: DO NOT TEST THE TARGET.\n"
+    printf "  IF THE SCOPE IS UNCLEAR: STOP AND VERIFY IT.\n"
+    printf "  IF TESTING COULD CAUSE HARM: STOP AND REDUCE THE RISK.\n"
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "${STY_BOLD}By continuing, you acknowledge that this environment is intended for\n"
+    printf "authorized, responsible and controlled security activity only.${STY_RST}\n"
+
+    # -------------------------------------------------------------------------
+    # Ask whether the user wants to start the safety test
+    # -------------------------------------------------------------------------
+
+    local start_test
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                  OPTIONAL RESPONSIBLE SECURITY SELF-ASSESSMENT'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "${STY_CYAN}This test is intended for personal self-assessment and learning.${STY_RST}\n"
+    printf "${STY_CYAN}It helps you reflect on ethical and responsible security practices.${STY_RST}\n"
+    printf "${STY_YELLOW}Participation is voluntary and not required to install JK Gray Linux.${STY_RST}\n"
+    printf "\n"
+
+    while true; do
+        read -r -p "Would you like to take the self-assessment test? [y/n]: " start_test
+
+        case "${start_test,,}" in
+            y|yes)
+                printf "\n${STY_GREEN}[ INFO ] Starting the self-assessment test.${STY_RST}\n"
+                printf "${STY_CYAN}[ INFO ] You have %d safety-test attempts remaining.${STY_RST}\n" "$((MAX_ATTEMPTS - test_attempts))"
+                break
+                ;;
+            n|no)
+                printf "\n${STY_YELLOW}[ SKIP ] Self-assessment skipped.${STY_RST}\n"
+                printf "${STY_GREEN}[ OK ] Continuing installation without the test.${STY_RST}\n\n"
+                return 0
+                ;;
+            *)
+                printf "${STY_YELLOW}Please enter y or n.${STY_RST}\n"
+                ;;
+        esac
+    done
+
+    printf "\n${STY_CYAN}Starting safety test...${STY_RST}\n\n"
+
+    test_attempts=$((test_attempts + 1))
+    printf '%s\n' "$test_attempts" > "$ATTEMPT_FILE"
+
+    printf "${STY_CYAN}Safety-test attempt: %d${STY_RST}\n" "$test_attempts"
+
+    # -------------------------------------------------------------------------
+    # Question database
+    #
+    # Format:
+    # ID|CATEGORY|CRITICAL|QUESTION|A|B|C|D|CORRECT|EXPLANATION
+    #
+    # Critical = 1:
+    # A wrong answer immediately fails the gate.
+    # -------------------------------------------------------------------------
+
+    local -a QUESTIONS=()
+
+    QUESTIONS+=(
+'01|AUTHORIZATION|1|You discover a serious vulnerability in infrastructure belonging to another organization. You have no authorization. What is the correct action?|Exploit it carefully because the vulnerability is real.|Attempt only a harmless proof of concept.|Stop intrusive testing and seek appropriate authorization or use an authorized disclosure channel.|Exploit it anonymously so the organization cannot identify you.|C|A vulnerability does not grant permission to access or exploit a system.'
+'02|AUTHORIZATION|1|A publicly reachable administrator panel has no authentication. What does public accessibility mean?|Anyone may administer it.|It is automatically authorized for security testing.|It may be observed as publicly exposed, but intrusive interaction still requires appropriate authorization.|You may change settings if you restore them afterwards.|C|Public exposure and authorization are separate concepts.'
+'03|ANONYMITY|1|You are using Tor and a VPN while testing a system without permission. Does anonymity make the activity acceptable?|Yes, because attribution is difficult.|Yes, provided you do not cause damage.|No. Privacy or anonymity technology does not create authorization.|Only if the organization is large.|C|Anonymity changes attribution, not authorization.'
+'04|SCOPE|1|Your written assessment covers example.com but explicitly excludes its payment infrastructure. You discover a vulnerable payment endpoint.|Test it because it belongs to the same company.|Test only the least dangerous endpoint.|Do not access it beyond what is permitted; report the discovery through the agreed channel.|Exploit it if the vulnerability is severe.|C|Scope restrictions remain binding.'
+'05|SCOPE|1|A client employee verbally tells you to test an excluded system, but your engagement authority does not yet reflect that change.|Proceed because the employee requested it.|Proceed if the employee sounds senior.|Obtain the appropriate scope authorization before testing.|Proceed but omit the activity from the report.|C|A scope change should be properly authorized and documented.'
+'06|PRIVACY|1|During an authorized assessment you encounter private photographs unrelated to the test.|Open several to determine whether they contain evidence.|Copy them for later review.|Stop examining them and follow the engagement procedure for accidental exposure.|Share one internally as an example.|C|Authorized security testing does not authorize unrelated private-data inspection.'
+'07|PRIVACY|1|You have administrator privileges during a legitimate assessment and become curious about an employee personal directory.|Inspect it because administrator access permits it.|Inspect only a few files.|Do not access it unless explicitly required and authorized by the assessment.|Copy it but promise not to distribute it.|C|Technical privilege is not permission for curiosity-driven access.'
+'08|DATA-MINIMIZATION|0|A vulnerability can be demonstrated with one sanitized record. What evidence should you collect?|The entire database.|As many records as possible.|Only the minimum evidence necessary to establish the finding.|A full backup in case it becomes useful.|C|Security evidence should follow necessity and data minimization.'
+'09|CREDENTIALS|1|During an authorized test you obtain credentials that also work on an unrelated out-of-scope server.|Log into the server once to confirm.|Run a harmless command.|Do not access the server; report the credential exposure.|Save the credentials for future research.|C|Credentials do not expand the authorization boundary.'
+'10|DESTRUCTIVE-TESTING|1|A destructive exploit gives stronger evidence, but a non-destructive demonstration proves the same issue.|Use the destructive exploit for stronger evidence.|Use both to be certain.|Use the least harmful method that adequately demonstrates the finding.|Choose whichever is technically more impressive.|C|Avoid unnecessary harm when equivalent evidence is available.'
+'11|CRITICAL-INFRA|1|Testing reveals that a target may control medical or other safety-critical equipment.|Increase testing intensity to determine the maximum impact.|Continue normally because the system is in scope.|Stop potentially disruptive activity and follow the emergency/escalation procedure.|Test during the night without informing anyone.|C|Potential physical consequences require heightened caution.'
+'12|CRITICAL-INFRA|1|A scan unexpectedly reaches a system controlling industrial equipment that was not part of the engagement.|Continue because discovery already occurred.|Try a harmless command to see whether it responds.|Stop further interaction and report the unexpected exposure through the defined procedure.|Attempt exploitation because industrial systems are interesting targets.|C|Unexpected access to safety-critical systems should trigger caution and escalation.'
+'13|DISCLOSURE|1|You discover a serious vulnerability during an authorized assessment.|Publish the exploit immediately.|Sell the information to the highest bidder.|Document it and use the agreed reporting/disclosure process.|Keep exploiting the target until the owner notices.|C|Authorized findings should be handled through the agreed process.'
+'14|DISCLOSURE|0|A vendor has no published vulnerability-reporting process. You discover a serious issue affecting its service.|Publicly dump all technical details immediately.|Keep the issue secret indefinitely.|Use a reasonable responsible-disclosure route and provide enough information for remediation.|Sell the vulnerability first.|C|Lack of a published process does not justify reckless disclosure.'
+'15|EVIDENCE|0|You need screenshots for a vulnerability report. The screenshots would expose unrelated personal information.|Capture everything because it proves access.|Publish the unredacted screenshots.|Minimize, redact or avoid unrelated personal information while preserving necessary evidence.|Capture the entire desktop for completeness.|C|Evidence should minimize unnecessary exposure.'
+'16|LOGGING|1|You accidentally perform an action outside the approved scope and cause an interruption.|Delete logs before anyone notices.|Hide the event if service recovers.|Report it promptly and cooperate with investigation and remediation.|Blame the target configuration.|C|Accountability includes transparent handling of mistakes.'
+'17|LOGGING|1|A colleague suggests deleting test logs so the client will not see an accidental out-of-scope action.|Agree because it protects the team.|Delete only the most obvious entries.|Preserve relevant records and report the incident honestly.|Keep a private copy and delete the official logs.|C|Concealing security activity undermines accountability.'
+'18|PRESSURE|1|A manager says: "Ignore the scope for ten minutes. We can fix the paperwork later."|Do it because the manager asked.|Do it if the target looks safe.|Require appropriate authorization before expanding the scope.|Do it but leave it out of the report.|C|Pressure does not replace authorization.'
+'19|PRESSURE|0|A client says a more aggressive test would make the report more impressive.|Increase the impact regardless of risk.|Perform destructive testing to demonstrate skill.|Explain the risk and choose an appropriately authorized, proportionate method.|Do whatever produces the most dramatic report.|C|Security testing should serve the objective, not ego or spectacle.'
+'20|HARM|1|An action could protect five systems but has a significant avoidable risk of damaging an unrelated system.|Proceed because five is greater than one.|Proceed because collateral damage is acceptable in security work.|Find a safer alternative and avoid unnecessary harm to uninvolved systems.|Proceed if the action is technically impressive.|C|Majority benefit does not automatically justify avoidable collateral harm.'
+'21|HARM|0|A vulnerability can be verified either by reading a sensitive file or by demonstrating access to a harmless test file.|Read the sensitive file because it is stronger evidence.|Copy both files.|Use the harmless test file.|Read the sensitive file and delete it afterwards.|C|Prefer the least intrusive proof that satisfies the objective.'
+'22|CONSENT|1|A friend asks you to "just check" whether their former employer is vulnerable, but you have no authorization from the employer.|Do it as a favor.|Do it anonymously.|Decline intrusive testing and explain that authorization is required.|Do it only if the vulnerability is obvious.|C|Personal relationships do not provide third-party authorization.'
+'23|THIRD-PARTY|1|During testing, you discover a cloud service belonging to a third party connected to the authorized target.|Attack it because it is technically reachable.|Use stolen or discovered credentials to investigate.|Respect the third-party boundary and report the connection.|Test it if it appears insecure.|C|Third-party systems require their own authorization or an appropriate process.'
+'24|SECRETS|0|You find an API key in a public repository that appears to belong to a real organization.|Use it against production to determine its privileges.|Publish the key as proof.|Avoid unnecessary use, notify the appropriate party through a responsible channel, and treat the secret as compromised.|Store it for future testing.|C|Exposed credentials should not become a license for unauthorized access.'
+'25|RISK|0|A proposed test has uncertain impact and no rollback procedure.|Run it anyway because uncertainty is normal.|Run it on production first.|Clarify authorization, impact, safeguards and rollback before proceeding.|Hide the risk from the client to avoid delaying the test.|C|Risky testing requires informed planning and safeguards.'
+'26|INCIDENT|1|You discover that your own testing tool is behaving differently than expected and may be affecting unrelated systems.|Continue until you understand it.|Increase privileges to investigate faster.|Stop or contain the activity and assess/report the unexpected behavior.|Delete the tool logs.|C|Unexpected behavior requires containment and accountability.'
+'27|BOUNDARIES|1|An authorized target contains a link to another organization that looks vulnerable.|Follow the link and test it because the target exposed it.|Scan the other organization automatically.|Treat the other organization as outside the authorization boundary unless separately authorized.|Exploit it only if there is no obvious damage.|C|A trusted relationship does not transfer authorization.'
+'28|RESEARCH|0|You want to learn how a dangerous exploit works but have no authorized target.|Try it against a random public server.|Test it against a third-party service.|Use a controlled lab, intentionally vulnerable environment, or other authorized target.|Find a small company that probably will not notice.|C|Security research should use controlled or authorized environments.'
+'29|RESPONSIBILITY|1|You discover that a previous security report from your team contained a serious error that could mislead the client.|Ignore it unless they complain.|Modify old records without telling anyone.|Notify the appropriate parties, correct the record and document the correction.|Delete the original report.|C|Professional security work requires correction and accountability.'
+'30|FINAL-PRINCIPLE|1|Which principle best describes responsible use of powerful security capabilities?|Anything technically possible is acceptable.|Anonymity makes unauthorized actions acceptable.|Authorization, scope, proportionality, privacy, harm minimization and accountability constrain technical capability.|Technical skill is more important than authorization.|C|Capability and permission are fundamentally different.'
+    )
+
+    # -------------------------------------------------------------------------
+    # Randomization
+    # -------------------------------------------------------------------------
+
+    local -a SHUFFLED=()
+    local item
+
+    # Fisher-Yates shuffle using Bash RANDOM.
+    SHUFFLED=("${QUESTIONS[@]}")
+
+    local i j tmp
+    for ((i=${#SHUFFLED[@]}-1; i>0; i--)); do
+        j=$((RANDOM % (i + 1)))
+        tmp="${SHUFFLED[$i]}"
+        SHUFFLED[$i]="${SHUFFLED[$j]}"
+        SHUFFLED[$j]="$tmp"
+    done
+
+    # -------------------------------------------------------------------------
+    # Ask question
+    # -------------------------------------------------------------------------
+
+    local id category critical question a b c d correct explanation
+    local IFS='|'
+
+    for item in "${SHUFFLED[@]}"; do
+
+        IFS='|' read -r \
+            id category critical question a b c d correct explanation \
+            <<< "$item"
+
+        max_score=$((max_score + 1))
+
+        printf "\n"
+        printf "${STY_BOLD}${STY_CYAN}"
+        printf '%s\n' '==============================================================================='
+        printf "QUESTION %02d / %02d   [%s]\n" "$((max_score))" "${#SHUFFLED[@]}" "$category"
+        printf '%s\n' '==============================================================================='
+        printf "${STY_RST}\n"
+
+        printf "%s\n\n" "$question"
+
+        printf "  A) %s\n" "$a"
+        printf "  B) %s\n" "$b"
+        printf "  C) %s\n" "$c"
+        printf "  D) %s\n" "$d"
+        printf "\n"
+
+        while true; do
+            read -r -p "Answer [A-D]: " answer
+
+            answer="${answer,,}"
+
+            case "$answer" in
+                a|b|c|d)
+                    break
+                    ;;
+                *)
+                    printf "${STY_YELLOW}Invalid answer. Enter A, B, C or D.${STY_RST}\n"
+                    ;;
+            esac
+        done
+
+        answered=$((answered + 1))
+
+        if [[ "${answer^^}" == "${correct^^}" ]]; then
+
+            score=$((score + 1))
+
+            printf "\n"
+            printf "${STY_GREEN}[ PASS ]${STY_RST} %s\n" "$explanation"
+
+        else
+
+            failures=$((failures + 1))
+
+            printf "\n"
+            printf "${STY_RED}[ FAIL ]${STY_RST} %s\n" "$explanation"
+
+            # -------------------------------------------------------------
+            # Critical failure
+            # -------------------------------------------------------------
+
+            if [[ "$critical" == "1" ]]; then
+
+                critical_failures=$((critical_failures + 1))
+
+                printf "\n"
+                printf "${STY_RED}${STY_BOLD}"
+                printf '%s\n' '==============================================================================='
+                printf '%s\n' '                         CRITICAL SAFETY FAILURE'
+                printf '%s\n' '==============================================================================='
+                printf "${STY_RST}\n"
+
+                printf "Question: %s\n" "$id"
+                printf "Category: %s\n" "$category"
+                printf "\n"
+
+                printf "${STY_RED}"
+                printf "A critical responsible-security principle was rejected.\n"
+                printf "The gate therefore terminates immediately.\n"
+                printf "${STY_RST}\n\n"
+
+                printf "${STY_YELLOW}"
+                printf "[ ABORT ] Safety test failed.\n"
+                printf "${STY_RST}\n"
+
+                # Second failed attempt => remove repository.
+                if (( test_attempts >= MAX_ATTEMPTS )); then
+                    printf "\n"
+                    printf "${STY_RED}${STY_BOLD}"
+                    printf "[ CLEANUP ] Second failed attempt detected.\n"
+                    printf "${STY_RST}\n"
+
+                    cleanup_failed_repository
+                fi
+
+                return 1
+            fi
+        fi
+    done
+
+    # -------------------------------------------------------------------------
+    # Final evaluation
+    # -------------------------------------------------------------------------
+
+    local percentage=0
+
+    if (( max_score > 0 )); then
+        percentage=$((score * 100 / max_score))
+    fi
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                         SAFETY GATE RESULT'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "Answered:          %d / %d\n" "$answered" "$max_score"
+    printf "Score:             %d / %d\n" "$score" "$max_score"
+    printf "Result:            %d%%\n" "$percentage"
+    printf "Failed questions:  %d\n" "$failures"
+    printf "Critical failures: %d\n" "$critical_failures"
+    printf "\n"
+
+    # -------------------------------------------------------------------------
+    # Strict acceptance criteria
+    #
+    # Requirements:
+    #   1. Every question answered correctly
+    #   2. No critical failure
+    #   3. 100% score
+    # -------------------------------------------------------------------------
+
+    if (( score == max_score &&
+          failures == 0 &&
+          critical_failures == 0 )); then
+
+        printf "${STY_GREEN}${STY_BOLD}"
+        printf '%s\n' '==============================================================================='
+        printf '%s\n' '                         [ PASS ] SAFETY GATE'
+        printf '%s\n' '==============================================================================='
+        printf "${STY_RST}\n"
+
+        printf "All responsible-security principles were demonstrated.\n"
+        printf "The installation may continue.\n"
+        printf "\n"
+
+        # Reset persistent failure counter after a successful test.
+        rm -f -- "$ATTEMPT_FILE"
+
+        return 0
+    fi
+
+    printf "${STY_RED}${STY_BOLD}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                         [ FAIL ] SAFETY GATE'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "The required standard is 100%%.\n"
+    printf "Installation must not continue.\n"
+    printf "\n"
+
+    printf "${STY_YELLOW}"
+    printf "[ ABORT ] Installation cancelled.\n"
+    printf "${STY_RST}\n"
+
+    # -------------------------------------------------------------------------
+    # Second failed attempt -> remove the installer repository.
+    #
+    # IMPORTANT:
+    # This is deliberately restricted to the expected repository path.
+    # -------------------------------------------------------------------------
+
+    if (( test_attempts >= MAX_ATTEMPTS )); then
+        printf "\n"
+        printf "${STY_RED}${STY_BOLD}"
+        printf '%s\n' '==============================================================================='
+        printf '%s\n' '                         SECOND TEST FAILURE'
+        printf '%s\n' '==============================================================================='
+        printf "${STY_RST}\n"
+
+        printf "${STY_RED}"
+        printf "The safety test has been failed twice.\n"
+        printf "The installer repository will now be removed:\n"
+        printf "  %s\n" "${HOME}/dots-hyprland"
+        printf "${STY_RST}\n"
+
+        cleanup_failed_repository
+    fi
+
+    return 1
+}
+
 case $1 in
   # Global help
   ""|help|--help|-h)showhelp_global;exit;;
@@ -68,58 +607,1943 @@ fi
 case ${SUBCMD_NAME} in
   install)
 
-    if [[ -f /etc/os-release ]] && [[ -d /run/systemd/system ]] && [[ ! -d /run/archiso ]]; then
-      ARCH_INSTALL_RECOMMENDATION="n"
+    # Check whether the current system is Arch Linux.
+    IS_ARCH_LINUX=false
 
-      printf "\n${STY_BOLD}${STY_CYAN}An existing Linux installation was detected.${STY_RST}\n"
-      printf "  ${STY_GREEN}Recommendation: No${STY_RST} - continue with the existing system.\n"
+    if [[ -f /etc/arch-release || -f /etc/cachyos-release ]]; then
+      IS_ARCH_LINUX=true
+    fi
+
+    if [[ "${IS_ARCH_LINUX}" == true ]]; then
+      printf '%b\n' "${STY_BOLD}${STY_GREEN}Arch Linux detected.${STY_RESET}"
     else
-      ARCH_INSTALL_RECOMMENDATION="y"
+      printf '%b\n' "${STY_BOLD}${STY_YELLOW}
+Warning: You are not running Arch Linux.
 
-      printf "\n${STY_BOLD}${STY_CYAN}No existing Linux installation was detected.${STY_RST}\n"
-      printf "  ${STY_YELLOW}Recommendation: Yes${STY_RST} - start the Arch Linux installer.\n"
+This installer is primarily designed for Arch Linux.
+Other distributions, such as Fedora or NixOS, may work
+in some cases, but support is very limited.
+
+Some features may fail, behave unexpectedly, or not work
+at all on non-Arch systems. Installation steps may break
+or require manual adjustments.
+
+Arch-specific commands and functions will be skipped
+where possible, but this does not guarantee full compatibility.
+
+For the best experience, stability, and compatibility,
+using Arch Linux is strongly recommended.
+
+By continuing, you acknowledge and accept these limitations.
+To proceed, type \"I understand\" and press Enter:
+${STY_RESET}"
+
+      # Require explicit confirmation from the user.
+      read -r -p "> " USER_CONFIRMATION
+
+      if [[ "${USER_CONFIRMATION}" != "I understand" ]]; then
+        printf '%b\n' "${STY_BOLD}${STY_RED}Confirmation failed. Installation cancelled.${STY_RESET}"
+        return 1 2>/dev/null || exit 1
+      fi
+
+      printf '%b\n' "${STY_BOLD}${STY_GREEN}Acknowledgement accepted. Continuing installation...${STY_RESET}"
+    fi
+
+printf "${STY_BOLD}${STY_CYAN}
+            ▄▄▄██▀▀▀██ ▄█▀     ▄████  ██▀███   ▄▄▄     ▓██   ██▓
+              ▒██   ██▄█▒     ██▒ ▀█▒▓██ ▒ ██▒▒████▄    ▒██  ██▒
+              ░██  ▓███▄░    ▒██░▄▄▄░▓██ ░▄█ ▒▒██  ▀█▄   ▒██ ██░
+            ▓██▄██▓ ▓██ █▄    ░▓█  ██▓▒██▀▀█▄  ░██▄▄▄▄██  ░ ▐██▓░
+            ▓███▒  ▒██▒ █▄   ░▒▓███▀▒░██▓ ▒██▒ ▓█   ▓██▒ ░ ██▒▓░
+            ▒▓▒▒░  ▒ ▒▒ ▓▒    ░▒   ▒ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ██▒▒▒ 
+            ▒ ░▒░  ░ ░▒ ▒░     ░   ░   ░▒ ░ ▒░  ▒   ▒▒ ░▓██ ░▒░ 
+            ░ ░ ░  ░ ░░ ░    ░ ░   ░   ░░   ░   ░   ▒   ▒ ▒ ░░  
+            ░   ░  ░  ░            ░    ░           ░  ░░ ░     
+                                                        ░ ░     
+                  ██▓     ██▓ ███▄    █  █    ██ ▒██   ██▒       
+                  ▓██▒    ▓██▒ ██ ▀█   █  ██  ▓██▒▒▒ █ █ ▒░      
+                  ▒██░    ▒██▒▓██  ▀█ ██▒▓██  ▒██░░░  █   ░      
+                  ▒██░    ░██░▓██▒  ▐▌██▒▓▓█  ░██░ ░ █ █ ▒       
+                  ░██████▒░██░▒██░   ▓██░▒▒█████▓ ▒██▒ ▒██▒      
+                  ░ ▒░▓  ░░▓  ░ ▒░   ▒ ▒ ░▒▓▒ ▒ ▒ ▒▒ ░ ░▓ ░      
+                  ░ ░ ▒  ░ ▒ ░░ ░░   ░ ▒░░░▒░ ░ ░ ░░   ░▒ ░      
+                    ░ ░    ▒ ░   ░   ░ ░  ░░░ ░ ░  ░    ░        
+                      ░  ░ ░           ░    ░      ░    ░        
+
+${STY_RST}\n"
+
+    ###############################################################################
+    # Execute responsible-security gate
+    ###############################################################################
+
+    if ! run_ethics_gate; then
+        exit 1
     fi
 
     printf "\n"
-    printf "  ${STY_GREEN}y${STY_RST} = Yes, install Arch Linux ${STY_YELLOW}(Experimental — hopefully fixed before October 1, 2026)${STY_RST}\n"
-    printf "  ${STY_YELLOW}n${STY_RST} = No, continue with the existing system\n\n"
+    printf "${STY_GREEN}${STY_BOLD}"
+    printf "[ OK ] Responsible-security gate passed.\n"
+    printf "${STY_RST}"
+    printf "Continuing with JK Gray Arch installation...\n"
+
+
+    ###############################################################################
+    # NETWORK PRIVACY PREFERENCE
+    #
+    # This section ONLY records the user's preferred privacy configuration.
+    #
+    # IMPORTANT:
+    #   - This is NOT an authorization mechanism.
+    #   - Tor/VPN usage does NOT authorize access to third-party systems.
+    #   - Privacy tools do NOT guarantee anonymity or prevent all leaks.
+    #   - Applications may bypass the selected network path.
+    #   - Actual routing depends on the final system configuration.
+    #   - Users remain responsible for complying with applicable law,
+    #     contracts, policies and authorization boundaries.
+    ###############################################################################
+
+    if [[ "${IS_ARCH_LINUX}" != true ]]; then
+        # Skip interactive network privacy configuration on non-Arch systems.
+        PRIVACY_MODE="direct"
+
+        printf "\n"
+        printf "${STY_BOLD}${STY_YELLOW}"
+        printf '%s\n' '[ SKIP ] Non-Arch Linux detected.'
+        printf '%s\n' '        Network privacy configuration will be skipped.'
+        printf '%s\n' '        Defaulting to a direct connection.'
+        printf "${STY_RST}\n"
+    else
+        printf "\n"
+        printf "${STY_BOLD}${STY_CYAN}"
+        printf '%s\n' '==============================================================================='
+        printf '%s\n' '                         NETWORK PRIVACY MODE'
+        printf '%s\n' '==============================================================================='
+        printf "${STY_RST}\n"
+
+        printf "Choose the preferred network privacy configuration:\n\n"
+
+        printf "  ${STY_GREEN}1${STY_RST}) Tor\n"
+        printf "  ${STY_GREEN}2${STY_RST}) Mullvad VPN\n"
+        printf "  ${STY_GREEN}3${STY_RST}) Mullvad VPN + Tor\n"
+        printf "  ${STY_GREEN}4${STY_RST}) Direct connection\n\n"
+
+        while true; do
+            read -r -p "Selection [1/2/3/4]: " PRIVACY_CHOICE
+
+            case "$PRIVACY_CHOICE" in
+
+                1)
+                    PRIVACY_MODE="tor"
+                    break
+                    ;;
+
+                2)
+                    PRIVACY_MODE="mullvad"
+                    break
+                    ;;
+
+                3)
+                    PRIVACY_MODE="mullvad+tor"
+                    break
+                    ;;
+
+                4)
+                    PRIVACY_MODE="direct"
+                    break
+                    ;;
+
+                *)
+                    printf "${STY_RED}"
+                    printf "[ERROR] Please select 1, 2, 3 or 4.\n"
+                    printf "${STY_RST}"
+                    ;;
+            esac
+        done
+    fi
+
+    export PRIVACY_MODE
+
+    printf "\n"
+    printf "${STY_GREEN}[ OK ] Privacy preference selected: %s${STY_RST}\n" \
+        "$PRIVACY_MODE"
+
+
+    ###############################################################################
+    # PRIVACY CONFIGURATION SUMMARY
+    ###############################################################################
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                         PRIVACY CONFIGURATION'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    case "$PRIVACY_MODE" in
+
+        tor)
+            printf "Selected path: ${STY_GREEN}Tor${STY_RST}\n"
+            ;;
+
+        mullvad)
+            printf "Selected path: ${STY_GREEN}Mullvad VPN${STY_RST}\n"
+            ;;
+
+        mullvad+tor)
+            printf "Selected path: ${STY_GREEN}Mullvad VPN + Tor${STY_RST}\n"
+            ;;
+
+        direct)
+            printf "Selected path: ${STY_GREEN}Direct connection${STY_RST}\n"
+            ;;
+    esac
+
+    printf "\n"
+    printf "${STY_YELLOW}"
+    printf "The selected value is a preference only.\n"
+    printf "No claim is made that all system or application traffic will use it.\n"
+    printf "${STY_RST}\n"
+
+
+    ###############################################################################
+    # INSTALL SELECTED NETWORK PRIVACY COMPONENTS
+    ###############################################################################
+
+    if ! command -v pacman >/dev/null 2>&1; then
+        printf "\n"
+        printf "${STY_RED}${STY_BOLD}"
+        printf "[ ERROR ] pacman was not found.\n"
+        printf "${STY_RST}"
+        printf "The selected privacy components cannot be installed.\n"
+        exit 1
+    fi
+
+    ###############################################################################
+    # PRIVACY / NETWORK CONFIGURATION
+    #
+    # Modes:
+    #
+    #   tor
+    #       Install Tor
+    #       Start Tor daemon
+    #       Wait for SOCKS5
+    #       Test real Tor connectivity
+    #
+    #   mullvad
+    #       Install Mullvad CLI/daemon
+    #       Start daemon
+    #       Ask for account number if necessary
+    #       Login automatically
+    #       Enable auto-connect
+    #       Enable Lockdown Mode
+    #       Connect VPN
+    #       Verify real VPN connectivity
+    #
+    #   mullvad+tor
+    #       Install Mullvad + Tor
+    #       Login Mullvad if necessary
+    #       Connect Mullvad FIRST
+    #       Verify Mullvad
+    #       Start Tor AFTER Mullvad
+    #       Verify Tor SOCKS5
+    #       Verify real Tor connectivity
+    #
+    #   direct
+    #       No privacy service
+    #
+    # ASSUMPTIONS:
+    #   - Script is running under bash
+    #   - Network connection is already available
+    #   - pacman repositories are configured
+    #   - script has root privileges
+    #
+    ###############################################################################
+
+
+    ###############################################################################
+    # HELPER FUNCTIONS
+    ###############################################################################
+
+    privacy_error()
+    {
+        printf "${STY_RED}[ ERROR ] %s${STY_RST}\n" "$1"
+        exit 1
+    }
+
+
+    privacy_ok()
+    {
+        printf "${STY_GREEN}[ OK ] %s${STY_RST}\n" "$1"
+    }
+
+
+    privacy_info()
+    {
+        printf "${STY_CYAN}[ %s ] %s${STY_RST}\n" "$1" "$2"
+    }
+
+    ###############################################################################
+    # PRIVILEGE HANDLING
+    ###############################################################################
+
+    privacy_run_root()
+    {
+        if (( EUID == 0 )); then
+            "$@"
+        else
+            if ! command -v sudo >/dev/null 2>&1; then
+                privacy_error "sudo is required for privileged operations."
+            fi
+
+            sudo "$@"
+        fi
+    }
+
+    if (( EUID != 0 )); then
+        if ! command -v sudo >/dev/null 2>&1; then
+            privacy_error "Install sudo or run the installer as root."
+        fi
+
+        privacy_info "PRIVILEGES" \
+            "Running as a normal user; privileged operations will use sudo."
+    else
+        privacy_info "PRIVILEGES" "Running as root."
+    fi
+
+    ###############################################################################
+    # CHECK NETWORK BEFORE INSTALLATION
+    ###############################################################################
+
+    privacy_info "NETWORK" "Checking basic Internet connectivity..."
+
+    if ! curl --silent --show-error --fail --max-time 15 \
+        https://archlinux.org >/dev/null 2>&1; then
+
+        printf "${STY_RED}[ ERROR ] No working Internet connection detected.${STY_RST}\n"
+        printf "${STY_RED}[ ERROR ] pacman/Tor/Mullvad cannot be configured without network access.${STY_RST}\n"
+        exit 1
+    fi
+
+    privacy_ok "Basic Internet connectivity is available."
+
+
+    ###############################################################################
+    # MULLVAD LOGIN FUNCTION
+    ###############################################################################
+
+    mullvad_login_if_needed()
+    {
+        printf "\n"
+        printf "${STY_BOLD}${STY_CYAN}"
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf '%s\n' '                         MULLVAD ACCOUNT'
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf "${STY_RST}\n"
+
+        privacy_info "MULLVAD" "Checking account status..."
+
+        ###########################################################################
+        # Check whether an account is already configured.
+        #
+        # mullvad account get returns successfully when an account is configured.
+        ###########################################################################
+
+        if mullvad account get >/dev/null 2>&1; then
+
+            privacy_ok "A Mullvad account is already configured."
+
+            return 0
+        fi
+
+
+        ###########################################################################
+        # No account configured -> ask user
+        ###########################################################################
+
+        printf "\n"
+        printf "${STY_YELLOW:-}${STY_BOLD}"
+        printf '%s\n' 'Mullvad account login is required.'
+        printf '%s\n' 'You need your Mullvad account number.'
+        printf '%s\n' 'The account number will NOT be stored by this script.'
+        printf "${STY_RST}\n"
+
+        while true; do
+
+            printf "${STY_CYAN}Mullvad Account Number: ${STY_RST}"
+            read -r MULLVAD_ACCOUNT_NUMBER
+
+            #######################################################################
+            # Remove accidental whitespace
+            #######################################################################
+
+            MULLVAD_ACCOUNT_NUMBER="$(printf '%s' "$MULLVAD_ACCOUNT_NUMBER" | tr -d '[:space:]')"
+
+            #######################################################################
+            # Mullvad account numbers are numeric.
+            #######################################################################
+
+            if [[ ! "$MULLVAD_ACCOUNT_NUMBER" =~ ^[0-9]+$ ]]; then
+                printf "${STY_RED}[ ERROR ] Account number must contain digits only.${STY_RST}\n"
+                continue
+            fi
+
+            #######################################################################
+            # Mullvad account numbers are normally 16 digits.
+            #######################################################################
+
+            if [ "${#MULLVAD_ACCOUNT_NUMBER}" -ne 16 ]; then
+                printf "${STY_RED}[ ERROR ] Mullvad account number must contain 16 digits.${STY_RST}\n"
+                continue
+            fi
+
+            break
+        done
+
+
+        ###########################################################################
+        # Login
+        ###########################################################################
+
+        printf "\n"
+        privacy_info "MULLVAD" "Logging in..."
+
+        if ! mullvad account login "$MULLVAD_ACCOUNT_NUMBER"; then
+
+            unset MULLVAD_ACCOUNT_NUMBER
+
+            printf "\n"
+            printf "${STY_RED}[ ERROR ] Mullvad login failed.${STY_RST}\n"
+            printf "${STY_RED}[ ERROR ] Please verify your account number and try again.${STY_RST}\n"
+
+            exit 1
+        fi
+
+
+        ###########################################################################
+        # Remove account number from shell variable immediately.
+        ###########################################################################
+
+        unset MULLVAD_ACCOUNT_NUMBER
+
+
+        ###########################################################################
+        # Verify login
+        ###########################################################################
+
+        if ! mullvad account get >/dev/null 2>&1; then
+
+            printf "${STY_RED}[ ERROR ] Mullvad login could not be verified.${STY_RST}\n"
+            exit 1
+        fi
+
+        privacy_ok "Mullvad account login successful."
+    }
+
+
+    ###############################################################################
+    # MULLVAD CONNECTION FUNCTION
+    ###############################################################################
+
+    mullvad_connect_and_verify()
+    {
+        printf "\n"
+        printf "${STY_BOLD}${STY_CYAN}"
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf '%s\n' '                         MULLVAD VPN'
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf "${STY_RST}\n"
+
+
+        ###########################################################################
+        # Auto-connect
+        ###########################################################################
+
+        privacy_info "MULLVAD" "Enabling auto-connect..."
+
+        if ! mullvad auto-connect set on >/dev/null 2>&1; then
+            privacy_error "Failed to enable Mullvad auto-connect."
+        fi
+
+        privacy_ok "Auto-connect enabled."
+
+
+        ###########################################################################
+        # Lockdown Mode
+        ###########################################################################
+
+        privacy_info "MULLVAD" "Enabling Lockdown Mode..."
+
+        if ! mullvad lockdown-mode set on >/dev/null 2>&1; then
+            privacy_error "Failed to enable Mullvad Lockdown Mode."
+        fi
+
+        privacy_ok "Lockdown Mode enabled."
+
+
+        ###########################################################################
+        # Connect
+        ###########################################################################
+
+        printf "\n"
+        privacy_info "MULLVAD" "Connecting to VPN..."
+
+        if ! mullvad connect; then
+            privacy_error "Mullvad VPN connection failed."
+        fi
+
+
+        ###########################################################################
+        # Wait for actual connection
+        ###########################################################################
+
+        privacy_info "MULLVAD" "Waiting for VPN tunnel..."
+
+        MULLVAD_CONNECTED=0
+
+        for _ in $(seq 1 60); do
+
+            MULLVAD_STATUS="$(mullvad status 2>/dev/null || true)"
+
+            if printf '%s\n' "$MULLVAD_STATUS" | grep -qiE \
+                'Connected|Connected to'; then
+
+                MULLVAD_CONNECTED=1
+                break
+            fi
+
+            sleep 1
+        done
+
+
+        if [ "$MULLVAD_CONNECTED" -ne 1 ]; then
+
+            printf "\n"
+            printf "${STY_RED}[ ERROR ] Mullvad VPN did not become connected.${STY_RST}\n"
+            printf "\n"
+
+            mullvad status -v || true
+
+            exit 1
+        fi
+
+        privacy_ok "Mullvad VPN tunnel is connected."
+
+
+        ###########################################################################
+        # Verify actual Mullvad connection
+        ###########################################################################
+
+        printf "\n"
+        privacy_info "MULLVAD" "Testing real VPN connectivity..."
+
+        MULLVAD_CHECK="$(
+            curl \
+                --silent \
+                --show-error \
+                --fail \
+                --max-time 30 \
+                https://am.i.mullvad.net/connected \
+                2>/dev/null || true
+        )"
+
+
+        if printf '%s\n' "$MULLVAD_CHECK" | \
+            grep -qi 'You are connected to Mullvad'; then
+
+            privacy_ok "Internet traffic is going through Mullvad."
+
+        else
+
+            printf "${STY_RED}[ ERROR ] Mullvad connection verification failed.${STY_RST}\n"
+            printf "${STY_RED}[ ERROR ] VPN reports connected, but the external check failed.${STY_RST}\n"
+
+            exit 1
+        fi
+    }
+
+
+    ###############################################################################
+    # TOR START + VERIFY FUNCTION
+    ###############################################################################
+
+    tor_start_and_verify()
+    {
+        printf "\n"
+        printf "${STY_BOLD}${STY_CYAN}"
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf '%s\n' '                              TOR'
+        printf '%s\n' '-------------------------------------------------------------------------------'
+        printf "${STY_RST}\n"
+
+
+        ###########################################################################
+        # Start Tor
+        ###########################################################################
+
+        privacy_info "SYSTEMD" "Enabling and starting tor.service..."
+
+        if ! systemctl enable --now tor.service; then
+            privacy_error "Failed to start tor.service."
+        fi
+
+
+        ###########################################################################
+        # Check systemd state
+        ###########################################################################
+
+        if ! systemctl is-active --quiet tor.service; then
+            privacy_error "Tor daemon is not running."
+        fi
+
+        privacy_ok "Tor daemon is running."
+
+
+        ###########################################################################
+        # Wait for SOCKS5
+        ###########################################################################
+
+        printf "\n"
+        privacy_info "TOR" "Waiting for SOCKS5 proxy on 127.0.0.1:9050..."
+
+        TOR_READY=0
+
+        for _ in $(seq 1 30); do
+
+            if (echo > /dev/tcp/127.0.0.1/9050) \
+                >/dev/null 2>&1; then
+
+                TOR_READY=1
+                break
+            fi
+
+            sleep 1
+        done
+
+
+        if [ "$TOR_READY" -ne 1 ]; then
+
+            printf "${STY_RED}[ ERROR ] Tor SOCKS5 port 127.0.0.1:9050 is not reachable.${STY_RST}\n"
+            printf "${STY_RED}[ ERROR ] Check Tor logs with:${STY_RST}\n"
+            printf "         journalctl -u tor.service -n 50 --no-pager\n"
+
+            exit 1
+        fi
+
+        privacy_ok "Tor SOCKS5 proxy is available."
+
+
+        ###########################################################################
+        # Real Tor connectivity test
+        ###########################################################################
+
+        printf "\n"
+        privacy_info "TOR" "Testing real Tor network connectivity..."
+
+        TOR_CHECK="$(
+            curl \
+                --silent \
+                --show-error \
+                --fail \
+                --max-time 45 \
+                --proxy socks5h://127.0.0.1:9050 \
+                https://check.torproject.org/api/ip \
+                2>/dev/null || true
+        )"
+
+
+        if printf '%s' "$TOR_CHECK" | grep -q '"IsTor":true'; then
+
+            privacy_ok "Traffic through Tor is working."
+
+        else
+
+            printf "${STY_RED}[ ERROR ] Tor connectivity test failed.${STY_RST}\n"
+            printf "${STY_RED}[ ERROR ] Tor daemon is running, but a Tor circuit could not be verified.${STY_RST}\n"
+
+            exit 1
+        fi
+    }
+
+
+    ###############################################################################
+    # PACKAGE INSTALLATION
+    ###############################################################################
+
+    case "$PRIVACY_MODE" in
+
+
+        ###########################################################################
+        # TOR
+        ###########################################################################
+
+        tor)
+
+            printf "\n"
+            printf "${STY_BOLD}${STY_CYAN}"
+            printf '%s\n' '==============================================================================='
+            printf '%s\n' '                         INSTALLING TOR'
+            printf '%s\n' '==============================================================================='
+            printf "${STY_RST}\n"
+
+
+            privacy_info "PACMAN" "Installing Tor and curl..."
+
+            if ! pacman -S --needed tor curl; then
+                privacy_error "Tor installation failed."
+            fi
+
+            privacy_ok "Tor packages installed."
+
+            tor_start_and_verify
+
+            ;;
+
+
+        ###########################################################################
+        # MULLVAD VPN
+        ###########################################################################
+
+        mullvad)
+
+            printf "\n"
+            printf "${STY_BOLD}${STY_CYAN}"
+            printf '%s\n' '==============================================================================='
+            printf '%s\n' '                       INSTALLING MULLVAD VPN'
+            printf '%s\n' '==============================================================================='
+            printf "${STY_RST}\n"
+
+
+            privacy_info "PACMAN" "Installing Mullvad VPN daemon and curl..."
+
+            if ! pacman -S --needed mullvad-vpn-daemon curl; then
+                privacy_error "Mullvad VPN installation failed."
+            fi
+
+            privacy_ok "Mullvad packages installed."
+
+
+            #######################################################################
+            # Check CLI
+            #######################################################################
+
+            if ! command -v mullvad >/dev/null 2>&1; then
+                privacy_error "Mullvad CLI was not installed."
+            fi
+
+            privacy_ok "Mullvad CLI is available."
+
+
+            #######################################################################
+            # Start daemon
+            #######################################################################
+
+            printf "\n"
+            privacy_info "SYSTEMD" \
+                "Enabling and starting mullvad-daemon.service..."
+
+            if ! systemctl enable --now mullvad-daemon.service; then
+                privacy_error "Failed to start Mullvad daemon."
+            fi
+
+
+            if ! systemctl is-active --quiet mullvad-daemon.service; then
+                privacy_error "Mullvad daemon is not running."
+            fi
+
+            privacy_ok "Mullvad daemon is running."
+
+
+            #######################################################################
+            # Login if necessary
+            #######################################################################
+
+            mullvad_login_if_needed
+
+
+            #######################################################################
+            # Connect
+            #######################################################################
+
+            mullvad_connect_and_verify
+
+            ;;
+
+
+        ###########################################################################
+        # MULLVAD + TOR
+        ###########################################################################
+
+        mullvad+tor)
+
+            printf "\n"
+            printf "${STY_BOLD}${STY_CYAN}"
+            printf '%s\n' '==============================================================================='
+            printf '%s\n' '                       INSTALLING MULLVAD VPN + TOR'
+            printf '%s\n' '==============================================================================='
+            printf "${STY_RST}\n"
+
+
+            #######################################################################
+            # Install everything
+            #######################################################################
+
+            privacy_info "PACMAN" \
+                "Installing Mullvad VPN daemon, Tor and curl..."
+
+            if ! pacman -S --needed \
+                mullvad-vpn-daemon \
+                tor \
+                curl; then
+
+                privacy_error "Privacy package installation failed."
+            fi
+
+            privacy_ok "Mullvad, Tor and curl installed."
+
+
+            #######################################################################
+            # Check Mullvad CLI
+            #######################################################################
+
+            if ! command -v mullvad >/dev/null 2>&1; then
+                privacy_error "Mullvad CLI is not available."
+            fi
+
+            privacy_ok "Mullvad CLI is available."
+
+
+            #######################################################################
+            # Start Mullvad FIRST
+            #######################################################################
+
+            printf "\n"
+            privacy_info "SYSTEMD" \
+                "Enabling and starting Mullvad daemon..."
+
+            if ! systemctl enable --now mullvad-daemon.service; then
+                privacy_error "Failed to start Mullvad daemon."
+            fi
+
+
+            if ! systemctl is-active --quiet mullvad-daemon.service; then
+                privacy_error "Mullvad daemon is not running."
+            fi
+
+            privacy_ok "Mullvad daemon is running."
+
+
+            #######################################################################
+            # Login
+            #######################################################################
+
+            mullvad_login_if_needed
+
+
+            #######################################################################
+            # Connect Mullvad FIRST
+            #######################################################################
+
+            mullvad_connect_and_verify
+
+
+            #######################################################################
+            # Start Tor AFTER Mullvad
+            #######################################################################
+
+            printf "\n"
+            printf "${STY_BOLD}${STY_CYAN}"
+            printf '%s\n' '-------------------------------------------------------------------------------'
+            printf '%s\n' '                     STARTING TOR OVER MULLVAD'
+            printf '%s\n' '-------------------------------------------------------------------------------'
+            printf "${STY_RST}\n"
+
+
+            tor_start_and_verify
+
+            ;;
+
+
+        ###########################################################################
+        # DIRECT CONNECTION
+        ###########################################################################
+
+        direct)
+
+            printf "\n"
+            printf "${STY_BOLD}${STY_CYAN}"
+            printf '%s\n' '==============================================================================='
+            printf '%s\n' '                         DIRECT CONNECTION'
+            printf '%s\n' '==============================================================================='
+            printf "${STY_RST}\n"
+
+
+            printf "${STY_GREEN}[ OK ] Direct connection selected.${STY_RST}\n"
+            printf "No Tor or Mullvad packages will be installed.\n"
+
+            ;;
+
+
+        ###########################################################################
+        # INVALID INTERNAL STATE
+        ###########################################################################
+
+        *)
+
+            printf "\n"
+            printf "${STY_RED}${STY_BOLD}"
+            printf "[ ERROR ] Invalid privacy mode: %s\n" "$PRIVACY_MODE"
+            printf "${STY_RST}"
+
+            exit 1
+            ;;
+
+    esac
+
+
+    ###############################################################################
+    # FINAL PRIVACY SERVICE STATUS
+    ###############################################################################
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                       PRIVACY SERVICES STATUS'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+
+    case "$PRIVACY_MODE" in
+
+
+        ###########################################################################
+        # TOR FINAL STATUS
+        ###########################################################################
+
+        tor)
+
+            printf "Tor daemon:      "
+
+            if systemctl is-active --quiet tor.service; then
+                printf "${STY_GREEN}ACTIVE${STY_RST}\n"
+            else
+                printf "${STY_RED}INACTIVE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Tor SOCKS5:      "
+
+            if (echo > /dev/tcp/127.0.0.1/9050) \
+                >/dev/null 2>&1; then
+
+                printf "${STY_GREEN}AVAILABLE${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}UNAVAILABLE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Tor network:     "
+
+            TOR_FINAL="$(
+                curl \
+                    --silent \
+                    --show-error \
+                    --fail \
+                    --max-time 45 \
+                    --proxy socks5h://127.0.0.1:9050 \
+                    https://check.torproject.org/api/ip \
+                    2>/dev/null || true
+            )"
+
+
+            if printf '%s' "$TOR_FINAL" | grep -q '"IsTor":true'; then
+                printf "${STY_GREEN}CONNECTED${STY_RST}\n"
+            else
+                printf "${STY_RED}NOT CONNECTED${STY_RST}\n"
+                exit 1
+            fi
+
+            ;;
+
+
+        ###########################################################################
+        # MULLVAD FINAL STATUS
+        ###########################################################################
+
+        mullvad)
+
+            printf "Mullvad daemon:  "
+
+            if systemctl is-active --quiet mullvad-daemon.service; then
+                printf "${STY_GREEN}ACTIVE${STY_RST}\n"
+            else
+                printf "${STY_RED}INACTIVE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad account: "
+
+            if mullvad account get >/dev/null 2>&1; then
+                printf "${STY_GREEN}LOGGED IN${STY_RST}\n"
+            else
+                printf "${STY_RED}NOT LOGGED IN${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad VPN:     "
+
+            MULLVAD_FINAL="$(mullvad status 2>/dev/null || true)"
+
+            if printf '%s\n' "$MULLVAD_FINAL" | \
+                grep -qiE 'Connected|Connected to'; then
+
+                printf "${STY_GREEN}CONNECTED${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}NOT CONNECTED${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad network: "
+
+            MULLVAD_FINAL_CHECK="$(
+                curl \
+                    --silent \
+                    --show-error \
+                    --fail \
+                    --max-time 30 \
+                    https://am.i.mullvad.net/connected \
+                    2>/dev/null || true
+            )"
+
+
+            if printf '%s\n' "$MULLVAD_FINAL_CHECK" | \
+                grep -qi 'You are connected to Mullvad'; then
+
+                printf "${STY_GREEN}VERIFIED${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}FAILED${STY_RST}\n"
+                exit 1
+            fi
+
+            ;;
+
+
+        ###########################################################################
+        # MULLVAD + TOR FINAL STATUS
+        ###########################################################################
+
+        mullvad+tor)
+
+            printf "Mullvad daemon:  "
+
+            if systemctl is-active --quiet mullvad-daemon.service; then
+                printf "${STY_GREEN}ACTIVE${STY_RST}\n"
+            else
+                printf "${STY_RED}INACTIVE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad account: "
+
+            if mullvad account get >/dev/null 2>&1; then
+                printf "${STY_GREEN}LOGGED IN${STY_RST}\n"
+            else
+                printf "${STY_RED}NOT LOGGED IN${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad VPN:     "
+
+            MULLVAD_FINAL="$(mullvad status 2>/dev/null || true)"
+
+            if printf '%s\n' "$MULLVAD_FINAL" | \
+                grep -qiE 'Connected|Connected to'; then
+
+                printf "${STY_GREEN}CONNECTED${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}NOT CONNECTED${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Mullvad network: "
+
+            MULLVAD_FINAL_CHECK="$(
+                curl \
+                    --silent \
+                    --show-error \
+                    --fail \
+                    --max-time 30 \
+                    https://am.i.mullvad.net/connected \
+                    2>/dev/null || true
+            )"
+
+
+            if printf '%s\n' "$MULLVAD_FINAL_CHECK" | \
+                grep -qi 'You are connected to Mullvad'; then
+
+                printf "${STY_GREEN}VERIFIED${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}FAILED${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Tor daemon:      "
+
+            if systemctl is-active --quiet tor.service; then
+                printf "${STY_GREEN}ACTIVE${STY_RST}\n"
+            else
+                printf "${STY_RED}INACTIVE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Tor SOCKS5:      "
+
+            if (echo > /dev/tcp/127.0.0.1/9050) \
+                >/dev/null 2>&1; then
+
+                printf "${STY_GREEN}AVAILABLE${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}UNAVAILABLE${STY_RST}\n"
+                exit 1
+            fi
+
+
+            printf "Tor network:     "
+
+            TOR_FINAL="$(
+                curl \
+                    --silent \
+                    --show-error \
+                    --fail \
+                    --max-time 45 \
+                    --proxy socks5h://127.0.0.1:9050 \
+                    https://check.torproject.org/api/ip \
+                    2>/dev/null || true
+            )"
+
+
+            if printf '%s' "$TOR_FINAL" | \
+                grep -q '"IsTor":true'; then
+
+                printf "${STY_GREEN}CONNECTED${STY_RST}\n"
+
+            else
+
+                printf "${STY_RED}NOT CONNECTED${STY_RST}\n"
+                exit 1
+            fi
+
+            ;;
+
+
+        ###########################################################################
+        # DIRECT FINAL STATUS
+        ###########################################################################
+
+        direct)
+
+            printf "Privacy services: ${STY_GREEN}NOT INSTALLED${STY_RST}\n"
+
+            ;;
+
+    esac
+
+
+    ###############################################################################
+    # FINAL SUCCESS
+    ###############################################################################
+
+    printf "\n"
+
+    printf "${STY_GREEN}${STY_BOLD}"
+    printf '%s\n' '==============================================================================='
+    printf '%s\n' '                    PRIVACY CONFIGURATION COMPLETE'
+    printf '%s\n' '==============================================================================='
+    printf "${STY_RST}\n"
+
+    printf "${STY_GREEN}${STY_BOLD}"
+    printf "[ OK ] Network privacy configuration completed successfully.\n"
+    printf "${STY_RST}\n"
+
+    ###############################################################################
+    # EXISTING INSTALLATION / ARCH INSTALLER
+    ###############################################################################
+
+    if [[ -f /etc/os-release ]] \
+        && [[ -d /run/systemd/system ]] \
+        && [[ ! -d /run/archiso ]]; then
+
+        ARCH_INSTALL_RECOMMENDATION="n"
+
+        # printf "\n"
+        # printf "${STY_BOLD}${STY_CYAN}"
+        # printf "An existing Linux installation was detected.\n"
+        # printf "${STY_RST}"
+
+        # printf "  ${STY_GREEN}Recommendation: No${STY_RST} - "
+        # printf "continue with the existing system.\n"
+
+    else
+
+        ARCH_INSTALL_RECOMMENDATION="y"
+
+        # printf "\n"
+        # printf "${STY_BOLD}${STY_CYAN}"
+        # printf "No existing Linux installation was detected.\n"
+        # printf "${STY_RST}"
+
+        # printf "  ${STY_YELLOW}Recommendation: Yes${STY_RST} - "
+        # printf "start the Arch Linux installer.\n"
+    fi
+
+    ###############################################################################
+    # INSTALLATION DETECTION / INSTALLER SELECTION
+    ###############################################################################
+
+    # Detect whether we are currently running from the official Arch ISO.
+    if [[ -d /run/archiso ]]; then
+      RUNNING_FROM_ARCHISO="yes"
+    else
+      RUNNING_FROM_ARCHISO="no"
+    fi
+
+    # Detect whether a Linux installation is already running.
+    if [[ -f /etc/os-release ]] \
+      && [[ -d /run/systemd/system ]] \
+      && [[ "${RUNNING_FROM_ARCHISO}" != "yes" ]]; then
+      EXISTING_LINUX_INSTALLATION="yes"
+    else
+      EXISTING_LINUX_INSTALLATION="no"
+    fi
+
+    ###############################################################################
+    # DETECT AVAILABLE INSTALLERS
+    ###############################################################################
+
+    # noch eine option bitte: pacman -S blackarch-installer
+    # bzw. :
+    # # NOTE: For development testing, use:
+    # # git clone -b develop https://github.com/BlackArch/blackarch-installer.git
+    # 1) git clone https://github.com/BlackArch/blackarch-installer.git
+    # 2) cp -R blackarch-installer/ /usr/share/blackarch-installer
+    # 3) ln -sf /usr/share/blackarch-installer/blackarch-install /usr/bin/blackarch-install
+    # 4) chmod +x /usr/bin/blackarch-install
+
+    # JK Gray Linux / JK Arch installer
+    if [[ -f "$REPO_ROOT/jk-arch-installer/arch-installer.py" ]]; then
+      JK_GRAY_INSTALLER_AVAILABLE="yes"
+    else
+      JK_GRAY_INSTALLER_AVAILABLE="no"
+    fi
+
+    # BlackArch repository availability
+    if grep -qE '^\[blackarch\]' /etc/pacman.conf; then
+      BLACKARCH_AVAILABLE="yes"
+    else
+      BLACKARCH_AVAILABLE="no"
+    fi
+
+    # BlackArch installer availability
+    if command -v blackarch-install >/dev/null 2>&1; then
+      BLACKARCH_INSTALLER_AVAILABLE="yes"
+    else
+      BLACKARCH_INSTALLER_AVAILABLE="no"
+    fi
+
+    # Official Archinstall
+    if command -v archinstall >/dev/null 2>&1; then
+      ARCHINSTALL_AVAILABLE="yes"
+    else
+      ARCHINSTALL_AVAILABLE="no"
+    fi
+
+    # CachyOS New CLI Installer from GitHub repository.
+    #
+    # Expected repository:
+    #   $REPO_ROOT/cachyos-new-installer/
+    #
+    # The repository contains CMakeLists.txt and the CachyOS CLI installer
+    # source code.
+    if [[ -d "$REPO_ROOT/cachyos-new-installer" ]] \
+      && [[ -f "$REPO_ROOT/cachyos-new-installer/CMakeLists.txt" ]]; then
+      CACHYOS_INSTALLER_AVAILABLE="yes"
+    else
+      CACHYOS_INSTALLER_AVAILABLE="no"
+    fi
+
+    ###############################################################################
+    # DEFAULT RECOMMENDATION
+    ###############################################################################
+
+    if [[ "${EXISTING_LINUX_INSTALLATION}" == "yes" ]]; then
+
+      INSTALL_RECOMMENDATION="5"
+
+    elif [[ "${JK_GRAY_INSTALLER_AVAILABLE}" == "yes" ]]; then
+
+      INSTALL_RECOMMENDATION="1"
+
+    elif [[ "${RUNNING_FROM_ARCHISO}" == "yes" ]]; then
+
+      INSTALL_RECOMMENDATION="2"
+
+    else
+
+      INSTALL_RECOMMENDATION="1"
+
+    fi
+
+    ###############################################################################
+    #                         INSTALLATION OPTIONS
+    ###############################################################################
+
+    printf "\n"
+    printf "${STY_BOLD}${STY_CYAN}###############################################################################${STY_RST}\n"
+    printf "${STY_BOLD}${STY_CYAN}#                         INSTALLATION OPTIONS                                #${STY_RST}\n"
+    printf "${STY_BOLD}${STY_CYAN}###############################################################################${STY_RST}\n\n"
+
+    if [[ "${RUNNING_FROM_ARCHISO}" == "yes" ]]; then
+      printf "${STY_GREEN}[DETECTION] Running from Arch Linux installation media.${STY_RST}\n"
+    elif [[ "${EXISTING_LINUX_INSTALLATION}" == "yes" ]]; then
+      printf "${STY_GREEN}[DETECTION] Existing Linux installation detected.${STY_RST}\n"
+    else
+      printf "${STY_YELLOW}[DETECTION] No existing Linux installation detected.${STY_RST}\n"
+    fi
+
+    printf "\n"
+
+    printf "  ${STY_GREEN}1${STY_RST} = ${STY_BOLD}JK Gray Linux Installer${STY_RST}\n"
+    printf "      Arch Linux + Hyprland + JK Gray Linux base configuration\n"
+    printf "      Security and additional features can be configured afterwards.\n\n"
+
+    printf "  ${STY_GREEN}2${STY_RST} = ${STY_BOLD}Archinstall${STY_RST}\n"
+    printf "      Official Arch Linux guided installer.\n"
+    printf "      ${STY_CYAN}archinstall will be installed automatically if required.${STY_RST}\n\n"
+
+    printf "  ${STY_YELLOW}3${STY_RST} = ${STY_BOLD}CachyOS New CLI Installer${STY_RST} ${STY_YELLOW}[EXPERIMENTAL]${STY_RST}\n"
+    printf "      CachyOS installer from the official GitHub repository.\n"
+    printf "      ${STY_CYAN}The repository will be downloaded automatically if required.${STY_RST}\n\n"
+
+    printf "  ${STY_GREEN}4${STY_RST} = ${STY_BOLD}BlackArch Installer${STY_RST}\n"
+    printf "      BlackArch Linux installation using the BlackArch installer.\n"
+    printf "      Repository and installer availability will be checked automatically.\n\n"
+
+    if [[ "${INSTALL_RECOMMENDATION}" == "5" ]]; then
+      printf "  ${STY_GREEN}5${STY_RST} = ${STY_BOLD}No installation / Keep current configuration${STY_RST} ${STY_YELLOW}[RECOMMENDED]${STY_RST}\n"
+    else
+      printf "  ${STY_GREEN}5${STY_RST} = ${STY_BOLD}No installation / Keep current configuration${STY_RST}\n"
+    fi
+
+    printf "      Do not install another operating system.\n\n"
+
+    printf "${STY_BOLD}Detected configuration:${STY_RST}\n"
+    printf "  JK Gray Installer    : ${JK_GRAY_INSTALLER_AVAILABLE}\n"
+    printf "  BlackArch Repository : ${BLACKARCH_AVAILABLE}\n"
+    printf "  BlackArch Installer  : ${BLACKARCH_INSTALLER_AVAILABLE}\n"
+    printf "  Archinstall          : ${ARCHINSTALL_AVAILABLE}\n"
+    printf "  CachyOS Installer    : ${CACHYOS_INSTALLER_AVAILABLE}\n"
+    printf "  Existing Linux       : ${EXISTING_LINUX_INSTALLATION}\n"
+    printf "  Arch ISO             : ${RUNNING_FROM_ARCHISO}\n\n"
+
+    ###############################################################################
+    # USER SELECTION
+    ###############################################################################
 
     while true; do
-      read -r -p "Should Arch Linux be installed? [y/n] (recommended: ${ARCH_INSTALL_RECOMMENDATION}): " INSTALL_ARCH
 
-      case "${INSTALL_ARCH,,}" in
+      read -r -p \
+        "Select an option [1-5] (recommended: ${INSTALL_RECOMMENDATION}): " \
+        INSTALL_OPTION
 
-        y|yes)
-          printf "${STY_YELLOW}[INFO] Starting the jk-arch Arch Linux installer...${STY_RST}\n\n"
+      # Empty input uses the automatically detected recommendation.
+      if [[ -z "${INSTALL_OPTION}" ]]; then
+        INSTALL_OPTION="${INSTALL_RECOMMENDATION}"
+      fi
 
-          sudo python3 "$REPO_ROOT/jk-arch-installer/arch-installer.py"
+      case "${INSTALL_OPTION}" in
+
+        ###########################################################################
+        # OPTION 1 - JK GRAY LINUX
+        ###########################################################################
+
+        1)
+
+          if [[ "${JK_GRAY_INSTALLER_AVAILABLE}" != "yes" ]]; then
+            printf "\n${STY_RED}[ERROR] JK Gray Linux installer is not available.${STY_RST}\n"
+            printf "Expected:\n"
+            printf "  %s\n\n" \
+              "$REPO_ROOT/jk-arch-installer/arch-installer.py"
+            continue
+          fi
+
+          printf "\n${STY_YELLOW}[INFO] Starting JK Gray Linux installer...${STY_RST}\n\n"
+
+          timedatectl set-ntp true
+
+          if ! command -v python3 >/dev/null 2>&1; then
+            printf "${STY_YELLOW}[INFO] Installing Python...${STY_RST}\n"
+            pacman -Sy --noconfirm python || {
+              printf "${STY_RED}[ERROR] Failed to install Python.${STY_RST}\n"
+              exit 1
+            }
+          fi
+
+          sudo python3 \
+            "$REPO_ROOT/jk-arch-installer/arch-installer.py"
 
           INSTALLER_EXIT_CODE=$?
 
           if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
-            printf "${STY_RED}[ERROR] Arch Linux installer exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
+            printf "\n${STY_RED}[ERROR] JK Gray Linux installer exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
             exit "${INSTALLER_EXIT_CODE}"
           fi
 
-          printf "\n${STY_GREEN}[ OK ] Arch Linux installer finished.${STY_RST}\n"
-          break
+          printf "\n${STY_GREEN}[ OK ] JK Gray Linux base installation completed.${STY_RST}\n\n"
+
+          printf "${STY_CYAN}The installed system now contains the base configuration:${STY_RST}\n"
+          printf "  - Arch Linux\n"
+          printf "  - Hyprland\n"
+          printf "  - Bootloader\n"
+          printf "  - NetworkManager\n"
+          printf "  - PipeWire / WirePlumber\n"
+          printf "  - CPU microcode\n"
+          printf "  - GPU support\n"
+          printf "  - zram\n\n"
+
+          printf "${STY_CYAN}Additional security configuration is performed after the first boot.${STY_RST}\n"
+          printf "The graphical JK Gray Linux installer can then configure, on demand:\n"
+          printf "  - UFW\n"
+          printf "  - AppArmor\n"
+          printf "  - Fail2ban\n"
+          printf "  - Security hardening\n"
+          printf "  - Privacy configuration\n"
+          printf "  - Penetration-testing tools\n"
+          printf "  - Development tools\n"
+          printf "  - Applications\n\n"
+
+          printf "${STY_BOLD}${STY_YELLOW}The system will reboot into the installed system.${STY_RST}\n\n"
+
+          read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
+
+          case "${REBOOT_CONFIRM,,}" in
+            ""|y|yes)
+              printf "${STY_YELLOW}[INFO] Rebooting...${STY_RST}\n"
+              sleep 2
+              reboot
+              exit 0
+              ;;
+            n|no)
+              printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
+              break
+              ;;
+            *)
+              printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+              ;;
+          esac
+
           ;;
 
-        n|no)
-          printf "${STY_GREEN}[ OK ] Skipping Arch Linux installation.${STY_RST}\n"
-          printf "      Continuing with the existing system...\n\n"
-          break
+        ###########################################################################
+        # OPTION 2 - OFFICIAL ARCHINSTALL
+        ###########################################################################
+
+        2)
+
+          printf "\n${STY_YELLOW}[INFO] Preparing the official Archinstall installer...${STY_RST}\n\n"
+
+          timedatectl set-ntp true
+
+          if ! command -v archinstall >/dev/null 2>&1; then
+
+            printf "${STY_YELLOW}[INFO] archinstall is not installed.${STY_RST}\n"
+            printf "${STY_CYAN}[INFO] Installing archinstall from the Arch repositories...${STY_RST}\n\n"
+
+            pacman -Sy --noconfirm archinstall
+
+            if [[ $? -ne 0 ]]; then
+              printf "${STY_RED}[ERROR] Failed to install archinstall.${STY_RST}\n"
+              printf "${STY_YELLOW}Please check your network connection and pacman mirrors.${STY_RST}\n\n"
+              continue
+            fi
+          fi
+
+          if ! command -v archinstall >/dev/null 2>&1; then
+            printf "${STY_RED}[ERROR] archinstall is still unavailable after installation.${STY_RST}\n"
+            continue
+          fi
+
+          printf "${STY_GREEN}[ OK ] archinstall is ready.${STY_RST}\n\n"
+          printf "${STY_YELLOW}[INFO] Starting official Archinstall...${STY_RST}\n\n"
+
+          archinstall
+
+          INSTALLER_EXIT_CODE=$?
+
+          if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
+            printf "\n${STY_RED}[ERROR] archinstall exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
+            continue
+          fi
+
+          printf "\n${STY_GREEN}[ OK ] Archinstall completed.${STY_RST}\n\n"
+
+          printf "${STY_YELLOW}The system should now be rebooted into the new installation.${STY_RST}\n\n"
+
+          read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
+
+          case "${REBOOT_CONFIRM,,}" in
+            ""|y|yes)
+              printf "${STY_YELLOW}[INFO] Rebooting...${STY_RST}\n"
+              sleep 2
+              reboot
+              exit 0
+              ;;
+
+            n|no)
+              printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
+              break
+              ;;
+
+            *)
+              printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+              ;;
+          esac
+
           ;;
 
-        "")
-          printf "${STY_YELLOW}[INFO] Please enter y or n.${STY_RST}\n"
+        ###########################################################################
+        # OPTION 3 - CACHYOS NEW CLI INSTALLER
+        ###########################################################################
+
+        3)
+
+          printf "\n"
+          printf "${STY_BOLD}${STY_YELLOW}CachyOS New CLI Installer${STY_RST}\n"
+          printf "${STY_YELLOW}Experimental installation path${STY_RST}\n\n"
+
+          printf "This will use:\n"
+          printf "  ${CACHYOS_INSTALLER_REPOSITORY}\n\n"
+
+          read -r -p "Continue with CachyOS installation? [y/N]: " CACHY_CONFIRM
+
+          case "${CACHY_CONFIRM,,}" in
+
+            y|yes)
+
+              timedatectl set-ntp true
+
+              #####################################################################
+              # CHECK GIT
+              #####################################################################
+
+              if ! command -v git >/dev/null 2>&1; then
+                printf "${STY_YELLOW}[INFO] Git is not installed.${STY_RST}\n"
+                printf "${STY_CYAN}[INFO] Installing Git...${STY_RST}\n\n"
+
+                pacman -Sy --noconfirm git
+
+                if [[ $? -ne 0 ]]; then
+                  printf "${STY_RED}[ERROR] Failed to install Git.${STY_RST}\n"
+                  continue
+                fi
+              fi
+
+              #####################################################################
+              # DOWNLOAD CACHYOS INSTALLER
+              #####################################################################
+
+              if [[ ! -d "${CACHYOS_INSTALLER_DIR}" ]]; then
+
+                printf "${STY_YELLOW}[INFO] CachyOS installer was not found locally.${STY_RST}\n"
+                printf "${STY_CYAN}[INFO] Downloading from GitHub...${STY_RST}\n\n"
+
+                git clone \
+                  "${CACHYOS_INSTALLER_REPOSITORY}" \
+                  "${CACHYOS_INSTALLER_DIR}"
+
+                if [[ $? -ne 0 ]]; then
+                  printf "${STY_RED}[ERROR] Failed to download the CachyOS installer.${STY_RST}\n"
+                  printf "Repository:\n"
+                  printf "  ${CACHYOS_INSTALLER_REPOSITORY}\n\n"
+                  continue
+                fi
+
+              else
+
+                printf "${STY_GREEN}[ OK ] CachyOS installer repository already exists.${STY_RST}\n"
+
+              fi
+
+              #####################################################################
+              # VERIFY REPOSITORY
+              #####################################################################
+
+              if [[ ! -f "${CACHYOS_INSTALLER_DIR}/CMakeLists.txt" ]]; then
+                printf "${STY_RED}[ERROR] Invalid CachyOS installer repository.${STY_RST}\n"
+                printf "Missing CMakeLists.txt.\n\n"
+                continue
+              fi
+
+              #####################################################################
+              # BUILD DEPENDENCIES
+              #####################################################################
+
+              cd "${CACHYOS_INSTALLER_DIR}" || {
+                printf "${STY_RED}[ERROR] Cannot enter CachyOS installer directory.${STY_RST}\n"
+                continue
+              }
+
+              printf "\n${STY_CYAN}[INFO] Installing CachyOS installer build dependencies...${STY_RST}\n\n"
+
+              pacman -Sy --needed --noconfirm \
+                base-devel \
+                cmake \
+                pkg-config \
+                ninja \
+                clang \
+                mold \
+                llvm
+
+              if [[ $? -ne 0 ]]; then
+                printf "${STY_RED}[ERROR] Failed to install build dependencies.${STY_RST}\n"
+                continue
+              fi
+
+              #####################################################################
+              # BUILD
+              #####################################################################
+
+              printf "\n${STY_CYAN}[INFO] Configuring CachyOS New CLI Installer...${STY_RST}\n"
+
+              cmake -S . -B build
+
+              if [[ $? -ne 0 ]]; then
+                printf "${STY_RED}[ERROR] CMake configuration failed.${STY_RST}\n"
+                continue
+              fi
+
+              printf "${STY_CYAN}[INFO] Building CachyOS New CLI Installer...${STY_RST}\n\n"
+
+              cmake --build build
+
+              if [[ $? -ne 0 ]]; then
+                printf "${STY_RED}[ERROR] CachyOS installer build failed.${STY_RST}\n"
+                continue
+              fi
+
+              printf "\n${STY_GREEN}[ OK ] CachyOS New CLI Installer built successfully.${STY_RST}\n\n"
+
+              #####################################################################
+              # LOCATE EXECUTABLE
+              #####################################################################
+
+              CACHYOS_BINARY=""
+
+              if [[ -x "./build/cachyos-new-installer" ]]; then
+                CACHYOS_BINARY="./build/cachyos-new-installer"
+              else
+                CACHYOS_BINARY="$(find ./build -maxdepth 3 -type f -executable 2>/dev/null | head -n 1)"
+              fi
+
+              if [[ -z "${CACHYOS_BINARY}" ]]; then
+                printf "${STY_RED}[ERROR] Could not find the built CachyOS installer executable.${STY_RST}\n"
+                continue
+              fi
+
+              printf "${STY_GREEN}[ OK ] CachyOS installer executable found:${STY_RST}\n"
+              printf "      ${CACHYOS_BINARY}\n\n"
+
+              #####################################################################
+              # START CACHYOS INSTALLER
+              #####################################################################
+
+              printf "${STY_YELLOW}[INFO] Starting CachyOS New CLI Installer...${STY_RST}\n\n"
+
+              sudo "${CACHYOS_BINARY}"
+
+              INSTALLER_EXIT_CODE=$?
+
+              if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
+                printf "\n${STY_RED}[ERROR] CachyOS installer exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
+                continue
+              fi
+
+              printf "\n${STY_GREEN}[ OK ] CachyOS installation completed.${STY_RST}\n\n"
+
+              printf "${STY_YELLOW}The system should now be rebooted into the new installation.${STY_RST}\n\n"
+
+              read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
+
+              case "${REBOOT_CONFIRM,,}" in
+
+                ""|y|yes)
+                  printf "${STY_YELLOW}[INFO] Rebooting...${STY_RST}\n"
+                  sleep 2
+                  reboot
+                  exit 0
+                  ;;
+
+                n|no)
+                  printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
+                  break
+                  ;;
+
+                *)
+                  printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+                  ;;
+
+              esac
+
+              ;;
+
+            ""|n|no)
+              printf "${STY_GREEN}[ OK ] CachyOS installation cancelled.${STY_RST}\n"
+              ;;
+
+            *)
+              printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+              ;;
+
+          esac
+
           ;;
+
+        ###########################################################################
+        # OPTION 4 - BLACKARCH INSTALLER
+        ###########################################################################
+
+        4)
+
+          printf "\n${STY_BOLD}${STY_YELLOW}BlackArch Installer${STY_RST}\n\n"
+
+          timedatectl set-ntp true || {
+            printf "${STY_YELLOW}[WARNING] Could not enable network time synchronization.${STY_RST}\n"
+          }
+
+          #########################################################################
+          # INSTALL FROM BLACKARCH REPOSITORY
+          #########################################################################
+
+          if [[ "${BLACKARCH_AVAILABLE}" == "yes" ]]; then
+
+            printf "${STY_GREEN}[INFO] BlackArch repository detected.${STY_RST}\n"
+
+            if ! command -v blackarch-install >/dev/null 2>&1; then
+
+              printf "${STY_YELLOW}[INFO] Installing blackarch-installer via pacman...${STY_RST}\n\n"
+
+              if ! pacman -S --needed --noconfirm blackarch-installer; then
+                printf "${STY_RED}[ERROR] Failed to install blackarch-installer.${STY_RST}\n\n"
+                continue
+              fi
+
+            fi
+
+          #########################################################################
+          # NO BLACKARCH REPOSITORY - ASK ABOUT GITHUB INSTALLATION
+          #########################################################################
+
+          else
+
+            printf "${STY_YELLOW}[WARNING] BlackArch repository is not configured.${STY_RST}\n\n"
+            printf "The installer can alternatively be installed directly from GitHub.\n"
+            printf "Repository:\n"
+            printf "  https://github.com/BlackArch/blackarch-installer.git\n\n"
+
+            read -r -p "Install BlackArch installer directly from GitHub? [y/N]: " BLACKARCH_GIT_CONFIRM
+
+            case "${BLACKARCH_GIT_CONFIRM,,}" in
+
+              y|yes)
+
+                ###################################################################
+                # CHECK GIT
+                ###################################################################
+
+                if ! command -v git >/dev/null 2>&1; then
+
+                  printf "${STY_YELLOW}[INFO] Git is not installed. Installing Git...${STY_RST}\n\n"
+
+                  if ! pacman -S --needed --noconfirm git; then
+                    printf "${STY_RED}[ERROR] Failed to install Git.${STY_RST}\n\n"
+                    continue
+                  fi
+
+                fi
+
+                ###################################################################
+                # CLONE REPOSITORY
+                ###################################################################
+
+                BLACKARCH_SOURCE_DIR="${REPO_ROOT}/blackarch-installer"
+                BLACKARCH_INSTALL_DIR="/usr/share/blackarch-installer"
+                BLACKARCH_INSTALL_BIN="/usr/bin/blackarch-install"
+
+                if [[ ! -d "${BLACKARCH_SOURCE_DIR}/.git" ]]; then
+
+                  if [[ -e "${BLACKARCH_SOURCE_DIR}" ]]; then
+                    printf "${STY_RED}[ERROR] Destination exists but is not a Git repository:${STY_RST}\n"
+                    printf "  %s\n\n" "${BLACKARCH_SOURCE_DIR}"
+                    continue
+                  fi
+
+                  printf "${STY_YELLOW}[INFO] Cloning BlackArch installer from GitHub...${STY_RST}\n\n"
+
+                  if ! git clone \
+                    https://github.com/BlackArch/blackarch-installer.git \
+                    "${BLACKARCH_SOURCE_DIR}"; then
+                    printf "${STY_RED}[ERROR] Failed to clone BlackArch installer.${STY_RST}\n\n"
+                    continue
+                  fi
+
+                else
+
+                  printf "${STY_GREEN}[INFO] Existing BlackArch Git repository found.${STY_RST}\n"
+
+                fi
+
+                ###################################################################
+                # VERIFY SOURCE
+                ###################################################################
+
+                if [[ ! -f "${BLACKARCH_SOURCE_DIR}/blackarch-install" ]]; then
+                  printf "${STY_RED}[ERROR] blackarch-install script not found in cloned repository.${STY_RST}\n"
+                  printf "Expected: %s\n\n" "${BLACKARCH_SOURCE_DIR}/blackarch-install"
+                  continue
+                fi
+
+                ###################################################################
+                # INSTALL FILES
+                ###################################################################
+
+                printf "${STY_YELLOW}[INFO] Installing BlackArch installer files...${STY_RST}\n\n"
+
+                if ! install -d "${BLACKARCH_INSTALL_DIR}"; then
+                  printf "${STY_RED}[ERROR] Could not create installation directory.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! cp -a "${BLACKARCH_SOURCE_DIR}/." "${BLACKARCH_INSTALL_DIR}/"; then
+                  printf "${STY_RED}[ERROR] Failed to copy installer files.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! chmod +x "${BLACKARCH_INSTALL_DIR}/blackarch-install"; then
+                  printf "${STY_RED}[ERROR] Failed to make installer executable.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! ln -sf \
+                  "${BLACKARCH_INSTALL_DIR}/blackarch-install" \
+                  "${BLACKARCH_INSTALL_BIN}"; then
+                  printf "${STY_RED}[ERROR] Failed to create installer symlink.${STY_RST}\n\n"
+                  continue
+                fi
+
+                printf "${STY_GREEN}[ OK ] BlackArch installer installed from GitHub.${STY_RST}\n\n"
+
+                ;;
+
+              ""|n|no)
+
+                printf "${STY_YELLOW}[INFO] GitHub installation cancelled.${STY_RST}\n\n"
+                continue
+                ;;
+
+              *)
+
+                printf "${STY_RED}Please enter y or n.${STY_RST}\n\n"
+                continue
+                ;;
+
+            esac
+
+          fi
+
+          #########################################################################
+          # VERIFY INSTALLATION
+          #########################################################################
+
+          if [[ ! -x /usr/bin/blackarch-install ]] \
+            && ! command -v blackarch-install >/dev/null 2>&1; then
+
+            printf "${STY_RED}[ERROR] BlackArch installer executable is unavailable.${STY_RST}\n"
+            printf "Please verify the package installation or GitHub installation.\n\n"
+            continue
+
+          fi
+
+          #########################################################################
+          # START INSTALLER
+          #########################################################################
+
+          printf "${STY_GREEN}[ OK ] BlackArch installer is ready.${STY_RST}\n\n"
+          printf "${STY_YELLOW}[INFO] Starting BlackArch installer...${STY_RST}\n\n"
+
+          if [[ -x /usr/bin/blackarch-install ]]; then
+            /usr/bin/blackarch-install
+          else
+            blackarch-install
+          fi
+
+          INSTALLER_EXIT_CODE=$?
+
+          if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
+            printf "\n${STY_RED}[ERROR] BlackArch installer exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n\n"
+            continue
+          fi
+
+          printf "\n${STY_GREEN}[ OK ] BlackArch installer finished.${STY_RST}\n\n"
+
+          ;;
+
+        ###########################################################################
+        # OPTION 5 - KEEP CURRENT CONFIGURATION
+        ###########################################################################
+
+        5)
+
+          printf "\n${STY_GREEN}[ OK ] Keeping the current system configuration.${STY_RST}\n"
+          printf "      No operating system will be installed.\n"
+          printf "      Continuing with the existing JK Gray Linux configuration...\n\n"
+
+          break
+
+          ;;
+
+        ###########################################################################
+        # INVALID OPTION
+        ###########################################################################
 
         *)
-          printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+
+          printf "\n${STY_RED}Invalid selection.${STY_RST}\n"
+          printf "Please choose ${STY_GREEN}1${STY_RST}, ${STY_GREEN}2${STY_RST}, ${STY_GREEN}3${STY_RST}, ${STY_GREEN}4${STY_RST} or ${STY_GREEN}5${STY_RST}.\n\n"
+
           ;;
 
       esac
+
     done
 
     for function in ${print_os_group_id_functions[@]}; do
