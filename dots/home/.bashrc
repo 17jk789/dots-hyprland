@@ -221,87 +221,39 @@ httphead() {
 }
 
 # ---------------------------------------------------------------------------
-# Atuin: shared history
+# Atuin: Up-arrow history search, insert without execution
 # ---------------------------------------------------------------------------
-# Atuin records commands using its shell hooks.
-# Keep Ctrl-R free for our fzf picker; Atuin retains Up-arrow integration.
 
 if command -v atuin >/dev/null 2>&1; then
     eval "$(atuin init bash --disable-ctrl-r)"
+
+    # Requires Atuin >= 18.10.0.
+    if declare -F atuin-bind >/dev/null 2>&1; then
+        for keymap in emacs vi-insertion vi-command; do
+            case "$keymap" in
+                emacs)        handler=atuin-up-search-emacs ;;
+                vi-insertion) handler=atuin-up-search-viins ;;
+                vi-command)   handler=atuin-up-search-vicmd ;;
+            esac
+
+            atuin-bind -m "$keymap" '\e[A'  "$handler"
+            atuin-bind -m "$keymap" '\eOA' "$handler"
+        done
+    fi
 fi
 
 # ---------------------------------------------------------------------------
-# fzf: file search and shared history
+# NIGHTWATCH: native Bash + fzf
 # ---------------------------------------------------------------------------
 
-if command -v fzf >/dev/null 2>&1; then
-    # Set defaults only if the user has not configured their own options.
-    if [[ -z ${FZF_DEFAULT_OPTS:-} ]]; then
-        export FZF_DEFAULT_OPTS='--height=80% --layout=reverse-list --border=rounded --info=inline --margin=1 --padding=1'
-    fi
+_nightwatch="$HOME/.config/bash/nightwatch-fzf.bash"
 
-    if command -v fd >/dev/null 2>&1; then
-        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
-    elif command -v rg >/dev/null 2>&1; then
-        export FZF_DEFAULT_COMMAND='rg --files --hidden -g !.git -g !node_modules'
-    fi
-
-    if [[ -n ${FZF_DEFAULT_COMMAND:-} ]]; then
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    fi
-
-    # Load the official fzf bindings for the installed version.
-    if fzf --bash >/dev/null 2>&1; then
-        eval "$(fzf --bash)"
-    elif [[ -r /usr/share/fzf/key-bindings.bash ]]; then
-        source /usr/share/fzf/key-bindings.bash
-        [[ -r /usr/share/fzf/completion.bash ]] &&
-            source /usr/share/fzf/completion.bash
-    fi
-
-    _nightwatch_fzf_history() {
-        local selected
-
-        if command -v atuin >/dev/null 2>&1; then
-            selected="$(
-                command atuin history list --cmd-only --reverse=true 2>/dev/null |
-                    command fzf \
-                        --scheme=history \
-                        --no-multi \
-                        --layout=reverse-list \
-                        --height=80% \
-                        --border=rounded \
-                        --border-label=' Shared History ' \
-                        --prompt='history> ' \
-                        --pointer='>' \
-                        --query="$READLINE_LINE"
-            )" || return 0
-        else
-            selected="$(
-                builtin history |
-                    command sed -E 's/^[[:space:]]*[0-9]+\**[[:space:]]+//' |
-                    command fzf \
-                        --scheme=history \
-                        --no-multi \
-                        --layout=reverse-list \
-                        --height=80% \
-                        --border=rounded \
-                        --prompt='history> ' \
-                        --query="$READLINE_LINE"
-            )" || return 0
-        fi
-
-        # Escape/cancel must not alter the current input.
-        [[ -n $selected ]] || return 0
-
-        READLINE_LINE=$selected
-        READLINE_POINT=${#READLINE_LINE}
-    }
-
-    # Install the picker in both Readline Vi maps.
-    bind -m vi-insert -x '"\C-r": _nightwatch_fzf_history'
-    bind -m vi-command -x '"\C-r": _nightwatch_fzf_history'
+if [[ -r "$_nightwatch" ]]; then
+    source "$_nightwatch"
+else
+    printf 'NIGHTWATCH: Datei nicht lesbar: %s\n' "$_nightwatch" >&2
 fi
+unset _nightwatch
 
 # ---------------------------------------------------------------------------
 # Prompt and optional integrations
