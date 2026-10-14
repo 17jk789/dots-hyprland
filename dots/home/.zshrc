@@ -1,124 +1,178 @@
-#
 # ~/.zshrc
-# NIGHTWATCH — independent Arch / CachyOS / BlackArch-inspired Zsh
-# Zsh + Starship | Catppuccin Mocha | FZF | optional Zsh plugins
-#
+# NIGHTWATCH | Zsh | Arch / BlackArch
+# Fast completion cache, Atuin history, fzf picker, native ZLE Vi mode.
 
-# Interactive shells only.
 [[ -o interactive ]] || return
-
-# Guard against accidental duplicate sourcing.
 [[ ${_NIGHTWATCH_ZSHRC_LOADED:-0} == 1 ]] && return
 typeset -g _NIGHTWATCH_ZSHRC_LOADED=1
 
-# ── Environment ──────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Environment and PATH
+# ---------------------------------------------------------------------------
+
 export SHELL_NAME=zsh
 export EDITOR="${EDITOR:-nvim}"
 export VISUAL="${VISUAL:-$EDITOR}"
 export PAGER="${PAGER:-less -FRX}"
 export LESSHISTFILE=-
-
-# Preserve the system PATH and prepend user-local locations only when present.
-typeset -U path PATH
-[[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
-[[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-[[ -d "$HOME/.local/share/bin" ]] && path=("$HOME/.local/share/bin" $path)
-[[ -d "$HOME/.cargo/bin" ]] && path=("$HOME/.cargo/bin" $path)
-export PATH
-
-# Load Cargo's official helper when available.
-[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-
-# Restrictive default permissions for newly created files.
 umask 077
 
-# ── Completion ───────────────────────────────────────────────────────────────
+# Keep PATH unique without removing system paths.
+typeset -U path PATH
+
+for _nw_dir in \
+    "$HOME/.local/bin" \
+    "$HOME/bin" \
+    "$HOME/.local/share/bin" \
+    "$HOME/.cargo/bin"; do
+    [[ -d $_nw_dir ]] && path=("$_nw_dir" "${path[@]}")
+done
+unset _nw_dir
+
+[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# ---------------------------------------------------------------------------
+# Completion: cache initialization for faster startup
+# ---------------------------------------------------------------------------
+
 autoload -Uz compinit
 zmodload -i zsh/complist 2>/dev/null
 
-# Keep completion cache private; refresh periodically rather than every shell.
-ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
-mkdir -p -- "${ZSH_COMPDUMP:h}" 2>/dev/null
-_compinit_args=(-d "$ZSH_COMPDUMP")
-[[ -n ${ZSH_COMPDUMP_FORCE:-} ]] && _compinit_args+=(-C)
-compinit "${_compinit_args[@]}"
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+ZSH_COMPDUMP="$ZSH_CACHE_DIR/zcompdump-${ZSH_VERSION}"
+
+command mkdir -p "$ZSH_CACHE_DIR" 2>/dev/null
+
+# -C reuses the existing dump without running a full security audit every
+# startup. Run NIGHTWATCH_COMPINIT_SECURE=1 zsh to force a full audit.
+if [[ -r "$ZSH_COMPDUMP" &&
+      ${NIGHTWATCH_COMPINIT_SECURE:-0} != 1 ]]; then
+    compinit -C -d "$ZSH_COMPDUMP"
+else
+    compinit -d "$ZSH_COMPDUMP"
+fi
 
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '%F{blue}── %d ──%f'
 zstyle ':completion:*' use-cache yes
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
+zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR/zcompcache"
+
+# Include dotfiles in completion.
 _comp_options+=(globdots)
 
-# ── Keybindings ──────────────────────────────────────────────────────────────
-# Vi mode; use KEYTIMEOUT to make mode switching responsive.
+# ---------------------------------------------------------------------------
+# ZLE: Vi mode and terminal navigation
+# ---------------------------------------------------------------------------
+
 bindkey -v
 export KEYTIMEOUT=1
 
-# Reliable terminal-aware Home/End/Delete/Page keys, with common fallbacks.
 zmodload -i zsh/terminfo 2>/dev/null
-[[ -n ${terminfo[khome]-} ]] && bindkey "${terminfo[khome]}" beginning-of-line
-[[ -n ${terminfo[kend]-} ]] && bindkey "${terminfo[kend]}" end-of-line
-[[ -n ${terminfo[kdch1]-} ]] && bindkey "${terminfo[kdch1]}" delete-char
-[[ -n ${terminfo[kich1]-} ]] && bindkey "${terminfo[kich1]}" overwrite-mode
-[[ -n ${terminfo[kpp]-} ]] && bindkey "${terminfo[kpp]}" history-beginning-search-backward
-[[ -n ${terminfo[knp]-} ]] && bindkey "${terminfo[knp]}" history-beginning-search-forward
+
+[[ -n ${terminfo[khome]-} ]] &&
+    bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n ${terminfo[kend]-} ]] &&
+    bindkey "${terminfo[kend]}" end-of-line
+[[ -n ${terminfo[kdch1]-} ]] &&
+    bindkey "${terminfo[kdch1]}" delete-char
+[[ -n ${terminfo[kich1]-} ]] &&
+    bindkey "${terminfo[kich1]}" overwrite-mode
+
+# Common terminal escape sequences.
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 bindkey '^[[3~' delete-char
-bindkey '^[[5~' history-beginning-search-backward
-bindkey '^[[6~' history-beginning-search-forward
+bindkey '^[[Z' undo
+bindkey '^?' backward-delete-char
+
+# Ctrl+Left/Right: move by word.
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[Oc' forward-word
 bindkey '^[Od' backward-word
-bindkey '^H' backward-kill-word
-bindkey '^[[Z' undo
 
-# Search through history using Up/Down, preserving the current input.
+# Up/Down: search history by the current prefix when Atuin is absent.
+# Atuin's integration is loaded below and owns these keys when installed.
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
-bindkey '^[[A' up-line-or-beginning-search
-bindkey '^[[B' down-line-or-beginning-search
 
-# ── History ──────────────────────────────────────────────────────────────────
+bindkey -M viins '^[[A' up-line-or-beginning-search
+bindkey -M viins '^[[B' down-line-or-beginning-search
+bindkey -M vicmd '^[[A' up-line-or-beginning-search
+bindkey -M vicmd '^[[B' down-line-or-beginning-search
+
+# Familiar Vi motions.
+bindkey -M vicmd 'w' forward-word
+bindkey -M vicmd 'b' backward-word
+bindkey -M vicmd 'W' forward-word
+bindkey -M vicmd 'B' backward-word
+bindkey -M vicmd '^A' beginning-of-line
+bindkey -M vicmd '^E' end-of-line
+
+# Cursor shape: line in insert mode, block in normal mode.
+_nw_cursor_insert() { print -n -- $'\e[6 q' }
+_nw_cursor_normal() { print -n -- $'\e[2 q' }
+
+zle-line-init() {
+    _nw_cursor_insert
+}
+zle-keymap-select() {
+    if [[ $KEYMAP == vicmd || $KEYMAP == isearch || $KEYMAP == command ]]; then
+        _nw_cursor_normal
+    else
+        _nw_cursor_insert
+    fi
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+# ---------------------------------------------------------------------------
+# Native Zsh history
+# ---------------------------------------------------------------------------
+
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
-[[ -d "${HISTFILE:h}" ]] || mkdir -p -- "${HISTFILE:h}" 2>/dev/null
-HISTSIZE=30000
-SAVEHIST=60000
+command mkdir -p "${HISTFILE:h}" 2>/dev/null
+
+HISTSIZE=20000
+SAVEHIST=40000
+
 setopt APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
-setopt HIST_SAVE_NO_DUPS
-setopt SHARE_HISTORY
-setopt INC_APPEND_HISTORY
 setopt INTERACTIVE_COMMENTS
 
-# Do not persist common one-off/noisy commands. Prefix a command with a space
-# to keep it out of history (HIST_IGNORE_SPACE).
-HISTORY_IGNORE='(ls|ll|la|clear|c|pwd|exit|history|cd|cd ..|..|...|....)'
+# Do not save routine noise; commands prefixed with a space are ignored too.
+HISTORY_IGNORE='(ls|ll|la|lla|l|clear|c|pwd|exit|history)'
 
-# ── Navigation / shell behavior ──────────────────────────────────────────────
+# AUTO_CD and directory stack convenience.
 setopt AUTO_CD
 setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
-setopt INTERACTIVE_COMMENTS
 setopt NO_BEEP
-setopt CORRECT
 setopt LONG_LIST_JOBS
 
-# ── Colors and portable aliases ──────────────────────────────────────────────
+# Deliberately omit CORRECT: pentest tools, flags and target names can be
+# unusual, and interactive correction can slow down or interrupt workflows.
+
+# ---------------------------------------------------------------------------
+# Aliases and CLI
+# ---------------------------------------------------------------------------
+
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -color=auto'
+
 alias c='clear'
 alias r='reset'
 alias h='history'
@@ -126,142 +180,344 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias cd..='cd ..'
+
 alias ports='ss -tulpen'
 alias listening='ss -lntup'
 alias myip='ip -brief address'
+
 alias df='df -h'
 alias free='free -h'
 alias du='du -h'
 alias dd='dd status=progress'
 
-# Interactive overwrite safety for file operations.
-# Use command cp/mv/rm to bypass these aliases deliberately.
+# Interactive confirmation for accidental overwrites.
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
 if (( $+commands[eza] )); then
-  alias ls='eza --icons=auto --group-directories-first'
-  alias ll='eza -lah --icons=auto --git'
-  alias la='eza -a --icons=auto --group-directories-first'
-  alias tree='eza --tree --icons=auto'
-  alias l='eza -lah --icons=auto --group-directories-first'
+    alias ls='eza --icons=auto --group-directories-first'
+    alias ll='eza -lah --icons=auto --git'
+    alias la='eza -a --icons=auto --group-directories-first'
+    alias lla='eza -laa --icons=auto --group-directories-first'
+    alias l='eza -lah --icons=auto --group-directories-first'
+    alias tree='eza --tree --icons=auto'
 else
-  alias ls='ls --color=auto'
-  alias ll='ls -lah --color=auto'
-  alias la='ls -A --color=auto'
-  alias l='ls -lah --color=auto'
-  alias tree='tree -C'
+    alias ls='ls --color=auto'
+    alias ll='ls -lah --color=auto'
+    alias la='ls -A --color=auto'
+    alias lla='ls -la --color=auto'
+    alias l='ls -lah --color=auto'
+    (( $+commands[tree] )) && alias tree='tree -C'
 fi
 
 if (( $+commands[bat] )); then
-  alias cat='bat --paging=never'
+    alias cat='bat --paging=never'
 elif (( $+commands[batcat] )); then
-  alias cat='batcat --paging=never'
+    alias cat='batcat --paging=never'
 fi
 
 (( $+commands[nvim] )) && alias vi='nvim'
-(( $+commands[rg] )) && alias grepall='rg --hidden --glob "!.git" --glob "!node_modules"'
-(( $+commands[fd] )) || { (( $+commands[fdfind] )) && alias fd='fdfind'; }
 
-# ── Practical helpers ────────────────────────────────────────────────────────
+if (( ! $+commands[fd] && $+commands[fdfind] )); then
+    alias fd='fdfind'
+fi
+
+if (( $+commands[rg] )); then
+    alias grepall='rg --hidden --glob "!.git" --glob "!node_modules"'
+fi
+
+# ---------------------------------------------------------------------------
+# Small helpers
+# ---------------------------------------------------------------------------
+
 mkcd() {
-  (( $# == 1 )) || { print -u2 'Usage: mkcd DIRECTORY'; return 2; }
-  command mkdir -p -- "$1" && builtin cd -- "$1"
+    (( $# == 1 )) || {
+        print -u2 'Usage: mkcd DIRECTORY'
+        return 2
+    }
+
+    command mkdir -p -- "$1" && builtin cd -- "$1"
 }
 
 extract() {
-  (( $# == 1 )) && [[ -f "$1" ]] || {
-    print -u2 'Usage: extract ARCHIVE'
-    return 2
-  }
-  case "$1" in
-    *.tar.bz2|*.tbz2) command tar -xjf "$1" ;;
-    *.tar.gz|*.tgz)   command tar -xzf "$1" ;;
-    *.tar.xz|*.txz)   command tar -xJf "$1" ;;
-    *.tar.zst|*.tzst) command tar --zstd -xf "$1" ;;
-    *.tar)            command tar -xf "$1" ;;
-    *.bz2)            command bunzip2 -- "$1" ;;
-    *.gz)             command gunzip -- "$1" ;;
-    *.xz)             command unxz -- "$1" ;;
-    *.zip)            command unzip -- "$1" ;;
-    *.7z)             command 7z x -- "$1" ;;
-    *) print -u2 "extract: unsupported archive: $1"; return 1 ;;
-  esac
+    (( $# == 1 )) && [[ -f "$1" ]] || {
+        print -u2 'Usage: extract ARCHIVE'
+        return 2
+    }
+
+    case "$1" in
+        *.tar.bz2|*.tbz2) command tar -xjf "$1" ;;
+        *.tar.gz|*.tgz)   command tar -xzf "$1" ;;
+        *.tar.xz|*.txz)   command tar -xJf "$1" ;;
+        *.tar.zst|*.tzst) command tar --zstd -xf "$1" ;;
+        *.tar)            command tar -xf "$1" ;;
+        *.bz2)            command bunzip2 -- "$1" ;;
+        *.gz)             command gunzip -- "$1" ;;
+        *.xz)             command unxz -- "$1" ;;
+        *.zip)            command unzip "$1" ;;
+        *.7z)             command 7z x "$1" ;;
+        *)
+            print -u2 "extract: unsupported archive: $1"
+            return 1
+            ;;
+    esac
 }
 
 croot() {
-  if (( $+commands[rg] )); then
-    command rg --hidden --glob '!.git' --glob '!node_modules' --glob '!vendor' "$@"
-  else
-    command grep -RIn --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=vendor -- "$@"
-  fi
+    if (( $+commands[rg] )); then
+        command rg --hidden \
+            --glob '!.git' \
+            --glob '!node_modules' \
+            --glob '!vendor' "$@"
+    else
+        command grep -RIn \
+            --exclude-dir=.git \
+            --exclude-dir=node_modules \
+            --exclude-dir=vendor -- "$@"
+    fi
+}
+
+dns() {
+    (( $+commands[dig] )) || {
+        print -u2 'dns: install bind (dig)'
+        return 127
+    }
+    (( $# > 0 )) || {
+        print -u2 'Usage: dns DOMAIN [dig options]'
+        return 2
+    }
+    command dig "$@"
+}
+
+pubip() {
+    (( $+commands[curl] )) || {
+        print -u2 'pubip: curl is not installed'
+        return 127
+    }
+    command curl -fsS --max-time 5 https://api.ipify.org && print
+}
+
+httphead() {
+    (( $+commands[curl] )) || {
+        print -u2 'httphead: curl is not installed'
+        return 127
+    }
+    (( $# == 1 )) || {
+        print -u2 'Usage: httphead URL'
+        return 2
+    }
+    command curl -sS -I -L --max-time 10 -- "$1"
 }
 
 shellinfo() {
-  print -r -- "Shell:     Zsh $ZSH_VERSION"
-  print -r -- "Kernel:    $(uname -sr)"
-  print -r -- "User:      ${USER:-unknown}"
-  print -r -- "Host:      $(hostname -s 2>/dev/null || hostname)"
-  print -r -- "Directory: $PWD"
-  print -r -- "Prompt:    $([[ $+commands[starship] == 1 ]] && print Starship || print fallback)"
+    print -r -- "Shell:     Zsh $ZSH_VERSION"
+    print -r -- "Kernel:    $(uname -sr)"
+    print -r -- "Directory: $PWD"
+    print -r -- "History:   $(( $+commands[atuin] )) (Atuin installed: 1=yes)"
+    print -r -- "Prompt:    $(( $+commands[starship] )) (Starship installed: 1=yes)"
 }
 
-# ── FZF ──────────────────────────────────────────────────────────────────────
-if (( $+commands[fzf] )); then
-  export FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border=rounded --info=inline --margin=1 --padding=1'
-  if (( $+commands[fd] )); then
-    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  elif (( $+commands[rg] )); then
-    export FZF_DEFAULT_COMMAND='rg --files --hidden -g !.git -g !node_modules'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  fi
-  if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
-    source /usr/share/fzf/key-bindings.zsh
-    [[ -r /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
-  elif (( $+commands[fzf] )); then
-    source <(fzf --zsh)
-  fi
+# ---------------------------------------------------------------------------
+# Atuin: shared history and Up-arrow integration
+# ---------------------------------------------------------------------------
+
+if (( $+commands[atuin] )); then
+    # Atuin owns Up; our fzf widget owns Ctrl-R.
+    eval "$(atuin init zsh --disable-ctrl-r)"
 fi
 
-# ── Optional plugin integrations ─────────────────────────────────────────────
-# Arch packages commonly install plugins under /usr/share/zsh/plugins.
-# Load autosuggestions before syntax-highlighting; highlighting must be last.
-for _plugin in \
-  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
-  /usr/share/zsh/plugins/zsh-autosuggestions.zsh \
-  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; do
-  if [[ -r "$_plugin" ]]; then source "$_plugin"; break; fi
-done
+# ---------------------------------------------------------------------------
+# fzf: file picker and cross-shell history picker
+# ---------------------------------------------------------------------------
 
-# ── Optional directory/environment tools ─────────────────────────────────────
+if (( $+commands[fzf] )); then
+    if [[ -z ${FZF_DEFAULT_OPTS:-} ]]; then
+        export FZF_DEFAULT_OPTS='--height=80% --layout=reverse-list --border=rounded --info=inline --margin=1 --padding=1'
+    fi
+
+    if (( $+commands[fd] )); then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
+    elif (( $+commands[rg] )); then
+        export FZF_DEFAULT_COMMAND='rg --files --hidden -g !.git -g !node_modules'
+    fi
+
+    [[ -n ${FZF_DEFAULT_COMMAND:-} ]] &&
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+    # Official fzf bindings/completion, according to the installed version.
+    if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
+        source /usr/share/fzf/key-bindings.zsh
+        [[ -r /usr/share/fzf/completion.zsh ]] &&
+            source /usr/share/fzf/completion.zsh
+    else
+        source <(fzf --zsh)
+    fi
+fi
+
+_nw_fzf_history_widget() {
+    local selected
+
+    if (( ! $+commands[fzf] )); then
+        zle -M 'fzf is not installed'
+        return 127
+    fi
+
+    if (( $+commands[atuin] )); then
+        selected="$(
+            command atuin history list --cmd-only --reverse=true 2>/dev/null |
+                command fzf \
+                    --scheme=history \
+                    --no-multi \
+                    --layout=reverse-list \
+                    --height=80% \
+                    --border=rounded \
+                    --border-label=' Shared History ' \
+                    --prompt='history> ' \
+                    --pointer='>' \
+                    --query="$LBUFFER"
+        )"
+    else
+        selected="$(
+            fc -rl 1 |
+                command sed -E 's/^[[:space:]]*[0-9]+\**[[:space:]]+//' |
+                command fzf \
+                    --scheme=history \
+                    --no-multi \
+                    --layout=reverse-list \
+                    --height=80% \
+                    --border=rounded \
+                    --prompt='history> ' \
+                    --query="$LBUFFER"
+        )"
+    fi
+
+    # Cancel without modifying the current command.
+    [[ -n $selected ]] && {
+        BUFFER=$selected
+        CURSOR=${#BUFFER}
+    }
+
+    zle reset-prompt
+}
+
+zle -N _nw_fzf_history_widget
+bindkey -M viins '^R' _nw_fzf_history_widget
+bindkey -M vicmd '^R' _nw_fzf_history_widget
+
+# ---------------------------------------------------------------------------
+# Optional integrations
+# ---------------------------------------------------------------------------
+
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
-# ── Prompt ───────────────────────────────────────────────────────────────────
-# Starship is the single prompt owner. The fallback works without Starship.
 if (( $+commands[starship] )); then
-  export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship.toml}"
-  eval "$(starship init zsh)"
-else
-  autoload -Uz colors && colors
-  setopt PROMPT_SUBST
-  _nightwatch_prompt() {
-    local code=$?
-    local status_color='%F{green}'
-    (( code != 0 )) && status_color='%F{red}'
-    PROMPT=$'\n'"%F{blue}╭─%F{cyan}%n@%m %F{blue}│ %F{teal}%~ ${status_color}[${code}]%f"$'\n'"%F{blue}╰─%F{green}❯%f "
-  }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook precmd _nightwatch_prompt
+    export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship.toml}"
+    eval "$(starship init zsh)"
 fi
 
-# Syntax highlighting must be loaded last among ZLE plugins.
-for _plugin in \
-  /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
-  /usr/share/zsh/plugins/zsh-syntax-highlighting.zsh \
-  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
-  if [[ -r "$_plugin" ]]; then source "$_plugin"; break; fi
+# ---------------------------------------------------------------------------
+# Optional autosuggestions
+# ---------------------------------------------------------------------------
+# Load one available installation. Native Zsh suggestions are not a promise
+# that all Fish/Bash inline suggestion engines will behave identically.
+
+for _nw_plugin in \
+    /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh/plugins/zsh-autosuggestions.zsh \
+    /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+    if [[ -r $_nw_plugin ]]; then
+        source "$_nw_plugin"
+        break
+    fi
 done
-unset _plugin
+
+# ---------------------------------------------------------------------------
+# ZLE widgets: preserve the command line while launching interactive tools
+# ---------------------------------------------------------------------------
+
+_nw_clear_widget() {
+    echoti clear 2>/dev/null || printf '\e[H\e[2J'
+    zle reset-prompt
+}
+
+_nw_tui_widget() {
+    local app=$1
+    shift
+
+    zle -I
+
+    if (( $+commands[$app] )); then
+        print
+        command "$app" "$@"
+        print
+    else
+        print -u2 "NIGHTWATCH: $app is not installed."
+    fi
+
+    zle reset-prompt
+}
+
+_nw_list_widget()    { _nw_tui_widget ls -la }
+_nw_yazi_widget()    { _nw_tui_widget yazi }
+_nw_nvim_widget()    { _nw_tui_widget nvim . }
+_nw_lazygit_widget() { _nw_tui_widget lazygit }
+_nw_navi_widget()    { _nw_tui_widget lazy_navi }
+
+_nw_edit_widget() {
+    local tmp rc
+
+    tmp=$(command mktemp "${TMPDIR:-/tmp}/nightwatch-zsh.XXXXXX") || return 1
+    command chmod 600 "$tmp"
+    print -rn -- "$BUFFER" > "$tmp"
+
+    zle -I
+    "${VISUAL:-${EDITOR:-vi}}" "$tmp"
+    rc=$?
+
+    if (( rc == 0 )); then
+        BUFFER=$(<"$tmp")
+        CURSOR=$#BUFFER
+    fi
+
+    command rm -f -- "$tmp"
+    zle reset-prompt
+    return $rc
+}
+
+zle -N _nw_clear_widget
+zle -N _nw_list_widget
+zle -N _nw_yazi_widget
+zle -N _nw_nvim_widget
+zle -N _nw_lazygit_widget
+zle -N _nw_navi_widget
+zle -N _nw_edit_widget
+
+for _nw_map in viins vicmd; do
+    bindkey -M "$_nw_map" '^[c' _nw_clear_widget
+    bindkey -M "$_nw_map" '^H' backward-word
+    bindkey -M "$_nw_map" '^L' forward-word
+    bindkey -M "$_nw_map" '^S' _nw_list_widget
+    bindkey -M "$_nw_map" '^Y' _nw_yazi_widget
+    bindkey -M "$_nw_map" '^N' _nw_nvim_widget
+    bindkey -M "$_nw_map" '^G' _nw_lazygit_widget
+    bindkey -M "$_nw_map" '^K' _nw_navi_widget
+    bindkey -M "$_nw_map" '^X^E' _nw_edit_widget
+done
+unset _nw_map
+
+# ---------------------------------------------------------------------------
+# Syntax highlighting: last optional plugin
+# ---------------------------------------------------------------------------
+
+for _nw_plugin in \
+    /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    /usr/share/zsh/plugins/zsh-syntax-highlighting.zsh \
+    /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+    if [[ -r $_nw_plugin ]]; then
+        source "$_nw_plugin"
+        break
+    fi
+done
+unset _nw_plugin
