@@ -1,0 +1,150 @@
+# Atuin configuration
+# SPDX-License-Identifier: GPL-3.0-only
+# https://www.gnu.org/licenses/gpl-3.0.html
+
+# ---------------------------------------------------------------------------
+# History and storage
+# ---------------------------------------------------------------------------
+
+dialect = "uk"
+timezone = "local"
+
+# Keep history local unless sync is explicitly configured.
+auto_sync = false
+update_check = true
+update_channel = "stable"
+
+# ---------------------------------------------------------------------------
+# Search
+# ---------------------------------------------------------------------------
+
+search_mode = "fuzzy"
+search_mode_shell_up_key_binding = "fuzzy"
+
+filter_mode = "global"
+filter_mode_shell_up_key_binding = "global"
+
+# Compact interface with a useful command preview.
+style = "compact"
+inline_height = 30
+inline_height_shell_up_key_binding = 30
+show_preview = true
+max_preview_height = 6
+show_help = true
+show_tabs = true
+show_numeric_shortcuts = true
+invert = false
+
+# Return to the original prompt when cancelling search.
+exit_mode = "return-original"
+
+# ---------------------------------------------------------------------------
+# Accepting commands
+# ---------------------------------------------------------------------------
+
+# Enter and Tab insert the selected command into the prompt.
+# The command is NOT executed until you press Enter at the shell prompt.
+enter_accept = false
+
+# Keep commands separate instead of automatically chaining them.
+command_chaining = false
+
+# ---------------------------------------------------------------------------
+# History privacy and reliability
+# ---------------------------------------------------------------------------
+
+strip_trailing_whitespace = true
+secrets_filter = true
+store_failed = true
+
+# Add project- or machine-specific exclusions here if needed.
+# Regex patterns are unanchored unless you use ^ and $.
+history_filter = [
+  "^exit$",
+  "^clear$",
+]
+
+# Example: prevent recording commands run in sensitive directories.
+# cwd_filter = [
+#   "^/path/to/private/directory",
+# ]
+
+# ---------------------------------------------------------------------------
+# Keymap
+# ---------------------------------------------------------------------------
+
+# Let Atuin choose its keymap based on the shell binding.
+keymap_mode = "auto"
+
+# ---------------------------------------------------------------------------
+# Statistics
+# ---------------------------------------------------------------------------
+
+[stats]
+common_subcommands = [
+  "docker",
+  "git",
+  "go",
+  "kubectl",
+  "npm",
+  "pnpm",
+  "podman",
+  "systemctl",
+  "yarn",
+]
+
+common_prefix = ["sudo"]
+
+ignored_commands = [
+  "clear",
+  "exit",
+]
+
+# ---------------------------------------------------------------------------
+# Search key behavior
+# ---------------------------------------------------------------------------
+
+[keys]
+scroll_exits = true
+exit_past_line_start = true
+accept_past_line_end = true
+accept_past_line_start = false
+accept_with_backspace = false
+
+# ---------------------------------------------------------------------------
+# Preview
+# ---------------------------------------------------------------------------
+
+[preview]
+strategy = "auto"
+
+# ---------------------------------------------------------------------------
+# Search filters
+# ---------------------------------------------------------------------------
+
+[search]
+shells = "all"
+filters = ["global", "host", "session", "workspace", "directory"]
+
+# ---------------------------------------------------------------------------
+# tmux
+# ---------------------------------------------------------------------------
+
+[tmux]
+enabled = false
+
+# ---------------------------------------------------------------------------
+# Interface
+# ---------------------------------------------------------------------------
+
+[ui]
+columns = ["duration", "time", "directory", "command"]
+syntax_highlight = true
+
+# ---------------------------------------------------------------------------
+# Daemon
+# ---------------------------------------------------------------------------
+
+[daemon]
+enabled = false
+autostart = false
