@@ -135,62 +135,61 @@
 # BlackArch Linux | Performance | Pentesting | Modern CLI
 # Keep startup lean: no automatic network requests or tool scans.
 
-
-# # Commands to run in interactive sessions can go here
+# Commands to run in interactive sessions can go here
 if status is-interactive
     status is-interactive; or return
 
-    # ---------------------------------------------------------------------------
-    # Environment
-    # ---------------------------------------------------------------------------
+    # Prevent duplicate initialization if this file is sourced again.
+    if set -q __nightwatch_fish_loaded
+        return
+    end
+    set -g __nightwatch_fish_loaded 1
+
+    # =============================================================================
+    # 1. ENVIRONMENT
+    # =============================================================================
 
     set -gx SHELL_NAME fish
     set -gx EDITOR nvim
     set -gx VISUAL nvim
+    set -gx SUDO_EDITOR nvim
     set -gx PAGER 'less -FRX'
     set -gx LESSHISTFILE -
+    set -gx MY_IP "x.x.x.x"
+    set -gx PUB_IP "x.x.x.x"
 
+    # Avoid unnecessary greeting and startup output.
     set -g fish_greeting
+
+    # Vi mode, initially in insert mode.
     set -g fish_key_bindings fish_vi_key_bindings
     set -g fish_cursor_default block
     set -g fish_cursor_insert line
-    set -g fish_cursor_replace underscore
+    set -g fish_cursor_replace_one underscore
 
-    # Disable terminal flow control so Ctrl-S can work as a key binding.
+    # Allow Ctrl-S bindings by disabling terminal software flow control.
     if isatty stdin
         command stty -ixon 2>/dev/null
     end
 
-    # ---------------------------------------------------------------------------
-    # Shared history: Atuin
-    # ---------------------------------------------------------------------------
-    # Atuin records commands through its shell hooks. Never import its full
-    # database on every prompt; that creates avoidable subprocess overhead.
-    # Atuin owns Up; our fzf widget owns Ctrl-R.
+    # =============================================================================
+    # 2. PATH — prepend only existing directories, avoid duplicates
+    # =============================================================================
 
-    if type -q atuin
-        atuin init fish --disable-ctrl-r | source
-    end
+    # Fish's fish_add_path handles duplicate entries.
+    fish_add_path --prepend --path \
+        "$HOME/.local/bin" \
+        "$HOME/bin" \
+        "$HOME/go/bin" \
+        "$HOME/.cargo/bin"
 
-    # ---------------------------------------------------------------------------
-    # Prompt: Starship
-    # ---------------------------------------------------------------------------
+    # Optional personal pentesting tools:
+    # fish_add_path --prepend --path "$HOME/tools"
+    # fish_add_path --prepend --path "$HOME/tools/bin"
 
-    function starship_transient_prompt_func
-        starship module character
-    end
-
-    if test "$TERM" != linux; and type -q starship
-        starship init fish | source
-
-        if functions -q enable_transience
-            enable_transience
-        end
-    end
-
-    # ---------------------------------------------------------------------------
-    # Modern CLI
-    # ---------------------------------------------------------------------------
+    # =============================================================================
+    # 3. MODERN CLI ALIASES
+    # =============================================================================
 
     if type -q eza
         alias ls  'eza --icons=auto --group-directories-first'
@@ -217,89 +216,82 @@ if status is-interactive
     alias .. 'cd ..'
     alias ... 'cd ../..'
     alias .... 'cd ../../..'
+
     alias ports 'ss -lntup'
     alias listening 'ss -lntup'
     alias myip 'ip -brief address'
+    alias routes 'ip route'
+    alias sockets 'ss -tulpen'
+
     alias grep 'grep --color=auto'
     alias diff 'diff --color=auto'
 
-    # Optional modern directory navigation.
+    # =============================================================================
+    # 4. STARSHIP PROMPT
+    # =============================================================================
+
+    function starship_transient_prompt_func
+        starship module character
+    end
+
+    if test "$TERM" != linux; and type -q starship
+        starship init fish | source
+
+        # Enable only if the installed Starship integration provides it.
+        if functions -q enable_transience
+            enable_transience
+        end
+    end
+
+    # =============================================================================
+    # 5. DIRECTORY NAVIGATION
+    # =============================================================================
+
     if type -q zoxide
         zoxide init fish | source
     end
 
-    # ---------------------------------------------------------------------------
-    # fzf defaults: file search only, never global history imports
-    # ---------------------------------------------------------------------------
+    # =============================================================================
+    # 6. FUZZY FINDER — avoid following symlinks through huge trees
+    # =============================================================================
 
     if type -q fd
         set -gx FZF_DEFAULT_COMMAND \
-            'fd --type f --hidden --follow --exclude .git --exclude node_modules'
+            'fd --type f --hidden --exclude .git --exclude node_modules --exclude .venv --exclude vendor'
     else if type -q rg
         set -gx FZF_DEFAULT_COMMAND \
-            'rg --files --hidden -g !.git -g !node_modules'
+            'rg --files --hidden -g !.git -g !node_modules -g !.venv -g !vendor'
     end
 
     if set -q FZF_DEFAULT_COMMAND
-        set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
+        set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
     end
 
     set -gx FZF_DEFAULT_OPTS \
-        '--height=80% --layout=reverse-list --border=rounded --info=inline --margin=1 --padding=1'
+        '--height=80% --layout=reverse --border=rounded --info=inline --margin=1'
 
-    # ---------------------------------------------------------------------------
-    # History picker: current Atuin database -> fzf -> editable command line
-    # ---------------------------------------------------------------------------
+    # =============================================================================
+    # 7. ATUIN — shell history
+    # =============================================================================
+    # Atuin is initialized once per interactive shell.
+    # Keep Ctrl-R available for fzf.fish when that plugin is installed.
+    # Remove --disable-ctrl-r if you want Atuin to own Ctrl-R instead.
 
-    function _nightwatch_fzf_history --description 'Search shared shell history'
-        if not type -q fzf
-            echo 'NIGHTWATCH: fzf is not installed.' >&2
-            return 127
-        end
-
-        if type -q atuin
-            set -l selected (
-                command atuin history list --cmd-only --reverse=true 2>/dev/null |
-                    command fzf \
-                        --scheme=history \
-                        --no-multi \
-                        --layout=reverse-list \
-                        --height=80% \
-                        --border=rounded \
-                        --border-label=' Shared History ' \
-                        --prompt='history> ' \
-                        --pointer='>' \
-                        --query=(commandline)
-            )
-
-            # Cancellation leaves the current command line untouched.
-            if test $status -eq 0; and test -n "$selected"
-                commandline --replace -- "$selected"
-            end
-        else
-            set -l selected (
-                builtin history |
-                    command fzf \
-                        --scheme=history \
-                        --no-multi \
-                        --layout=reverse-list \
-                        --height=80% \
-                        --border=rounded \
-                        --prompt='history> ' \
-                        --query=(commandline)
-            )
-
-            if test $status -eq 0; and test -n "$selected"
-                commandline --replace -- "$selected"
-            end
-        end
-
-        commandline -f repaint
+    if type -q atuin
+        atuin init fish --disable-ctrl-r | source
     end
 
-    # ---------------------------------------------------------------------------
-    # Small, explicit helpers
-    # ---------------------------------------------------------------------------
+    # =============================================================================
+    # 8. DIRenv — project-specific environments
+    # =============================================================================
+
+    if type -q direnv
+        direnv hook fish | source
+    end
+
+    # =============================================================================
+    # 9. SMALL, EXPLICIT HELPERS
+    # =============================================================================
 
     function mkcd --description 'Create a directory and enter it'
         if test (count $argv) -ne 1
@@ -317,54 +309,65 @@ if status is-interactive
             return 2
         end
 
-        switch "$argv[1]"
+        set -l archive "$argv[1]"
+
+        switch "$archive"
             case '*.tar.bz2' '*.tbz2'
-                command tar -xjf "$argv[1]"
+                command tar -xjf "$archive"
             case '*.tar.gz' '*.tgz'
-                command tar -xzf "$argv[1]"
+                command tar -xzf "$archive"
             case '*.tar.xz' '*.txz'
-                command tar -xJf "$argv[1]"
+                command tar -xJf "$archive"
             case '*.tar.zst' '*.tzst'
-                command tar --zstd -xf "$argv[1]"
+                command tar --zstd -xf "$archive"
             case '*.tar'
-                command tar -xf "$argv[1]"
+                command tar -xf "$archive"
             case '*.bz2'
-                command bunzip2 -- "$argv[1]"
+                command bunzip2 -- "$archive"
             case '*.gz'
-                command gunzip -- "$argv[1]"
+                command gunzip -- "$archive"
             case '*.xz'
-                command unxz -- "$argv[1]"
+                command unxz -- "$archive"
             case '*.zip'
-                command unzip "$argv[1]"
+                command unzip "$archive"
             case '*.7z'
-                command 7z x "$argv[1]"
+                command 7z x "$archive"
             case '*'
-                echo "extract: unsupported archive: $argv[1]" >&2
+                echo "extract: unsupported archive: $archive" >&2
                 return 1
         end
     end
 
-    function croot --description 'Search project files'
+    function croot --description 'Search text recursively, excluding common noise'
+        if test (count $argv) -lt 1
+            echo 'Usage: croot PATTERN [PATH ...]' >&2
+            return 2
+        end
+
         if type -q rg
             command rg --hidden \
                 --glob '!.git' \
                 --glob '!node_modules' \
-                --glob '!vendor' $argv
+                --glob '!.venv' \
+                --glob '!vendor' \
+                -- "$argv"
         else
             command grep -RIn \
                 --exclude-dir=.git \
                 --exclude-dir=node_modules \
-                --exclude-dir=vendor -- $argv
+                --exclude-dir=.venv \
+                --exclude-dir=vendor \
+                -- "$argv"
         end
     end
 
-    function dns --description 'Perform an explicit DNS query'
-        type -q dig; or begin
+    function dns --description 'Run an explicit DNS query'
+        if not type -q dig
             echo 'dns: install bind (dig)' >&2
             return 127
         end
 
-        test (count $argv) -gt 0; or begin
+        if test (count $argv) -eq 0
             echo 'Usage: dns DOMAIN [dig options]' >&2
             return 2
         end
@@ -373,7 +376,7 @@ if status is-interactive
     end
 
     function pubip --description 'Query public IP on explicit request'
-        type -q curl; or begin
+        if not type -q curl
             echo 'pubip: curl is not installed' >&2
             return 127
         end
@@ -383,12 +386,12 @@ if status is-interactive
     end
 
     function httphead --description 'Inspect HTTP response headers'
-        type -q curl; or begin
+        if not type -q curl
             echo 'httphead: curl is not installed' >&2
             return 127
         end
 
-        test (count $argv) -eq 1; or begin
+        if test (count $argv) -ne 1
             echo 'Usage: httphead URL' >&2
             return 2
         end
@@ -396,27 +399,27 @@ if status is-interactive
         command curl -sS -I -L --max-time 10 -- "$argv[1]"
     end
 
-    function shellinfo --description 'Show shell environment'
+    function shellinfo --description 'Show shell and tool availability'
         echo "Shell:     "(fish --version)
         echo "Kernel:    "(uname -sr)
         echo "Directory: $PWD"
 
-        if type -q atuin
-            echo 'History:   Atuin'
-        else
-            echo 'History:   Fish native'
-        end
-
-        if type -q starship
-            echo 'Prompt:    Starship'
-        else
-            echo 'Prompt:    Fish default'
+        for tool in nvim starship atuin fzf rg fd zoxide direnv
+            if type -q "$tool"
+                printf '%-11s%s\n' "$tool:" available
+            else
+                printf '%-11s%s\n' "$tool:" missing
+            end
         end
     end
 
+    # =============================================================================
+    # 10. EDIT CURRENT COMMAND IN NEOVIM
+    # =============================================================================
+
     function edit-commandline --description 'Edit current command in Neovim'
-        type -q nvim; or begin
-            echo 'nvim is not installed.' >&2
+        if not type -q nvim
+            echo 'edit-commandline: nvim is not installed' >&2
             return 127
         end
 
@@ -436,58 +439,79 @@ if status is-interactive
         return $rc
     end
 
-    # ---------------------------------------------------------------------------
-    # Key bindings
-    # ---------------------------------------------------------------------------
+    # =============================================================================
+    # 11. KEY BINDINGS
+    # =============================================================================
 
     function fish_user_key_bindings
         # Start in insert mode; retain native Fish Vi editing.
         fish_vi_key_bindings insert
 
-        # Atuin owns Up/Down when its widget is available.
+        # Atuin: history search, insert selection without execution
+        if type -q atuin
+            atuin init fish --disable-ctrl-r | source
+        end
+
+        # Pfeiltasten nutzen Atuins optimierte Suche
         if functions -q _atuin_bind_up
             bind -M insert up _atuin_bind_up
             bind -M default up _atuin_bind_up
         end
-
-        # Our custom shared-history picker owns Ctrl-R.
-        bind -M insert \cr _nightwatch_fzf_history
-        bind -M default \cr _nightwatch_fzf_history
 
         # Optional autopair plugin.
         if functions -q _autopair_install
             _autopair_install
         end
 
-        # Word navigation.
+        # Ctrl-H / Ctrl-L: directory history when possible, word movement otherwise.
         bind -M insert \ch prevd-or-backward-word
         bind -M insert \cl nextd-or-forward-word
         bind -M default \ch prevd-or-backward-word
         bind -M default \cl nextd-or-forward-word
 
-        # Clear terminal.
+        # Ctrl-Escape: clear terminal.
         bind -M insert \ec 'clear; commandline -f repaint'
         bind -M default \ec 'clear; commandline -f repaint'
 
-        # Useful interactive tools.
+        # Ctrl-S: list files in current directory.
         bind -M insert \cs 'commandline -r "ls -la"; commandline -f execute'
         bind -M default \cs 'commandline -r "ls -la"; commandline -f execute'
 
-        bind -M insert \cy 'yazi; commandline -f repaint'
-        bind -M default \cy 'yazi; commandline -f repaint'
+        # Ctrl-Y: Yazi file manager.
+        if type -q yazi
+            bind -M insert \cy 'yazi; commandline -f repaint'
+            bind -M default \cy 'yazi; commandline -f repaint'
+        end
 
-        bind -M insert \cn 'nvim .; commandline -f repaint'
-        bind -M default \cn 'nvim .; commandline -f repaint'
+        # Ctrl-N: open current directory in Neovim.
+        if type -q nvim
+            bind -M insert \cn 'nvim .; commandline -f repaint'
+            bind -M default \cn 'nvim .; commandline -f repaint'
+        end
 
-        bind -M insert \cg 'lazygit; commandline -f repaint'
-        bind -M default \cg 'lazygit; commandline -f repaint'
+        # Ctrl-G: Lazygit.
+        if type -q lazygit
+            bind -M insert \cg 'lazygit; commandline -f repaint'
+            bind -M default \cg 'lazygit; commandline -f repaint'
+        end
 
-        bind -M insert \ck 'lazy_navi; commandline -f repaint'
-        bind -M default \ck 'lazy_navi; commandline -f repaint'
+        # Ctrl-K: optional lazy_navi helper.
+        if type -q lazy_navi
+            bind -M insert \ck 'lazy_navi; commandline -f repaint'
+            bind -M default \ck 'lazy_navi; commandline -f repaint'
+        end
 
-        # Ctrl-X, Ctrl-E: edit current command in Neovim.
-        bind -M insert \cx\ce edit-commandline
-        bind -M default \cx\ce edit-commandline
+        # Ctrl-X, Ctrl-E: edit the current command line.
+        if type -q nvim
+            bind -M insert \cx\ce edit-commandline
+            bind -M default \cx\ce edit-commandline
+        end
+
+        # Ctrl-R: let fzf.fish manage its own binding, if installed.
+        if functions -q fzf_configure_bindings
+            fzf_configure_bindings --history=ctrl-r
+        end
+
     end
 
     # if test "$TERM" != "linux"
