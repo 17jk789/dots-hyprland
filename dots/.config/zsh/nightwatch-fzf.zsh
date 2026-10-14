@@ -584,12 +584,12 @@ _nw_fzf_remove_own_bindings() {
 _nw_fzf_configure_bindings() {
     emulate -L zsh
 
-    local directory=$'\ef'
-    local git_log=$'\el'
-    local git_status=$'\es'
-    local history=$'\C-r'
-    local processes=$'\ep'
-    local variables=$'\C-v'
+    local directory=$'\e\C-f'     # Ctrl + Alt + F
+    local git_log=$'\e\C-l'       # Ctrl + Alt + L
+    local git_status=$'\e\C-s'    # Ctrl + Alt + S
+    local history=$'\C-r'         # Ctrl + R
+    local processes=$'\e\C-p'     # Ctrl + Alt + P
+    local variables=$'\C-v'       # Ctrl + V
 
     while (( $# )); do
         case "$1" in
