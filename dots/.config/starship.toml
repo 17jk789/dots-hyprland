@@ -38,7 +38,7 @@ add_newline = false
 #  $character"""
 
 format = """
-$os$username$hostname$directory${env_var.MY_IP}${env_var.PUB_IP}$git_branch$git_status$python$rust$golang$nodejs$java$c$lua$fill$cmd_duration$jobs$battery$time
+$os$username$hostname${env_var.SHELL_NAME}$directory${env_var.MY_IP}${env_var.PUB_IP}$git_branch$git_status$python$rust$golang$nodejs$java$c$lua$fill$cmd_duration$jobs$battery$time
 $character"""
 
 # ============================================================
@@ -48,8 +48,8 @@ $character"""
 [os]
 disabled = false
 style = "bg:#313244 fg:#cdd6f4"
-format = " [](bold fg:#313244)[ ]($style)"
-# format = " [](bold fg:#313244)[  ]($style)"
+format = " [](bold fg:#313244)[  ]($style)"
+# format = " [](bold fg:#313244)[   ]($style)"
 
 # ============================================================
 # USERNAME
@@ -72,6 +72,17 @@ ssh_only = false
 style = "bg:#313244 fg:#cdd6f4"
 format = "[@$hostname]($style)[](bold fg:#313244)"
 trim_at = "."
+
+# ============================================================
+# SHELL
+# ============================================================
+
+[env_var.SHELL_NAME]
+variable = "SHELL_NAME"
+default = "unknown"
+style = "bg:#313244 fg:#cdd6f4"
+# format = " [](bold fg:#313244)[ $env_value]($style)[](bold fg:#313244)"
+format = " [](bold fg:#313244)[$env_value]($style)[](bold fg:#313244)"
 
 # ============================================================
 # FILL
