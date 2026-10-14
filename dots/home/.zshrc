@@ -319,46 +319,28 @@ shellinfo() {
 }
 
 # ---------------------------------------------------------------------------
-# Atuin: history search, insert selection without execution
+# Atuin: Up-arrow history search, insert without execution
 # ---------------------------------------------------------------------------
 
 if (( $+commands[atuin] )); then
     eval "$(atuin init zsh --disable-ctrl-r)"
 
-    _atuin_search() {
-        emulate -L zsh
-        zle -I
-
-        local output rc
-        output=$(__atuin_search_cmd "$@")
-        rc=$?
-
-        zle reset-prompt
-        print -rn -- "${zle_bracketed_paste[1]}" > /dev/tty 2>/dev/null
-
-        if (( rc != 0 )); then
-            [[ -n $output ]] && print -r -- "$output" > /dev/tty
-            return $rc
-        fi
-
-        if [[ -n $output ]]; then
-            # Remove Atuin's special accept prefix, if present.
-            output="${output#__atuin_accept__:}"
-
-            # Insert into the editable command line only.
-            BUFFER="$output"
-            CURSOR=$#BUFFER
-        fi
-
-        zle reset-prompt
-    }
-
-    # Explicitly bind Up/Down to Atuin's search widgets.
+    # Vi insert mode
     if (( $+widgets[atuin-up-search-viins] )); then
         bindkey -M viins '^[[A' atuin-up-search-viins
+        bindkey -M viins '^[OA' atuin-up-search-viins
     fi
+
+    # Vi command mode
     if (( $+widgets[atuin-up-search-vicmd] )); then
         bindkey -M vicmd '^[[A' atuin-up-search-vicmd
+        bindkey -M vicmd '^[OA' atuin-up-search-vicmd
+    fi
+
+    # Emacs mode / default keymap
+    if (( $+widgets[atuin-up-search] )); then
+        bindkey -M emacs '^[[A' atuin-up-search
+        bindkey -M emacs '^[OA' atuin-up-search
     fi
 fi
 
