@@ -319,91 +319,55 @@ shellinfo() {
 }
 
 # ---------------------------------------------------------------------------
-# Atuin: shared history and Up-arrow integration
+# Atuin: history search, insert selection without execution
 # ---------------------------------------------------------------------------
 
 if (( $+commands[atuin] )); then
-    # Atuin owns Up; our fzf widget owns Ctrl-R.
     eval "$(atuin init zsh --disable-ctrl-r)"
-fi
 
-# ---------------------------------------------------------------------------
-# fzf: file picker and cross-shell history picker
-# ---------------------------------------------------------------------------
+    _atuin_search() {
+        emulate -L zsh
+        zle -I
 
-if (( $+commands[fzf] )); then
-    if [[ -z ${FZF_DEFAULT_OPTS:-} ]]; then
-        export FZF_DEFAULT_OPTS='--height=80% --layout=reverse-list --border=rounded --info=inline --margin=1 --padding=1'
-    fi
+        local output rc
+        output=$(__atuin_search_cmd "$@")
+        rc=$?
 
-    if (( $+commands[fd] )); then
-        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
-    elif (( $+commands[rg] )); then
-        export FZF_DEFAULT_COMMAND='rg --files --hidden -g !.git -g !node_modules'
-    fi
+        zle reset-prompt
+        print -rn -- "${zle_bracketed_paste[1]}" > /dev/tty 2>/dev/null
 
-    [[ -n ${FZF_DEFAULT_COMMAND:-} ]] &&
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        if (( rc != 0 )); then
+            [[ -n $output ]] && print -r -- "$output" > /dev/tty
+            return $rc
+        fi
 
-    # Official fzf bindings/completion, according to the installed version.
-    if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
-        source /usr/share/fzf/key-bindings.zsh
-        [[ -r /usr/share/fzf/completion.zsh ]] &&
-            source /usr/share/fzf/completion.zsh
-    else
-        source <(fzf --zsh)
-    fi
-fi
+        if [[ -n $output ]]; then
+            # Remove Atuin's special accept prefix, if present.
+            output="${output#__atuin_accept__:}"
 
-_nw_fzf_history_widget() {
-    local selected
+            # Insert into the editable command line only.
+            BUFFER="$output"
+            CURSOR=$#BUFFER
+        fi
 
-    if (( ! $+commands[fzf] )); then
-        zle -M 'fzf is not installed'
-        return 127
-    fi
-
-    if (( $+commands[atuin] )); then
-        selected="$(
-            command atuin history list --cmd-only --reverse=true 2>/dev/null |
-                command fzf \
-                    --scheme=history \
-                    --no-multi \
-                    --layout=reverse-list \
-                    --height=80% \
-                    --border=rounded \
-                    --border-label=' Shared History ' \
-                    --prompt='history> ' \
-                    --pointer='>' \
-                    --query="$LBUFFER"
-        )"
-    else
-        selected="$(
-            fc -rl 1 |
-                command sed -E 's/^[[:space:]]*[0-9]+\**[[:space:]]+//' |
-                command fzf \
-                    --scheme=history \
-                    --no-multi \
-                    --layout=reverse-list \
-                    --height=80% \
-                    --border=rounded \
-                    --prompt='history> ' \
-                    --query="$LBUFFER"
-        )"
-    fi
-
-    # Cancel without modifying the current command.
-    [[ -n $selected ]] && {
-        BUFFER=$selected
-        CURSOR=${#BUFFER}
+        zle reset-prompt
     }
 
-    zle reset-prompt
-}
+    # Explicitly bind Up/Down to Atuin's search widgets.
+    if (( $+widgets[atuin-up-search-viins] )); then
+        bindkey -M viins '^[[A' atuin-up-search-viins
+    fi
+    if (( $+widgets[atuin-up-search-vicmd] )); then
+        bindkey -M vicmd '^[[A' atuin-up-search-vicmd
+    fi
+fi
 
-zle -N _nw_fzf_history_widget
-bindkey -M viins '^R' _nw_fzf_history_widget
-bindkey -M vicmd '^R' _nw_fzf_history_widget
+# ---------------------------------------------------------------------------
+# NIGHTWATCH fzf bindings
+# ---------------------------------------------------------------------------
+
+[[ -r "$HOME/.config/zsh/nightwatch-fzf.zsh" ]] &&
+    source "$HOME/.config/zsh/nightwatch-fzf.zsh"
 
 # ---------------------------------------------------------------------------
 # Optional integrations
