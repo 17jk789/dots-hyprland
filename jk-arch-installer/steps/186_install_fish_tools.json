@@ -1,0 +1,40 @@
+{
+    "id": "install_fish_tools",
+    "name": {
+        "de": "Fish-Werkzeuge installieren",
+        "en": "Install Fish Utilities"
+    },
+    "description": {
+        "de": "Installiert Such-, Datei- und Datenverarbeitungswerkzeuge für Fish und andere Shells.",
+        "en": "Installs search, file, and data-processing utilities for Fish and other shells."
+    },
+    "question": {
+        "de": "Sollen die Fish-Werkzeuge installiert werden?",
+        "en": "Should the Fish utilities be installed?"
+    },
+    "optional": false,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert ripgrep, fd, jq und yq.",
+                "en": "Installs ripgrep, fd, jq, and yq."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "ripgrep",
+                "fd",
+                "jq",
+                "yq"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,37 @@
+{
+    "id": "install_fwupd",
+    "name": {
+        "de": "fwupd installieren",
+        "en": "Install fwupd"
+    },
+    "description": {
+        "de": "Installiert fwupd zur Verwaltung und Aktualisierung unterstützter Firmware unter Linux.",
+        "en": "Installs fwupd to manage and update supported firmware on Linux."
+    },
+    "question": {
+        "de": "Soll fwupd zur Firmware-Verwaltung installiert werden?",
+        "en": "Should fwupd be installed for firmware management?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert fwupd über Pacman.",
+                "en": "Installs fwupd using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "fwupd"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

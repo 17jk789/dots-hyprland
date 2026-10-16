@@ -1,0 +1,37 @@
+{
+    "id": "install_pdfarranger",
+    "name": {
+        "de": "PDF Arranger installieren",
+        "en": "Install PDF Arranger"
+    },
+    "description": {
+        "de": "Installiert PDF Arranger zum Zusammenfügen, Aufteilen, Sortieren und Bearbeiten von PDF-Seiten.",
+        "en": "Installs PDF Arranger to merge, split, reorder, and edit PDF pages."
+    },
+    "question": {
+        "de": "Soll PDF Arranger installiert werden?",
+        "en": "Should PDF Arranger be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert PDF Arranger über Pacman.",
+                "en": "Installs PDF Arranger using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "pdfarranger"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

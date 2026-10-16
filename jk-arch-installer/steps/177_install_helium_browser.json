@@ -1,0 +1,119 @@
+{
+    "id": "install_helium",
+    "variants": {
+        "pacman": {
+            "id": "install_helium_pacman",
+            "name": {
+                "de": "Helium Browser über Pacman installieren",
+                "en": "Install Helium Browser with Pacman"
+            },
+            "description": {
+                "de": "Installiert den datenschutzorientierten Helium Browser über Pacman.",
+                "en": "Installs the privacy-focused Helium browser using Pacman."
+            },
+            "question": {
+                "de": "Soll Helium über Pacman installiert werden?",
+                "en": "Should Helium be installed using Pacman?"
+            },
+            "optional": true,
+            "exclusive_group": "helium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Helium über Pacman.",
+                        "en": "Installs Helium using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "helium-browser"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "yay": {
+            "id": "install_helium_yay",
+            "name": {
+                "de": "Helium Browser über yay installieren",
+                "en": "Install Helium Browser with yay"
+            },
+            "description": {
+                "de": "Installiert den datenschutzorientierten Helium Browser aus dem AUR mit yay.",
+                "en": "Installs the privacy-focused Helium browser from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll Helium über yay installiert werden?",
+                "en": "Should Helium be installed using yay?"
+            },
+            "optional": true,
+            "exclusive_group": "helium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Helium über yay.",
+                        "en": "Installs Helium using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "helium-browser-bin"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_helium_flatpak",
+            "name": {
+                "de": "Helium Browser über Flatpak installieren",
+                "en": "Install Helium Browser with Flatpak"
+            },
+            "description": {
+                "de": "Installiert den Helium Browser über ein inoffizielles Flatpak-Paket.",
+                "en": "Installs the Helium browser using an unofficial Flatpak package."
+            },
+            "question": {
+                "de": "Soll Helium über Flatpak installiert werden?",
+                "en": "Should Helium be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "helium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Helium über Flatpak aus dem konfigurierten Flathub-Repository.",
+                        "en": "Installs Helium using Flatpak from the configured Flathub repository."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "net.imput.helium"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

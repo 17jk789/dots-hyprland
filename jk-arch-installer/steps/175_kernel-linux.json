@@ -1,0 +1,130 @@
+{
+    "id": "install_additional_kernel",
+    "name": {
+        "de": "Zusätzlichen Kernel installieren",
+        "en": "Install additional kernel"
+    },
+    "description": {
+        "de": "Installiert optional einen zusätzlichen Kernel neben dem vorhandenen Standard-Kernel.",
+        "en": "Optionally installs an additional kernel alongside the existing standard kernel."
+    },
+    "question": {
+        "de": "Welche zusätzliche Kernel-Variante soll installiert werden?",
+        "en": "Which additional kernel variant should be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "variants": {
+        "lts": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Arch-LTS-Kernel und die zugehörigen Header.",
+                        "en": "Installs the Arch LTS kernel and its headers."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "linux-lts",
+                        "linux-lts-headers"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "cachyos_lts": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den linux-cachyos-lts Kernel aus dem CachyOS-Repository.",
+                        "en": "Installs the linux-cachyos-lts kernel from the CachyOS repository."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "linux-cachyos-lts"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "zen": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den Zen-Kernel und die zugehörigen Header.",
+                        "en": "Installs the Zen kernel and its headers."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "linux-zen",
+                        "linux-zen-headers"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "hardened": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den gehärteten Arch-Kernel und die zugehörigen Header.",
+                        "en": "Installs the hardened Arch kernel and its headers."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "linux-hardened",
+                        "linux-hardened-headers"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch"
+                    ]
+                }
+            ]
+        },
+        "cachyos_hardened": {
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert den gehärteten CachyOS-Kernel.",
+                        "en": "Installs the hardened CachyOS kernel."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "linux-cachyos-hardened"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        }
+    }
+}

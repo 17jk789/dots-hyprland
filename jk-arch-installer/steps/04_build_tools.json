@@ -5,8 +5,8 @@
         "en": "Install software build tools"
     },
     "description": {
-        "de": "Installiert git und base-devel für das Klonen der JK-Arch Config sowie das Bauen und Installieren von Paketen.",
-        "en": "Installs git and base-devel for cloning the JK-Arch Config and building and installing packages."
+        "de": "Installiert git und base-devel für das Klonen der JK Gray Linux Config sowie das Bauen und Installieren von Paketen.",
+        "en": "Installs git and base-devel for cloning the JK Gray Linux Config and building and installing packages."
     },
     "question": {
         "de": "Sollen die benötigten Werkzeuge für den Softwarebau installiert werden?",

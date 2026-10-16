@@ -1,0 +1,37 @@
+{
+    "id": "install_blackarch_menus",
+    "name": {
+        "de": "BlackArch-Menüs installieren",
+        "en": "Install BlackArch Menus"
+    },
+    "description": {
+        "de": "Installiert die Menüeinträge des BlackArch-Repositories.",
+        "en": "Installs the menu entries provided by the BlackArch repository."
+    },
+    "question": {
+        "de": "Sollen die BlackArch-Menüs installiert werden?",
+        "en": "Should the BlackArch menus be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert das Paket blackarch-menus über Pacman.",
+                "en": "Installs the blackarch-menus package using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "blackarch-menus"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

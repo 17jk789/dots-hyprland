@@ -1,0 +1,119 @@
+{
+    "id": "install_chromium",
+    "variants": {
+        "pacman": {
+            "id": "install_chromium_pacman",
+            "name": {
+                "de": "Chromium über Pacman installieren",
+                "en": "Install Chromium with Pacman"
+            },
+            "description": {
+                "de": "Installiert den Chromium Browser über Pacman.",
+                "en": "Installs the Chromium browser using Pacman."
+            },
+            "question": {
+                "de": "Soll Chromium über Pacman installiert werden?",
+                "en": "Should Chromium be installed using Pacman?"
+            },
+            "optional": false,
+            "exclusive_group": "chromium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Chromium über Pacman.",
+                        "en": "Installs Chromium using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "chromium"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "yay": {
+            "id": "install_chromium_yay",
+            "name": {
+                "de": "Chromium über yay installieren",
+                "en": "Install Chromium with yay"
+            },
+            "description": {
+                "de": "Installiert Chromium aus dem AUR mit yay.",
+                "en": "Installs Chromium from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll Chromium über yay aus dem AUR installiert werden?",
+                "en": "Should Chromium be installed from the AUR using yay?"
+            },
+            "optional": true,
+            "exclusive_group": "chromium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Chromium aus dem AUR mit yay.",
+                        "en": "Installs Chromium from the AUR using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "chromium"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "flatpak": {
+            "id": "install_chromium_flatpak",
+            "name": {
+                "de": "Chromium über Flatpak installieren",
+                "en": "Install Chromium with Flatpak"
+            },
+            "description": {
+                "de": "Installiert Chromium über Flathub mit Flatpak.",
+                "en": "Installs Chromium from Flathub using Flatpak."
+            },
+            "question": {
+                "de": "Soll Chromium über Flatpak installiert werden?",
+                "en": "Should Chromium be installed using Flatpak?"
+            },
+            "optional": true,
+            "exclusive_group": "chromium_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Chromium über Flathub.",
+                        "en": "Installs Chromium from Flathub."
+                    },
+                    "command": [
+                        "flatpak",
+                        "install",
+                        "--noninteractive",
+                        "flathub",
+                        "org.chromium.Chromium"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

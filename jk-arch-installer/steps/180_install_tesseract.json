@@ -1,0 +1,37 @@
+{
+    "id": "install_tesseract",
+    "name": {
+        "de": "Tesseract OCR installieren",
+        "en": "Install Tesseract OCR"
+    },
+    "description": {
+        "de": "Installiert Tesseract OCR zur Texterkennung in Bildern und gescannten Dokumenten.",
+        "en": "Installs Tesseract OCR for text recognition in images and scanned documents."
+    },
+    "question": {
+        "de": "Soll Tesseract OCR installiert werden?",
+        "en": "Should Tesseract OCR be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Tesseract OCR über Pacman.",
+                "en": "Installs Tesseract OCR using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "tesseract"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

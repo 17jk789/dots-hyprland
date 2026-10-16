@@ -124,6 +124,42 @@
             ]
         },
         {
+            "id": "install_polkit_gnome",
+            "name": {
+                "de": "✨ Polkit-GNOME installieren",
+                "en": "✨ Install Polkit GNOME"
+            },
+            "description": {
+                "de": "Installiert den grafischen Polkit-Authentifizierungsagenten für geeignete Desktop-Umgebungen.",
+                "en": "Installs the graphical Polkit authentication agent for compatible desktop environments."
+            },
+            "file": "189_install_polkit_gnome.json"
+        },
+        {
+            "id": "install_network_manager_applet",
+            "name": {
+                "de": "NetworkManager Applet installieren",
+                "en": "Install NetworkManager Applet"
+            },
+            "description": {
+                "de": "Installiert das NetworkManager-Applet zur Netzwerkverwaltung über die Systemleiste.",
+                "en": "Installs the NetworkManager applet for managing network connections from the system tray."
+            },
+            "file": "190_install_network_manager_applet.json"
+        },
+        {
+            "id": "install_polkit",
+            "name": {
+                "de": "✨ Polkit installieren",
+                "en": "✨ Install Polkit"
+            },
+            "description": {
+                "de": "Installiert Polkit zur Verwaltung privilegierter Aktionen und administrativer Berechtigungen.",
+                "en": "Installs Polkit for managing privileged actions and administrative permissions."
+            },
+            "file": "191_install_polkit.json"
+        },
+        {
             "id": "cloudflare_dns",
             "name": {
                 "de": "DNS temporär auf Cloudflare setzen",
@@ -142,8 +178,8 @@
                 "en": "Install software build tools"
             },
             "description": {
-                "de": "Installiert git und base-devel für das Klonen der JK-Arch Config sowie das Bauen und Installieren von Paketen.",
-                "en": "Installs git and base-devel for cloning the JK-Arch Config and building and installing packages."
+                "de": "Installiert git und base-devel für das Klonen der JK Gray Linux Config sowie das Bauen und Installieren von Paketen.",
+                "en": "Installs git and base-devel for cloning the JK Gray Linux Config and building and installing packages."
             },
             "file": "04_build_tools.json"
         },
@@ -188,44 +224,95 @@
             ]
         },
         {
-            "id": "install_linux_hardened",
+            "id": "install_additional_kernel",
             "name": {
-                "de": "✨ Hardened Kernel installieren",
-                "en": "✨ Install hardened kernel"
+                "de": "✨ Zusätzlichen Kernel installieren",
+                "en": "✨ Install additional kernel"
             },
             "description": {
-                "de": "Wähle zwischen dem Arch linux-hardened oder dem CachyOS linux-cachyos-hardened Kernel.",
-                "en": "Choose between the Arch linux-hardened or CachyOS linux-cachyos-hardened kernel."
+                "de": "Installiert optional einen zusätzlichen LTS-, Zen- oder Hardened-Kernel für Arch Linux oder CachyOS.",
+                "en": "Optionally installs an additional LTS, Zen, or hardened kernel for Arch Linux or CachyOS."
             },
-            "file": "175_kernel-linux-hardened.json",
+            "file": "175_kernel-linux.json",
             "substeps": [
                 {
-                    "id": "install_linux_arch_hardened",
-                    "variant": "arch_hardened",
+                    "id": "install_linux_lts",
+                    "variant": "lts",
                     "name": {
-                        "de": "✨ Arch linux-hardened installieren",
-                        "en": "✨ Install Arch linux-hardened"
+                        "de": "✨ Linux-LTS-Kernel installieren",
+                        "en": "✨ Install Linux LTS kernel"
+                    },
+                    "description": {
+                        "de": "Installiert den langfristig unterstützten linux-lts Kernel inklusive Header.",
+                        "en": "Installs the long-term support linux-lts kernel including headers."
+                    },
+                    "exclusive_group": "additional_kernel"
+                },
+                {
+                    "id": "install_linux_cachyos_lts",
+                    "variant": "cachyos_lts",
+                    "name": {
+                        "de": "✨ CachyOS-LTS-Kernel installieren",
+                        "en": "✨ Install CachyOS LTS kernel"
+                    },
+                    "description": {
+                        "de": "Installiert den linux-cachyos-lts Kernel aus dem CachyOS-v3-Repository.",
+                        "en": "Installs the linux-cachyos-lts kernel from the CachyOS-v3 repository."
+                    },
+                    "exclusive_group": "additional_kernel"
+                },
+                {
+                    "id": "install_linux_zen",
+                    "variant": "zen",
+                    "name": {
+                        "de": "✨ Linux-Zen-Kernel installieren",
+                        "en": "✨ Install Linux Zen kernel"
+                    },
+                    "description": {
+                        "de": "Installiert den auf Reaktionsfähigkeit optimierten linux-zen Kernel inklusive Header.",
+                        "en": "Installs the linux-zen kernel, optimized for responsiveness, including headers."
+                    },
+                    "exclusive_group": "additional_kernel"
+                },
+                {
+                    "id": "install_linux_hardened",
+                    "variant": "hardened",
+                    "name": {
+                        "de": "✨ Hardened-Kernel installieren",
+                        "en": "✨ Install hardened kernel"
                     },
                     "description": {
                         "de": "Installiert den gehärteten Arch linux-hardened Kernel inklusive Header.",
                         "en": "Installs the hardened Arch linux-hardened kernel including headers."
                     },
-                    "exclusive_group": "hardened_kernel"
+                    "exclusive_group": "additional_kernel"
                 },
                 {
                     "id": "install_linux_cachyos_hardened",
                     "variant": "cachyos_hardened",
                     "name": {
-                        "de": "✨ linux-cachyos-hardened installieren",
-                        "en": "✨ Install linux-cachyos-hardened"
+                        "de": "✨ CachyOS Hardened-Kernel installieren",
+                        "en": "✨ Install CachyOS hardened kernel"
                     },
                     "description": {
-                        "de": "Installiert den gehärteten linux-cachyos-hardened Kernel inklusive Header.",
-                        "en": "Installs the hardened linux-cachyos-hardened kernel including headers."
+                        "de": "Installiert den gehärteten linux-cachyos-hardened Kernel.",
+                        "en": "Installs the hardened linux-cachyos-hardened kernel."
                     },
-                    "exclusive_group": "hardened_kernel"
+                    "exclusive_group": "additional_kernel"
                 }
             ]
+        },
+        {
+            "id": "install_secure_boot_tools",
+            "name": {
+                "de": "✨ Secure-Boot-Werkzeuge installieren",
+                "en": "✨ Install Secure Boot Tools"
+            },
+            "description": {
+                "de": "Installiert sbctl und systemd-ukify zur Verwaltung von Secure Boot und Unified Kernel Images.",
+                "en": "Installs sbctl and systemd-ukify for Secure Boot management and Unified Kernel Images."
+            },
+            "file": "185_install_secure_boot_tools.json"
         },
         {
             "id": "install_yay",
@@ -739,6 +826,46 @@
                 "en": "Installs NeoVim and Vim as the foundation of the development environment."
             },
             "file": "42_install_neovim_vim.json"
+        },
+        {
+            "id": "install_emacs",
+            "name": {
+                "de": "Emacs installieren",
+                "en": "Install Emacs"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für den Emacs-Editor: Emacs oder Emacs mit Doom Emacs.",
+                "en": "Choose exactly one installation method for the Emacs editor: Emacs or Emacs with Doom Emacs."
+            },
+            "file": "181_install_emacs.json",
+            "substeps": [
+                {
+                    "id": "install_emacs_standard",
+                    "variant": "standard",
+                    "name": {
+                        "de": "Emacs installieren",
+                        "en": "Install Emacs"
+                    },
+                    "description": {
+                        "de": "Installiert den erweiterbaren Emacs-Texteditor über Pacman.",
+                        "en": "Installs the extensible Emacs text editor using Pacman."
+                    },
+                    "exclusive_group": "emacs_method"
+                },
+                {
+                    "id": "install_emacs_doom",
+                    "variant": "doom",
+                    "name": {
+                        "de": "Emacs mit Doom Emacs installieren",
+                        "en": "Install Emacs with Doom Emacs"
+                    },
+                    "description": {
+                        "de": "Installiert Emacs und richtet Doom Emacs als vorkonfigurierte, erweiterbare Emacs-Konfiguration ein.",
+                        "en": "Installs Emacs and sets up Doom Emacs as a preconfigured, extensible Emacs configuration."
+                    },
+                    "exclusive_group": "emacs_method"
+                }
+            ]
         },
         {
             "id": "setup_lazyvim_starter",
@@ -1307,6 +1434,59 @@
             ]
         },
         {
+            "id": "install_librewolf",
+            "name": {
+                "de": "LibreWolf installieren",
+                "en": "Install LibreWolf"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten LibreWolf Browser: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the privacy-focused LibreWolf browser: Pacman, yay, or Flatpak."
+            },
+            "file": "75_install_librewolf.json",
+            "substeps": [
+                {
+                    "id": "install_librewolf_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "LibreWolf über Pacman installieren",
+                        "en": "Install LibreWolf with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert LibreWolf über Pacman auf Arch-basierten Distributionen.",
+                        "en": "Installs LibreWolf using Pacman on Arch-based distributions."
+                    },
+                    "exclusive_group": "librewolf_method"
+                },
+                {
+                    "id": "install_librewolf_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "LibreWolf über yay installieren",
+                        "en": "Install LibreWolf with yay"
+                    },
+                    "description": {
+                        "de": "Installiert den LibreWolf Browser über das AUR mit yay.",
+                        "en": "Installs the LibreWolf browser from the AUR using yay."
+                    },
+                    "exclusive_group": "librewolf_method"
+                },
+                {
+                    "id": "install_librewolf_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "LibreWolf über Flatpak installieren",
+                        "en": "Install LibreWolf with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert den LibreWolf Browser über Flathub mit Flatpak.",
+                        "en": "Installs the LibreWolf browser from Flathub using Flatpak."
+                    },
+                    "exclusive_group": "librewolf_method"
+                }
+            ]
+        },
+        {
             "id": "install_mullvad_browser",
             "name": {
                 "de": "✨ Mullvad Browser installieren",
@@ -1412,55 +1592,108 @@
             ]
         },
         {
-            "id": "install_librewolf",
+            "id": "install_chromium",
             "name": {
-                "de": "✨ LibreWolf installieren",
-                "en": "✨ Install LibreWolf"
+                "de": "✨ Chromium installieren",
+                "en": "✨ Install Chromium"
             },
             "description": {
-                "de": "Wähle genau eine Installationsmethode für den datenschutzfokussierten LibreWolf Browser: Pacman, yay oder Flatpak.",
-                "en": "Choose exactly one installation method for the privacy-focused LibreWolf browser: Pacman, yay, or Flatpak."
+                "de": "Wähle genau eine Installationsmethode für den Chromium Browser: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the Chromium browser: Pacman, yay, or Flatpak."
             },
-            "file": "75_install_librewolf.json",
+            "file": "178_install_chromium.json",
             "substeps": [
                 {
-                    "id": "install_librewolf_pacman",
+                    "id": "install_chromium_pacman",
                     "variant": "pacman",
                     "name": {
-                        "de": "✨ LibreWolf über Pacman installieren",
-                        "en": "✨ Install LibreWolf with Pacman"
+                        "de": "✨ Chromium über Pacman installieren",
+                        "en": "✨ Install Chromium with Pacman"
                     },
                     "description": {
-                        "de": "Installiert LibreWolf über Pacman auf Arch-basierten Distributionen.",
-                        "en": "Installs LibreWolf using Pacman on Arch-based distributions."
+                        "de": "Installiert Chromium über Pacman auf Arch-basierten Distributionen.",
+                        "en": "Installs Chromium using Pacman on Arch-based distributions."
                     },
-                    "exclusive_group": "librewolf_method"
+                    "exclusive_group": "chromium_method"
                 },
                 {
-                    "id": "install_librewolf_yay",
+                    "id": "install_chromium_yay",
                     "variant": "yay",
                     "name": {
-                        "de": "✨ LibreWolf über yay installieren",
-                        "en": "✨ Install LibreWolf with yay"
+                        "de": "✨ Chromium über yay installieren",
+                        "en": "✨ Install Chromium with yay"
                     },
                     "description": {
-                        "de": "Installiert den LibreWolf Browser über das AUR mit yay.",
-                        "en": "Installs the LibreWolf browser from the AUR using yay."
+                        "de": "Installiert Chromium aus dem AUR mit yay.",
+                        "en": "Installs Chromium from the AUR using yay."
                     },
-                    "exclusive_group": "librewolf_method"
+                    "exclusive_group": "chromium_method"
                 },
                 {
-                    "id": "install_librewolf_flatpak",
+                    "id": "install_chromium_flatpak",
                     "variant": "flatpak",
                     "name": {
-                        "de": "✨ LibreWolf über Flatpak installieren",
-                        "en": "✨ Install LibreWolf with Flatpak"
+                        "de": "✨ Chromium über Flatpak installieren",
+                        "en": "✨ Install Chromium with Flatpak"
                     },
                     "description": {
-                        "de": "Installiert den LibreWolf Browser über Flathub mit Flatpak.",
-                        "en": "Installs the LibreWolf browser from Flathub using Flatpak."
+                        "de": "Installiert Chromium über Flathub mit Flatpak.",
+                        "en": "Installs Chromium from Flathub using Flatpak."
                     },
-                    "exclusive_group": "librewolf_method"
+                    "exclusive_group": "chromium_method"
+                }
+            ]
+        },
+        {
+            "id": "install_helium_browser",
+            "name": {
+                "de": "✨ Helium Browser installieren",
+                "en": "✨ Install Helium Browser"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für den Helium Browser: Pacman, yay oder Flatpak.",
+                "en": "Choose exactly one installation method for the Helium browser: Pacman, yay, or Flatpak."
+            },
+            "file": "177_install_helium_browser.json",
+            "substeps": [
+                {
+                    "id": "install_helium_browser_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "✨ Helium Browser über Pacman installieren",
+                        "en": "✨ Install Helium Browser with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert den Helium Browser über Pacman auf Arch-basierten Distributionen.",
+                        "en": "Installs the Helium browser using Pacman on Arch-based distributions."
+                    },
+                    "exclusive_group": "helium_browser_method"
+                },
+                {
+                    "id": "install_helium_browser_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "✨ Helium Browser über yay installieren",
+                        "en": "✨ Install Helium Browser with yay"
+                    },
+                    "description": {
+                        "de": "Installiert den Helium Browser aus dem AUR mit yay.",
+                        "en": "Installs the Helium browser from the AUR using yay."
+                    },
+                    "exclusive_group": "helium_browser_method"
+                },
+                {
+                    "id": "install_helium_browser_flatpak",
+                    "variant": "flatpak",
+                    "name": {
+                        "de": "✨ Helium Browser über Flatpak installieren",
+                        "en": "✨ Install Helium Browser with Flatpak"
+                    },
+                    "description": {
+                        "de": "Installiert den Helium Browser über ein Flatpak-Paket, sofern eine kompatible Quelle eingerichtet ist.",
+                        "en": "Installs the Helium browser through a Flatpak package, provided a compatible source is configured."
+                    },
+                    "exclusive_group": "helium_browser_method"
                 }
             ]
         },
@@ -1523,6 +1756,30 @@
                 "en": "Installs the universal KDE document viewer Okular using Pacman."
             },
             "file": "80_install_okular.json"
+        },
+        {
+            "id": "install_pdfarranger",
+            "name": {
+                "de": "✨ PDF Arranger installieren",
+                "en": "✨ Install PDF Arranger"
+            },
+            "description": {
+                "de": "Installiert PDF Arranger zum Zusammenfügen, Aufteilen, Sortieren und Bearbeiten von PDF-Seiten über Pacman.",
+                "en": "Installs PDF Arranger to merge, split, reorder, and edit PDF pages using Pacman."
+            },
+            "file": "179_install_pdfarranger.json"
+        },
+        {
+            "id": "install_tesseract",
+            "name": {
+                "de": "✨ Tesseract OCR installieren",
+                "en": "✨ Install Tesseract OCR"
+            },
+            "description": {
+                "de": "Installiert Tesseract OCR zur Texterkennung in Bildern und gescannten Dokumenten über Pacman.",
+                "en": "Installs Tesseract OCR to recognize text in images and scanned documents using Pacman."
+            },
+            "file": "180_install_tesseract.json"
         },
         {
             "id": "install_media_player",
@@ -2572,6 +2829,42 @@
             "file": "136_install_fish_plugins.json"
         },
         {
+            "id": "install_fish_tools",
+            "name": {
+                "de": "Fish-Werkzeuge installieren",
+                "en": "Install Fish Utilities"
+            },
+            "description": {
+                "de": "Installiert nützliche Such-, Datei- und Datenverarbeitungswerkzeuge für Fish und andere Shells.",
+                "en": "Installs useful search, file, and data-processing utilities for Fish and other shells."
+            },
+            "file": "186_install_fish_tools.json"
+        },
+        {
+            "id": "install_bash_tools",
+            "name": {
+                "de": "Bash optimieren",
+                "en": "Enhance Bash"
+            },
+            "description": {
+                "de": "Installiert Bash-Vervollständigung und moderne Terminal-Werkzeuge.",
+                "en": "Installs Bash completion and modern terminal utilities."
+            },
+            "file": "187_install_bash_tools.json"
+        },
+        {
+            "id": "install_zsh_tools",
+            "name": {
+                "de": "Zsh optimieren",
+                "en": "Enhance Zsh"
+            },
+            "description": {
+                "de": "Installiert Zsh-Erweiterungen für Vervollständigung, Autosuggestions und Syntaxhervorhebung.",
+                "en": "Installs Zsh extensions for completion, autosuggestions, and syntax highlighting."
+            },
+            "file": "188_install_zsh_tools.json"
+        },
+        {
             "id": "install_eza_navi",
             "name": {
                 "de": "eza und navi installieren",
@@ -2718,8 +3011,8 @@
         {
             "id": "install_blackarch",
             "name": {
-                "de": "✨ BlackArch installieren",
-                "en": "✨ Install BlackArch"
+                "de": "BlackArch installieren",
+                "en": "Install BlackArch"
             },
             "description": {
                 "de": "Lädt das offizielle BlackArch-strap-Skript herunter, überprüft dessen SHA1-Prüfsumme, führt es als Root aus und aktualisiert anschließend das System.",
@@ -2730,8 +3023,8 @@
         {
             "id": "install_blackarch_tools",
             "name": {
-                "de": "✨ BlackArch Tools installieren",
-                "en": "✨ Install BlackArch tools"
+                "de": "BlackArch Tools installieren",
+                "en": "Install BlackArch tools"
             },
             "description": {
                 "de": "Wähle eine BlackArch-Kategorie oder installiere alle verfügbaren BlackArch Tools.",
@@ -2744,8 +3037,8 @@
                     "variant": "all",
                     "default_selected": true,
                     "name": {
-                        "de": "✨ Alle BlackArch Tools installieren",
-                        "en": "✨ Install all BlackArch tools"
+                        "de": "Alle BlackArch Tools installieren",
+                        "en": "Install all BlackArch tools"
                     },
                     "description": {
                         "de": "Installiert alle verfügbaren BlackArch Tools.",
@@ -2757,8 +3050,8 @@
                     "variant": "anti-forensic",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Anti-Forensic Tools",
-                        "en": "✨ Anti-Forensic tools"
+                        "de": "Anti-Forensic Tools",
+                        "en": "Anti-Forensic tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Anti-Forensic Tools.",
@@ -2770,8 +3063,8 @@
                     "variant": "automation",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Automation Tools",
-                        "en": "✨ Automation tools"
+                        "de": "Automation Tools",
+                        "en": "Automation tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Automation Tools.",
@@ -2783,8 +3076,8 @@
                     "variant": "ai",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ AI Tools",
-                        "en": "✨ AI tools"
+                        "de": "AI Tools",
+                        "en": "AI tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch AI Tools.",
@@ -2796,8 +3089,8 @@
                     "variant": "automobile",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Automotive Tools",
-                        "en": "✨ Automotive tools"
+                        "de": "Automotive Tools",
+                        "en": "Automotive tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Automotive Tools.",
@@ -2809,8 +3102,8 @@
                     "variant": "backdoor",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Backdoor Tools",
-                        "en": "✨ Backdoor tools"
+                        "de": "Backdoor Tools",
+                        "en": "Backdoor tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Backdoor Tools.",
@@ -2822,8 +3115,8 @@
                     "variant": "binary",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Binary Tools",
-                        "en": "✨ Binary tools"
+                        "de": "Binary Tools",
+                        "en": "Binary tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Binary Tools.",
@@ -2835,8 +3128,8 @@
                     "variant": "bluetooth",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Bluetooth Tools",
-                        "en": "✨ Bluetooth tools"
+                        "de": "Bluetooth Tools",
+                        "en": "Bluetooth tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Bluetooth Tools.",
@@ -2848,8 +3141,8 @@
                     "variant": "code-audit",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Code Audit Tools",
-                        "en": "✨ Code audit tools"
+                        "de": "Code Audit Tools",
+                        "en": "Code audit tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Code Audit Tools.",
@@ -2861,8 +3154,8 @@
                     "variant": "cracker",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Cracking Tools",
-                        "en": "✨ Cracking tools"
+                        "de": "Cracking Tools",
+                        "en": "Cracking tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Cracking Tools.",
@@ -2874,8 +3167,8 @@
                     "variant": "crypto",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Crypto Tools",
-                        "en": "✨ Crypto tools"
+                        "de": "Crypto Tools",
+                        "en": "Crypto tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Crypto Tools.",
@@ -2887,8 +3180,8 @@
                     "variant": "database",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Database Tools",
-                        "en": "✨ Database tools"
+                        "de": "Database Tools",
+                        "en": "Database tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Database Tools.",
@@ -2900,8 +3193,8 @@
                     "variant": "debugger",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Debugger Tools",
-                        "en": "✨ Debugger tools"
+                        "de": "Debugger Tools",
+                        "en": "Debugger tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Debugger Tools.",
@@ -2913,8 +3206,8 @@
                     "variant": "decompiler",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Decompiler Tools",
-                        "en": "✨ Decompiler tools"
+                        "de": "Decompiler Tools",
+                        "en": "Decompiler tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Decompiler Tools.",
@@ -2926,8 +3219,8 @@
                     "variant": "defensive",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Defensive Security Tools",
-                        "en": "✨ Defensive security tools"
+                        "de": "Defensive Security Tools",
+                        "en": "Defensive security tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Defensive Security Tools.",
@@ -2939,8 +3232,8 @@
                     "variant": "disassembler",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Disassembler Tools",
-                        "en": "✨ Disassembler tools"
+                        "de": "Disassembler Tools",
+                        "en": "Disassembler tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Disassembler Tools.",
@@ -2952,8 +3245,8 @@
                     "variant": "dos",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ DoS Tools",
-                        "en": "✨ DoS tools"
+                        "de": "DoS Tools",
+                        "en": "DoS tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch DoS Tools.",
@@ -2965,8 +3258,8 @@
                     "variant": "drone",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Drone Tools",
-                        "en": "✨ Drone tools"
+                        "de": "Drone Tools",
+                        "en": "Drone tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Drone Tools.",
@@ -2978,8 +3271,8 @@
                     "variant": "exploitation",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Exploitation Tools",
-                        "en": "✨ Exploitation tools"
+                        "de": "Exploitation Tools",
+                        "en": "Exploitation tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Exploitation Tools.",
@@ -2991,8 +3284,8 @@
                     "variant": "fingerprint",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Fingerprint Tools",
-                        "en": "✨ Fingerprint tools"
+                        "de": "Fingerprint Tools",
+                        "en": "Fingerprint tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Fingerprint Tools.",
@@ -3004,8 +3297,8 @@
                     "variant": "firmware",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Firmware Tools",
-                        "en": "✨ Firmware tools"
+                        "de": "Firmware Tools",
+                        "en": "Firmware tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Firmware Tools.",
@@ -3017,8 +3310,8 @@
                     "variant": "forensic",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Forensic Tools",
-                        "en": "✨ Forensic tools"
+                        "de": "Forensic Tools",
+                        "en": "Forensic tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Forensic Tools.",
@@ -3030,8 +3323,8 @@
                     "variant": "fuzzer",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Fuzzing Tools",
-                        "en": "✨ Fuzzing tools"
+                        "de": "Fuzzing Tools",
+                        "en": "Fuzzing tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Fuzzing Tools.",
@@ -3043,8 +3336,8 @@
                     "variant": "gpu",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ GPU Tools",
-                        "en": "✨ GPU tools"
+                        "de": "PU Tools",
+                        "en": "GPU tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch GPU Tools.",
@@ -3056,8 +3349,8 @@
                     "variant": "hardware",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Hardware Tools",
-                        "en": "✨ Hardware tools"
+                        "de": "Hardware Tools",
+                        "en": "Hardware tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Hardware Tools.",
@@ -3069,8 +3362,8 @@
                     "variant": "honeypot",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Honeypot Tools",
-                        "en": "✨ Honeypot tools"
+                        "de": "Honeypot Tools",
+                        "en": "Honeypot tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Honeypot Tools.",
@@ -3082,8 +3375,8 @@
                     "variant": "ids",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ IDS Tools",
-                        "en": "✨ IDS tools"
+                        "de": "IDS Tools",
+                        "en": "IDS tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch IDS Tools.",
@@ -3095,8 +3388,8 @@
                     "variant": "keylogger",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Keylogger Tools",
-                        "en": "✨ Keylogger tools"
+                        "de": "Keylogger Tools",
+                        "en": "Keylogger tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Keylogger Tools.",
@@ -3108,8 +3401,8 @@
                     "variant": "malware",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Malware Tools",
-                        "en": "✨ Malware tools"
+                        "de": "Malware Tools",
+                        "en": "Malware tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Malware Tools.",
@@ -3121,8 +3414,8 @@
                     "variant": "misc",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Miscellaneous Tools",
-                        "en": "✨ Miscellaneous tools"
+                        "de": "Miscellaneous Tools",
+                        "en": "Miscellaneous tools"
                     },
                     "description": {
                         "de": "Installiert sonstige BlackArch Tools.",
@@ -3134,8 +3427,8 @@
                     "variant": "mobile-reversing",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Mobile Reversing Tools",
-                        "en": "✨ Mobile reversing tools"
+                        "de": "Mobile Reversing Tools",
+                        "en": "Mobile reversing tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Mobile Reversing Tools.",
@@ -3147,8 +3440,8 @@
                     "variant": "mobile",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Mobile Tools",
-                        "en": "✨ Mobile tools"
+                        "de": "Mobile Tools",
+                        "en": "Mobile tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Mobile Tools.",
@@ -3160,8 +3453,8 @@
                     "variant": "networking",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Networking Tools",
-                        "en": "✨ Networking tools"
+                        "de": "Networking Tools",
+                        "en": "Networking tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Networking Tools.",
@@ -3173,8 +3466,8 @@
                     "variant": "nfc",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ NFC Tools",
-                        "en": "✨ NFC tools"
+                        "de": "NFC Tools",
+                        "en": "NFC tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch NFC Tools.",
@@ -3186,8 +3479,8 @@
                     "variant": "packer",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Packer Tools",
-                        "en": "✨ Packer tools"
+                        "de": "Packer Tools",
+                        "en": "Packer tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Packer Tools.",
@@ -3199,8 +3492,8 @@
                     "variant": "proxy",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Proxy Tools",
-                        "en": "✨ Proxy tools"
+                        "de": "Proxy Tools",
+                        "en": "Proxy tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Proxy Tools.",
@@ -3212,8 +3505,8 @@
                     "variant": "radio",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Radio Tools",
-                        "en": "✨ Radio tools"
+                        "de": "Radio Tools",
+                        "en": "Radio tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Radio Tools.",
@@ -3225,8 +3518,8 @@
                     "variant": "recon",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Reconnaissance Tools",
-                        "en": "✨ Reconnaissance tools"
+                        "de": "Reconnaissance Tools",
+                        "en": "Reconnaissance tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Reconnaissance Tools.",
@@ -3238,8 +3531,8 @@
                     "variant": "reversing",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Reverse Engineering Tools",
-                        "en": "✨ Reverse engineering tools"
+                        "de": "Reverse Engineering Tools",
+                        "en": "Reverse engineering tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Reverse Engineering Tools.",
@@ -3251,8 +3544,8 @@
                     "variant": "scan",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Scan Tools",
-                        "en": "✨ Scan tools"
+                        "de": "Scan Tools",
+                        "en": "Scan tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Scan Tools.",
@@ -3264,8 +3557,8 @@
                     "variant": "scanner",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Scanner Tools",
-                        "en": "✨ Scanner tools"
+                        "de": "Scanner Tools",
+                        "en": "Scanner tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Scanner Tools.",
@@ -3277,8 +3570,8 @@
                     "variant": "sniffer",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Sniffer Tools",
-                        "en": "✨ Sniffer tools"
+                        "de": "Sniffer Tools",
+                        "en": "Sniffer tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Sniffer Tools.",
@@ -3290,8 +3583,8 @@
                     "variant": "social",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Social Engineering Tools",
-                        "en": "✨ Social engineering tools"
+                        "de": "Social Engineering Tools",
+                        "en": "Social engineering tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Social Engineering Tools.",
@@ -3303,8 +3596,8 @@
                     "variant": "spoof",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Spoofing Tools",
-                        "en": "✨ Spoofing tools"
+                        "de": "Spoofing Tools",
+                        "en": "Spoofing tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Spoofing Tools.",
@@ -3316,8 +3609,8 @@
                     "variant": "stego",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Steganography Tools",
-                        "en": "✨ Steganography tools"
+                        "de": "Steganography Tools",
+                        "en": "Steganography tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Steganography Tools.",
@@ -3329,8 +3622,8 @@
                     "variant": "tunnel",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Tunnel Tools",
-                        "en": "✨ Tunnel tools"
+                        "de": "Tunnel Tools",
+                        "en": "Tunnel tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Tunnel Tools.",
@@ -3342,8 +3635,8 @@
                     "variant": "unpacker",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Unpacker Tools",
-                        "en": "✨ Unpacker tools"
+                        "de": "Unpacker Tools",
+                        "en": "Unpacker tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Unpacker Tools.",
@@ -3355,8 +3648,8 @@
                     "variant": "voip",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ VoIP Tools",
-                        "en": "✨ VoIP tools"
+                        "de": "VoIP Tools",
+                        "en": "VoIP tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch VoIP Tools.",
@@ -3368,8 +3661,8 @@
                     "variant": "webapp",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Web Application Tools",
-                        "en": "✨ Web application tools"
+                        "de": "Web Application Tools",
+                        "en": "Web application tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Web Application Tools.",
@@ -3381,8 +3674,8 @@
                     "variant": "windows",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Windows Tools",
-                        "en": "✨ Windows tools"
+                        "de": "Windows Tools",
+                        "en": "Windows tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Windows Tools.",
@@ -3394,8 +3687,8 @@
                     "variant": "wireless",
                     "default_selected": false,
                     "name": {
-                        "de": "✨ Wireless Tools",
-                        "en": "✨ Wireless tools"
+                        "de": "Wireless Tools",
+                        "en": "Wireless tools"
                     },
                     "description": {
                         "de": "Installiert BlackArch Wireless Tools.",
@@ -3403,6 +3696,42 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "install_blackarch_menus",
+            "name": {
+                "de": "✨ BlackArch-Menüs installieren",
+                "en": "✨ Install BlackArch Menus"
+            },
+            "description": {
+                "de": "Installiert die BlackArch-Menüeinträge für Sicherheits- und Penetrationstestwerkzeuge.",
+                "en": "Installs BlackArch menu entries for security and penetration testing tools."
+            },
+            "file": "182_install_blackarch_menus.json"
+        },
+        {
+            "id": "install_wordlistctl",
+            "name": {
+                "de": "✨ Wordlistctl installieren",
+                "en": "✨ Install Wordlistctl"
+            },
+            "description": {
+                "de": "Installiert Wordlistctl zur Verwaltung und zum Herunterladen von Wortlisten für Sicherheitsanalysen und Penetrationstests.",
+                "en": "Installs Wordlistctl to manage and download wordlists for security analysis and penetration testing."
+            },
+            "file": "183_install_wordlistctl.json"
+        },
+        {
+            "id": "install_blackarch_artwork",
+            "name": {
+                "de": "✨ BlackArch-Design installieren",
+                "en": "✨ Install BlackArch Artwork"
+            },
+            "description": {
+                "de": "Installiert das BlackArch-Artwork mit visuellen Gestaltungselementen für das BlackArch-System.",
+                "en": "Installs BlackArch artwork and visual assets for the BlackArch system."
+            },
+            "file": "184_install_blackarch_artwork.json"
         },
         {
             "id": "install_security_tools",
@@ -3475,10 +3804,38 @@
                 "en": "✨ Install Tor"
             },
             "description": {
-                "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
-                "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
+                "de": "Wähle eine Installationsoption: nur Tor oder Tor mit torctl.",
+                "en": "Choose an installation option: Tor only or Tor with torctl."
             },
-            "file": "151_install_tor.json"
+            "file": "151_install_tor.json",
+            "substeps": [
+                {
+                    "id": "install_tor_standard",
+                    "variant": "standard",
+                    "name": {
+                        "de": "✨ Nur Tor installieren",
+                        "en": "✨ Install Tor only"
+                    },
+                    "description": {
+                        "de": "Installiert den Tor-Dienst über Pacman.",
+                        "en": "Installs the Tor service using Pacman."
+                    },
+                    "exclusive_group": "tor_method"
+                },
+                {
+                    "id": "install_tor_torctl",
+                    "variant": "torctl",
+                    "name": {
+                        "de": "✨ Tor mit torctl installieren (experimentell)",
+                        "en": "✨ Install Tor with torctl (experimental)"
+                    },
+                    "description": {
+                        "de": "Installiert Tor und das zusätzliche Werkzeug torctl über Pacman. Achtung: Das Projekt ist veraltet und kann mit UFW oder anderen Firewall-Regeln in Konflikt geraten.",
+                        "en": "Installs Tor and the additional torctl utility using Pacman. Warning: The project is outdated and may conflict with UFW or other firewall rules."
+                    },
+                    "exclusive_group": "tor_method"
+                }
+            ]
         },
         {
             "id": "install_bottles",
@@ -3735,6 +4092,18 @@
                     "exclusive_group": "fail2ban_config"
                 }
             ]
+        },
+        {
+            "id": "install_fwupd",
+            "name": {
+                "de": "✨ fwupd installieren",
+                "en": "✨ Install fwupd"
+            },
+            "description": {
+                "de": "Installiert fwupd zur Verwaltung und Aktualisierung unterstützter Firmware unter Linux.",
+                "en": "Installs fwupd to manage and update supported firmware on Linux."
+            },
+            "file": "192_install_fwupd.json"
         },
         {
             "id": "disable_sshd",

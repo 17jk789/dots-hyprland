@@ -1,0 +1,37 @@
+{
+    "id": "install_polkit_gnome",
+    "name": {
+        "de": "Polkit-GNOME installieren",
+        "en": "Install Polkit GNOME"
+    },
+    "description": {
+        "de": "Installiert den grafischen Polkit-Authentifizierungsagenten für geeignete Desktop-Umgebungen.",
+        "en": "Installs the graphical Polkit authentication agent for compatible desktop environments."
+    },
+    "question": {
+        "de": "Soll der Polkit-GNOME-Agent installiert werden?",
+        "en": "Should the Polkit GNOME agent be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert polkit-gnome über Pacman.",
+                "en": "Installs polkit-gnome using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "polkit-gnome"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

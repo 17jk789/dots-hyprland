@@ -1,0 +1,38 @@
+{
+    "id": "install_bash_tools",
+    "name": {
+        "de": "Bash optimieren",
+        "en": "Enhance Bash"
+    },
+    "description": {
+        "de": "Installiert Bash-Completion und moderne Terminal-Werkzeuge für Bash.",
+        "en": "Installs Bash completion and modern terminal utilities for Bash."
+    },
+    "question": {
+        "de": "Sollen Bash-Completion und Terminal-Werkzeuge installiert werden?",
+        "en": "Should Bash completion and terminal utilities be installed?"
+    },
+    "optional": false,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Bash-Completion, Starship und moderne Kommandozeilenwerkzeuge.",
+                "en": "Installs Bash completion, Starship, and modern command-line utilities."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "bash",
+                "bash-completion"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

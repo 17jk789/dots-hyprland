@@ -1,0 +1,113 @@
+{
+    "id": "install_emacs",
+    "variants": {
+        "standard": {
+            "id": "install_emacs_standard",
+            "name": {
+                "de": "Emacs installieren",
+                "en": "Install Emacs"
+            },
+            "description": {
+                "de": "Installiert den Emacs-Texteditor über Pacman.",
+                "en": "Installs the Emacs text editor using Pacman."
+            },
+            "question": {
+                "de": "Soll Emacs installiert werden?",
+                "en": "Should Emacs be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "emacs_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Emacs über Pacman.",
+                        "en": "Installs Emacs using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "emacs"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "doom": {
+            "id": "install_emacs_doom",
+            "name": {
+                "de": "Emacs mit Doom Emacs installieren",
+                "en": "Install Emacs with Doom Emacs"
+            },
+            "description": {
+                "de": "Installiert Emacs und richtet Doom Emacs aus dem offiziellen Doom-Emacs-Core-Repository ein.",
+                "en": "Installs Emacs and sets up Doom Emacs from the official Doom Emacs core repository."
+            },
+            "question": {
+                "de": "Sollen Emacs und Doom Emacs installiert werden?",
+                "en": "Should Emacs and Doom Emacs be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "emacs_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Emacs über Pacman.",
+                        "en": "Installs Emacs using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "emacs"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Klont das Doom-Emacs-Core-Repository nach ~/.config/emacs.",
+                        "en": "Clones the Doom Emacs core repository into ~/.config/emacs."
+                    },
+                    "command": [
+                        "git",
+                        "clone",
+                        "--depth",
+                        "1",
+                        "https://github.com/doomemacs/core",
+                        "~/.config/emacs"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Startet die Installation und Konfiguration von Doom Emacs.",
+                        "en": "Starts the installation and configuration of Doom Emacs."
+                    },
+                    "command": [
+                        "~/.config/emacs/bin/doom",
+                        "install"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}

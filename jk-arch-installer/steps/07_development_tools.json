@@ -32,7 +32,11 @@
                 "git-delta",
                 "fzf",
                 "cmark",
-                "shellcheck"
+                "shellcheck",
+                "man-db",
+                "man-pages",
+                "texinfo",
+                "which" 
             ],
             "requires_root": true,
             "distros": [
@@ -60,7 +64,8 @@
                 "clang-tools-extra",
                 "flawfinder",
                 "splint",
-                "bear"
+                "bear",
+                "direnv"
             ],
             "requires_root": true,
             "distros": [
@@ -159,7 +164,7 @@
                 "--needed",
                 "--noconfirm",
                 "network-manager-applet",
-                "polkit-gnome"
+                "polkit"
             ],
             "requires_root": true,
             "distros": [

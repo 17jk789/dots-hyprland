@@ -15,7 +15,7 @@
                 "de": "Soll Google Chrome über yay installiert werden?",
                 "en": "Should Google Chrome be installed using yay?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "google_chrome_method",
             "continue_on_error": false,
             "checks": [],

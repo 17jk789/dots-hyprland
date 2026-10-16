@@ -1,0 +1,40 @@
+{
+    "id": "install_zsh_tools",
+    "name": {
+        "de": "Zsh optimieren",
+        "en": "Enhance Zsh"
+    },
+    "description": {
+        "de": "Installiert Zsh, Vervollständigung, Autosuggestions und Syntaxhervorhebung.",
+        "en": "Installs Zsh, completion, autosuggestions, and syntax highlighting."
+    },
+    "question": {
+        "de": "Sollen Zsh und die zugehörigen Erweiterungen installiert werden?",
+        "en": "Should Zsh and its extensions be installed?"
+    },
+    "optional": false,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Zsh und die empfohlenen Erweiterungen.",
+                "en": "Installs Zsh and the recommended extensions."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "zsh",
+                "zsh-completions",
+                "zsh-autosuggestions",
+                "zsh-syntax-highlighting"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

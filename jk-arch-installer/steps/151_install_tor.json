@@ -1,37 +1,82 @@
 {
     "id": "install_tor",
-    "name": {
-        "de": "Tor installieren",
-        "en": "Install Tor"
-    },
-    "description": {
-        "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk und die Anonymisierung des unterstützten Datenverkehrs.",
-        "en": "Installs the Tor service for accessing the Tor network and anonymizing supported traffic."
-    },
-    "question": {
-        "de": "Soll Tor installiert werden?",
-        "en": "Should Tor be installed?"
-    },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert Tor.",
-                "en": "Installs Tor."
+    "variants": {
+        "standard": {
+            "id": "install_tor_standard",
+            "name": {
+                "de": "Nur Tor installieren",
+                "en": "Install Tor only"
             },
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "tor"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert den Tor-Dienst für den Zugriff auf das Tor-Netzwerk.",
+                "en": "Installs the Tor service for accessing the Tor network."
+            },
+            "question": {
+                "de": "Soll nur Tor installiert werden?",
+                "en": "Should only Tor be installed?"
+            },
+            "optional": false,
+            "exclusive_group": "tor_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Tor über Pacman.",
+                        "en": "Installs Tor using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "tor"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "torctl": {
+            "id": "install_tor_torctl",
+            "name": {
+                "de": "Tor mit torctl installieren (experimentell)",
+                "en": "Install Tor with torctl (experimental)"
+            },
+            "description": {
+                "de": "Installiert Tor und torctl zur Umleitung des Systemverkehrs über das Tor-Netzwerk. Achtung: Das Projekt ist veraltet. Es kann mit UFW oder anderen Firewall-Regeln in Konflikt geraten und sollte vor dem Einsatz sorgfältig geprüft werden.",
+                "en": "Installs Tor and torctl to redirect system traffic through the Tor network. Warning: The project is outdated. It may conflict with UFW or other firewall rules and should be carefully reviewed before use."
+            },
+            "question": {
+                "de": "Sollen Tor und das experimentelle Werkzeug torctl installiert werden?",
+                "en": "Should Tor and the experimental torctl utility be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "tor_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Tor und torctl über Pacman.",
+                        "en": "Installs Tor and torctl using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "tor",
+                        "torctl"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }
