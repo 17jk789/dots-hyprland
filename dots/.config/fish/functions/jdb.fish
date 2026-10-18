@@ -1,4 +1,4 @@
-function gdb --description "Launch GDB with optional Pwndbg or GEF, context settings, Intel syntax and styling"
+function jdb --description "Launch GDB with optional Pwndbg or GEF, context settings, Intel syntax and styling"
 
     set -l args $argv
 
