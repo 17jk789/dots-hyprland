@@ -82,7 +82,7 @@ variable = "SHELL_NAME"
 default = "unknown"
 style = "bg:#313244 fg:#cdd6f4"
 # format = " [](bold fg:#313244)[ $env_value]($style)[](bold fg:#313244)"
-format = " [](bold fg:#313244)[$env_value]($style)[](bold fg:#313244)"
+format = "[─](bold fg:#585b70)[](bold fg:#313244)[$env_value]($style)[](bold fg:#313244)"
 
 # ============================================================
 # FILL
@@ -121,7 +121,7 @@ symbol = "󰘬"
 truncation_length = 12
 truncation_symbol = ""
 # format = " 󰜥 [](bold fg:#45475a)[$symbol $branch(:$remote_branch)]($style)[ ](bold fg:#45475a)"
-format = " [](bold fg:#cba6f7)[$symbol $branch(:$remote_branch)]($style)[](bold fg:#cba6f7)"
+format = "[─](bold fg:#585b70)[](bold fg:#cba6f7)[$symbol $branch(:$remote_branch)]($style)[](bold fg:#cba6f7)"
 
 # ============================================================
 # GIT COMMIT
@@ -137,7 +137,7 @@ tag_symbol = " "
 
 [git_state]
 style = "bg:#b4befe fg:#1e1e2e"
-format = ' [\($state( $progress_current of $progress_total)\)]($style)'
+format = '[─](bold fg:#585b70)[\($state( $progress_current of $progress_total)\)]($style)'
 cherry_pick = "[🍒 PICKING](bold #f38ba8)"
 
 # ============================================================
@@ -147,7 +147,7 @@ cherry_pick = "[🍒 PICKING](bold #f38ba8)"
 [git_status]
 style = "bg:#f9e2af fg:#1e1e2e"
 
-format = " [](bold fg:#f9e2af)[ $all_status]($style)[](bold fg:#f9e2af)"
+format = "[─](bold fg:#585b70)[](bold fg:#f9e2af)[ $all_status]($style)[](bold fg:#f9e2af)"
 
 # conflicted = " 🏳 "
 # ahead = " 🏎💨 "
@@ -206,7 +206,7 @@ style = "bold dimmed #a6e3a1"
 [time]
 disabled = false
 style = "bg:#313244 fg:#cdd6f4"
-format = " [](bold fg:#313244)[󰥔 $time]($style)[](bold fg:#313244) "
+format = "[─](bold fg:#585b70)[](bold fg:#313244)[󰥔 $time]($style)[](bold fg:#313244) "
 time_format = "%T"
 
 # ============================================================
@@ -227,7 +227,7 @@ time_format = "%T"
 [jobs]
 symbol = "󰒋"
 style = "bg:#45475a fg:#cdd6f4"
-format = " [](bold fg:#45475a)[$symbol $number]($style)[](bold fg:#45475a)"
+format = "[─](bold fg:#585b70)[](bold fg:#45475a)[$symbol $number]($style)[](bold fg:#45475a)"
 number_threshold = 1
 
 # ============================================================
@@ -240,7 +240,7 @@ charging_symbol = "󰂄 "
 discharging_symbol = "󰂃 "
 empty_symbol = "󰂎 "
 unknown_symbol = "󰂑 "
-format = " [](bold fg:#a6e3a1)[$symbol$percentage](bg:#a6e3a1 fg:#1e1e2e)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol$percentage](bg:#a6e3a1 fg:#1e1e2e)[](bold fg:#a6e3a1)"
 
 # ============================================================
 # DIRECTORY
@@ -270,7 +270,7 @@ style = "bg:#94e2d5 fg:#1e1e2e"
 read_only = "  "
 truncation_length = 0
 fish_style_pwd_dir_length = 3
-format = " [](bold fg:#94e2d5)[󰉋 → $path]($style)[](bold fg:#94e2d5)"
+format = "[─](bold fg:#585b70)[](bold fg:#94e2d5)[󰉋 → $path]($style)[](bold fg:#94e2d5)"
 
 # ============================================================
 # COMMAND DURATION
@@ -297,7 +297,7 @@ format = "[](bold fg:#fab387)[󰪢 $duration]($style)[](bold fg:#fab387)"
 [python]
 symbol = ""
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $virtualenv]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $virtualenv]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "py"
 ]
@@ -320,7 +320,7 @@ detect_folders = [
 [rust]
 symbol = ""
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "rs"
 ]
@@ -335,7 +335,7 @@ detect_files = [
 [nodejs]
 symbol = ""
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "js",
     "ts",
@@ -354,7 +354,7 @@ detect_files = [
 [golang]
 symbol = ""
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "go"
 ]
@@ -370,7 +370,7 @@ detect_files = [
 [lua]
 symbol = ""
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "lua"
 ]
@@ -385,7 +385,7 @@ detect_files = [
 [java]
 symbol = " "
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "java",
     "gradle",
@@ -404,7 +404,7 @@ detect_files = [
 [c]
 symbol = " "
 style = "bg:#a6e3a1 fg:#1e1e2e"
-format = " [](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
 detect_extensions = [
     "c",
     "h",
@@ -416,6 +416,161 @@ detect_files = [
     "CMakeLists.txt",
     "Makefile"
 ]
+
+# ============================================================
+# PHP
+# ============================================================
+
+[php]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["php"]
+detect_files = ["composer.json", "composer.lock"]
+
+
+# ============================================================
+# RUBY
+# ============================================================
+
+[ruby]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["rb"]
+detect_files = ["Gemfile", ".ruby-version", "Rakefile"]
+
+
+# ============================================================
+# KOTLIN
+# ============================================================
+
+[kotlin]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["kt", "kts"]
+detect_files = ["build.gradle.kts"]
+
+
+# ============================================================
+# SWIFT
+# ============================================================
+
+[swift]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["swift"]
+detect_files = ["Package.swift"]
+
+
+# ============================================================
+# DART / FLUTTER
+# ============================================================
+
+[dart]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["dart"]
+detect_files = ["pubspec.yaml"]
+
+
+# ============================================================
+# ELIXIR
+# ============================================================
+
+[elixir]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["ex", "exs"]
+detect_files = ["mix.exs"]
+
+
+# ============================================================
+# HASKELL
+# ============================================================
+
+[haskell]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["hs", "lhs"]
+detect_files = ["stack.yaml", "cabal.project"]
+
+
+# ============================================================
+# ZIG
+# ============================================================
+
+[zig]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["zig"]
+detect_files = ["build.zig"]
+
+
+# ============================================================
+# JULIA
+# ============================================================
+
+[julia]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["jl"]
+detect_files = ["Project.toml", "Manifest.toml"]
+
+
+# ============================================================
+# PERL
+# ============================================================
+
+[perl]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["pl", "pm"]
+detect_files = ["Makefile.PL", "Build.PL", "cpanfile"]
+
+
+# ============================================================
+# .NET / C#
+# ============================================================
+
+[dotnet]
+symbol = "󰪮"
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["cs", "fs", "vb"]
+detect_files = ["global.json", "*.csproj", "*.fsproj", "*.sln"]
+
+
+# ============================================================
+# SCALA
+# ============================================================
+
+[scala]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["scala", "sc"]
+detect_files = ["build.sbt"]
+
+
+# ============================================================
+# OCAML
+# ============================================================
+
+[ocaml]
+symbol = ""
+style = "bg:#a6e3a1 fg:#1e1e2e"
+format = "[─](bold fg:#585b70)[](bold fg:#a6e3a1)[$symbol $version]($style)[](bold fg:#a6e3a1)"
+detect_extensions = ["ml", "mli"]
+detect_files = ["dune-project", "opam"]
 
 # unötig -> immer C!!!
 # [cpp]
@@ -432,7 +587,7 @@ detect_files = [
 [env_var.MY_IP]
 variable = "MY_IP"
 style = "bg:#74c7ec fg:#1e1e2e"
-format = " [](bold fg:#74c7ec)[󰒋 $env_value]($style)[](bold fg:#74c7ec)"
+format = "[─](bold fg:#585b70)[](bold fg:#74c7ec)[󰒋 $env_value]($style)[](bold fg:#74c7ec)"
 
 # ============================================================
 # PUBLIC IP
@@ -441,4 +596,4 @@ format = " [](bold fg:#74c7ec)[󰒋 $env_value]($style)[](bold fg:#74c7ec)
 [env_var.PUB_IP]
 variable = "PUB_IP"
 style = "bg:#89b4fa fg:#1e1e2e"
-format = " [](bold fg:#89b4fa)[󰖟 $env_value]($style)[](bold fg:#89b4fa)"
+format = "[─](bold fg:#585b70)[](bold fg:#89b4fa)[󰖟 $env_value]($style)[](bold fg:#89b4fa)"
