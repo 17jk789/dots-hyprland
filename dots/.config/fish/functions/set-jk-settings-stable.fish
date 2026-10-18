@@ -109,7 +109,7 @@ function set-jk-settings-stable --description "Configures the stable JK illogica
                 "placementStrategy": "leastBusy",
                 "quote": {
                     "enable": false,
-                    "text": "JK-Arch"
+                    "text": "JK Gray Linux"
                 },
                 "showOnlyWhenLocked": false,
                 "style": "digital",

@@ -121,7 +121,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
                 "placementStrategy": "leastBusy",
                 "quote": {
                     "enable": true,
-                    "text": "JK-Arch"
+                    "text": "JK Gray Linux"
                 },
                 "showOnlyWhenLocked": false,
                 "style": "digital",
