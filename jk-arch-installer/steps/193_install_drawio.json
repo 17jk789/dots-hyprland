@@ -1,0 +1,37 @@
+{
+    "id": "install_drawio",
+    "name": {
+        "de": "draw.io installieren",
+        "en": "Install draw.io"
+    },
+    "description": {
+        "de": "Installiert draw.io Desktop zum Erstellen von Diagrammen, Flussdiagrammen, UML-Diagrammen und Netzwerkplänen.",
+        "en": "Installs draw.io Desktop for creating diagrams, flowcharts, UML diagrams, and network diagrams."
+    },
+    "question": {
+        "de": "Soll draw.io Desktop installiert werden?",
+        "en": "Should draw.io Desktop be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert draw.io Desktop über Pacman.",
+                "en": "Installs draw.io Desktop using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "drawio-desktop"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

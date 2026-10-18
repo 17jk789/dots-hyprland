@@ -840,19 +840,6 @@
             "file": "181_install_emacs.json",
             "substeps": [
                 {
-                    "id": "install_emacs_standard",
-                    "variant": "standard",
-                    "name": {
-                        "de": "Emacs installieren",
-                        "en": "Install Emacs"
-                    },
-                    "description": {
-                        "de": "Installiert den erweiterbaren Emacs-Texteditor über Pacman.",
-                        "en": "Installs the extensible Emacs text editor using Pacman."
-                    },
-                    "exclusive_group": "emacs_method"
-                },
-                {
                     "id": "install_emacs_doom",
                     "variant": "doom",
                     "name": {
@@ -862,6 +849,19 @@
                     "description": {
                         "de": "Installiert Emacs und richtet Doom Emacs als vorkonfigurierte, erweiterbare Emacs-Konfiguration ein.",
                         "en": "Installs Emacs and sets up Doom Emacs as a preconfigured, extensible Emacs configuration."
+                    },
+                    "exclusive_group": "emacs_method"
+                },
+                {
+                    "id": "install_emacs_standard",
+                    "variant": "standard",
+                    "name": {
+                        "de": "Emacs installieren",
+                        "en": "Install Emacs"
+                    },
+                    "description": {
+                        "de": "Installiert den erweiterbaren Emacs-Texteditor über Pacman.",
+                        "en": "Installs the extensible Emacs text editor using Pacman."
                     },
                     "exclusive_group": "emacs_method"
                 }
@@ -2051,6 +2051,18 @@
             "file": "86_install_krita.json"
         },
         {
+            "id": "install_drawio",
+            "name": {
+                "de": "✨ draw.io installieren",
+                "en": "✨ Install draw.io"
+            },
+            "description": {
+                "de": "Installiert die leistungsstarke Open-Source-Diagrammsoftware draw.io Desktop über Pacman.",
+                "en": "Installs the powerful open-source diagramming software draw.io Desktop using Pacman."
+            },
+            "file": "193_install_drawio.json"
+        },
+        {
             "id": "install_gimp",
             "name": {
                 "de": "✨ GIMP installieren",
@@ -2723,46 +2735,6 @@
                 "en": "Installs the official GitHub CLI tool for managing GitHub directly from the terminal."
             },
             "file": "132_install_github_cli.json"
-        },
-        {
-            "id": "install_ghidra",
-            "name": {
-                "de": "Ghidra installieren",
-                "en": "Install Ghidra"
-            },
-            "description": {
-                "de": "Wähle die Installationsmethode für Ghidra: Pacman oder yay.",
-                "en": "Choose the installation method for Ghidra: Pacman or yay."
-            },
-            "file": "133_install_ghidra.json",
-            "substeps": [
-                {
-                    "id": "ghidra_pacman",
-                    "variant": "pacman",
-                    "name": {
-                        "de": "Ghidra mit Pacman installieren",
-                        "en": "Install Ghidra with Pacman"
-                    },
-                    "description": {
-                        "de": "Installiert Ghidra aus den offiziellen Arch-Repositories.",
-                        "en": "Installs Ghidra from the official Arch repositories."
-                    },
-                    "exclusive_group": "ghidra_method"
-                },
-                {
-                    "id": "ghidra_yay",
-                    "variant": "yay",
-                    "name": {
-                        "de": "Ghidra mit yay installieren",
-                        "en": "Install Ghidra with yay"
-                    },
-                    "description": {
-                        "de": "Installiert Ghidra über den AUR-Helper yay.",
-                        "en": "Installs Ghidra using the AUR helper yay."
-                    },
-                    "exclusive_group": "ghidra_method"
-                }
-            ]
         },
         {
             "id": "setup_eduroam",
@@ -3694,6 +3666,46 @@
                         "de": "Installiert BlackArch Wireless Tools.",
                         "en": "Installs BlackArch wireless tools."
                     }
+                }
+            ]
+        },
+        {
+            "id": "install_ghidra",
+            "name": {
+                "de": "Ghidra installieren",
+                "en": "Install Ghidra"
+            },
+            "description": {
+                "de": "Wähle die Installationsmethode für Ghidra: Pacman oder yay.",
+                "en": "Choose the installation method for Ghidra: Pacman or yay."
+            },
+            "file": "133_install_ghidra.json",
+            "substeps": [
+                {
+                    "id": "ghidra_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "Ghidra mit Pacman installieren",
+                        "en": "Install Ghidra with Pacman"
+                    },
+                    "description": {
+                        "de": "Installiert Ghidra aus den offiziellen Arch-Repositories.",
+                        "en": "Installs Ghidra from the official Arch repositories."
+                    },
+                    "exclusive_group": "ghidra_method"
+                },
+                {
+                    "id": "ghidra_yay",
+                    "variant": "yay",
+                    "name": {
+                        "de": "Ghidra mit yay installieren",
+                        "en": "Install Ghidra with yay"
+                    },
+                    "description": {
+                        "de": "Installiert Ghidra über den AUR-Helper yay.",
+                        "en": "Installs Ghidra using the AUR helper yay."
+                    },
+                    "exclusive_group": "ghidra_method"
                 }
             ]
         },
