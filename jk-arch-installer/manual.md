@@ -50,7 +50,6 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
       - [Reverse Engineering](#reverse-engineering)
       - [Fuzzing \& Performance](#fuzzing--performance)
       - [GUI-Bibliotheken](#gui-bibliotheken)
-      - [Desktop-Integration](#desktop-integration)
       - [Lua-Entwicklung](#lua-entwicklung)
     - [Die Programmiersprache Lua in der Version 5.1 installieren](#die-programmiersprache-lua-in-der-version-51-installieren)
       - [✨ GDB-Konfiguration](#-gdb-konfiguration)
@@ -116,11 +115,11 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Den Firefox Browser installieren](#den-firefox-browser-installieren)
       - [Firefox-Theme Catppuccin installieren](#firefox-theme-catppuccin-installieren)
     - [Den Brave Browser über yay installieren](#den-brave-browser-über-yay-installieren)
+    - [✨ Den datenschutzfokussierten LibreWolf Browser installieren](#-den-datenschutzfokussierten-librewolf-browser-installieren)
+      - [LibreWolf-Theme Catppuccin installieren](#librewolf-theme-catppuccin-installieren)
     - [✨ Den datenschutzfokussierten Mullvad Browser installieren](#-den-datenschutzfokussierten-mullvad-browser-installieren)
 - [✨ Tor Browser installieren und einrichten](#-tor-browser-installieren-und-einrichten)
     - [✨ Google Chrome über den AUR-Helfer installieren](#-google-chrome-über-den-aur-helfer-installieren)
-    - [✨ Den datenschutzfokussierten LibreWolf Browser installieren](#-den-datenschutzfokussierten-librewolf-browser-installieren)
-      - [LibreWolf-Theme Catppuccin installieren](#librewolf-theme-catppuccin-installieren)
     - [✨ Die Firefox Developer Edition installieren](#-die-firefox-developer-edition-installieren)
     - [Das grafische Archivierungsprogramm Ark installieren](#das-grafische-archivierungsprogramm-ark-installieren)
     - [Den erweiterten KDE-Texteditor Kate installieren](#den-erweiterten-kde-texteditor-kate-installieren)
@@ -669,18 +668,18 @@ Jetzt installieren wir die wichtigsten Werkzeuge für Entwicklung, Debugging, Re
 
 #### Basis-Tools
 
-> `curl` und `wget` laden Dateien aus dem Internet, `unzip` entpackt ZIP-Archive, `git-delta` macht Git-Diffs deutlich angenehmer lesbar, `fzf` bietet eine schnelle interaktive Suche im Terminal, `cmark` verarbeitet Markdown und `shellcheck` findet Fehler und typische Probleme in Shell-Scripts.
+> `curl` und `wget` laden Dateien aus dem Internet, `unzip` entpackt ZIP-Archive, `git-delta` macht Git-Diffs deutlich angenehmer lesbar, `fzf` bietet eine schnelle interaktive Suche im Terminal, `cmark` verarbeitet Markdown, `shellcheck` findet Fehler in Shell-Scripts, `man-db` verwaltet Manpages, `man-pages` stellt Linux-Dokumentation bereit, `texinfo` liefert GNU-Info-Dokumentation und `which` findet ausführbare Programme im `PATH`.
 
 ```bash
-sudo pacman -S curl wget unzip git-delta fzf cmark shellcheck
+sudo pacman -S curl wget unzip git-delta fzf cmark shellcheck man-db man-pages texinfo which
 ```
 
 #### Compiler & Toolchain
 
-> `gcc`, `clang` und `llvm` bilden die Compiler-Toolchain, `lldb` und `clang-tools-extra` liefern zusätzliche Entwicklungs- und Debugging-Werkzeuge, `cmake` und `ninja` kümmern sich um Build-Systeme, `valgrind` analysiert Speicherfehler und `flawfinder`, `splint` und `bear` helfen bei Codeanalyse und der Entwicklung größerer C/C++-Projekte.
+> `gcc`, `clang` und `llvm` bilden die Compiler-Toolchain, `lldb` und `clang-tools-extra` liefern zusätzliche Entwicklungs- und Debugging-Werkzeuge, `cmake` und `ninja` kümmern sich um Build-Systeme, `valgrind` analysiert Speicherfehler und `flawfinder`, `splint` und `bear` helfen bei Codeanalyse und der Entwicklung größerer C/C++-Projekte. `direnv` verwaltet automatisch Umgebungsvariablen für unterschiedliche Projektverzeichnisse.
 
 ```bash
-sudo pacman -S gcc lib32-gcc-libs llvm clang lldb cmake ninja valgrind clang-tools-extra flawfinder splint bear
+sudo pacman -S gcc lib32-gcc-libs llvm clang lldb cmake ninja valgrind clang-tools-extra flawfinder splint bear direnv
 ```
 
 #### Debugging
@@ -713,14 +712,6 @@ sudo pacman -S afl++ perf cppcheck
 
 ```bash
 sudo pacman -S gtk4 libadwaita librsvg adwaita-icon-theme
-```
-
-#### Desktop-Integration
-
-> `network-manager-applet` stellt eine grafische Oberfläche für NetworkManager bereit und `polkit-gnome` ermöglicht grafische Authentifizierungsdialoge für Anwendungen.
-
-```bash
-sudo pacman -S network-manager-applet polkit-gnome
 ```
 
 #### Lua-Entwicklung
@@ -1777,7 +1768,7 @@ sudo pacman -S thefuck
 
 ```bash
 yay -S visual-studio-code-bin
-````
+```
 
 <details>
 <summary>✨ Open-Source-Version von VS Code installieren</summary>
@@ -1802,7 +1793,7 @@ sudo pacman -S code
 
 ```bash
 yay -S gitkraken
-````
+```
 
 <details>
 <summary>✨ Offizielle GitKraken-Version manuell installieren</summary>
@@ -1899,6 +1890,29 @@ sudo pacman -S brave-bin
 # flatpak install --noninteractive flathub com.brave.Browser
 ```
 
+### ✨ Den datenschutzfokussierten LibreWolf Browser installieren
+
+> **LibreWolf** ist ein datenschutzorientierter Webbrowser, der auf Firefox basiert und von der Community entwickelt wird. Er legt besonderen Wert auf Sicherheit, Datenschutz und die Entfernung von Telemetrie- und Tracking-Funktionen.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S librewolf
+# yay -S librewolf-bin
+# flatpak install --noninteractive flathub io.gitlab.librewolf-community
+```
+
+</details>
+
+#### LibreWolf-Theme Catppuccin installieren
+
+1. Installieren Sie das [Firefox Color](https://addons.mozilla.org/en-GB/firefox/addon/firefox-color/) Add-on.
+
+2. Öffnen Sie einfach den folgenden Link in LibreWolf, um das Catppuccin-Theme zu importieren:
+
+`https://color.firefox.com/?theme=XQAAAAKIBAAAAAAAAABBqYhm849SCicxcUhA3DJozHnOMuotJJEgvcajvXXzbLRJ0F_F447xQs-L1kFlGgDKq4IIvWciiy4upwJKgUnUuoFzOpzRTee96ZfRONrwxQSYysWh_ma3QSMYv0zZpLv8XMOvIV_qpACwq2OgZ1z9xSlavydmJJev054ySeZzGtmgWrNUvJqNOAsQbyBWY7w2l3fhFgW2qxx4tJIAxrL1trg8wc6irH9ucbs1e5toXkQ7re8sllEIkOU40yE1hdPUJwvTgxq39WIjDLpg_izcrQURjhO4grdbFg9rigcAgqwrEXjjtdjJXeTf2Y0JKOy0nT4W52DED42vgrB-rDCbmYO9QhNCXOSqGBCwasUidE0Ozu0CFbStrxLFoG-ZwOeWIs9Di8-7JXHmMkt3IGWYdahLQgRybpP9baffPyrx9sVvfxesjWEEFRJJ1Zj8KLhKm_3MlLOUI2WBSRilhx7i2bWEr28XtWO9qXN9PRj6UwCtf9wJcAEFxq1WwpGCWr0H5aquYWf9ZyT2rnA5tGqBTi1FUHuE5M5-eLjR2_wnyC1yePK_zdRYBKA54r_6K7xpc73Zv__rEaAM`
+
 ### ✨ Den datenschutzfokussierten Mullvad Browser installieren
 
 > **Mullvad Browser** ist ein datenschutzorientierter Webbrowser, der auf Firefox basiert und von Mullvad entwickelt wurde. Er bietet zusätzliche Sicherheits- und Datenschutzfunktionen, wie z.B. integrierten Schutz vor Tracking, Fingerprinting und Werbung.
@@ -1955,29 +1969,6 @@ yay -S google-chrome
 ```
 
 </details>
-
-### ✨ Den datenschutzfokussierten LibreWolf Browser installieren
-
-> **LibreWolf** ist ein datenschutzorientierter Webbrowser, der auf Firefox basiert und von der Community entwickelt wird. Er legt besonderen Wert auf Sicherheit, Datenschutz und die Entfernung von Telemetrie- und Tracking-Funktionen.
-
-<details>
-<summary>Installieren</summary>
-
-```bash
-sudo pacman -S librewolf
-# yay -S librewolf-bin
-# flatpak install --noninteractive flathub io.gitlab.librewolf-community
-```
-
-</details>
-
-#### LibreWolf-Theme Catppuccin installieren
-
-1. Installieren Sie das [Firefox Color](https://addons.mozilla.org/en-GB/firefox/addon/firefox-color/) Add-on.
-
-2. Öffnen Sie einfach den folgenden Link in LibreWolf, um das Catppuccin-Theme zu importieren:
-
-`https://color.firefox.com/?theme=XQAAAAKIBAAAAAAAAABBqYhm849SCicxcUhA3DJozHnOMuotJJEgvcajvXXzbLRJ0F_F447xQs-L1kFlGgDKq4IIvWciiy4upwJKgUnUuoFzOpzRTee96ZfRONrwxQSYysWh_ma3QSMYv0zZpLv8XMOvIV_qpACwq2OgZ1z9xSlavydmJJev054ySeZzGtmgWrNUvJqNOAsQbyBWY7w2l3fhFgW2qxx4tJIAxrL1trg8wc6irH9ucbs1e5toXkQ7re8sllEIkOU40yE1hdPUJwvTgxq39WIjDLpg_izcrQURjhO4grdbFg9rigcAgqwrEXjjtdjJXeTf2Y0JKOy0nT4W52DED42vgrB-rDCbmYO9QhNCXOSqGBCwasUidE0Ozu0CFbStrxLFoG-ZwOeWIs9Di8-7JXHmMkt3IGWYdahLQgRybpP9baffPyrx9sVvfxesjWEEFRJJ1Zj8KLhKm_3MlLOUI2WBSRilhx7i2bWEr28XtWO9qXN9PRj6UwCtf9wJcAEFxq1WwpGCWr0H5aquYWf9ZyT2rnA5tGqBTi1FUHuE5M5-eLjR2_wnyC1yePK_zdRYBKA54r_6K7xpc73Zv__rEaAM`
 
 ### ✨ Die Firefox Developer Edition installieren
 
@@ -2275,7 +2266,7 @@ sudo pacman -S kdenlive
 
 ```bash
 sudo pacman -S davinci-resolve
-````
+```
 
 > **CachyOS:**
 > Unter CachyOS reicht die Installation von `davinci-resolve` meistens aus, da benötigte Abhängigkeiten bereits passend eingerichtet sind.
@@ -2390,7 +2381,7 @@ sudo pacman -S flameshot grim xdg-desktop-portal-hyprland
 
 ```bash
 sudo pacman -S obs-studio
-````
+```
 
 <details>
 <summary>✨ Wayland- und Hyprland-Unterstützung einrichten</summary>
@@ -4702,7 +4693,7 @@ sudo systemctl enable --now tor
 
 ```bash
 yay -S bottles
-````
+```
 
 </details>
 
