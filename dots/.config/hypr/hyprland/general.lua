@@ -101,7 +101,7 @@ hl.config({
 			-- Diese Variable bleibt dauerhaft bestehen und dient als Status:
 			-- false = Glass/Blur global AUS
 			-- true  = Glass/Blur global AN
-			ignore_opacity = false,
+			ignore_opacity = true,
 
 			popups = true,
 			popups_ignorealpha = 0.2,
@@ -112,7 +112,7 @@ hl.config({
 			enabled = true,
 			range = 100,
 			offset = { 0, 25 },
-			render_power = 3,
+			render_power = 10,
 			color = "rgba(00000030)"
 		},
 		-- Dim
