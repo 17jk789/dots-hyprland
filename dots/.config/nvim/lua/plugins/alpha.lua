@@ -753,9 +753,9 @@ return {
 						{
 							icon = " ",
 							key = "b",
-							desc = "17jk789/jk-arch",
+							desc = "17jk789/dots-hyprland",
 							action = function()
-								local url = "https://github.com/17jk789/jk-arch"
+								local url = "https://github.com/17jk789/dots-hyprland"
 								local cmd
 
 								if vim.fn.has("mac") == 1 then
