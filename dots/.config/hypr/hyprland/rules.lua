@@ -19,6 +19,8 @@ hl.window_rule({match = {title = "^(Open Folder)(.*)$" },                    cen
 hl.window_rule({match = {title = "^(Open Folder)(.*)$" },                    float = true})
 hl.window_rule({match = {title = "^(Select the mod file to import)(.*)$" },  center = true}) -- Gale
 hl.window_rule({match = {title = "^(Select the mod file to import)(.*)$" },  float = true})
+hl.window_rule({match = {title = "^(Select the mod file to import)(.*)$" },  center = true}) -- Gale
+hl.window_rule({match = {title = "^(Select the mod file to import)(.*)$" },  float = true})
 hl.window_rule({match = {title = "^(Save As)(.*)$" },                        center = true})
 hl.window_rule({match = {title = "^(Save As)(.*)$" },                        float = true})
 hl.window_rule({match = {title = "^(Library)(.*)$" },                        center = true})
@@ -60,6 +62,8 @@ hl.window_rule({match = {class = "^(plasma-changeicons)$" }, move = {999999, 999
 hl.window_rule({match = {title = "^(Copying — Dolphin)$" }, move = {40, 80}})
 
 -- Tiling
+-- Ignore app maximize requests so restored window states do not override tiling.
+hl.window_rule({match = {class = ".*" }, suppress_event = "maximize"})
 -- Ignore app maximize requests so restored window states do not override tiling.
 hl.window_rule({match = {class = ".*" }, suppress_event = "maximize"})
 hl.window_rule({match = {class = "^dev\\.warp\\.Warp$" }, tile = true})
