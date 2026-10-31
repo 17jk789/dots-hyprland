@@ -8,6 +8,6 @@ function jecksec --description "Checksec-Ausgabe übersichtlich und tabellarisch
         return 1
     end
 
-    python3 ~/.config/fish/functions/checksec.py $argv
+    python3 ~/.config/fish/functions/scripts/checksec.py $argv
 
 end
