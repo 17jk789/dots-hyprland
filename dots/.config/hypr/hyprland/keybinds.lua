@@ -455,11 +455,11 @@ for i = 1, 4 do
 		"ALT + SUPER + mouse_",
 	}
 
-	local keycombos = {
-		key[1] .. "down",
-		key[1] .. "up",
-		key[2] .. "down",
-		key[2] .. "up",
+	local keycombos = { 
+		key[1] .. "up", 
+		key[1] .. "down", 
+		key[2] .. "up", 
+		key[2] .. "down" 
 	}
 
 	local prefix = { "r-", "r+", "r-", "r+" }
@@ -589,8 +589,8 @@ end
 --#/# bind = SUPER, Scroll ↑/↓,, -- Focus left/right
 for i = 1, 4 do
 	local key = {
-		"SUPER + mouse_up",
 		"SUPER + mouse_down",
+		"SUPER + mouse_up",
 	}
 
 	local keycombos = {
@@ -731,7 +731,7 @@ hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
 
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })
 
-hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" }) -- Sollte Brave laut JK-Arch Config sein
+hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" }) -- Sollte Brave laut JK Gray Linux Config sein
 
 hl.bind("SUPER + ALT + W", hl.dsp.exec_cmd("firefox"), { description = "App: Firefox" })
 
