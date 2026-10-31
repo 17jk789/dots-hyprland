@@ -1,95 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-===============================================================================
- GNOME 50 / 51
- CATPPUCCIN MOCHA + HYPRLAND-STYLE KEYBINDINGS
-===============================================================================
+"""Install a Catppuccin Mocha GNOME Shell theme and Hyprland-inspired shortcuts.
 
-Ein vollständiger GNOME-Installer für Arch Linux.
+Supported targets: Arch Linux, GNOME Shell 50 and 51.
 
-ZIELE
------
+The installer deliberately does not modify GTK themes, application themes,
+fonts, font sizes, GNOME animation settings, or package installations.
 
-1. Catppuccin Mocha für GNOME Shell 50 / 51
-2. Modulare GNOME-Shell-CSS-Struktur
-3. Hyprland-Keybindings als Referenz
-4. GNOME-Keybindings so nah wie möglich an Hyprland
-5. Native GNOME-Funktionen bevorzugen
-6. Custom GNOME Shortcuts für Hyprland-Funktionen verwenden
-7. Vorhandene GNOME-Keybindings sichern
-8. Restore-Funktion bereitstellen
-9. Keine yay / paru / AUR-Abhängigkeit
-10. pacman nur für optionale Pakete
-11. GTK 3 / GTK 4 / Libadwaita nicht verändern
-12. Fonts nicht verändern
-13. Keine Anwendungsthemes verändern
-14. Keine GNOME-Geometrie verändern
-15. Keine GNOME-Animationen verändern
-
-WICHTIG
--------
-
-Dieses Script konfiguriert tatsächlich GNOME-Shortcuts.
-
-Die visuelle Theme-Konfiguration und die Keybinding-Konfiguration
-sind logisch getrennt, werden aber von demselben Installer verwaltet.
-
-Die Hyprland-Konfiguration ist die Referenz für die gewünschte
-Bedienlogik.
-
-GNOME kann Hyprland-spezifische Funktionen nicht 1:1 nativ ersetzen.
-Für solche Funktionen werden Custom Shortcuts verwendet.
-
-Beispiele:
-
-    Quickshell
-    Hyprctl
-    cliphist
-    hyprshot
-    hyprpicker
-    grim
-    slurp
-    playerctl
-    wl-copy
-    OCR
-    Übersetzung
-    Recording
-    OBS
-    Scratchpad
-    VM-Submap
-
-Diese Programme werden NICHT automatisch installiert.
-Ein Shortcut wird nur eingerichtet, wenn sein Command sinnvoll
-definiert ist.
-
-INSTALLATION
-------------
-
-    python3 gnome-hyprland-installer.py
-
-RESTORE
--------
-
-    python3 gnome-hyprland-installer.py --restore
-
-THEME ENTFERNEN
----------------
-
-    python3 gnome-hyprland-installer.py --remove
-
-KEYBINDINGS NUR INSTALLIEREN
-----------------------------
-
-    python3 gnome-hyprland-installer.py --keybindings-only
-
-THEME NUR INSTALLIEREN
-----------------------
-
-    python3 gnome-hyprland-installer.py --theme-only
-
-===============================================================================
+Usage:
+    python3 config-gnome.py
+    python3 config-gnome.py --theme-only
+    python3 config-gnome.py --keybindings-only
+    python3 config-gnome.py --restore
+    python3 config-gnome.py --remove
 """
 
 from __future__ import annotations
@@ -99,46 +23,55 @@ import ast
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 
 # =============================================================================
-# PATHS
+# PATHS AND IDENTIFIERS
 # =============================================================================
 
 HOME = Path.home()
+XDG_DATA_HOME = Path(os.environ.get("XDG_DATA_HOME", HOME / ".local" / "share")).expanduser()
+DATA_HOME = XDG_DATA_HOME
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-
 ASSETS_DIR = SCRIPT_DIR / "assets"
-
 DASH_TO_PANEL_CONF = ASSETS_DIR / "dash-to-panel.conf"
 
-BACKUP_DIR = HOME / ".local" / "share" / "gnome-hyprland-installer" / "backups"
+APP_DATA_DIR = DATA_HOME / "gnome-hyprland-installer"
+BACKUP_DIR = APP_DATA_DIR / "backups"
+EXTENSIONS_DIR = DATA_HOME / "gnome-shell" / "extensions"
 
-BACKUP_DIR.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
-UUID = "catppuccin-mocha-colors@local"
-
+EXTENSION_UUID = "catppuccin-mocha-colors@local"
 EXTENSION_NAME = "Catppuccin Mocha Shell Colors"
+EXTENSION_DIR = EXTENSIONS_DIR / EXTENSION_UUID
 
-EXTENSION_DIR = HOME / ".local" / "share" / "gnome-shell" / "extensions" / UUID
+CUSTOM_BASE_PATH = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
+MANAGED_PATH_PREFIX = "gnome-hyprland-"
+
+MEDIA_KEYS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
+CUSTOM_SHORTCUT_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
+WM_SCHEMA = "org.gnome.desktop.wm.keybindings"
+SHELL_SCHEMA = "org.gnome.shell.keybindings"
+INTERFACE_SCHEMA = "org.gnome.desktop.interface"
+
+# The registry key belongs to MEDIA_KEYS_SCHEMA, not WM_SCHEMA.
+CUSTOM_KEYBINDINGS_KEY = "custom-keybindings"
 
 
 # =============================================================================
-# CATPPUCCIN MOCHA
+# CATPPUCCIN MOCHA PALETTE
 # =============================================================================
 
 COLORS = {
-    "rosewater": "#f5e0e5",
+    "rosewater": "#f5e0dc",
     "flamingo": "#f2cdcd",
     "pink": "#f5c2e7",
     "mauve": "#cba6f7",
@@ -168,37 +101,17 @@ COLORS = {
 
 
 # =============================================================================
-# ARGUMENTS
+# COMMAND-LINE OPTIONS
 # =============================================================================
 
 parser = argparse.ArgumentParser(
-    description=("GNOME 50/51 Catppuccin Mocha theme + Hyprland-style keybindings")
+    description="Catppuccin Mocha GNOME Shell theme and Hyprland-style shortcuts"
 )
-
-parser.add_argument(
-    "--restore",
-    action="store_true",
-    help="Restore the latest GNOME keybinding backup",
-)
-
-parser.add_argument(
-    "--remove",
-    action="store_true",
-    help="Remove the installed Catppuccin GNOME Shell extension",
-)
-
-parser.add_argument(
-    "--theme-only",
-    action="store_true",
-    help="Install only the GNOME Shell theme",
-)
-
-parser.add_argument(
-    "--keybindings-only",
-    action="store_true",
-    help="Install only the GNOME keybindings",
-)
-
+mode_group = parser.add_mutually_exclusive_group()
+mode_group.add_argument("--restore", action="store_true", help="Restore the latest keybinding backup")
+mode_group.add_argument("--remove", action="store_true", help="Remove the installed GNOME Shell theme extension")
+mode_group.add_argument("--theme-only", action="store_true", help="Install only the GNOME Shell theme")
+mode_group.add_argument("--keybindings-only", action="store_true", help="Install only GNOME keybindings")
 args = parser.parse_args()
 
 
@@ -206,47 +119,47 @@ args = parser.parse_args()
 # OUTPUT
 # =============================================================================
 
-
-def title(text: str) -> None:
-    print()
-    print("=" * 78)
-    print(text)
-    print("=" * 78)
-    print()
+def title(message: str) -> None:
+    print("\n" + "=" * 78)
+    print(message)
+    print("=" * 78 + "\n")
 
 
-def info(text: str) -> None:
-    print(f"[INFO] {text}")
+def info(message: str) -> None:
+    print(f"[INFO] {message}")
 
 
-def ok(text: str) -> None:
-    print(f"[OK]   {text}")
+def success(message: str) -> None:
+    print(f"[OK]   {message}")
 
 
-def warn(text: str) -> None:
-    print(f"[WARN] {text}")
+def warning(message: str) -> None:
+    print(f"[WARN] {message}")
 
 
-def error(text: str) -> None:
-    print(f"[ERROR] {text}")
+def failure(message: str) -> None:
+    print(f"[ERROR] {message}")
+
+
+def timestamp() -> str:
+    return datetime.now().strftime("%Y%m%d-%H%M%S-%f")
 
 
 # =============================================================================
-# COMMAND HELPERS
+# PROCESS HELPERS
 # =============================================================================
-
 
 def command_exists(command: str) -> bool:
     return shutil.which(command) is not None
 
 
-def run(
+def run_command(
     command: list[str],
     *,
-    check: bool = True,
+    check: bool = False,
     capture: bool = False,
-) -> subprocess.CompletedProcess:
-
+) -> subprocess.CompletedProcess[str]:
+    """Run a command without a shell and optionally print its exact argv."""
     if capture:
         return subprocess.run(
             command,
@@ -256,2269 +169,1504 @@ def run(
             stderr=subprocess.PIPE,
         )
 
-    print("$ " + " ".join(command))
-
-    return subprocess.run(
-        command,
-        check=check,
-        text=True,
-    )
+    print("$ " + shlex.join(command))
+    return subprocess.run(command, check=check, text=True)
 
 
-def shell_command(command: str) -> str:
-    return command
-
-
-def require_commands(
-    commands: Iterable[str],
-) -> None:
-
-    missing = [command for command in commands if not command_exists(command)]
-
+def require_commands(commands: Iterable[str]) -> None:
+    missing = [name for name in commands if not command_exists(name)]
     if missing:
-        error("Required commands are missing:")
-
-        for command in missing:
-            print(f"  - {command}")
-
-        sys.exit(1)
+        for name in missing:
+            failure(f"Required command not found: {name}")
+        raise SystemExit(1)
 
 
-# =============================================================================
-# ROOT CHECK
-# =============================================================================
-
-if os.geteuid() == 0:
-    error("Dieses Script darf nicht als root ausgeführt werden.")
-
-    error("sudo wird nur intern für pacman verwendet.")
-
-    sys.exit(1)
+def atomic_write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(content.rstrip() + "\n", encoding="utf-8")
+    os.replace(temporary, path)
 
 
 # =============================================================================
-# REQUIRED GNOME TOOLS
+# GNOME VERSION AND ENVIRONMENT
 # =============================================================================
-
-require_commands(
-    [
-        "gsettings",
-        "gnome-extensions",
-    ]
-)
-
-
-# =============================================================================
-# GNOME VERSION
-# =============================================================================
-
 
 def get_gnome_shell_version() -> str:
-
     if not command_exists("gnome-shell"):
         return "unknown"
+    result = run_command(["gnome-shell", "--version"], capture=True)
+    return (result.stdout or result.stderr).strip() or "unknown"
 
-    result = run(
-        [
-            "gnome-shell",
-            "--version",
-        ],
-        check=False,
-        capture=True,
-    )
 
-    value = result.stdout.strip() or result.stderr.strip()
-
-    return value or "unknown"
+def get_gnome_major(version: str) -> int | None:
+    match = re.search(r"(\d+)", version)
+    return int(match.group(1)) if match else None
 
 
 GNOME_VERSION = get_gnome_shell_version()
+GNOME_MAJOR = get_gnome_major(GNOME_VERSION)
 
 
-def get_gnome_major_version() -> int | None:
+def check_environment(*, theme: bool, keybindings: bool) -> None:
+    title("GNOME 50 / 51 — ENVIRONMENT CHECK")
+    print(f"GNOME Shell: {GNOME_VERSION}")
 
-    match = re.search(
-        r"(\d+)",
-        GNOME_VERSION,
+    if GNOME_MAJOR in (50, 51):
+        success("Supported GNOME Shell version detected.")
+    elif GNOME_MAJOR is None:
+        warning("GNOME Shell version could not be detected. Compatibility cannot be confirmed.")
+    else:
+        warning(f"This installer targets GNOME Shell 50/51; detected version: {GNOME_MAJOR}.")
+
+    if theme:
+        require_commands(["gnome-extensions", "gsettings"])
+    if keybindings:
+        require_commands(["gsettings"])
+
+    if not os.environ.get("DBUS_SESSION_BUS_ADDRESS"):
+        warning("No session D-Bus address is available. GNOME settings may be inaccessible.")
+
+
+# =============================================================================
+# GSETTINGS SERIALIZATION AND ACCESS
+# =============================================================================
+
+def gvariant_string(value: str) -> str:
+    """Return a safely escaped GVariant string literal."""
+    escaped = (
+        value.replace("\\", "\\\\")
+        .replace("'", "\\'")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\t", "\\t")
     )
+    return "'" + escaped + "'"
 
-    if not match:
+
+def gvariant_string_array(values: Iterable[str]) -> str:
+    return "[" + ", ".join(gvariant_string(value) for value in values) + "]"
+
+
+def parse_gvariant(value: str) -> Any:
+    """Parse common GSettings output (strings, arrays, booleans and numbers)."""
+    try:
+        return ast.literal_eval(value)
+    except (ValueError, SyntaxError):
+        return value.strip()
+
+
+def gsettings_get(schema: str, key: str, *, path: str | None = None) -> str | None:
+    # Relocatable schemas use the documented SCHEMA:PATH form.
+    target = f"{schema}:{path}" if path is not None else schema
+    result = run_command(["gsettings", "get", target, key], capture=True)
+    if result.returncode != 0:
         return None
-
-    return int(match.group(1))
-
-
-GNOME_MAJOR = get_gnome_major_version()
-
-
-# =============================================================================
-# VERSION VALIDATION
-# =============================================================================
-
-title("GNOME 50 / 51 — ENVIRONMENT CHECK")
-
-print(f"GNOME Shell: {GNOME_VERSION}")
-
-if GNOME_MAJOR in {50, 51}:
-    ok("GNOME Shell 50/51 erkannt.")
-
-else:
-    warn("Dieses Script ist für GNOME Shell 50/51 ausgelegt.")
-
-    if GNOME_MAJOR is not None:
-        warn(f"Erkannte Major-Version: {GNOME_MAJOR}")
-
-
-# =============================================================================
-# PACMAN
-# =============================================================================
-
-
-def package_installed(
-    package: str,
-) -> bool:
-
-    result = subprocess.run(
-        [
-            "pacman",
-            "-Q",
-            package,
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
-
-    return result.returncode == 0
-
-
-def pacman_install(
-    *packages: str,
-) -> bool:
-
-    if not command_exists("pacman"):
-        warn("pacman nicht gefunden.")
-
-        return False
-
-    packages = [package for package in packages if package]
-
-    if not packages:
-        return True
-
-    result = run(
-        [
-            "sudo",
-            "pacman",
-            "-S",
-            "--needed",
-            *packages,
-        ],
-        check=False,
-    )
-
-    return result.returncode == 0
-
-
-# =============================================================================
-# BACKUP
-# =============================================================================
-
-
-def timestamp() -> str:
-    return datetime.now().strftime("%Y%m%d-%H%M%S")
-
-
-def backup_file(
-    name: str,
-    content: str,
-) -> Path:
-
-    path = BACKUP_DIR / f"{timestamp()}-{name}"
-
-    path.write_text(
-        content,
-        encoding="utf-8",
-    )
-
-    return path
-
-
-# =============================================================================
-# GSETTINGS HELPERS
-# =============================================================================
-
-
-def gsettings_get(
-    schema: str,
-    key: str,
-) -> str:
-
-    result = run(
-        [
-            "gsettings",
-            "get",
-            schema,
-            key,
-        ],
-        check=False,
-        capture=True,
-    )
-
     return result.stdout.strip()
 
 
-def gsettings_set(
-    schema: str,
-    key: str,
-    value: str,
-) -> bool:
-
-    result = run(
-        [
-            "gsettings",
-            "set",
-            schema,
-            key,
-            value,
-        ],
-        check=False,
-    )
-
-    return result.returncode == 0
+def gsettings_set(schema: str, key: str, value: str, *, path: str | None = None) -> bool:
+    target = f"{schema}:{path}" if path is not None else schema
+    result = run_command(["gsettings", "set", target, key, value], capture=True)
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip()
+        warning(f"Could not set {target} {key}: {detail or 'gsettings returned an error'}")
+        return False
+    return True
 
 
-# =============================================================================
-# GNOME SHORTCUT SCHEMA
-# =============================================================================
-
-MEDIA_KEYS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
-
-WM_SCHEMA = "org.gnome.desktop.wm.keybindings"
-
-SHELL_SCHEMA = "org.gnome.shell.keybindings"
-
-INTERFACE_SCHEMA = "org.gnome.desktop.interface"
-
-CUSTOM_KEYBINDINGS_KEY = "custom-keybindings"
+def gsettings_has_key(schema: str, key: str) -> bool:
+    result = run_command(["gsettings", "list-keys", schema], capture=True)
+    return result.returncode == 0 and key in result.stdout.splitlines()
 
 
-# =============================================================================
-# BACKUP GNOME KEYBINDINGS
-# =============================================================================
+def gsettings_schema_values(schema: str) -> dict[str, str]:
+    result = run_command(["gsettings", "list-recursively", schema], capture=True)
+    if result.returncode != 0:
+        return {}
+
+    values: dict[str, str] = {}
+    for line in result.stdout.splitlines():
+        parts = line.split(" ", 2)
+        if len(parts) == 3:
+            _schema_name, key, value = parts
+            values[key] = value
+    return values
 
 
-def backup_keybindings() -> Path:
-
-    title("BACKUP — EXISTING GNOME KEYBINDINGS")
-
-    data = {
-        "created": datetime.now().isoformat(),
-        "gnome_version": GNOME_VERSION,
-        "wm": {},
-        "shell": {},
-        "media": {},
-        "interface": {},
-        "custom": {},
-    }
-
-    for schema, target in [
-        (WM_SCHEMA, data["wm"]),
-        (SHELL_SCHEMA, data["shell"]),
-        (MEDIA_KEYS_SCHEMA, data["media"]),
-        (INTERFACE_SCHEMA, data["interface"]),
-    ]:
-        result = run(
-            [
-                "gsettings",
-                "list-recursively",
-                schema,
-            ],
-            check=False,
-            capture=True,
-        )
-
-        if result.returncode != 0:
-            continue
-
-        for line in result.stdout.splitlines():
-            parts = line.split(
-                " ",
-                2,
-            )
-
-            if len(parts) != 3:
-                continue
-
-            _, key, value = parts
-
-            target[key] = value
-
-    custom = gsettings_get(
-        WM_SCHEMA,
-        CUSTOM_KEYBINDINGS_KEY,
-    )
-
-    data["custom"] = custom
-
-    path = backup_file(
-        "gnome-keybindings.json",
-        json.dumps(
-            data,
-            indent=2,
-            ensure_ascii=False,
-        ),
-    )
-
-    ok(f"Keybinding-Backup erstellt: {path}")
-
-    return path
-
-
-# =============================================================================
-# CUSTOM SHORTCUT MANAGEMENT
-# =============================================================================
-
-
-def get_custom_keybindings() -> list[str]:
-
-    raw = gsettings_get(
-        WM_SCHEMA,
-        CUSTOM_KEYBINDINGS_KEY,
-    )
-
-    if not raw:
-        return []
-
-    try:
-        value = ast.literal_eval(raw)
-
-        if isinstance(value, list):
-            return [str(item) for item in value]
-
-    except Exception:
-        pass
-
+def read_accelerators(value: str) -> list[str]:
+    parsed = parse_gvariant(value)
+    if isinstance(parsed, list):
+        return [item for item in parsed if isinstance(item, str) and item]
+    if isinstance(parsed, str) and parsed:
+        return [parsed]
     return []
 
 
-def gvariant_string(
-    value: str,
-) -> str:
-
-    return (
-        "'"
-        + value.replace(
-            "'",
-            "\\'",
-        )
-        + "'"
-    )
-
-
-def set_custom_keybindings(
-    paths: list[str],
-) -> bool:
-
-    value = (
-        "@as []"
-        if not paths
-        else "[" + ", ".join(gvariant_string(path) for path in paths) + "]"
-    )
-
-    return gsettings_set(
-        WM_SCHEMA,
-        CUSTOM_KEYBINDINGS_KEY,
-        value,
-    )
-
-
-def set_custom_entry(
-    path: str,
-    name: str,
-    command: str,
-    binding: str,
-) -> bool:
-
-    schema = f"org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:{path}"
-
-    # GNOME's schema is normally accessed by the
-    # relocatable path through gsettings.
-    #
-    # Using gsettings directly keeps this compatible
-    # with standard GNOME settings storage.
-
-    success = True
-
-    success &= gsettings_set(
-        schema,
-        "name",
-        gvariant_string(name),
-    )
-
-    success &= gsettings_set(
-        schema,
-        "command",
-        gvariant_string(command),
-    )
-
-    success &= gsettings_set(
-        schema,
-        "binding",
-        gvariant_string(binding),
-    )
-
-    return bool(success)
+def canonical_binding(binding: str) -> str:
+    return re.sub(r"\s+", "", binding).casefold()
 
 
 # =============================================================================
-# GNOME CUSTOM SHORTCUT IMPLEMENTATION
+# KEYBINDING BACKUPS
 # =============================================================================
 
-CUSTOM_BASE = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
+def get_custom_paths() -> list[str]:
+    raw = gsettings_get(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY)
+    if raw is None:
+        return []
+    parsed = parse_gvariant(raw)
+    if not isinstance(parsed, list):
+        warning("The current custom-keybindings registry could not be parsed.")
+        return []
+    return [str(item) for item in parsed if isinstance(item, str)]
 
 
-def custom_path(index: int) -> str:
-
-    return CUSTOM_BASE + f"custom{index}/"
-
-
-def custom_schema(
-    path: str,
-) -> str:
-
-    return f"org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:{path}"
+def get_custom_entry(path: str) -> dict[str, str]:
+    entry: dict[str, str] = {}
+    for key in ("name", "command", "binding"):
+        value = gsettings_get(CUSTOM_SHORTCUT_SCHEMA, key, path=path)
+        entry[key] = parse_gvariant(value) if value is not None else ""
+    return entry
 
 
-def configure_custom_shortcuts(
-    shortcuts: list[dict[str, str]],
-) -> int:
+def save_keybinding_backup() -> Path:
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
-    existing = get_custom_keybindings()
+    data: dict[str, Any] = {
+        "format_version": 2,
+        "created": datetime.now().isoformat(timespec="seconds"),
+        "gnome_shell_version": GNOME_VERSION,
+        "schemas": {
+            WM_SCHEMA: gsettings_schema_values(WM_SCHEMA),
+            SHELL_SCHEMA: gsettings_schema_values(SHELL_SCHEMA),
+            MEDIA_KEYS_SCHEMA: gsettings_schema_values(MEDIA_KEYS_SCHEMA),
+            INTERFACE_SCHEMA: {
+                "color-scheme": gsettings_get(INTERFACE_SCHEMA, "color-scheme")
+            },
+        },
+        "custom_entries": {},
+    }
 
-    # We deliberately create a dedicated block at the
-    # end of the custom-keybinding list.
-    #
-    # Existing user shortcuts remain in place.
+    paths = get_custom_paths()
+    data["custom_entries"] = {path: get_custom_entry(path) for path in paths}
 
-    start_index = 0
+    backup_path = BACKUP_DIR / f"{timestamp()}-gnome-keybindings.json"
+    atomic_write(backup_path, json.dumps(data, indent=2, ensure_ascii=False))
+    success(f"Keybinding backup created: {backup_path}")
+    return backup_path
 
-    while custom_path(start_index) in existing:
-        start_index += 1
 
-    paths = list(existing)
+def restore_latest_keybindings() -> bool:
+    title("RESTORE GNOME KEYBINDINGS")
+    backups = sorted(BACKUP_DIR.glob("*-gnome-keybindings.json"), reverse=True)
+    if not backups:
+        failure(f"No keybinding backup found in {BACKUP_DIR}")
+        return False
 
+    backup_path = backups[0]
+    info(f"Restoring backup: {backup_path}")
+    try:
+        data = json.loads(backup_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        failure(f"Could not read backup: {exc}")
+        return False
+
+    success_count = 0
+    failure_count = 0
+
+    # Restore the relocatable shortcut entries before restoring their registry.
+    for path, entry in data.get("custom_entries", {}).items():
+        for key in ("name", "command", "binding"):
+            value = entry.get(key, "")
+            if isinstance(value, str) and gsettings_set(
+                CUSTOM_SHORTCUT_SCHEMA, key, gvariant_string(value), path=path
+            ):
+                success_count += 1
+            else:
+                failure_count += 1
+
+    schemas = data.get("schemas", {})
+    for schema in (WM_SCHEMA, SHELL_SCHEMA, MEDIA_KEYS_SCHEMA, INTERFACE_SCHEMA):
+        for key, raw_value in schemas.get(schema, {}).items():
+            if raw_value is None:
+                continue
+            if gsettings_set(schema, key, raw_value):
+                success_count += 1
+            else:
+                failure_count += 1
+
+    # Verify the restored custom shortcut registry, which is the critical index.
+    expected = data.get("schemas", {}).get(MEDIA_KEYS_SCHEMA, {}).get(CUSTOM_KEYBINDINGS_KEY)
+    if expected is not None:
+        actual = gsettings_get(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY)
+        if parse_gvariant(actual or "") != parse_gvariant(expected):
+            failure_count += 1
+            failure("The custom shortcut registry does not match the backup after restore.")
+
+    if failure_count == 0:
+        success(f"Backup restored and verified ({success_count} settings).")
+        return True
+
+    warning(f"Restore completed with {failure_count} failed or unverified settings.")
+    return False
+
+
+# =============================================================================
+# NATIVE GNOME / MUTTER KEYBINDINGS
+# =============================================================================
+
+# These are configured through their native GNOME schemas, not as custom commands.
+# GSettings keybinding values in these schemas are string arrays (type 'as').
+
+def build_native_bindings() -> list[dict[str, str]]:
+    bindings: list[dict[str, str]] = [
+        {"schema": WM_SCHEMA, "key": "close", "binding": "<Super>q", "label": "Close window"},
+        {"schema": WM_SCHEMA, "key": "toggle-maximized", "binding": "<Super>d", "label": "Toggle maximize"},
+        {"schema": WM_SCHEMA, "key": "toggle-fullscreen", "binding": "<Super>f", "label": "Toggle fullscreen"},
+        {"schema": WM_SCHEMA, "key": "switch-to-workspace-left", "binding": "<Control><Super>Left", "label": "Previous workspace"},
+        {"schema": WM_SCHEMA, "key": "switch-to-workspace-right", "binding": "<Control><Super>Right", "label": "Next workspace"},
+    ]
+
+    for number in range(1, 11):
+        digit = "0" if number == 10 else str(number)
+        bindings.append({
+            "schema": WM_SCHEMA,
+            "key": f"switch-to-workspace-{number}",
+            "binding": f"<Super>{digit}",
+            "label": f"Switch to workspace {number}",
+        })
+        bindings.append({
+            "schema": WM_SCHEMA,
+            "key": f"move-to-workspace-{number}",
+            "binding": f"<Alt><Super>{digit}",
+            "label": f"Move window to workspace {number}",
+        })
+
+    return bindings
+
+
+def existing_native_bindings() -> dict[str, list[tuple[str, str]]]:
+    found: dict[str, list[tuple[str, str]]] = {}
+    for schema in (WM_SCHEMA, SHELL_SCHEMA, MEDIA_KEYS_SCHEMA):
+        for key, raw in gsettings_schema_values(schema).items():
+            for binding in read_accelerators(raw):
+                found.setdefault(canonical_binding(binding), []).append((schema, key))
+    return found
+
+
+def existing_custom_bindings() -> dict[str, tuple[str, str]]:
+    found: dict[str, tuple[str, str]] = {}
+    for path in get_custom_paths():
+        entry = get_custom_entry(path)
+        binding = entry.get("binding", "")
+        if binding:
+            found[canonical_binding(binding)] = (entry.get("name", "Custom shortcut"), path)
+    return found
+
+
+def configure_native_bindings() -> tuple[int, int, list[str]]:
     configured = 0
+    skipped = 0
+    notes: list[str] = []
 
-    for offset, item in enumerate(shortcuts):
-        index = start_index + offset
+    active_custom = existing_custom_bindings()
+    for item in build_native_bindings():
+        schema = item["schema"]
+        key = item["key"]
+        binding = item["binding"]
+        canonical = canonical_binding(binding)
 
-        path = custom_path(index)
+        if not gsettings_has_key(schema, key):
+            skipped += 1
+            notes.append(f"{item['label']}: schema key is unavailable")
+            continue
 
-        schema = custom_schema(path)
+        custom_collision = active_custom.get(canonical)
+        if custom_collision:
+            skipped += 1
+            notes.append(
+                f"{item['label']}: preserved existing custom shortcut '{custom_collision[0]}'"
+            )
+            continue
 
-        success = True
+        # Do not create two Mutter actions on the same accelerator.
+        current = existing_native_bindings()
+        conflicts = current.get(canonical, [])
+        other_conflicts = [(s, k) for s, k in conflicts if not (s == schema and k == key)]
+        if other_conflicts:
+            skipped += 1
+            notes.append(f"{item['label']}: accelerator already used by {other_conflicts[0][1]}")
+            continue
 
-        success &= gsettings_set(
-            schema,
-            "name",
-            gvariant_string(item["name"]),
-        )
+        value = gvariant_string_array([binding])
+        if not gsettings_set(schema, key, value):
+            skipped += 1
+            notes.append(f"{item['label']}: GSettings write failed")
+            continue
 
-        success &= gsettings_set(
-            schema,
-            "command",
-            gvariant_string(item["command"]),
-        )
-
-        success &= gsettings_set(
-            schema,
-            "binding",
-            gvariant_string(item["binding"]),
-        )
-
-        if success:
-            paths.append(path)
-
+        actual = gsettings_get(schema, key)
+        if actual is not None and read_accelerators(actual) == [binding]:
             configured += 1
-
         else:
-            warn(f"Custom Shortcut konnte nicht eingerichtet werden: {item['name']}")
+            skipped += 1
+            notes.append(f"{item['label']}: value could not be verified")
 
-    if not set_custom_keybindings(paths):
-        error("custom-keybindings konnte nicht gesetzt werden.")
-
-    return configured
+    return configured, skipped, notes
 
 
 # =============================================================================
-# COMMAND AVAILABILITY
-# =============================================================================
-
-
-def command_or_skip(
-    command: str,
-) -> bool:
-
-    # We intentionally do not try to parse complex shell
-    # pipelines here. If the command begins with bash/sh,
-    # it is treated as an external shell command.
-
-    first = command.strip().split(
-        None,
-        1,
-    )[0]
-
-    if first in {
-        "bash",
-        "sh",
-        "fish",
-        "python",
-        "python3",
-        "kitty",
-        "alacritty",
-        "wezterm",
-        "gnome-terminal",
-        "xdg-open",
-    }:
-        return command_exists(first)
-
-    return command_exists(first)
-
-
-# =============================================================================
-# APPLICATION COMMAND DETECTION
-# =============================================================================
-
-
-def first_available(
-    commands: list[str],
-) -> str | None:
-
-    for command in commands:
-        first = command.split(
-            None,
-            1,
-        )[0]
-
-        if command_exists(first):
-            return command
-
-    return None
-
-
-TERMINAL_COMMAND = first_available(
-    [
-        "kitty",
-        "foot",
-        "alacritty",
-        "wezterm",
-        "gnome-terminal",
-    ]
-)
-
-BROWSER_COMMAND = first_available(
-    [
-        "brave",
-        "firefox",
-        "librewolf",
-        "chromium",
-    ]
-)
-
-FILE_MANAGER_COMMAND = first_available(
-    [
-        "nautilus",
-        "thunar",
-        "dolphin",
-        "pcmanfm",
-    ]
-)
-
-
-# =============================================================================
-# HYPRLAND -> GNOME SHORTCUT DEFINITIONS
-# =============================================================================
-#
-# Diese Tabelle bildet deine Lua-Konfiguration auf GNOME ab.
-#
-# Syntax:
-#
-#   <Super>
-#   <Shift>
-#   <Control>
-#   <Alt>
-#
-# GNOME verwendet "<Super>" statt "SUPER".
+# CUSTOM SHORTCUT DEFINITIONS
 # =============================================================================
 
 CUSTOM_SHORTCUTS: list[dict[str, str]] = []
+GNOME_APPLICATION_SHORTCUTS: list[dict[str, str]] = []
+UNSUPPORTED_FEATURES: list[str] = [
+    "Hyprland floating-window mode: no safe native GNOME equivalent is configured.",
+    "Hyprland pin/always-on-top mode: requires a compatible GNOME Shell extension.",
+    "Hyprland scratchpad/special workspace: requires a dedicated GNOME Shell extension or workflow.",
+    "Hyprland directional window focus: not mapped to wmctrl move/resize commands.",
+]
 
 
 def add_shortcut(
     name: str,
     binding: str,
     command: str,
+    *,
+    group: str = "Hyprland utilities",
 ) -> None:
-
-    CUSTOM_SHORTCUTS.append(
-        {
-            "name": name,
-            "binding": binding,
-            "command": command,
-        }
-    )
+    target = GNOME_APPLICATION_SHORTCUTS if group == "GNOME applications" else CUSTOM_SHORTCUTS
+    target.append({"name": name, "binding": binding, "command": command, "group": group})
 
 
-# =============================================================================
-# QUICK / SHELL
-# =============================================================================
-
-if command_exists("fuzzel"):
-    add_shortcut(
-        "Hyprland: Search / Fuzzel",
-        "<Super>space",
-        "fuzzel",
-    )
+def first_available(commands: Iterable[str]) -> str | None:
+    for command in commands:
+        executable = command.split(None, 1)[0]
+        if command_exists(executable):
+            return command
+    return None
 
 
-if command_exists("qs"):
-    add_shortcut(
-        "Hyprland: Quickshell Search",
-        "<Super>space",
-        "qs",
-    )
+def build_shortcuts() -> None:
+    CUSTOM_SHORTCUTS.clear()
+    GNOME_APPLICATION_SHORTCUTS.clear()
 
-
-add_shortcut(
-    "Hyprland: Overview",
-    "<Super>Tab",
-    "bash -c 'gnome-extensions prefs org.gnome.shell.extensions.dash-to-panel 2>/dev/null || true'",
-)
-
-
-# =============================================================================
-# CLIPBOARD
-# =============================================================================
-
-if command_exists("cliphist") and command_exists("fuzzel"):
-    add_shortcut(
-        "Utilities: Clipboard history",
-        "<Super>v",
-        "bash -c 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy'",
-    )
-
-
-# =============================================================================
-# EMOJI
-# =============================================================================
-
-if command_exists("fuzzel") and command_exists("wl-copy"):
-    emoji_script = (
-        HOME / ".config" / "hypr" / "hyprland" / "scripts" / "fuzzel-emoji.sh"
-    )
-
-    if emoji_script.exists():
+    # -------------------------------------------------------------------------
+    # GNOME applications: intentionally kept separate from Hyprland apps.
+    # -------------------------------------------------------------------------
+    if command_exists("nautilus"):
         add_shortcut(
-            "Utilities: Emoji",
+            "GNOME: Files",
+            "<Super>e",
+            "nautilus --new-window",
+            group="GNOME applications",
+        )
+    else:
+        info("GNOME Files shortcut skipped: 'nautilus' is not installed.")
+
+    if command_exists("gnome-control-center"):
+        add_shortcut(
+            "GNOME: Settings",
+            "<Super>i",
+            "gnome-control-center",
+            group="GNOME applications",
+        )
+    else:
+        info("GNOME Settings shortcut skipped: 'gnome-control-center' is not installed.")
+
+    # -------------------------------------------------------------------------
+    # Hyprland-style launcher and application shortcuts.
+    # -------------------------------------------------------------------------
+    launcher = first_available(["fuzzel", "qs"])
+    if launcher:
+        label = "Search / Fuzzel" if launcher == "fuzzel" else "Search / Quickshell"
+        add_shortcut(f"Launcher: {label}", "<Super>space", launcher)
+
+    terminal = first_available(["kitty", "foot", "alacritty", "wezterm", "gnome-terminal"])
+    if terminal:
+        add_shortcut("App: Terminal", "<Super>Return", terminal)
+        add_shortcut("App: Terminal (alternate)", "<Control><Alt>t", terminal)
+
+    browser = first_available(["brave", "firefox", "librewolf", "chromium"])
+    if browser:
+        add_shortcut("App: Browser", "<Super>w", browser)
+
+    if command_exists("firefox"):
+        add_shortcut("App: Firefox", "<Super><Alt>w", "firefox")
+    if command_exists("mullvad-browser"):
+        add_shortcut("App: Mullvad Browser", "<Control><Super>w", "mullvad-browser -P")
+    if command_exists("librewolf"):
+        add_shortcut("App: LibreWolf", "<Super><Shift>w", "librewolf")
+    if command_exists("torbrowser-launcher"):
+        add_shortcut("App: Tor Browser", "<Super><Alt><Shift>w", "torbrowser-launcher")
+    if command_exists("qalculate-gtk"):
+        add_shortcut("App: Qalculate", "XF86Calculator", "qalculate-gtk")
+    if command_exists("gnome-system-monitor"):
+        add_shortcut("App: System monitor", "<Control><Shift>Escape", "gnome-system-monitor")
+
+    # -------------------------------------------------------------------------
+    # Clipboard and text utilities.
+    # -------------------------------------------------------------------------
+    if all(command_exists(item) for item in ("cliphist", "fuzzel", "wl-copy")):
+        add_shortcut(
+            "Utilities: Clipboard history",
+            "<Super>v",
+            "bash -lc 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy'",
+        )
+
+    emoji_script = HOME / ".config" / "hypr" / "hyprland" / "scripts" / "fuzzel-emoji.sh"
+    if emoji_script.is_file() and command_exists("bash") and command_exists("fuzzel") and command_exists("wl-copy"):
+        add_shortcut(
+            "Utilities: Emoji picker",
             "<Super>period",
-            f"{emoji_script} copy",
+            f"bash {shlex.quote(str(emoji_script))} copy",
+        )
+
+    snip_search = HOME / ".config" / "hypr" / "hyprland" / "scripts" / "snip_to_search.sh"
+    if snip_search.is_file() and command_exists("bash"):
+        add_shortcut(
+            "Utilities: Region search",
+            "<Super><Shift>a",
+            f"bash {shlex.quote(str(snip_search))}",
+        )
+
+    if all(command_exists(item) for item in ("grim", "slurp", "tesseract", "wl-copy")):
+        add_shortcut(
+            "Utilities: OCR selected region",
+            "<Super><Shift>x",
+            "bash -lc 'tmp=$(mktemp --suffix=.png); trap \"rm -f \\\"$tmp\\\"\" EXIT; grim -g \"$(slurp)\" \"$tmp\" && tesseract \"$tmp\" stdout 2>/dev/null | wl-copy'",
+        )
+
+    # GNOME's Print key is intentionally left to its native screenshot UI.
+    # Use a separate accelerator for OBS to avoid stealing the screenshot key.
+    if command_exists("obs"):
+        add_shortcut("App: OBS", "<Control>Print", "obs")
+
+    if command_exists("gnome-screenshot"):
+        add_shortcut("Utilities: Interactive screenshot", "<Super><Shift>s", "gnome-screenshot -i")
+
+    if command_exists("hyprpicker"):
+        add_shortcut("Utilities: Color picker", "<Super><Shift>c", "hyprpicker -a")
+
+    # -------------------------------------------------------------------------
+    # GNOME shell and session utilities.
+    # -------------------------------------------------------------------------
+    add_shortcut(
+        "Shell: Toggle dark mode",
+        "<Control><Super><Shift>d",
+        "bash -lc 'current=$(gsettings get org.gnome.desktop.interface color-scheme); if [[ $current == *prefer-dark* ]]; then gsettings set org.gnome.desktop.interface color-scheme prefer-light; else gsettings set org.gnome.desktop.interface color-scheme prefer-dark; fi'",
+    )
+
+    if command_exists("gnome-control-center"):
+        add_shortcut(
+            "Shell: Open wallpaper settings",
+            "<Control><Super>t",
+            "gnome-control-center background",
+        )
+
+    if command_exists("playerctl"):
+        add_shortcut("Media: Play or pause", "<Super>m", "playerctl play-pause")
+        add_shortcut("Media: Next track", "<Super><Shift>n", "playerctl next")
+        add_shortcut("Media: Previous track", "<Super><Shift>b", "playerctl previous")
+        add_shortcut("Media: Play or pause (alternate)", "<Super><Shift>p", "playerctl play-pause")
+
+    if command_exists("wpctl"):
+        add_shortcut("Media: Toggle mute", "<Super><Shift>m", "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+
+    if command_exists("loginctl"):
+        add_shortcut("Session: Lock screen", "<Super>l", "loginctl lock-session")
+    if command_exists("systemctl"):
+        add_shortcut("Session: Suspend", "<Super><Shift>l", "systemctl suspend")
+
+    record_script = HOME / ".config" / "quickshell" / "scripts" / "videos" / "record.sh"
+    if record_script.is_file() and command_exists("bash"):
+        script = shlex.quote(str(record_script))
+        add_shortcut("Utilities: Record selected region", "<Super><Shift>r", f"bash {script}")
+        add_shortcut("Utilities: Record full screen", "<Control><Alt>r", f"bash {script} --fullscreen")
+        add_shortcut(
+            "Utilities: Record screen with audio",
+            "<Shift><Alt><Super>r",
+            f"bash {script} --fullscreen --sound",
+        )
+
+    if command_exists("qs"):
+        add_shortcut(
+            "Shell: Restart Quickshell",
+            "<Control><Super>r",
+            "bash -lc 'pkill -x quickshell 2>/dev/null || true; pkill -x qs 2>/dev/null || true; nohup qs >/dev/null 2>&1 &'",
         )
 
 
-# =============================================================================
-# GNOME / SHELL UTILITIES
-# =============================================================================
-
-add_shortcut(
-    "Shell: Cheatsheet",
-    "<Super><Shift>7",
-    'bash -c \'notify-send "Hyprland / GNOME Keybindings" "Use the configured Hyprland-compatible shortcuts."\'',
-)
-
-add_shortcut(
-    "Shell: On-screen keyboard",
-    "<Super>k",
-    "bash -c 'gsettings set org.gnome.desktop.a11y.applications screen-keyboard-enabled true'",
-)
-
-
-# =============================================================================
-# MEDIA OVERLAY
-# =============================================================================
-
-if command_exists("playerctl"):
-    add_shortcut(
-        "Media: Toggle media controls",
-        "<Super>m",
-        "playerctl play-pause",
-    )
-
-
-# =============================================================================
-# SESSION MENU
-# =============================================================================
-
-add_shortcut(
-    "Session: GNOME session menu",
-    "<Control><Alt>Delete",
-    "bash -c 'gnome-session-quit --logout-dialog'",
-)
-
-
-# =============================================================================
-# WALLPAPER
-# =============================================================================
-
-if command_exists("gsettings"):
-    add_shortcut(
-        "Shell: Wallpaper",
-        "<Control><Super>t",
-        "bash -c 'gnome-control-center background 2>/dev/null || true'",
-    )
-
-
-# =============================================================================
-# LIGHT / DARK
-# =============================================================================
-
-add_shortcut(
-    "Shell: Toggle light/dark mode",
-    "<Control><Super><Shift>d",
-    "bash -c 'v=$(gsettings get org.gnome.desktop.interface color-scheme); if [[ \"$v\" == *prefer-dark* ]]; then gsettings set org.gnome.desktop.interface color-scheme prefer-light; else gsettings set org.gnome.desktop.interface color-scheme prefer-dark; fi'",
-)
-
-
-# =============================================================================
-# RESTART QUICKSHELL
-# =============================================================================
-
-if command_exists("qs"):
-    add_shortcut(
-        "Shell: Restart Quickshell widgets",
-        "<Control><Super>r",
-        "bash -c 'pkill -x quickshell 2>/dev/null || true; pkill -x qs 2>/dev/null || true; qs -c \"$qsConfig\" &'",
-    )
-
-
-# =============================================================================
-# SCREENSHOT
-# =============================================================================
-
-if command_exists("gnome-screenshot"):
-    add_shortcut(
-        "Utilities: Screenshot",
-        "Print",
-        "gnome-screenshot",
-    )
-
-elif command_exists("gnome-screenshot"):
-    add_shortcut(
-        "Utilities: Screenshot",
-        "Print",
-        "gnome-screenshot",
-    )
-
-
-if command_exists("grim") and command_exists("slurp"):
-    add_shortcut(
-        "Utilities: Screen snip",
-        "<Super><Shift>s",
-        "bash -c 'grim -g \"$(slurp)\" - | wl-copy'",
-    )
-
-
-# =============================================================================
-# GOOGLE LENS / REGION SEARCH
-# =============================================================================
-
-SNIP_SEARCH = HOME / ".config" / "hypr" / "hyprland" / "scripts" / "snip_to_search.sh"
-
-if SNIP_SEARCH.exists():
-    add_shortcut(
-        "Utilities: Google Lens",
-        "<Super><Shift>a",
-        str(SNIP_SEARCH),
-    )
-
-
-# =============================================================================
-# OCR
-# =============================================================================
-
-if (
-    command_exists("grim")
-    and command_exists("slurp")
-    and command_exists("tesseract")
-    and command_exists("wl-copy")
-):
-    add_shortcut(
-        "Utilities: OCR",
-        "<Super><Shift>x",
-        "bash -c 'grim -g \"$(slurp)\" /tmp/gnome-ocr.png && tesseract /tmp/gnome-ocr.png stdout 2>/dev/null | wl-copy; rm -f /tmp/gnome-ocr.png'",
-    )
-
-
-# =============================================================================
-# TRANSLATION
-# =============================================================================
-
-add_shortcut(
-    "Utilities: Translate screen",
-    "<Super><Shift>t",
-    'bash -c \'notify-send "Screen Translation" "Configure your translation command here."\'',
-)
-
-
-# =============================================================================
-# COLOR PICKER
-# =============================================================================
-
-if command_exists("hyprpicker"):
-    add_shortcut(
-        "Utilities: Color picker",
-        "<Super><Shift>c",
-        "hyprpicker -a",
-    )
-
-
-# =============================================================================
-# RECORDING
-# =============================================================================
-
-RECORD_SCRIPT = HOME / ".config" / "quickshell" / "scripts" / "videos" / "record.sh"
-
-if RECORD_SCRIPT.exists():
-    add_shortcut(
-        "Utilities: Record region",
-        "<Super><Shift>r",
-        str(RECORD_SCRIPT),
-    )
-
-    add_shortcut(
-        "Utilities: Record screen",
-        "<Control><Alt>r",
-        f"{RECORD_SCRIPT} --fullscreen",
-    )
-
-    add_shortcut(
-        "Utilities: Record screen with sound",
-        "<Shift><Alt><Super>r",
-        f"{RECORD_SCRIPT} --fullscreen --sound",
-    )
-
-
-# =============================================================================
-# OBS
-# =============================================================================
-
-if command_exists("obs"):
-    add_shortcut(
-        "App: OBS",
-        "Print",
-        "obs",
-    )
-
-
-# =============================================================================
-# MEDIA
-# =============================================================================
-
-if command_exists("playerctl"):
-    add_shortcut(
-        "Media: Next track",
-        "<Super><Shift>n",
-        "playerctl next",
-    )
-
-    add_shortcut(
-        "Media: Previous track",
-        "<Super><Shift>b",
-        "playerctl previous",
-    )
-
-    add_shortcut(
-        "Media: Play / pause",
-        "<Super><Shift>p",
-        "playerctl play-pause",
-    )
-
-    add_shortcut(
-        "Media: Mute",
-        "<Super><Shift>m",
-        "wpctl set-mute @DEFAULT_SINK@ toggle",
-    )
-
-
-# =============================================================================
-# WINDOW MANAGEMENT
-# =============================================================================
-
-add_shortcut(
-    "Window: Close",
-    "<Super>q",
-    "bash -c 'wmctrl -c :ACTIVE: 2>/dev/null || gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.display.get_focus_window().delete(global.get_current_time());\" >/dev/null 2>&1'",
-)
-
-
-add_shortcut(
-    "Window: Maximize",
-    "<Super>d",
-    "bash -c 'wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz'",
-)
-
-
-add_shortcut(
-    "Window: Fullscreen",
-    "<Super>f",
-    "bash -c 'wmctrl -r :ACTIVE: -b toggle,fullscreen'",
-)
-
-
-add_shortcut(
-    "Window: Float",
-    "<Alt><Super>space",
-    'bash -c \'notify-send "GNOME" "Floating windows require a GNOME Shell extension or Mutter-specific workflow."\'',
-)
-
-
-add_shortcut(
-    "Window: Pin",
-    "<Super>p",
-    'bash -c \'notify-send "GNOME" "Always-on-top requires GNOME/Mutter extension support."\'',
-)
-
-
-# =============================================================================
-# WORKSPACE 1–10
-# =============================================================================
-
-for i in range(
-    1,
-    11,
-):
-    digit = "0" if i == 10 else str(i)
-
-    add_shortcut(
-        f"Workspace: Focus {i}",
-        f"<Super>{digit}",
-        f"bash -c 'wmctrl -s {i - 1}'",
-    )
-
-    add_shortcut(
-        f"Window: Send to workspace {i}",
-        f"<Alt><Super>{digit}",
-        f"bash -c 'wmctrl -r :ACTIVE: -t {i - 1}'",
-    )
-
-
-# =============================================================================
-# WORKSPACE NAVIGATION
-# =============================================================================
-
-add_shortcut(
-    "Workspace: Previous",
-    "<Control><Super>Left",
-    "bash -c 'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.workspace_manager.get_active_workspace().get_neighbor(Meta.MotionDirection.LEFT).activate(global.get_current_time());\" >/dev/null 2>&1'",
-)
-
-add_shortcut(
-    "Workspace: Next",
-    "<Control><Super>Right",
-    "bash -c 'gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"global.workspace_manager.get_active_workspace().get_neighbor(Meta.MotionDirection.RIGHT).activate(global.get_current_time());\" >/dev/null 2>&1'",
-)
-
-
-# =============================================================================
-# WORKSPACE PAGE UP/DOWN
-# =============================================================================
-
-add_shortcut(
-    "Workspace: Previous Page",
-    "<Super>Page_Up",
-    'bash -c \'wmctrl -s $(($(wmctrl -d | awk "$2==\\"*\\" {print $1}") - 1))\'',
-)
-
-add_shortcut(
-    "Workspace: Next Page",
-    "<Super>Page_Down",
-    'bash -c \'wmctrl -s $(($(wmctrl -d | awk "$2==\\"*\\" {print $1}") + 1))\'',
-)
-
-
-# =============================================================================
-# SCRATCHPAD
-# =============================================================================
-
-add_shortcut(
-    "Workspace: Toggle scratchpad",
-    "<Super>s",
-    'bash -c \'notify-send "GNOME Scratchpad" "A GNOME extension is required for a true Hyprland-style special workspace."\'',
-)
-
-add_shortcut(
-    "Window: Send to scratchpad",
-    "<Alt><Super>s",
-    'bash -c \'notify-send "GNOME Scratchpad" "A GNOME extension is required for a true Hyprland-style special workspace."\'',
-)
-
-
-# =============================================================================
-# WINDOW FOCUS
-# =============================================================================
-
-add_shortcut(
-    "Window: Focus left",
-    "<Super>Left",
-    "bash -c 'wmctrl -r :ACTIVE: -e 0,-1,-1,-1,-1'",
-)
-
-add_shortcut(
-    "Window: Focus right",
-    "<Super>Right",
-    "bash -c 'wmctrl -r :ACTIVE: -e 0,-1,-1,-1,-1'",
-)
-
-
-# =============================================================================
-# APPLICATIONS
-# =============================================================================
-
-if TERMINAL_COMMAND:
-    add_shortcut(
-        "App: Terminal",
-        "<Super>Return",
-        TERMINAL_COMMAND,
-    )
-
-    add_shortcut(
-        "App: Terminal",
-        "<Super>t",
-        TERMINAL_COMMAND,
-    )
-
-    add_shortcut(
-        "App: Terminal",
-        "<Control><Alt>t",
-        TERMINAL_COMMAND,
-    )
-
-
-if FILE_MANAGER_COMMAND:
-    add_shortcut(
-        "App: File manager",
-        "<Super>e",
-        FILE_MANAGER_COMMAND,
-    )
-
-
-if BROWSER_COMMAND:
-    add_shortcut(
-        "App: Browser",
-        "<Super>w",
-        BROWSER_COMMAND,
-    )
-
-
-if command_exists("firefox"):
-    add_shortcut(
-        "App: Firefox",
-        "<Super><Alt>w",
-        "firefox",
-    )
-
-
-if command_exists("mullvad-browser"):
-    add_shortcut(
-        "App: Mullvad Browser",
-        "<Control><Super>w",
-        "mullvad-browser -P",
-    )
-
-
-if command_exists("librewolf"):
-    add_shortcut(
-        "App: LibreWolf",
-        "<Super><Shift>w",
-        "librewolf",
-    )
-
-
-if command_exists("torbrowser-launcher"):
-    add_shortcut(
-        "App: Tor Browser",
-        "<Super><Alt><Shift>w",
-        "torbrowser-launcher",
-    )
-
-
-if command_exists("qalculate-gtk"):
-    add_shortcut(
-        "App: Qalculate",
-        "XF86Calculator",
-        "qalculate-gtk",
-    )
-
-
-# =============================================================================
-# SETTINGS
-# =============================================================================
-
-add_shortcut(
-    "App: Settings",
-    "<Super>i",
-    "gnome-control-center",
-)
-
-
-# =============================================================================
-# TASK MANAGER
-# =============================================================================
-
-if command_exists("gnome-system-monitor"):
-    add_shortcut(
-        "App: Task manager",
-        "<Control><Shift>Escape",
-        "gnome-system-monitor",
-    )
-
-
-# =============================================================================
-# VOLUME
-# =============================================================================
-
-add_shortcut(
-    "Media: Volume up",
-    "XF86AudioRaiseVolume",
-    "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5",
-)
-
-add_shortcut(
-    "Media: Volume down",
-    "XF86AudioLowerVolume",
-    "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
-)
-
-add_shortcut(
-    "Media: Mute",
-    "XF86AudioMute",
-    "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-)
-
-add_shortcut(
-    "Media: Microphone mute",
-    "XF86AudioMicMute",
-    "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-)
-
-
-# =============================================================================
-# MEDIA KEYS
-# =============================================================================
-
-if command_exists("playerctl"):
-    add_shortcut(
-        "Media: Play / pause",
-        "XF86AudioPlay",
-        "playerctl play-pause",
-    )
-
-    add_shortcut(
-        "Media: Play / pause",
-        "XF86AudioPause",
-        "playerctl play-pause",
-    )
-
-    add_shortcut(
-        "Media: Next",
-        "XF86AudioNext",
-        "playerctl next",
-    )
-
-    add_shortcut(
-        "Media: Previous",
-        "XF86AudioPrev",
-        "playerctl previous",
-    )
-
-
-# =============================================================================
-# SESSION
-# =============================================================================
-
-add_shortcut(
-    "Session: Lock",
-    "<Super>l",
-    "loginctl lock-session",
-)
-
-add_shortcut(
-    "Session: Suspend",
-    "<Super><Shift>l",
-    "systemctl suspend",
-)
-
-add_shortcut(
-    "Session: Logout",
-    "<Control><Alt>Delete",
-    "gnome-session-quit --logout",
-)
-
-
-# =============================================================================
-# GNOME DARK MODE
-# =============================================================================
-
-add_shortcut(
-    "GNOME: Toggle dark mode",
-    "<Control><Super><Shift>d",
-    "bash -c 'if [[ \"$(gsettings get org.gnome.desktop.interface color-scheme)\" == *prefer-dark* ]]; then gsettings set org.gnome.desktop.interface color-scheme prefer-light; else gsettings set org.gnome.desktop.interface color-scheme prefer-dark; fi'",
-)
-
-
-# =============================================================================
-# GLASS / BORDER / GNOME TOGGLE
-# =============================================================================
-
-GNOME_TOGGLE_SCRIPT = HOME / ".config" / "fish" / "functions" / "gnome-toggle.py"
-
-if GNOME_TOGGLE_SCRIPT.exists():
-    add_shortcut(
-        "Session: Toggle GNOME / Hyprland profile",
-        "<Control><Super>h",
-        f"kitty --hold python3 {GNOME_TOGGLE_SCRIPT} --reboot",
-    )
-
-
-# =============================================================================
-# FILTER INVALID DUPLICATES
-# =============================================================================
-
-
-def deduplicate_shortcuts(
-    shortcuts: list[dict[str, str]],
-) -> list[dict[str, str]]:
-
-    seen: set[tuple[str, str]] = set()
-
-    result = []
+def deduplicate_shortcuts(shortcuts: list[dict[str, str]]) -> tuple[list[dict[str, str]], list[str]]:
+    seen: set[str] = set()
+    result: list[dict[str, str]] = []
+    skipped: list[str] = []
 
     for item in shortcuts:
-        key = (
-            item["binding"],
-            item["name"],
-        )
-
+        key = canonical_binding(item["binding"])
         if key in seen:
+            skipped.append(f"{item['name']} ({item['binding']}): duplicate in installer definition")
             continue
-
         seen.add(key)
-
         result.append(item)
 
-    return result
-
-
-CUSTOM_SHORTCUTS = deduplicate_shortcuts(CUSTOM_SHORTCUTS)
+    return result, skipped
 
 
 # =============================================================================
-# PRINT KEYBINDING PLAN
+# CUSTOM SHORTCUT INSTALLATION
 # =============================================================================
 
+def managed_custom_path(index: int) -> str:
+    return f"{CUSTOM_BASE_PATH}{MANAGED_PATH_PREFIX}{index}/"
+
+
+def write_custom_entry(path: str, item: dict[str, str]) -> bool:
+    values = {
+        "name": item["name"],
+        "command": item["command"],
+        "binding": item["binding"],
+    }
+
+    for key, value in values.items():
+        if not gsettings_set(CUSTOM_SHORTCUT_SCHEMA, key, gvariant_string(value), path=path):
+            return False
+
+    for key, expected in values.items():
+        actual = gsettings_get(CUSTOM_SHORTCUT_SCHEMA, key, path=path)
+        if actual is None or parse_gvariant(actual) != expected:
+            warning(f"Verification failed for '{item['name']}' ({key}).")
+            return False
+
+    return True
+
+
+def install_custom_shortcuts(shortcuts: list[dict[str, str]]) -> tuple[int, int, list[str]]:
+    if not gsettings_has_key(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY):
+        failure(
+            f"The required key '{CUSTOM_KEYBINDINGS_KEY}' is not available in {MEDIA_KEYS_SCHEMA}."
+        )
+        return 0, len(shortcuts), ["Custom shortcut registry key is unavailable"]
+
+    existing_paths = get_custom_paths()
+    managed_paths = {path for path in existing_paths if MANAGED_PATH_PREFIX in path}
+    preserved_paths = [path for path in existing_paths if path not in managed_paths]
+
+    # Avoid stealing accelerators already assigned to another GNOME action.
+    native_in_use = existing_native_bindings()
+    custom_in_use = existing_custom_bindings()
+    accepted: list[dict[str, str]] = []
+    skipped_notes: list[str] = []
+    seen: set[str] = set()
+
+    for item in shortcuts:
+        binding_key = canonical_binding(item["binding"])
+        if binding_key in seen:
+            skipped_notes.append(f"{item['name']}: duplicate accelerator in installer definition")
+            continue
+        seen.add(binding_key)
+
+        if binding_key in native_in_use:
+            owners = ", ".join(key for _schema, key in native_in_use[binding_key])
+            skipped_notes.append(f"{item['name']} ({item['binding']}): already assigned to native GNOME action ({owners})")
+            continue
+
+        existing_custom = custom_in_use.get(binding_key)
+        if existing_custom and existing_custom[1] not in managed_paths:
+            skipped_notes.append(f"{item['name']} ({item['binding']}): preserved existing custom shortcut '{existing_custom[0]}'")
+            continue
+
+        accepted.append(item)
+
+    registered_entries: list[tuple[dict[str, str], str]] = []
+
+    for index, item in enumerate(accepted):
+        path = managed_custom_path(index)
+        if write_custom_entry(path, item):
+            registered_entries.append((item, path))
+        else:
+            warning(f"Shortcut was not registered: {item['name']}")
+
+    new_paths = [path for _item, path in registered_entries]
+    target_registry = preserved_paths + new_paths
+    registry_value = gvariant_string_array(target_registry)
+
+    if not gsettings_set(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY, registry_value):
+        failure("The custom shortcut registry could not be updated. No new shortcuts are considered installed.")
+        # Keep the previous registry intact wherever possible.
+        gsettings_set(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY, gvariant_string_array(existing_paths))
+        return 0, len(shortcuts), skipped_notes + ["Registry update failed; entries were not activated"]
+
+    actual_registry_raw = gsettings_get(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY)
+    actual_registry = parse_gvariant(actual_registry_raw or "")
+    if actual_registry != target_registry:
+        failure("The custom shortcut registry failed post-write verification.")
+        gsettings_set(MEDIA_KEYS_SCHEMA, CUSTOM_KEYBINDINGS_KEY, gvariant_string_array(existing_paths))
+        return 0, len(shortcuts), skipped_notes + ["Registry verification failed; previous registry restored"]
+
+    # Verify every registered entry again after the registry commit.
+    verified = 0
+    verified_paths: list[str] = []
+    for item, path in registered_entries:
+        entry = get_custom_entry(path)
+        if (
+            entry.get("name") == item["name"]
+            and entry.get("command") == item["command"]
+            and entry.get("binding") == item["binding"]
+        ):
+            verified += 1
+            verified_paths.append(path)
+        else:
+            warning(f"Registered shortcut could not be verified: {item['name']}")
+
+    if verified != len(new_paths):
+        # Remove unverified installer-owned entries from the active registry.
+        fallback_registry = preserved_paths + verified_paths
+        if not gsettings_set(
+            MEDIA_KEYS_SCHEMA,
+            CUSTOM_KEYBINDINGS_KEY,
+            gvariant_string_array(fallback_registry),
+        ):
+            failure("Could not remove unverified entries from the active shortcut registry.")
+            return 0, len(shortcuts), skipped_notes + ["Registry rollback failed"]
+
+    failed_or_skipped = (len(accepted) - verified) + len(skipped_notes)
+    return verified, failed_or_skipped, skipped_notes
+
+
+# =============================================================================
+# KEYBINDING REPORTING
+# =============================================================================
 
 def print_keybinding_plan() -> None:
-
-    title("HYPRLAND → GNOME KEYBINDING PLAN")
-
-    print("Ziel:")
-
-    print("  GNOME 50/51 soll sich bei der Bedienung")
-
-    print("  so nah wie möglich an deiner Hyprland-")
-
-    print("  Keybinding-Konfiguration verhalten.")
-
+    title("HYPRLAND → GNOME KEYBINDINGS")
+    print("Goal:")
+    print("  Make GNOME 50/51 behave as close as reasonably possible to the")
+    print("  existing Hyprland workflow, while preferring native GNOME actions.")
     print()
-
-    print(f"Geplante Custom Shortcuts: {len(CUSTOM_SHORTCUTS)}")
-
+    print("Native GNOME / Mutter bindings:")
+    for item in build_native_bindings():
+        print(f"  {item['binding']:<30} {item['label']}")
     print()
-
+    print("GNOME applications (kept separate from Hyprland application shortcuts):")
+    for item in GNOME_APPLICATION_SHORTCUTS:
+        print(f"  {item['binding']:<30} {item['name']}")
+    print()
+    print("Custom Hyprland-style shortcuts:")
     for item in CUSTOM_SHORTCUTS:
-        print(f"  {item['binding']:<30}{item['name']}")
+        print(f"  {item['binding']:<30} {item['name']}")
+    print()
+    print("Custom shortcuts are checked against existing GNOME bindings before registration.")
 
 
-# =============================================================================
-# INSTALL KEYBINDINGS
-# =============================================================================
-
-
-def install_keybindings() -> None:
+def install_keybindings(backup_path: Path) -> dict[str, int]:
+    build_shortcuts()
+    custom_shortcuts, duplicate_notes = deduplicate_shortcuts(
+        GNOME_APPLICATION_SHORTCUTS + CUSTOM_SHORTCUTS
+    )
+    # Keep GNOME application bindings first so their shortcuts are considered
+    # before optional Hyprland application mappings.
 
     print_keybinding_plan()
+    info(f"Using pre-installation backup: {backup_path}")
 
-    backup_keybindings()
+    title("APPLYING NATIVE GNOME KEYBINDINGS")
+    native_ok, native_skipped, native_notes = configure_native_bindings()
+    if native_ok:
+        success(f"{native_ok} native GNOME/Mutter bindings configured and verified.")
+    else:
+        info("No native GNOME/Mutter bindings were changed.")
 
-    title("INSTALLING GNOME KEYBINDINGS")
+    # Do not create a custom shortcut if its accelerator has just been assigned
+    # by one of the native Mutter settings above.
+    title("INSTALLING CUSTOM GNOME SHORTCUTS")
+    custom_ok, custom_skipped, custom_notes = install_custom_shortcuts(custom_shortcuts)
 
-    configured = configure_custom_shortcuts(CUSTOM_SHORTCUTS)
+    if custom_ok:
+        success(f"{custom_ok} custom shortcuts registered and verified.")
+    else:
+        warning("No custom shortcuts were verified as installed.")
 
+    for note in duplicate_notes + native_notes + custom_notes:
+        info(f"Skipped: {note}")
+
+    title("KEYBINDING SUMMARY")
+    print(f"Native GNOME/Mutter bindings verified: {native_ok}")
+    print(f"Custom shortcuts verified:             {custom_ok}")
+    print(f"Skipped or unavailable definitions:    {native_skipped + custom_skipped + len(duplicate_notes)}")
+    print(f"Backup: {backup_path}")
     print()
+    print("GNOME-native window and workspace actions are managed through Mutter.")
+    print("Custom commands are registered through the media-keys custom-keybinding schema.")
 
-    ok(f"{configured} Custom Shortcuts eingerichtet.")
-
-    print()
-
-    print("Keybinding-Ziel:")
-
-    print("  GNOME 50 / 51")
-
-    print("  möglichst nah an Hyprland")
-
-    print()
-
-    print("Native GNOME-Funktionen bleiben bevorzugt.")
-
-    print("Hyprland-spezifische Funktionen werden")
-
-    print("über Custom Shortcuts angebunden.")
+    return {
+        "native": native_ok,
+        "custom": custom_ok,
+        "skipped": native_skipped + custom_skipped + len(duplicate_notes),
+    }
 
 
 # =============================================================================
-# THEME FILE WRITER
+# GNOME SHELL EXTENSION SOURCE
 # =============================================================================
 
-
-def write_file(
-    path: Path,
-    content: str,
-) -> None:
-
-    path.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    path.write_text(
-        content.rstrip() + "\n",
-        encoding="utf-8",
-    )
-
-    print(f"[WRITE] {path}")
-
-
-# =============================================================================
-# GNOME EXTENSION
-# =============================================================================
-
-EXTENSION_JS = r"""
-import Gio from "gi://Gio";
+EXTENSION_JS = r'''import Gio from "gi://Gio";
 import St from "gi://St";
 
-import {
-    Extension,
-} from "resource:///org/gnome/shell/extensions/extension.js";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 
-
-export default class CatppuccinMochaShellColors
-    extends Extension {
-
+export default class CatppuccinMochaShellColors extends Extension {
     enable() {
-
-        this._themeContext =
-            St.ThemeContext.get_for_stage(
-                global.stage
-            );
-
-        this._theme =
-            this._themeContext.get_theme();
-
-        this._stylesheet =
-            Gio.File.new_for_path(
-                this.path + "/stylesheet.css"
-            );
+        this._theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
+        this._stylesheet = Gio.File.new_for_path(`${this.path}/stylesheet.css`);
 
         try {
-
-            this._theme.load_stylesheet(
-                this._stylesheet
-            );
-
-            log(
-                "Catppuccin Mocha: stylesheet loaded"
-            );
-
+            this._theme.load_stylesheet(this._stylesheet);
+            log("Catppuccin Mocha: GNOME Shell stylesheet loaded");
         } catch (error) {
-
-            logError(
-                error,
-                "Catppuccin Mocha: stylesheet load failed"
-            );
+            logError(error, "Catppuccin Mocha: failed to load GNOME Shell stylesheet");
+            this._theme = null;
+            this._stylesheet = null;
+            throw error;
         }
     }
 
     disable() {
-
-        if (
-            this._theme &&
-            this._stylesheet
-        ) {
-
+        if (this._theme && this._stylesheet) {
             try {
-
-                this._theme.unload_stylesheet(
-                    this._stylesheet
-                );
-
+                this._theme.unload_stylesheet(this._stylesheet);
+                log("Catppuccin Mocha: GNOME Shell stylesheet unloaded");
             } catch (error) {
-
-                logError(
-                    error,
-                    "Catppuccin Mocha: stylesheet unload failed"
-                );
+                logError(error, "Catppuccin Mocha: failed to unload GNOME Shell stylesheet");
             }
         }
 
         this._theme = null;
         this._stylesheet = null;
-        this._themeContext = null;
     }
 }
-"""
+'''
 
 
 # =============================================================================
-# CSS
+# MODULAR GNOME SHELL CSS
 # =============================================================================
 
-COLORS_CSS = f"""
-/*
- * CATPPUCCIN MOCHA
- * GNOME SHELL 50 / 51
+COLORS_CSS = f'''/* Catppuccin Mocha palette reference — GNOME Shell only.
+ * The stylesheet uses explicit colors instead of browser-only CSS variables.
  */
+/* Rosewater: {COLORS['rosewater']} | Flamingo: {COLORS['flamingo']} | Pink: {COLORS['pink']} */
+/* Mauve: {COLORS['mauve']} | Red: {COLORS['red']} | Peach: {COLORS['peach']} */
+/* Yellow: {COLORS['yellow']} | Green: {COLORS['green']} | Teal: {COLORS['teal']} */
+/* Blue: {COLORS['blue']} | Lavender: {COLORS['lavender']} | Text: {COLORS['text']} */
+/* Surface 0: {COLORS['surface0']} | Surface 1: {COLORS['surface1']} | Base: {COLORS['base']} */
+'''
 
-:root {{
-    --ctp-rosewater: {COLORS["rosewater"]};
-    --ctp-flamingo: {COLORS["flamingo"]};
-    --ctp-pink: {COLORS["pink"]};
-    --ctp-mauve: {COLORS["mauve"]};
-    --ctp-red: {COLORS["red"]};
-    --ctp-maroon: {COLORS["maroon"]};
-    --ctp-peach: {COLORS["peach"]};
-    --ctp-yellow: {COLORS["yellow"]};
-    --ctp-green: {COLORS["green"]};
-    --ctp-teal: {COLORS["teal"]};
-    --ctp-sky: {COLORS["sky"]};
-    --ctp-sapphire: {COLORS["sapphire"]};
-    --ctp-blue: {COLORS["blue"]};
-    --ctp-lavender: {COLORS["lavender"]};
-
-    --ctp-text: {COLORS["text"]};
-    --ctp-subtext1: {COLORS["subtext1"]};
-    --ctp-subtext0: {COLORS["subtext0"]};
-
-    --ctp-overlay2: {COLORS["overlay2"]};
-    --ctp-overlay1: {COLORS["overlay1"]};
-    --ctp-overlay0: {COLORS["overlay0"]};
-
-    --ctp-surface2: {COLORS["surface2"]};
-    --ctp-surface1: {COLORS["surface1"]};
-    --ctp-surface0: {COLORS["surface0"]};
-
-    --ctp-base: {COLORS["base"]};
-    --ctp-mantle: {COLORS["mantle"]};
-    --ctp-crust: {COLORS["crust"]};
-}}
-"""
-
-
-APP_CSS = f"""
+APP_CSS = f'''
+/* Global GNOME Shell surfaces. This does not theme GTK applications. */
 stage {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["crust"]};
-}}
-
-#overview {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["crust"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['crust']};
 }}
 
 StWidget {{
-    color: {COLORS["text"]};
-}}
-
-.button,
-.flat,
-.icon-button {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
-}}
-
-.button:hover,
-.flat:hover,
-.icon-button:hover {{
-    background-color: {COLORS["surface1"]};
-}}
-
-.button:active,
-.button:checked,
-.flat:active,
-.flat:checked,
-.icon-button:checked {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['text']};
 }}
 
 StEntry {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
-    caret-color: {COLORS["mauve"]};
-    selection-background-color: {COLORS["mauve"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 10px;
+    caret-color: {COLORS['mauve']};
+    selection-background-color: {COLORS['mauve']};
 }}
 
 StEntry:focus {{
-    background-color: {COLORS["surface1"]};
-    border-color: {COLORS["lavender"]};
+    background-color: {COLORS['surface1']};
+    border-color: {COLORS['lavender']};
 }}
 
 StScrollBar {{
-    -slider-background-color: {COLORS["surface1"]};
-    -slider-hover-background-color: {COLORS["surface2"]};
-    -slider-active-background-color: {COLORS["mauve"]};
+    -slider-background-color: {COLORS['surface1']};
+    -slider-hover-background-color: {COLORS['surface2']};
+    -slider-active-background-color: {COLORS['mauve']};
+    -slider-border-color: transparent;
 }}
 
-.link {{
-    color: {COLORS["blue"]};
-}}
+.link {{ color: {COLORS['blue']}; }}
+.link:hover {{ color: {COLORS['lavender']}; }}
+'''
 
-.link:hover {{
-    color: {COLORS["lavender"]};
-}}
-"""
-
-
-PANEL_CSS = f"""
+PANEL_CSS = f'''
+/* Top panel */
 #panel {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["mantle"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['mantle']};
+    border-bottom: 1px solid {COLORS['surface0']};
 }}
 
 #panel .panel-button {{
-    color: {COLORS["text"]};
+    color: {COLORS['text']};
     background-color: transparent;
+    border-radius: 9px;
 }}
 
 #panel .panel-button:hover,
 #panel .panel-button:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
 }}
 
 #panel .panel-button:active,
-#panel .panel-button:checked {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+#panel .panel-button:checked,
+#panel .panel-button:overview {{
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
 }}
-"""
 
+#panel StIcon,
+#panel .panel-button StLabel {{
+    color: {COLORS['text']};
+}}
+'''
 
-POPUP_MENU_CSS = f"""
-.popup-menu,
+POPUP_MENU_CSS = f'''
+/*
+ * Popup menu surfaces are intentionally split into two layers.
+ * The BoxPointer and arrow are transparent and shadowless. The rounded
+ * popup-menu-content actor owns the visible surface. This prevents a square
+ * shadow or background from sticking out below rounded popup corners.
+ */
 .popup-menu-boxpointer,
-.popup-menu-content,
+.candidate-popup-boxpointer {{
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    -arrow-background-color: transparent;
+    -arrow-border-color: transparent;
+    -arrow-border-width: 0;
+    -arrow-border-radius: 0;
+    -arrow-box-shadow: none;
+}}
+
+.popup-menu-content {{
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 16px;
+    box-shadow: none;
+    padding: 7px;
+}}
+
 .popup-sub-menu {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 12px;
+    box-shadow: none;
 }}
 
 .popup-menu-item {{
-    color: {COLORS["subtext1"]};
-    background-color: {COLORS["base"]};
+    color: {COLORS['subtext1']};
+    background-color: transparent;
+    border-radius: 9px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}}
+
+.popup-menu-item StLabel,
+.popup-menu-item StIcon,
+.popup-menu-item .popup-menu-icon,
+.popup-inactive-menu-item StLabel,
+.popup-inactive-menu-item StIcon {{
+    color: {COLORS['subtext1']};
 }}
 
 .popup-menu-item:hover,
-.popup-menu-item:focus {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
+.popup-menu-item:focus,
+.popup-menu-item:selected,
+.popup-menu-item.selected {{
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+}}
+
+.popup-menu-item:hover StLabel,
+.popup-menu-item:hover StIcon,
+.popup-menu-item:hover .popup-menu-icon,
+.popup-menu-item:focus StLabel,
+.popup-menu-item:focus StIcon,
+.popup-menu-item:focus .popup-menu-icon,
+.popup-menu-item:selected StLabel,
+.popup-menu-item:selected StIcon,
+.popup-menu-item.selected StLabel,
+.popup-menu-item.selected StIcon {{
+    color: {COLORS['text']};
 }}
 
 .popup-menu-item:active,
 .popup-menu-item:checked {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
 }}
 
-.popup-menu-item:insensitive {{
-    color: {COLORS["overlay0"]};
+.popup-menu-item:active StLabel,
+.popup-menu-item:active StIcon,
+.popup-menu-item:active .popup-menu-icon,
+.popup-menu-item:checked StLabel,
+.popup-menu-item:checked StIcon,
+.popup-menu-item:checked .popup-menu-icon {{
+    color: {COLORS['base']};
 }}
-"""
 
+.popup-menu-item:insensitive,
+.popup-menu-item:insensitive StLabel,
+.popup-menu-item:insensitive StIcon {{
+    color: {COLORS['overlay0']};
+}}
 
-QUICK_SETTINGS_CSS = f"""
+.popup-menu-ornament {{ color: {COLORS['mauve']}; }}
+'''
+
+QUICK_SETTINGS_CSS = f'''
+/* Quick Settings and system toggles */
 .quick-settings,
 .quick-settings-box,
 .quick-settings-grid {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
 }}
 
 .quick-toggle,
 .quick-menu-toggle {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 13px;
 }}
+
+.quick-toggle StIcon,
+.quick-menu-toggle StIcon {{ color: {COLORS['text']}; }}
 
 .quick-toggle:hover,
 .quick-menu-toggle:hover {{
-    background-color: {COLORS["surface1"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface1']};
 }}
+
+.quick-toggle:hover StIcon,
+.quick-menu-toggle:hover StIcon {{ color: {COLORS['text']}; }}
 
 .quick-toggle:checked,
 .quick-menu-toggle:checked {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
+    border-color: {COLORS['mauve']};
 }}
+
+.quick-toggle:checked StIcon,
+.quick-menu-toggle:checked StIcon {{ color: {COLORS['base']}; }}
+
+.quick-toggle:insensitive,
+.quick-toggle:insensitive StIcon {{ color: {COLORS['overlay0']}; }}
+
+.toggle-switch {{ background-color: {COLORS['surface1']}; }}
+.toggle-switch:checked {{ background-color: {COLORS['mauve']}; }}
+.toggle-switch-slider {{ background-color: {COLORS['text']}; }}
 
 .slider {{
-    -barlevel-background-color: {COLORS["surface1"]};
-    -barlevel-active-background-color: {COLORS["mauve"]};
-    -barlevel-overdrive-color: {COLORS["red"]};
+    -barlevel-background-color: {COLORS['surface1']};
+    -barlevel-active-background-color: {COLORS['mauve']};
+    -barlevel-overdrive-color: {COLORS['red']};
 }}
+'''
 
-.toggle-switch {{
-    background-color: {COLORS["surface1"]};
-}}
-
-.toggle-switch:checked {{
-    background-color: {COLORS["mauve"]};
-}}
-
-.toggle-switch-slider {{
-    background-color: {COLORS["text"]};
-}}
-"""
-
-
-CALENDAR_CSS = f"""
+CALENDAR_CSS = f'''
+/* Calendar and date picker */
 .calendar,
 .calendar-day-base {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
 }}
 
-.calendar-day-base:hover {{
-    background-color: {COLORS["surface0"]};
+.calendar-day-base:hover,
+.calendar-day-base:focus {{
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
 }}
 
 .calendar-day-base:selected {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
 }}
 
-.calendar-today {{
-    color: {COLORS["mauve"]};
-}}
-"""
+.calendar-today {{ color: {COLORS['mauve']}; }}
+'''
 
-
-NOTIFICATIONS_CSS = f"""
+NOTIFICATIONS_CSS = f'''
+/* Notification banners and message tray */
 .notification-banner,
 .message {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 16px;
+    box-shadow: none;
 }}
+
+.notification-banner StIcon,
+.notification-banner StLabel,
+.message StIcon,
+.message StLabel {{ color: {COLORS['text']}; }}
 
 .notification-banner:hover,
-.message:hover {{
-    background-color: {COLORS["surface0"]};
-}}
+.message:hover {{ background-color: {COLORS['surface0']}; }}
 
 .notification-button {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border-radius: 9px;
 }}
 
-.notification-button:hover {{
-    background-color: {COLORS["surface1"]};
-}}
-"""
+.notification-button:hover {{ background-color: {COLORS['surface1']}; }}
+'''
 
+OVERVIEW_CSS = f'''
+/* Overview, workspace switcher and search results */
+#overview {{ color: {COLORS['text']}; background-color: {COLORS['crust']}; }}
 
-OVERVIEW_CSS = f"""
 .workspace-thumbnail {{
-    background-color: {COLORS["mantle"]};
-    border-color: {COLORS["surface0"]};
+    background-color: {COLORS['mantle']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 12px;
 }}
 
-.workspace-thumbnail:selected {{
-    border-color: {COLORS["mauve"]};
-}}
-
-.workspace-thumbnail:hover {{
-    border-color: {COLORS["lavender"]};
-}}
+.workspace-thumbnail:selected {{ border-color: {COLORS['mauve']}; }}
+.workspace-thumbnail:hover {{ border-color: {COLORS['lavender']}; }}
 
 .switcher-list {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 16px;
+    box-shadow: none;
 }}
 
+.switcher-list .item-box {{ color: {COLORS['text']}; border-radius: 10px; }}
 .switcher-list .item-box:hover,
-.switcher-list .item-box:focus {{
-    background-color: {COLORS["surface0"]};
-}}
-
+.switcher-list .item-box:focus,
 .switcher-list .item-box:selected {{
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["mauve"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
 }}
-"""
 
+.search-provider-icon,
+.list-search-result,
+.grid-search-result > .overview-icon {{ border-radius: 12px; }}
+'''
 
-DASH_CSS = f"""
+DASH_CSS = f'''
+/* Dash and application grid */
 .dash {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["mantle"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['mantle']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 18px;
 }}
 
 .app-well-app-running-dot {{
-    background-color: {COLORS["mauve"]};
+    background-color: {COLORS['mauve']};
+    border-radius: 3px;
 }}
 
-.show-apps-icon:hover {{
-    color: {COLORS["lavender"]};
+.show-apps-icon {{ color: {COLORS['text']}; }}
+.show-apps:hover .show-apps-icon,
+.show-apps:focus .show-apps-icon,
+.show-apps:checked .show-apps-icon {{ color: {COLORS['mauve']}; }}
+
+/* Expanded application folders remain solid Mocha grey at every size. */
+.app-folder-dialog,
+.app-folder-dialog-container,
+.app-folder-popup-bin {{
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 20px;
+    box-shadow: none;
 }}
-"""
 
+.app-folder-dialog StLabel,
+.app-folder-dialog-container StLabel,
+.app-folder-popup-bin StLabel {{ color: {COLORS['text']}; }}
 
-DIALOGS_CSS = f"""
+.app-folder-dialog .folder-name-entry,
+.app-folder-dialog-container .folder-name-entry {{
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 9px;
+    caret-color: {COLORS['mauve']};
+    selection-background-color: {COLORS['mauve']};
+}}
+
+.app-folder-popup {{
+    -arrow-background-color: transparent;
+    -arrow-border-color: transparent;
+    -arrow-border-width: 0;
+    -arrow-border-radius: 0;
+    -arrow-box-shadow: none;
+}}
+
+.app-folder-popup-bin {{ padding: 10px; }}
+.app-well-app.app-folder > .overview-icon {{
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 14px;
+}}
+'''
+
+DIALOGS_CSS = f'''
+/* GNOME Shell modal dialogs */
 .modal-dialog,
 .end-session-dialog {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 18px;
+    box-shadow: none;
 }}
+
+.modal-dialog StLabel,
+.end-session-dialog StLabel {{ color: {COLORS['text']}; }}
 
 .modal-dialog-button,
 .modal-dialog-linked-button {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 10px;
 }}
 
 .modal-dialog-button:hover,
 .modal-dialog-linked-button:hover {{
-    background-color: {COLORS["surface1"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface1']};
 }}
 
 .modal-dialog-button:default,
 .modal-dialog-linked-button:default {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
+    border-color: {COLORS['mauve']};
 }}
-"""
 
+.modal-dialog-button:default StLabel,
+.modal-dialog-linked-button:default StLabel {{ color: {COLORS['base']}; }}
+'''
 
-SEARCH_CSS = f"""
+SEARCH_CSS = f'''
+/* Search field and system actions */
 .search-entry,
 #searchEntry {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
-    border-color: {COLORS["surface1"]};
-    caret-color: {COLORS["mauve"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border: 1px solid {COLORS['surface1']};
+    border-radius: 12px;
+    caret-color: {COLORS['mauve']};
+    selection-background-color: {COLORS['mauve']};
 }}
 
 .search-entry:focus,
 #searchEntry:focus {{
-    background-color: {COLORS["surface1"]};
-    border-color: {COLORS["lavender"]};
+    background-color: {COLORS['surface1']};
+    border-color: {COLORS['lavender']};
 }}
 
-.search-statustext {{
-    color: {COLORS["subtext0"]};
-}}
+.search-statustext {{ color: {COLORS['subtext0']}; }}
 
 .system-action-icon {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['surface0']};
+    border-radius: 14px;
 }}
 
+.system-action-icon StIcon {{ color: {COLORS['text']}; }}
 .system-action-icon:hover {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
 }}
-"""
+.system-action-icon:hover StIcon {{ color: {COLORS['base']}; }}
+'''
 
-
-WIDGETS_CSS = f"""
+WIDGETS_CSS = f'''
+/* Tooltips, audio device rows and generic Shell widgets */
 .tooltip {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["mantle"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['mantle']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 9px;
+    box-shadow: none;
 }}
 
-.audio-device-item:hover {{
-    background-color: {COLORS["surface0"]};
-}}
-
+.audio-device-item {{ color: {COLORS['text']}; border-radius: 9px; }}
+.audio-device-item:hover {{ background-color: {COLORS['surface0']}; }}
 .audio-device-item.selected {{
-    color: {COLORS["base"]};
-    background-color: {COLORS["mauve"]};
+    color: {COLORS['base']};
+    background-color: {COLORS['mauve']};
 }}
-"""
+.audio-device-item.selected StIcon,
+.audio-device-item.selected StLabel {{ color: {COLORS['base']}; }}
+'''
 
-
-OSD_CSS = f"""
+OSD_CSS = f'''
+/* On-screen display */
 .osd-window {{
-    color: {COLORS["text"]};
-    background-color: {COLORS["base"]};
-    border-color: {COLORS["surface0"]};
+    color: {COLORS['text']};
+    background-color: {COLORS['base']};
+    border: 1px solid {COLORS['surface0']};
+    border-radius: 18px;
+    box-shadow: none;
 }}
+
+.osd-window StIcon,
+.osd-window StLabel {{ color: {COLORS['text']}; }}
 
 .osd-window .level {{
-    -barlevel-background-color: {COLORS["surface1"]};
-    -barlevel-active-background-color: {COLORS["mauve"]};
-    -barlevel-overdrive-color: {COLORS["red"]};
+    -barlevel-background-color: {COLORS['surface1']};
+    -barlevel-active-background-color: {COLORS['mauve']};
+    -barlevel-overdrive-color: {COLORS['red']};
 }}
-"""
+'''
 
+CSS_MODULES: dict[str, str] = {
+    "colors.css": COLORS_CSS,
+    "app.css": APP_CSS,
+    "panel.css": PANEL_CSS,
+    "popup-menu.css": POPUP_MENU_CSS,
+    "quick-settings.css": QUICK_SETTINGS_CSS,
+    "calendar.css": CALENDAR_CSS,
+    "notifications.css": NOTIFICATIONS_CSS,
+    "overview.css": OVERVIEW_CSS,
+    "dash.css": DASH_CSS,
+    "dialogs.css": DIALOGS_CSS,
+    "search.css": SEARCH_CSS,
+    "widgets.css": WIDGETS_CSS,
+    "osd.css": OSD_CSS,
+}
 
-# =============================================================================
-# METADATA
-# =============================================================================
+MASTER_CSS = "\n\n".join(
+    ["/* Generated Catppuccin Mocha GNOME Shell stylesheet. */"]
+    + [content for name, content in CSS_MODULES.items() if name != "colors.css"]
+)
 
 METADATA = {
-    "uuid": UUID,
+    "uuid": EXTENSION_UUID,
     "name": EXTENSION_NAME,
-    "description": ("Catppuccin Mocha color theme for GNOME Shell 50/51"),
-    "version": 1,
-    "shell-version": [
-        "50",
-        "51",
-    ],
+    "description": "Catppuccin Mocha theme for GNOME Shell 50 and 51.",
+    "version": 2,
+    "shell-version": ["50", "51"],
 }
 
 
-# =============================================================================
-# MASTER CSS
-# =============================================================================
-
-MASTER_CSS = """
-/*
- * CATPPUCCIN MOCHA
- * GNOME Shell 50 / 51
- */
-
-@import url("colors.css");
-@import url("app.css");
-@import url("panel.css");
-@import url("popup-menu.css");
-@import url("quick-settings.css");
-@import url("calendar.css");
-@import url("notifications.css");
-@import url("overview.css");
-@import url("dash.css");
-@import url("dialogs.css");
-@import url("search.css");
-@import url("widgets.css");
-@import url("osd.css");
-"""
+def validate_css(css: str) -> bool:
+    """Perform basic structural checks before handing CSS to GNOME Shell."""
+    if css.count("{") != css.count("}"):
+        failure("Generated stylesheet has unbalanced braces.")
+        return False
+    if "@import" in css or "--ctp-" in css:
+        failure("Generated stylesheet contains an unsupported import or variable construct.")
+        return False
+    return True
 
 
 # =============================================================================
-# INSTALL THEME
+# THEME INSTALLATION AND ACTIVATION
 # =============================================================================
 
+def write_extension_files(target: Path) -> None:
+    target.mkdir(parents=True, exist_ok=True)
+    atomic_write(target / "metadata.json", json.dumps(METADATA, indent=2, ensure_ascii=False))
+    atomic_write(target / "extension.js", EXTENSION_JS)
+    for filename, content in CSS_MODULES.items():
+        atomic_write(target / filename, content)
+    atomic_write(target / "stylesheet.css", MASTER_CSS)
 
-def install_theme() -> None:
 
+def install_theme() -> bool:
     title("INSTALLING CATPPUCCIN MOCHA GNOME SHELL THEME")
+    if GNOME_MAJOR not in (50, 51):
+        warning("The detected Shell version is outside the declared compatibility range. Installation will continue, but activation is not guaranteed.")
 
-    if EXTENSION_DIR.exists():
-        backup = EXTENSION_DIR.with_name(f"{UUID}.backup-{timestamp()}")
+    if not validate_css(MASTER_CSS):
+        return False
 
-        shutil.copytree(
-            EXTENSION_DIR,
-            backup,
-        )
+    EXTENSIONS_DIR.mkdir(parents=True, exist_ok=True)
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix=f".{EXTENSION_UUID}-staging-", dir=EXTENSIONS_DIR))
+    rollback_dir: Path | None = None
+    backup_path: Path | None = None
 
-        ok(f"Theme-Backup: {backup}")
+    try:
+        write_extension_files(staging)
+        metadata = json.loads((staging / "metadata.json").read_text(encoding="utf-8"))
+        if metadata.get("uuid") != EXTENSION_UUID or not {"50", "51"}.issuperset(metadata.get("shell-version", [])):
+            raise ValueError("Generated extension metadata failed validation")
 
-        shutil.rmtree(EXTENSION_DIR)
+        if EXTENSION_DIR.exists():
+            backup_path = BACKUP_DIR / f"{timestamp()}-{EXTENSION_UUID}"
+            shutil.copytree(EXTENSION_DIR, backup_path)
+            rollback_dir = EXTENSIONS_DIR / f".{EXTENSION_UUID}-previous-{timestamp()}"
+            os.replace(EXTENSION_DIR, rollback_dir)
 
-    EXTENSION_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        os.replace(staging, EXTENSION_DIR)
+        if rollback_dir and rollback_dir.exists():
+            shutil.rmtree(rollback_dir)
 
-    write_file(
-        EXTENSION_DIR / "metadata.json",
-        json.dumps(
-            METADATA,
-            indent=2,
-            ensure_ascii=False,
-        ),
-    )
+        success(f"GNOME Shell extension files installed: {EXTENSION_DIR}")
+        if backup_path:
+            success(f"Previous extension backed up: {backup_path}")
+        for filename in ["metadata.json", "extension.js", "stylesheet.css", *CSS_MODULES.keys()]:
+            print(f"[WRITE] {EXTENSION_DIR / filename}")
+        return True
 
-    write_file(
-        EXTENSION_DIR / "extension.js",
-        EXTENSION_JS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "stylesheet.css",
-        MASTER_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "colors.css",
-        COLORS_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "app.css",
-        APP_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "panel.css",
-        PANEL_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "popup-menu.css",
-        POPUP_MENU_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "quick-settings.css",
-        QUICK_SETTINGS_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "calendar.css",
-        CALENDAR_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "notifications.css",
-        NOTIFICATIONS_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "overview.css",
-        OVERVIEW_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "dash.css",
-        DASH_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "dialogs.css",
-        DIALOGS_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "search.css",
-        SEARCH_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "widgets.css",
-        WIDGETS_CSS,
-    )
-
-    write_file(
-        EXTENSION_DIR / "osd.css",
-        OSD_CSS,
-    )
-
-    ok("Modulare GNOME-Shell-CSS installiert.")
+    except Exception as exc:
+        failure(f"Theme installation failed: {exc}")
+        if rollback_dir and rollback_dir.exists() and not EXTENSION_DIR.exists():
+            os.replace(rollback_dir, EXTENSION_DIR)
+        return False
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging, ignore_errors=True)
 
 
-# =============================================================================
-# THEME ACTIVATION
-# =============================================================================
-
-
-def activate_theme() -> None:
-
+def activate_theme() -> bool:
     title("ACTIVATING CATPPUCCIN MOCHA")
+    if not EXTENSION_DIR.is_dir() or not (EXTENSION_DIR / "metadata.json").is_file():
+        failure("The extension directory or metadata.json is missing.")
+        return False
 
-    run(
-        [
-            "gnome-extensions",
-            "disable",
-            UUID,
-        ],
-        check=False,
-    )
+    list_result = run_command(["gnome-extensions", "list"], capture=True)
+    listed = list_result.returncode == 0 and EXTENSION_UUID in list_result.stdout.splitlines()
+    if not listed:
+        info("The extension is not yet present in the GNOME extension registry; requesting activation anyway.")
 
-    result = run(
-        [
-            "gnome-extensions",
-            "enable",
-            UUID,
-        ],
-        check=False,
-    )
+    enable_result = run_command(["gnome-extensions", "enable", EXTENSION_UUID], capture=True)
+    if enable_result.returncode != 0:
+        detail = (enable_result.stderr or enable_result.stdout).strip()
+        warning(f"GNOME did not enable the extension: {detail or 'unknown extension manager error'}")
+        warning("The extension files are installed. Log out and back in, then run: gnome-extensions enable " + EXTENSION_UUID)
+        return False
 
-    if result.returncode == 0:
-        ok("Catppuccin Mocha Shell Theme aktiviert.")
+    enabled_result = run_command(["gnome-extensions", "list", "--enabled"], capture=True)
+    if enabled_result.returncode == 0 and EXTENSION_UUID in enabled_result.stdout.splitlines():
+        success("Catppuccin Mocha GNOME Shell extension is enabled.")
+        return True
 
-    else:
-        warn("GNOME konnte die Extension nicht sofort aktivieren.")
+    info_result = run_command(["gnome-extensions", "info", EXTENSION_UUID], capture=True)
+    info_text = (info_result.stdout or "") + (info_result.stderr or "")
+    if info_result.returncode == 0 and re.search(r"state\s*:\s*enabled", info_text, re.IGNORECASE):
+        success("Catppuccin Mocha GNOME Shell extension is enabled.")
+        return True
 
-        warn(f"Manuell prüfen mit: gnome-extensions info {UUID}")
-
-
-# =============================================================================
-# DARK MODE
-# =============================================================================
+    warning("GNOME accepted the enable request, but the enabled state could not be verified.")
+    warning("Check with: gnome-extensions info " + EXTENSION_UUID)
+    return False
 
 
-def configure_dark_mode() -> None:
-
+def set_dark_mode() -> bool:
     title("GNOME COLOR SCHEME")
+    if not gsettings_has_key(INTERFACE_SCHEMA, "color-scheme"):
+        warning("The GNOME color-scheme setting is unavailable; it was not changed.")
+        return False
 
-    if gsettings_set(
-        INTERFACE_SCHEMA,
-        "color-scheme",
-        "'prefer-dark'",
-    ):
-        ok("GNOME auf prefer-dark gesetzt.")
+    if gsettings_set(INTERFACE_SCHEMA, "color-scheme", gvariant_string("prefer-dark")):
+        actual = gsettings_get(INTERFACE_SCHEMA, "color-scheme")
+        if actual is not None and parse_gvariant(actual) == "prefer-dark":
+            success("GNOME color scheme set to prefer-dark and verified.")
+            return True
+    warning("Could not verify the GNOME dark color scheme setting.")
+    return False
 
 
-# =============================================================================
-# OPTIONAL PAPIRUS
-# =============================================================================
-
-
-def configure_papirus() -> None:
-
-    title("OPTIONAL — PAPIRUS ICON THEME")
-
-    if package_installed("papirus-icon-theme"):
-        if gsettings_set(
-            INTERFACE_SCHEMA,
-            "icon-theme",
-            "'Papirus-Dark'",
-        ):
-            ok("Papirus-Dark aktiviert.")
-
+def handle_dash_to_panel_asset() -> None:
+    title("DASH-TO-PANEL ASSET")
+    if DASH_TO_PANEL_CONF.is_file():
+        info(f"Found: {DASH_TO_PANEL_CONF}")
+        info("The asset is not executed or imported automatically.")
     else:
-        info("papirus-icon-theme ist nicht installiert.")
-
-        info("Das bestehende Icon-Theme bleibt unverändert.")
+        info("No assets/dash-to-panel.conf file was found.")
 
 
-# =============================================================================
-# DASH-TO-PANEL CONFIG
-# =============================================================================
-
-
-def handle_dash_to_panel() -> None:
-
-    title("DASH-TO-PANEL")
-
-    if DASH_TO_PANEL_CONF.exists():
-        info(f"Gefunden: {DASH_TO_PANEL_CONF}")
-
-        info("Die Datei wird NICHT blind ausgeführt.")
-
-        info("Sie wird nur als vorhandenes Benutzer-Asset erkannt.")
-
-        ok("Dash-to-Panel-Asset vorhanden.")
-
-    else:
-        info("Keine ./assets/dash-to-panel.conf gefunden.")
-
-        info("Dash-to-Panel-Konfiguration wird nicht erfunden.")
-
-
-# =============================================================================
-# RESTORE
-# =============================================================================
-
-
-def restore_latest_keybindings() -> None:
-
-    title("RESTORE GNOME KEYBINDINGS")
-
-    backups = sorted(
-        BACKUP_DIR.glob("*-gnome-keybindings.json"),
-        reverse=True,
-    )
-
-    if not backups:
-        error("Kein GNOME-Keybinding-Backup gefunden.")
-
-        return
-
-    backup = backups[0]
-
-    info(f"Restore: {backup}")
-
-    data = json.loads(backup.read_text(encoding="utf-8"))
-
-    for schema_name, schema in [
-        ("wm", WM_SCHEMA),
-        ("shell", SHELL_SCHEMA),
-        ("media", MEDIA_KEYS_SCHEMA),
-        ("interface", INTERFACE_SCHEMA),
-    ]:
-        values = data.get(
-            schema_name,
-            {},
-        )
-
-        for key, value in values.items():
-            gsettings_set(
-                schema,
-                key,
-                value,
-            )
-
-    ok("GNOME-Keybindings wurden wiederhergestellt.")
-
-
-# =============================================================================
-# REMOVE THEME
-# =============================================================================
-
-
-def remove_theme() -> None:
-
-    title("REMOVE CATPPUCCIN MOCHA THEME")
-
+def remove_theme() -> bool:
+    title("REMOVE CATPPUCCIN MOCHA GNOME SHELL THEME")
     if not EXTENSION_DIR.exists():
-        info("Theme ist nicht installiert.")
+        info("The Catppuccin Mocha extension is not installed.")
+        return True
 
-        return
-
-    run(
-        [
-            "gnome-extensions",
-            "disable",
-            UUID,
-        ],
-        check=False,
-    )
-
+    run_command(["gnome-extensions", "disable", EXTENSION_UUID], capture=True)
+    backup_path = BACKUP_DIR / f"{timestamp()}-{EXTENSION_UUID}-removed"
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(EXTENSION_DIR, backup_path)
     shutil.rmtree(EXTENSION_DIR)
-
-    ok("Catppuccin Mocha GNOME Shell Theme entfernt.")
+    success(f"Theme removed. A copy was preserved at: {backup_path}")
+    return True
 
 
 # =============================================================================
 # FINAL REPORT
 # =============================================================================
 
-
-def final_report() -> None:
-
-    title("INSTALLATION COMPLETE")
-
-    print("GNOME Shell:")
-
-    print(f"  {GNOME_VERSION}")
-
+def final_report(
+    *,
+    theme_installed: bool | None,
+    theme_enabled: bool | None,
+    dark_mode_set: bool | None,
+    keybinding_stats: dict[str, int] | None,
+) -> None:
+    title("INSTALLATION REPORT")
+    print(f"GNOME Shell: {GNOME_VERSION}")
+    print("Target: GNOME Shell 50 / 51")
     print()
 
-    print("Theme:")
+    if theme_installed is not None:
+        print("Catppuccin Mocha GNOME Shell theme:")
+        print(f"  Files installed: {'yes' if theme_installed else 'no'}")
+        if theme_enabled is not None:
+            print(f"  Extension enabled: {'yes (verified)' if theme_enabled else 'no / not verified'}")
+        print(f"  Theme directory: {EXTENSION_DIR}")
+        print()
 
-    print("  Catppuccin Mocha")
+    if dark_mode_set is not None:
+        print(f"GNOME color scheme: {'prefer-dark (verified)' if dark_mode_set else 'not verified'}")
+        print()
 
-    print("  Modular GNOME Shell CSS")
+    if keybinding_stats is not None:
+        print("Keybindings:")
+        print(f"  Native GNOME / Mutter bindings: {keybinding_stats['native']} verified")
+        print(f"  Custom shortcuts:              {keybinding_stats['custom']} verified")
+        print(f"  Skipped / unavailable:         {keybinding_stats['skipped']}")
+        print("  GNOME applications are listed separately from Hyprland app shortcuts.")
+        print(f"  Backup directory: {BACKUP_DIR}")
+        print("  Restore: python3 config-gnome.py --restore")
+        print()
 
+    print("Not modified directly by this installer:")
+    print("  GTK 3 theme files or CSS overrides")
+    print("  GTK 4 / Libadwaita theme files or CSS overrides")
+    print("  Application theme selections")
+    print("  Icon theme")
+    print("  Fonts and font sizes")
+    print("  GNOME animation settings")
+    print("  Package installations")
     print()
-
-    print("GNOME / Hyprland Keybinding-Ziel:")
-
-    print("  GNOME 50/51 möglichst nah an")
-
-    print("  der vorhandenen Hyprland-Konfiguration")
-
+    print("Color preference:")
+    print("  GNOME color-scheme is set to prefer-dark when the theme is installed.")
+    print("  Applications that follow this preference may choose their own dark variant.")
     print()
-
-    print("Keybindings:")
-
-    print(f"  {len(CUSTOM_SHORTCUTS)} Custom Shortcut Definitionen")
-
-    print("  Hyprland als Referenz")
-
-    print("  GNOME native Funktionen bevorzugt")
-
-    print()
-
-    print("Unverändert:")
-
-    print("  GTK 3")
-
-    print("  GTK 4 / Libadwaita")
-
-    print("  Application Themes")
-
-    print("  Fonts")
-
-    print("  Font sizes")
-
-    print("  Animation configuration")
-
-    print()
-
-    print("Package manager:")
-
-    print("  pacman")
-
-    print()
-
-    print("AUR:")
-
-    print("  not required")
-
-    print()
-
-    print("yay:")
-
-    print("  not required")
-
-    print()
-
-    print("paru:")
-
-    print("  not required")
-
-    print()
-
-    print("Theme directory:")
-
-    print(f"  {EXTENSION_DIR}")
-
-    print()
-
-    print("Keybinding backups:")
-
-    print(f"  {BACKUP_DIR}")
-
-    print()
-
-    print("Restore:")
-
-    print("  python3 gnome-hyprland-installer.py --restore")
-
-    print()
-
+    print("Scope:")
+    print("  Catppuccin styling applies to GNOME Shell UI elements only.")
+    print("  GTK application CSS and third-party application windows are not replaced.")
     print("=" * 78)
 
 
@@ -2526,69 +1674,81 @@ def final_report() -> None:
 # MAIN
 # =============================================================================
 
-
-def main() -> None:
+def main() -> int:
+    if os.geteuid() == 0:
+        failure("Do not run this installer as root. Run it as your desktop user.")
+        return 1
 
     if args.restore:
-        restore_latest_keybindings()
-
-        return
+        require_commands(["gsettings"])
+        return 0 if restore_latest_keybindings() else 1
 
     if args.remove:
-        remove_theme()
+        require_commands(["gnome-extensions"])
+        return 0 if remove_theme() else 1
 
-        return
+    do_theme = not args.keybindings_only
+    do_keybindings = not args.theme_only
+    check_environment(theme=do_theme, keybindings=do_keybindings)
+
+    theme_installed: bool | None = None
+    theme_enabled: bool | None = None
+    dark_mode_set: bool | None = None
+    keybinding_stats: dict[str, int] | None = None
+    keybinding_backup: Path | None = None
+    critical_failure = False
+
+    # Capture the original color scheme and all relevant shortcut schemas before
+    # the theme installer changes prefer-dark or the keybinding installer runs.
+    if do_keybindings:
+        title("BACKUP — EXISTING GNOME KEYBINDINGS")
+        keybinding_backup = save_keybinding_backup()
 
     title("GNOME 50 / 51 — CATPPUCCIN MOCHA")
+    print("The visual theme and keybinding configuration are managed separately.")
+    print("GNOME-native actions are preferred; custom shortcuts are used where appropriate.")
+    print("GNOME Files and GNOME Settings are kept in a separate application group.")
 
-    print("Ziel:")
+    if do_theme:
+        theme_installed = install_theme()
+        if theme_installed:
+            dark_mode_set = set_dark_mode()
+            theme_enabled = activate_theme()
+            handle_dash_to_panel_asset()
+        else:
+            critical_failure = True
 
-    print("  GNOME soll sich bei den Keybindings")
+    if do_keybindings:
+        assert keybinding_backup is not None
+        keybinding_stats = install_keybindings(keybinding_backup)
+        if keybinding_stats["native"] == 0 and keybinding_stats["custom"] == 0:
+            critical_failure = True
 
-    print("  möglichst nah an deiner Hyprland-Konfiguration")
+    final_report(
+        theme_installed=theme_installed,
+        theme_enabled=theme_enabled,
+        dark_mode_set=dark_mode_set,
+        keybinding_stats=keybinding_stats,
+    )
 
-    print("  bedienen lassen.")
+    # A missing extension activation or a failed settings operation must not be
+    # presented as a fully successful installation.
+    if do_theme and (not theme_installed or not theme_enabled):
+        critical_failure = True
+    if do_theme and dark_mode_set is False:
+        warning("The Shell theme may still be installed, but the dark color scheme was not verified.")
 
-    print()
-
-    print("Wichtig:")
-
-    print("  Theme und Keybindings werden getrennt behandelt.")
-
-    print("  Die Keybindings werden tatsächlich eingerichtet.")
-
-    print()
-
-    if not args.keybindings_only:
-        install_theme()
-
-        configure_dark_mode()
-
-        configure_papirus()
-
-        handle_dash_to_panel()
-
-        activate_theme()
-
-    if not args.theme_only:
-        install_keybindings()
-
-    final_report()
+    return 1 if critical_failure else 0
 
 
 if __name__ == "__main__":
     try:
-        main()
-
+        raise SystemExit(main())
     except KeyboardInterrupt:
         print()
-        warn("Installation durch Benutzer abgebrochen.")
-
-        sys.exit(130)
-
+        warning("Installation cancelled by the user.")
+        raise SystemExit(130)
     except Exception as exc:
         print()
-
-        error(f"Unerwarteter Fehler: {exc}")
-
-        sys.exit(1)
+        failure(f"Unexpected error: {exc}")
+        raise SystemExit(1)
