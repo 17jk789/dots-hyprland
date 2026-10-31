@@ -102,8 +102,8 @@
                 "en": "Install GNOME desktop"
             },
             "description": {
-                "de": "Wähle zwischen GNOME und GNOME mit zusätzlichen Paketen.",
-                "en": "Choose between GNOME and GNOME with additional packages."
+                "de": "Wähle zwischen GNOME Standard oder GNOME mit zusätzlichen Paketen, jeweils optional mit GDM.",
+                "en": "Choose between standard GNOME or GNOME with additional packages, optionally with GDM."
             },
             "file": "176_install_gnome.json",
             "substeps": [
@@ -115,8 +115,21 @@
                         "en": "Install GNOME"
                     },
                     "description": {
-                        "de": "Installiert die normale GNOME-Desktopumgebung.",
-                        "en": "Installs the standard GNOME desktop environment."
+                        "de": "Installiert die normale GNOME-Desktopumgebung ohne GDM.",
+                        "en": "Installs the standard GNOME desktop environment without GDM."
+                    },
+                    "exclusive_group": "gnome_variant"
+                },
+                {
+                    "id": "install_gnome_standard_gdm",
+                    "variant": "standard_gdm",
+                    "name": {
+                        "de": "GNOME mit GDM installieren",
+                        "en": "Install GNOME with GDM"
+                    },
+                    "description": {
+                        "de": "Installiert GNOME und aktiviert GDM als Display-Manager.",
+                        "en": "Installs GNOME and enables GDM as the display manager."
                     },
                     "exclusive_group": "gnome_variant"
                 },
@@ -128,8 +141,21 @@
                         "en": "Install GNOME with extras"
                     },
                     "description": {
-                        "de": "Installiert GNOME inklusive zusätzlicher GNOME-Pakete.",
-                        "en": "Installs GNOME including additional GNOME packages."
+                        "de": "Installiert GNOME inklusive zusätzlicher GNOME-Pakete ohne GDM.",
+                        "en": "Installs GNOME including additional GNOME packages without GDM."
+                    },
+                    "exclusive_group": "gnome_variant"
+                },
+                {
+                    "id": "install_gnome_extra_gdm",
+                    "variant": "extra_gdm",
+                    "name": {
+                        "de": "GNOME mit Extras und GDM installieren",
+                        "en": "Install GNOME with extras and GDM"
+                    },
+                    "description": {
+                        "de": "Installiert GNOME inklusive zusätzlicher Pakete und aktiviert GDM.",
+                        "en": "Installs GNOME including additional packages and enables GDM."
                     },
                     "exclusive_group": "gnome_variant"
                 }

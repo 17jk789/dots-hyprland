@@ -1,22 +1,24 @@
 {
     "id": "install_gnome",
-    "name": {
-        "de": "GNOME Desktop installieren",
-        "en": "Install GNOME desktop"
-    },
-    "description": {
-        "de": "Installiert GNOME und aktiviert GDM.",
-        "en": "Installs GNOME and enables GDM."
-    },
-    "question": {
-        "de": "Welche GNOME-Installation soll verwendet werden?",
-        "en": "Which GNOME installation should be used?"
-    },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
     "variants": {
         "standard": {
+            "id": "install_gnome_standard",
+            "name": {
+                "de": "GNOME installieren",
+                "en": "Install GNOME"
+            },
+            "description": {
+                "de": "Installiert die normale GNOME-Desktopumgebung ohne Display-Manager.",
+                "en": "Installs the standard GNOME desktop environment without a display manager."
+            },
+            "question": {
+                "de": "Soll GNOME in der Standard-Variante installiert werden?",
+                "en": "Should GNOME be installed using the standard variant?"
+            },
+            "optional": true,
+            "exclusive_group": "gnome_installation",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -26,6 +28,46 @@
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gnome"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "standard_gdm": {
+            "id": "install_gnome_standard_gdm",
+            "name": {
+                "de": "GNOME mit GDM installieren",
+                "en": "Install GNOME with GDM"
+            },
+            "description": {
+                "de": "Installiert GNOME und aktiviert GDM als Display-Manager.",
+                "en": "Installs GNOME and enables GDM as the display manager."
+            },
+            "question": {
+                "de": "Soll GNOME mit GDM als Display-Manager installiert werden?",
+                "en": "Should GNOME be installed with GDM as the display manager?"
+            },
+            "optional": true,
+            "exclusive_group": "gnome_installation",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GNOME.",
+                        "en": "Installs GNOME."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
                         "--noconfirm",
                         "gnome"
                     ],
@@ -37,8 +79,8 @@
                 },
                 {
                     "description": {
-                        "de": "Aktiviert GDM und startet den Display-Manager sofort.",
-                        "en": "Enables GDM and starts the display manager immediately."
+                        "de": "Aktiviert GDM dauerhaft und startet den Display-Manager sofort.",
+                        "en": "Enables GDM permanently and starts the display manager immediately."
                     },
                     "command": [
                         "systemctl",
@@ -55,15 +97,73 @@
             ]
         },
         "extra": {
+            "id": "install_gnome_extra",
+            "name": {
+                "de": "GNOME mit Extras installieren",
+                "en": "Install GNOME with extras"
+            },
+            "description": {
+                "de": "Installiert GNOME inklusive zusätzlicher GNOME-Extra-Pakete ohne Display-Manager.",
+                "en": "Installs GNOME including additional GNOME Extra packages without a display manager."
+            },
+            "question": {
+                "de": "Soll GNOME mit zusätzlichen GNOME-Paketen installiert werden?",
+                "en": "Should GNOME be installed with additional GNOME packages?"
+            },
+            "optional": true,
+            "exclusive_group": "gnome_installation",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
-                        "de": "Installiert GNOME mit zusätzlichen GNOME-Paketen.",
-                        "en": "Installs GNOME with additional GNOME packages."
+                        "de": "Installiert GNOME und die zusätzlichen GNOME-Extra-Pakete.",
+                        "en": "Installs GNOME and the additional GNOME Extra packages."
                     },
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "gnome",
+                        "gnome-extra"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch",
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "extra_gdm": {
+            "id": "install_gnome_extra_gdm",
+            "name": {
+                "de": "GNOME mit Extras und GDM installieren",
+                "en": "Install GNOME with extras and GDM"
+            },
+            "description": {
+                "de": "Installiert GNOME mit zusätzlichen GNOME-Extra-Paketen und aktiviert GDM als Display-Manager.",
+                "en": "Installs GNOME with additional GNOME Extra packages and enables GDM as the display manager."
+            },
+            "question": {
+                "de": "Soll GNOME mit zusätzlichen Paketen und GDM installiert werden?",
+                "en": "Should GNOME be installed with additional packages and GDM?"
+            },
+            "optional": true,
+            "exclusive_group": "gnome_installation",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert GNOME und die zusätzlichen GNOME-Extra-Pakete.",
+                        "en": "Installs GNOME and the additional GNOME Extra packages."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
                         "--noconfirm",
                         "gnome",
                         "gnome-extra"
@@ -76,8 +176,8 @@
                 },
                 {
                     "description": {
-                        "de": "Aktiviert GDM und startet den Display-Manager sofort.",
-                        "en": "Enables GDM and starts the display manager immediately."
+                        "de": "Aktiviert GDM dauerhaft und startet den Display-Manager sofort.",
+                        "en": "Enables GDM permanently and starts the display manager immediately."
                     },
                     "command": [
                         "systemctl",
