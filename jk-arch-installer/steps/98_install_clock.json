@@ -15,7 +15,7 @@
                 "de": "Soll KClock installiert werden?",
                 "en": "Should KClock be installed?"
             },
-            "optional": true,
+            "optional": false,
             "exclusive_group": "clock_method",
             "continue_on_error": false,
             "checks": [],

@@ -15,7 +15,7 @@
                 "de": "Sollen Emacs und Doom Emacs installiert werden?",
                 "en": "Should Emacs and Doom Emacs be installed?"
             },
-            "optional": true,
+            "optional": false,
             "exclusive_group": "emacs_method",
             "continue_on_error": false,
             "checks": [],

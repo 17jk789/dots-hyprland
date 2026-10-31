@@ -15,7 +15,7 @@
                 "de": "Soll VLC installiert werden?",
                 "en": "Should VLC be installed?"
             },
-            "optional": true,
+            "optional": false,
             "exclusive_group": "media_player_method",
             "continue_on_error": false,
             "checks": [],

@@ -102,7 +102,7 @@ def command_output(text: str) -> None:
 
 TRANSLATIONS = {
     "de": {
-        "title": "JK-ARCH LINUX INSTALLER",
+        "title": "JK GRAY LINUX INSTALLER",
         "subtitle": "Sicherer, modularer JSON-basierter Installationsmanager",
         "language": "Sprache auswählen",
         "german": "Deutsch",
@@ -144,7 +144,7 @@ TRANSLATIONS = {
         "selected_plan": "Folgende Installationsschritte werden jetzt ausgeführt:",
     },
     "en": {
-        "title": "JK-ARCH LINUX INSTALLER",
+        "title": "JK GRAY LINUX INSTALLER",
         "subtitle": "Secure, modular JSON-based installation manager",
         "language": "Select language",
         "german": "German",
@@ -1483,7 +1483,11 @@ def select_installations(
         for installation in installations
     ]
     selected = [
-        installation.get("default_selected", True) for installation in installations
+        installation.get(
+            "default_selected",
+            not step.optional,
+        )
+        for installation, step in zip(installations, step_details)
     ]
     exclusive_groups: dict[str, list[int]] = {}
     for index, step in enumerate(step_details):

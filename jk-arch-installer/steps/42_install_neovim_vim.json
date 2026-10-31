@@ -12,7 +12,7 @@
         "de": "Sollen NeoVim und Vim installiert werden?",
         "en": "Should NeoVim and Vim be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

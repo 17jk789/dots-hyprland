@@ -15,7 +15,7 @@
                 "de": "Soll AppArmor unter Arch Linux installiert werden?",
                 "en": "Should AppArmor be installed on Arch Linux?"
             },
-            "optional": true,
+            "optional": false,
             "exclusive_group": "security_solution",
             "continue_on_error": false,
             "checks": [],

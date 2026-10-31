@@ -15,7 +15,7 @@
                 "de": "Soll Chromium über Pacman installiert werden?",
                 "en": "Should Chromium be installed using Pacman?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "chromium_method",
             "continue_on_error": false,
             "checks": [],

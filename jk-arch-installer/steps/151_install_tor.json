@@ -15,7 +15,7 @@
                 "de": "Soll nur Tor installiert werden?",
                 "en": "Should only Tor be installed?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "tor_method",
             "continue_on_error": false,
             "checks": [],

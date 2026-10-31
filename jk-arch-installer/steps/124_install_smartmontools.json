@@ -12,7 +12,7 @@
         "de": "Sollen die Festplatten-Diagnosewerkzeuge installiert und die Laufwerke erkannt werden?",
         "en": "Should the disk diagnostic tools be installed and the drives detected?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

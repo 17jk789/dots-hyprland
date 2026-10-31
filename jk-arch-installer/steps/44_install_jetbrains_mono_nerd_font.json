@@ -12,7 +12,7 @@
         "de": "Soll die JetBrains Mono Nerd Font installiert werden?",
         "en": "Should the JetBrains Mono Nerd Font be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

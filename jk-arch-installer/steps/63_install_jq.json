@@ -12,7 +12,7 @@
         "de": "Soll jq installiert werden?",
         "en": "Should jq be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

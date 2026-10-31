@@ -12,7 +12,7 @@
         "de": "Soll LibreOffice installiert werden?",
         "en": "Should LibreOffice be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

@@ -15,7 +15,7 @@
                 "de": "Sollen radare2 und das r2ghidra-Decompilation-Plugin installiert werden?",
                 "en": "Do you want to install radare2 and the r2ghidra decompilation plugin?"
             },
-            "optional": true,
+            "optional": false,
             "exclusive_group": "r2ghidra_method",
             "continue_on_error": false,
             "checks": [],

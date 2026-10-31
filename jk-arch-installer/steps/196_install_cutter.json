@@ -12,7 +12,7 @@
         "de": "Sollen Cutter und Ghidra installiert werden?",
         "en": "Should Cutter and Ghidra be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

@@ -12,7 +12,7 @@
         "de": "Soll die zusätzliche Dolphin-Unterstützung für Hyprland installiert werden?",
         "en": "Should additional Dolphin support for Hyprland be installed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

@@ -15,7 +15,7 @@
                 "de": "Soll der Mullvad Browser über Pacman installiert werden?",
                 "en": "Should the Mullvad Browser be installed using Pacman?"
             },
-            "optional": false,
+            "optional": true,
             "exclusive_group": "mullvad_browser_method",
             "continue_on_error": false,
             "checks": [],

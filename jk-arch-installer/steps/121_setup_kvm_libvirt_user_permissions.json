@@ -12,7 +12,7 @@
         "de": "Sollen die Benutzerrechte für KVM und libvirt eingerichtet werden?",
         "en": "Should user permissions for KVM and libvirt be configured?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

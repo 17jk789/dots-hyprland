@@ -12,7 +12,7 @@
         "de": "Soll die LazyVim Starter-Konfiguration eingerichtet werden?",
         "en": "Should the LazyVim starter configuration be set up?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

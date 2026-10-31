@@ -12,7 +12,7 @@
         "de": "Sollen die VS Code Erweiterungen jetzt installiert werden?",
         "en": "Should the VS Code extensions be installed now?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

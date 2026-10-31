@@ -12,7 +12,7 @@
         "de": "Soll SDDM installiert und als Display Manager aktiviert werden?",
         "en": "Should SDDM be installed and enabled as the display manager?"
     },
-    "optional": false,
+    "optional": true,
     "continue_on_error": false,
     "checks": [],
     "commands": [

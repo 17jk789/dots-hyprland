@@ -20,8 +20,8 @@
         {
             "id": "rate_mirrors",
             "name": {
-                "de": "Mirrors neu bewerten",
-                "en": "Rerate mirrors"
+                "de": "✨ Mirrors neu bewerten",
+                "en": "✨ Rerate mirrors"
             },
             "description": {
                 "de": "Wähle genau eine Option: Arch oder CachyOS, jeweils mit oder ohne System-Update.",
@@ -33,8 +33,8 @@
                     "id": "rate_mirrors_arch",
                     "variant": "arch",
                     "name": {
-                        "de": "Arch Mirrors neu bewerten",
-                        "en": "Rerate Arch mirrors"
+                        "de": "✨ Arch Mirrors neu bewerten",
+                        "en": "✨ Rerate Arch mirrors"
                     },
                     "description": {
                         "de": "Bewertet die Arch-Mirrors neu.",
@@ -46,8 +46,8 @@
                     "id": "rate_mirrors_cachyos",
                     "variant": "cachyos",
                     "name": {
-                        "de": "CachyOS Mirrors neu bewerten",
-                        "en": "Rerate CachyOS mirrors"
+                        "de": "✨ CachyOS Mirrors neu bewerten",
+                        "en": "✨ Rerate CachyOS mirrors"
                     },
                     "description": {
                         "de": "Bewertet die CachyOS-Mirrors neu.",
@@ -59,8 +59,8 @@
                     "id": "rate_mirrors_arch_update",
                     "variant": "arch_update",
                     "name": {
-                        "de": "Arch Mirrors neu bewerten + Update",
-                        "en": "Rerate Arch mirrors + update"
+                        "de": "✨ Arch Mirrors neu bewerten + Update",
+                        "en": "✨ Rerate Arch mirrors + update"
                     },
                     "description": {
                         "de": "Bewertet die Arch-Mirrors neu und aktualisiert anschließend das System.",
@@ -72,8 +72,8 @@
                     "id": "rate_mirrors_cachyos_update",
                     "variant": "cachyos_update",
                     "name": {
-                        "de": "CachyOS Mirrors neu bewerten + Update",
-                        "en": "Rerate CachyOS mirrors + update"
+                        "de": "✨ CachyOS Mirrors neu bewerten + Update",
+                        "en": "✨ Rerate CachyOS mirrors + update"
                     },
                     "description": {
                         "de": "Bewertet die CachyOS-Mirrors neu und aktualisiert anschließend das System.",
@@ -82,6 +82,18 @@
                     "exclusive_group": "rate_mirrors_method"
                 }
             ]
+        },
+        {
+            "id": "cloudflare_dns",
+            "name": {
+                "de": "✨ DNS temporär auf Cloudflare setzen",
+                "en": "✨ Temporarily set DNS to Cloudflare"
+            },
+            "description": {
+                "de": "Setzt den DNS-Server temporär auf Cloudflare (1.1.1.1).",
+                "en": "Temporarily sets the DNS server to Cloudflare (1.1.1.1)."
+            },
+            "file": "03_cloudflare_dns.json"
         },
         {
             "id": "install_cachyos_package_setup",
@@ -98,8 +110,8 @@
         {
             "id": "install_gnome",
             "name": {
-                "de": "GNOME Desktop installieren",
-                "en": "Install GNOME desktop"
+                "de": "✨ GNOME Desktop installieren",
+                "en": "✨ Install GNOME desktop"
             },
             "description": {
                 "de": "Wähle zwischen GNOME Standard oder GNOME mit zusätzlichen Paketen, jeweils optional mit GDM.",
@@ -111,8 +123,8 @@
                     "id": "install_gnome_standard",
                     "variant": "standard",
                     "name": {
-                        "de": "GNOME installieren",
-                        "en": "Install GNOME"
+                        "de": "✨ GNOME installieren",
+                        "en": "✨ Install GNOME"
                     },
                     "description": {
                         "de": "Installiert die normale GNOME-Desktopumgebung ohne GDM.",
@@ -124,8 +136,8 @@
                     "id": "install_gnome_standard_gdm",
                     "variant": "standard_gdm",
                     "name": {
-                        "de": "GNOME mit GDM installieren",
-                        "en": "Install GNOME with GDM"
+                        "de": "✨ GNOME mit GDM installieren",
+                        "en": "✨ Install GNOME with GDM"
                     },
                     "description": {
                         "de": "Installiert GNOME und aktiviert GDM als Display-Manager.",
@@ -137,8 +149,8 @@
                     "id": "install_gnome_extra",
                     "variant": "extra",
                     "name": {
-                        "de": "GNOME mit Extras installieren",
-                        "en": "Install GNOME with extras"
+                        "de": "✨ GNOME mit Extras installieren",
+                        "en": "✨ Install GNOME with extras"
                     },
                     "description": {
                         "de": "Installiert GNOME inklusive zusätzlicher GNOME-Pakete ohne GDM.",
@@ -150,8 +162,8 @@
                     "id": "install_gnome_extra_gdm",
                     "variant": "extra_gdm",
                     "name": {
-                        "de": "GNOME mit Extras und GDM installieren",
-                        "en": "Install GNOME with extras and GDM"
+                        "de": "✨ GNOME mit Extras und GDM installieren",
+                        "en": "✨ Install GNOME with extras and GDM"
                     },
                     "description": {
                         "de": "Installiert GNOME inklusive zusätzlicher Pakete und aktiviert GDM.",
@@ -160,6 +172,18 @@
                     "exclusive_group": "gnome_variant"
                 }
             ]
+        },
+        {
+            "id": "install_polkit",
+            "name": {
+                "de": "✨ Polkit installieren",
+                "en": "✨ Install Polkit"
+            },
+            "description": {
+                "de": "Installiert Polkit zur Verwaltung privilegierter Aktionen und administrativer Berechtigungen.",
+                "en": "Installs Polkit for managing privileged actions and administrative permissions."
+            },
+            "file": "191_install_polkit.json"
         },
         {
             "id": "install_polkit_gnome",
@@ -184,30 +208,6 @@
                 "en": "Installs the NetworkManager applet for managing network connections from the system tray."
             },
             "file": "190_install_network_manager_applet.json"
-        },
-        {
-            "id": "install_polkit",
-            "name": {
-                "de": "✨ Polkit installieren",
-                "en": "✨ Install Polkit"
-            },
-            "description": {
-                "de": "Installiert Polkit zur Verwaltung privilegierter Aktionen und administrativer Berechtigungen.",
-                "en": "Installs Polkit for managing privileged actions and administrative permissions."
-            },
-            "file": "191_install_polkit.json"
-        },
-        {
-            "id": "cloudflare_dns",
-            "name": {
-                "de": "DNS temporär auf Cloudflare setzen",
-                "en": "Temporarily set DNS to Cloudflare"
-            },
-            "description": {
-                "de": "Setzt den DNS-Server temporär auf Cloudflare (1.1.1.1).",
-                "en": "Temporarily sets the DNS server to Cloudflare (1.1.1.1)."
-            },
-            "file": "03_cloudflare_dns.json"
         },
         {
             "id": "install_build_tools",
@@ -355,8 +355,8 @@
         {
             "id": "install_yay",
             "name": {
-                "de": "✨ yay installieren",
-                "en": "✨ Install yay"
+                "de": "yay installieren",
+                "en": "Install yay"
             },
             "description": {
                 "de": "Lädt den Quellcode von yay aus dem AUR herunter, baut das Paket und installiert es. yay wurde bereits durch das vorherige end-4-Skript installiert und muss daher normalerweise nicht erneut ausgeführt werden.",
@@ -415,8 +415,8 @@
         {
             "id": "install_cargo_tools",
             "name": {
-                "de": "Wichtige Cargo-Tools installieren",
-                "en": "Install essential Cargo tools"
+                "de": "✨ Wichtige Cargo-Tools installieren",
+                "en": "✨ Install essential Cargo tools"
             },
             "description": {
                 "de": "Installiert wichtige Cargo-Werkzeuge für Testing, Security, Entwicklung und Performance-Analyse.",
@@ -435,46 +435,6 @@
                 "en": "Installs additional Rust tools for embedded development, binary analysis, testing, and performance analysis."
             },
             "file": "12_optional_rust_tools.json"
-        },
-        {
-            "id": "install_r2ghidra",
-            "name": {
-                "de": "r2ghidra über Pacman installieren",
-                "en": "Install r2ghidra with Pacman"
-            },
-            "description": {
-                "de": "Wähle genau eine Installationsmethode für r2ghidra.",
-                "en": "Choose exactly one installation method for r2ghidra."
-            },
-            "file": "13_install_r2ghidra.json",
-            "substeps": [
-                {
-                    "id": "install_r2ghidra_pacman",
-                    "variant": "pacman",
-                    "name": {
-                        "de": "r2ghidra über Pacman installieren",
-                        "en": "Install r2ghidra with Pacman"
-                    },
-                    "description": {
-                        "de": "Offizielle Arch-Pakete für radare2 und r2ghidra installieren.",
-                        "en": "Install the official Arch packages for radare2 and r2ghidra."
-                    },
-                    "exclusive_group": "r2ghidra_method"
-                },
-                {
-                    "id": "install_r2ghidra_r2pm",
-                    "variant": "r2pm",
-                    "name": {
-                        "de": "r2ghidra über r2pm installieren",
-                        "en": "Install r2ghidra with r2pm"
-                    },
-                    "description": {
-                        "de": "r2ghidra alternativ über den radare2 Package Manager installieren.",
-                        "en": "Install r2ghidra alternatively through radare2's package manager."
-                    },
-                    "exclusive_group": "r2ghidra_method"
-                }
-            ]
         },
         {
             "id": "install_go_make",
@@ -616,8 +576,8 @@
         {
             "id": "install_zig",
             "name": {
-                "de": "Zig installieren",
-                "en": "Install Zig"
+                "de": "✨ Zig installieren",
+                "en": "✨ Install Zig"
             },
             "description": {
                 "de": "Installiert die Programmiersprache Zig und die zugehörige Compiler-Toolchain.",
@@ -2790,8 +2750,8 @@
                     "id": "eduroam_gui",
                     "variant": "gui",
                     "name": {
-                        "de": "geteduroam mit GUI installieren",
-                        "en": "Install geteduroam with GUI"
+                        "de": "✨ geteduroam mit GUI installieren",
+                        "en": "✨ Install geteduroam with GUI"
                     },
                     "description": {
                         "de": "Installiert die grafische geteduroam-Anwendung.",
@@ -2803,8 +2763,8 @@
                     "id": "eduroam_cli",
                     "variant": "cli",
                     "name": {
-                        "de": "geteduroam ohne GUI installieren",
-                        "en": "Install geteduroam without GUI"
+                        "de": "✨ geteduroam ohne GUI installieren",
+                        "en": "✨ Install geteduroam without GUI"
                     },
                     "description": {
                         "de": "Installiert geteduroam ohne grafische Oberfläche.",
@@ -3748,6 +3708,46 @@
             ]
         },
         {
+            "id": "install_r2ghidra",
+            "name": {
+                "de": "r2ghidra über Pacman installieren",
+                "en": "Install r2ghidra with Pacman"
+            },
+            "description": {
+                "de": "Wähle genau eine Installationsmethode für r2ghidra.",
+                "en": "Choose exactly one installation method for r2ghidra."
+            },
+            "file": "13_install_r2ghidra.json",
+            "substeps": [
+                {
+                    "id": "install_r2ghidra_pacman",
+                    "variant": "pacman",
+                    "name": {
+                        "de": "r2ghidra über Pacman installieren",
+                        "en": "Install r2ghidra with Pacman"
+                    },
+                    "description": {
+                        "de": "Offizielle Arch-Pakete für radare2 und r2ghidra installieren.",
+                        "en": "Install the official Arch packages for radare2 and r2ghidra."
+                    },
+                    "exclusive_group": "r2ghidra_method"
+                },
+                {
+                    "id": "install_r2ghidra_r2pm",
+                    "variant": "r2pm",
+                    "name": {
+                        "de": "r2ghidra über r2pm installieren",
+                        "en": "Install r2ghidra with r2pm"
+                    },
+                    "description": {
+                        "de": "r2ghidra alternativ über den radare2 Package Manager installieren.",
+                        "en": "Install r2ghidra alternatively through radare2's package manager."
+                    },
+                    "exclusive_group": "r2ghidra_method"
+                }
+            ]
+        },
+        {
             "id": "install_cutter",
             "name": {
                 "de": "Cutter und Ghidra installieren",
@@ -4142,8 +4142,8 @@
         {
             "id": "install_fail2ban",
             "name": {
-                "de": "Fail2Ban installieren",
-                "en": "Install Fail2Ban"
+                "de": "✨ Fail2Ban installieren",
+                "en": "✨ Install Fail2Ban"
             },
             "description": {
                 "de": "Wähle zwischen einer reinen Installation oder der Installation mit grundlegender SSH-Konfiguration.",

@@ -12,7 +12,7 @@
         "de": "Soll der Virtualisierungsdienst für QEMU/KVM aktiviert werden?",
         "en": "Should the virtualization service for QEMU/KVM be enabled?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

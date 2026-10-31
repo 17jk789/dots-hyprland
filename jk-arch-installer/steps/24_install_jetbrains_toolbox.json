@@ -12,7 +12,7 @@
         "de": "Soll die aktuelle JetBrains Toolbox jetzt heruntergeladen und installiert werden?",
         "en": "Should the latest JetBrains Toolbox be downloaded and installed now?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

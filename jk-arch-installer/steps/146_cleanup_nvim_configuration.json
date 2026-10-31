@@ -12,7 +12,7 @@
         "de": "Sollen die zusätzlichen Anpassungen für die Neovim-Konfiguration durchgeführt werden?",
         "en": "Should the additional adjustments for the Neovim configuration be performed?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [

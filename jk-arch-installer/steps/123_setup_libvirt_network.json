@@ -12,7 +12,7 @@
         "de": "Soll das Netzwerk für virtuelle Maschinen eingerichtet werden?",
         "en": "Should networking for virtual machines be configured?"
     },
-    "optional": true,
+    "optional": false,
     "continue_on_error": false,
     "checks": [],
     "commands": [
