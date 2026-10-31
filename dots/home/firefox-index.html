@@ -8,7 +8,7 @@
       type="image/png"
       href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Arch_Linux_%22Crystal%22_icon.svg/330px-Arch_Linux_%22Crystal%22_icon.svg.png"
     />
-    <title>JK-Arch OS Startpage</title>
+    <title>JK Gray Linux Startpage</title>
     <style>
       :root {
         --bg-1: #071021;
@@ -94,6 +94,28 @@
           grid-template-columns: 1fr;
           gap: 12px;
         }
+      }
+      .ascii-banner {
+        display: flex;
+        justify-content: center;
+        width: fit-content;
+        max-width: 100%;
+        overflow-x: auto;
+        margin: 20px auto 28px;
+        padding: 12px;
+        box-sizing: border-box;
+      }
+
+      .ascii-banner pre {
+        display: block;
+        width: max-content;
+        margin: 0;
+        padding: 0;
+        /* text-align: left; */
+        font-family: monospace;
+        font-size: 9px;
+        line-height: 1.1;
+        white-space: pre;
       }
       .card {
         width: 100%;
@@ -381,13 +403,13 @@
         width: 100%;
         padding: 10px 12px;
 
-        background: rgba(0, 0, 0, 0.18);
+        background: transparent;
 
         border: 1px solid rgba(125, 211, 252, 0.15);
-        border-radius: 12px;
+        border-radius: 10px;
 
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
 
         color: #e8f2fb;
         font-size: 15px;
@@ -413,11 +435,250 @@
           inset 0 0 15px rgba(125, 211, 252, 0.05);
       }
 
+      .news-sort {
+        appearance: none;
+        -webkit-appearance: none;
+        padding-right: 38px;
+        color: #e8f2fb;
+        background:
+          linear-gradient(45deg, transparent 50%, var(--accent) 50%) calc(100% - 19px)
+            calc(50% - 3px) / 6px 6px no-repeat,
+          linear-gradient(135deg, var(--accent) 50%, transparent 50%) calc(100% - 13px)
+            calc(50% - 3px) / 6px 6px no-repeat,
+          rgba(5, 15, 28, 0.78);
+        border-color: rgba(125, 211, 252, 0.22);
+        cursor: pointer;
+      }
+
+      .news-sort:hover {
+        border-color: rgba(125, 211, 252, 0.45);
+        box-shadow:
+          0 0 15px rgba(125, 211, 252, 0.12),
+          0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .news-sort option {
+        background: #0b1a2a;
+        color: #e8f2fb;
+      }
+
+      .news-sort-dropdown {
+        position: relative;
+        flex: 0 1 220px;
+      }
+
+      .news-sort-toggle {
+        display: inline-flex;
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 38px 10px 12px;
+        border: 1px solid rgba(125, 211, 252, 0.15);
+        border-radius: 12px;
+        color: #e8f2fb;
+        background: transparent;
+
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.05),
+          0 4px 12px rgba(0, 0, 0, 0.25);
+
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .news-sort-toggle:hover,
+      .news-sort-dropdown.open .news-sort-toggle {
+        border-color: rgba(125, 211, 252, 0.45);
+        box-shadow:
+          0 0 0 1px rgba(125, 211, 252, 0.2),
+          0 0 20px rgba(125, 211, 252, 0.15),
+          inset 0 0 15px rgba(125, 211, 252, 0.05);
+      }
+
+      .news-sort-menu {
+        position: absolute;
+        z-index: 20;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        display: grid;
+        gap: 0;
+        padding: 10px;
+        border: 1px solid rgba(125, 211, 252, 0.28);
+        border-radius: 16px;
+        background: rgba(7, 16, 33, 0.98);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow:
+          0 18px 45px rgba(0, 0, 0, 0.65),
+          0 0 25px rgba(125, 211, 252, 0.08),
+          inset 0 0 20px rgba(125, 211, 252, 0.03);
+        isolation: isolate;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px) scale(0.98);
+        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      }
+
+      .news-sort-dropdown.open .news-sort-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+
+      .news-sort-option {
+        width: 100%;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        margin: 5px 0;
+        border: 1px solid transparent;
+        border-radius: 11px;
+        color: #dcecf7;
+        background: rgba(255, 255, 255, 0.025);
+        font: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        transition:
+          background 0.15s ease,
+          color 0.15s ease,
+          border-color 0.15s ease,
+          transform 0.15s ease;
+      }
+
+      .news-sort-option:hover,
+      .news-sort-option.active {
+        border-color: rgba(125, 211, 252, 0.2);
+        color: var(--accent);
+        background: rgba(125, 211, 252, 0.12);
+        transform: translateX(2px);
+      }
+
+      .news-sort-option.active {
+        background: rgba(125, 211, 252, 0.16);
+        border-color: rgba(125, 211, 252, 0.25);
+        font-weight: 700;
+      }
+
       .links {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
         margin-top: 12px;
+      }
+      .news-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .news-item {
+        padding: 12px;
+        border: 1px solid rgba(125, 211, 252, 0.18);
+        border-left: 4px solid var(--accent);
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.16);
+      }
+      .news-item[data-severity="warning"] {
+        border-left-color: #fbbf24;
+      }
+      .news-item[data-severity="error"] {
+        border-left-color: #fb7185;
+      }
+      .news-item[data-severity="success"] {
+        border-left-color: #4ade80;
+      }
+      .news-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .news-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .markdown-content {
+        margin-top: 14px;
+        line-height: 1.6;
+      }
+      .markdown-content h1,
+      .markdown-content h2,
+      .markdown-content h3,
+      .markdown-content h4,
+      .markdown-content h5 {
+        color: var(--accent);
+        scroll-margin-top: 20px;
+      }
+      .markdown-content code {
+        color: #dff4ff;
+      }
+      .markdown-content p {
+        margin: 0.7em 0;
+      }
+      .markdown-content ul,
+      .markdown-content ol {
+        margin: 0.7em 0;
+        padding-left: 1.8em;
+      }
+      .markdown-content blockquote {
+        margin: 12px 0;
+        padding: 10px 14px;
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted);
+      }
+      .markdown-content blockquote p {
+        margin: 0.25em 0;
+      }
+      .markdown-content a {
+        color: var(--accent);
+      }
+      .markdown-content .markdown-toc {
+        margin: 14px 0 18px;
+        padding: 14px 16px;
+        border: 1px solid rgba(125, 211, 252, 0.15);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .markdown-content .markdown-toc-title {
+        margin: 0 0 8px;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .markdown-content details {
+        margin: 12px 0;
+        padding: 10px 14px;
+        border: 1px solid rgba(125, 211, 252, 0.15);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .markdown-content details[open] {
+        border-color: rgba(125, 211, 252, 0.35);
+      }
+      .markdown-content summary {
+        color: #e8f2fb;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .markdown-content .code-language {
+        margin-left: auto;
+        color: var(--muted);
+        font-family: inherit;
+        font-size: 11px;
+        text-transform: uppercase;
       }
       .link {
         padding: 10px 12px;
@@ -506,6 +767,18 @@
 
       .terminal-header span:nth-child(3) {
         background: #27c93f;
+      }
+
+      .terminal-header .code-language {
+        width: auto;
+        height: auto;
+        margin-left: auto;
+        border-radius: 0;
+        background: transparent;
+        color: var(--muted);
+        font-family: inherit;
+        font-size: 11px;
+        text-transform: uppercase;
       }
 
       .terminal-cmd pre.cmd {
@@ -1068,9 +1341,9 @@
             />
           </div>
           <div>
-            <div class="title">JK-Arch 🤘</div>
+            <div class="title">JK Gray Linux 🤘</div>
             <div class="subtitle">
-              Schnellzugriff • JK-Arch OS • File://-kompatibel
+              Schnellzugriff • JK Gray Linux • File://-kompatibel
             </div>
           </div>
         </div>
@@ -1084,7 +1357,21 @@
 
       <div class="grid">
         <main id="card-main" data-card-id="card-main">
-          <main class="card" id="card-main" data-card-id="card-main">
+          <section class="card" id="card-main-content" data-card-id="card-main-content">
+            <div class="ascii-banner">
+              <pre>
+      ▄▄▄██▀▀▀██ ▄█▀     ▄████  ██▀███   ▄▄▄     ▓██   ██▓     ██▓     ██▓ ███▄    █  █    ██ ▒██   ██▒
+        ▒██   ██▄█▒     ██▒ ▀█▒▓██ ▒ ██▒▒████▄    ▒██  ██▒     ▓██▒    ▓██▒ ██ ▀█   █  ██  ▓██▒▒▒ █ █ ▒░
+        ░██  ▓███▄░    ▒██░▄▄▄░▓██ ░▄█ ▒▒██  ▀█▄   ▒██ ██░     ▒██░    ▒██▒▓██  ▀█ ██▒▓██  ▒██░░░  █   ░
+     ▓██▄██▓ ▓██ █▄    ░▓█  ██▓▒██▀▀█▄  ░██▄▄▄▄██  ░ ▐██▓░     ▒██░    ░██░▓██▒  ▐▌██▒▓▓█  ░██░ ░ █ █ ▒
+      ▓███▒  ▒██▒ █▄   ░▒▓███▀▒░██▓ ▒██▒ ▓█   ▓██▒ ░ ██▒▓░     ░██████▒░██░▒██░   ▓██░▒▒█████▓ ▒██▒ ▒██▒
+      ▒▓▒▒░  ▒ ▒▒ ▓▒    ░▒   ▒ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░  ██▒▒▒      ░ ▒░▓  ░░▓  ░ ▒░   ▒ ▒ ░▒▓▒ ▒ ▒ ▒▒ ░ ░▓ ░
+      ▒ ░▒░  ░ ░▒ ▒░     ░   ░   ░▒ ░ ▒░  ▒   ▒▒ ░▓██ ░▒░      ░ ░ ▒  ░ ▒ ░░ ░░   ░ ▒░░░▒░ ░ ░ ░░   ░▒ ░
+      ░ ░ ░  ░ ░░ ░    ░ ░   ░   ░░   ░   ░   ▒   ▒ ▒ ░░         ░ ░    ▒ ░   ░   ░ ░  ░░░ ░ ░  ░    ░
+      ░   ░  ░  ░            ░    ░           ░  ░░ ░              ░  ░ ░           ░    ░      ░    ░
+                                                  ░ ░     
+              </pre>
+            </div>
             <div
               class="card-handle"
               draggable="true"
@@ -1096,20 +1383,6 @@
                 margin-bottom: 8px;
               "
             >
-              <div style="font-weight: 700">Schnellzugriff</div>
-              <div style="display: flex; gap: 8px">
-                <button
-                  data-target="card-main"
-                  title="Ein-/ausklappen"
-                  style="
-                    background: transparent;
-                    border: 0;
-                    color: var(--muted);
-                  "
-                >
-                  ▾
-                </button>
-              </div>
             </div>
             <form class="search" id="searchForm">
               <div class="search-engine-dropdown" id="searchEngineDropdown">
@@ -1120,7 +1393,7 @@
                   aria-haspopup="listbox"
                   aria-expanded="false"
                 >
-                  <span id="searchEngineName">Brave</span>
+                  <span id="searchEngineName">Brave 🛡️</span>
                   <span class="search-engine-arrow">⌄</span>
                 </button>
 
@@ -1131,52 +1404,72 @@
                 >
                   <button
                     type="button"
-                    class="search-engine-option"
-                    data-name="Google"
-                    data-url="https://www.google.com/search"
-                    role="option"
-                  >
-                    Google
-                  </button>
-
-                  <button
-                    type="button"
                     class="search-engine-option active"
-                    data-name="Brave"
+                    data-name="Brave 🛡️"
                     data-url="https://search.brave.com/search"
                     role="option"
                   >
-                    Brave
+                    Brave 🛡️
                   </button>
 
                   <button
                     type="button"
                     class="search-engine-option"
-                    data-name="DuckDuckGo"
+                    data-name="DuckDuckGo 🛡️"
                     data-url="https://duckduckgo.com/"
                     role="option"
                   >
-                    DuckDuckGo
+                    DuckDuckGo 🛡️
                   </button>
 
                   <button
                     type="button"
                     class="search-engine-option"
-                    data-name="Bing"
-                    data-url="https://www.bing.com/search"
+                    data-name="DuckDuckGo No AI 🛡️"
+                    data-url="https://noai.duckduckgo.com/"
                     role="option"
                   >
-                    Bing
+                    DuckDuckGo No AI 🛡️
                   </button>
 
                   <button
                     type="button"
                     class="search-engine-option"
-                    data-name="Startpage"
+                    data-name="Mojeek 🛡️"
+                    data-url="https://www.mojeek.com/search"
+                    role="option"
+                  >
+                    Mojeek 🛡️
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Startpage 🛡️"
                     data-url="https://www.startpage.com/sp/search"
                     role="option"
                   >
-                    Startpage
+                    Startpage 🛡️
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Google ⚠️"
+                    data-url="https://www.google.com/search"
+                    role="option"
+                  >
+                    Google ⚠️
+                  </button>
+
+                  <button
+                    type="button"
+                    class="search-engine-option"
+                    data-name="Bing ⚠️"
+                    data-url="https://www.bing.com/search"
+                    role="option"
+                  >
+                    Bing ⚠️
                   </button>
                 </div>
               </div>
@@ -1195,7 +1488,11 @@
               <a class="btn" href="https://wiki.archlinux.org" target="_blank"
                 >Arch Wiki</a
               >
-              <a class="btn" href="https://stackoverflow.com" target="_blank"
+              <a
+                class="btn"
+                href="https://man.archlinux.org/"
+                target="_blank"
+                rel="noopener noreferrer"
                 >Arch Manpages</a
               >
               <a class="btn" href="https://aur.archlinux.org" target="_blank"
@@ -1203,9 +1500,10 @@
               >
               <a
                 class="btn"
-                href="https://github.com/17jk789/jk-arch"
+                href="https://github.com/17jk789/dots-hyprland"
                 target="_blank"
-                >17jk789</a
+                rel="noopener noreferrer"
+                >GitHub: 17jk789</a
               >
               <a class="btn" href="https://any.run/" target="_blank">ANY.RUN</a>
               <a class="btn" href="https://search.brave.com" target="_blank"
@@ -1226,10 +1524,14 @@
               <a class="btn" href="https://www.youtube.com/" target="_blank"
                 >YouTube</a
               >
-              <a class="btn" href="https://gitlab.com" target="_blank"
-                >GitHub</a
+              <a
+                class="btn"
+                href="https://github.com/17jk789/dots-hyprland"
+                target="_blank"
+                rel="noopener noreferrer"
+                >JK Gray Linux auf GitHub</a
               >
-              <a class="btn" href="https://www.youtube.com/" target="_blank"
+              <a class="btn" href="https://gitlab.com" target="_blank"
                 >GitLab</a
               >
               <a class="btn" href="https://ipinfo.io" target="_blank"
@@ -1262,678 +1564,349 @@
               >
             </div>
 
-            <section style="margin-top: 14px">
-              <h3 style="margin: 0 0 8px 0">Arch Linux — Kurze Notizen</h3>
-              <div class="muted">
-                Schnelle Befehle und Hinweise; diese Seite ist lokal und
-                benötigt kein Webserver.
-              </div>
-              <div
-                style="
-                  margin-top: 10px;
-                  display: flex;
-                  gap: 12px;
-                  flex-wrap: wrap;
-                "
-              >
-                <div style="flex: 1; min-width: 220px">
-                  <strong>System / Paket</strong>
-                  <div class="terminal-cmd">
-                    <div class="terminal-header">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <pre class="cmd">
-sudo pacman -Syu
-sudo pacman -S package_name
-sudo pacman -Rns package_name</pre>
-                  </div>
-                </div>
-                <div style="flex: 1; min-width: 220px">
-                  <strong>Nützliche Tools</strong>
-                  <div class="terminal-cmd">
-                    <div class="terminal-header">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <pre class="cmd">
-systemctl status --user
-journalctl -b -p err
-htop</pre>
-                  </div>
+          <section class="card box" id="card-jk-arch-news" data-card-id="card-jk-arch-news">
+            <strong>JK Gray Linux News</strong>
+            <div class="muted" style="margin-top: 6px">
+              Wichtige Hinweise zu JK Gray Linux, Arch und Hyprland. Die
+              Einträge werden direkt in dieser HTML-Datei gepflegt.
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px">
+              <input id="news-search" class="glass-input" type="search"
+                placeholder="News durchsuchen …" aria-label="News durchsuchen" />
+              <div class="news-sort-dropdown" id="news-sort-dropdown">
+                <button class="news-sort-toggle" id="news-sort-toggle" type="button"
+                  aria-haspopup="listbox" aria-expanded="false">
+                  Neueste zuerst
+                </button>
+                <div class="news-sort-menu" id="news-sort-menu" role="listbox">
+                  <button class="news-sort-option active" type="button"
+                    data-sort="newest" role="option">Neueste zuerst</button>
+                  <button class="news-sort-option" type="button"
+                    data-sort="oldest" role="option">Älteste zuerst</button>
+                  <button class="news-sort-option" type="button"
+                    data-sort="severity" role="option">Nach Wichtigkeit</button>
+                  <button class="news-sort-option" type="button"
+                    data-sort="title" role="option">Nach Titel</button>
                 </div>
               </div>
-
-              <div style="margin-top: 12px">
-                <strong>Dotfiles / Home</strong>
-                <div class="muted">
-                  Beispiel: Klone dein JK-Arch Repo und verlinke Configs nach
-                  <code>~/.config</code>.
-                </div>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-cd ~
-git clone git@github.com:17jk789/jk-arch.git
-# Details: https://github.com/17jk789/jk-arch/blob/main/my-arch-jk.md
-stow -t ~ nvim</pre>
-                </div>
-              </div>
-
-              <div style="margin-top: 12px">
-                <strong>Sicherheit & Best Practices</strong>
-                <div class="muted">
-                  Kompakte Empfehlungen, um JK-Arch sicher zu betreiben:
-                </div>
-                <ul class="muted">
-                  <li>
-                    <strong>Regelmäßig updaten:</strong>
-                    <code>sudo pacman -Syu</code>
-                  </li>
-                  <li>
-                    <strong>Pacman Keyring:</strong>
-                    <code>sudo pacman -S archlinux-keyring</code> falls
-                    Signaturfehler auftreten
-                  </li>
-                  <li>
-                    <strong>Firewall:</strong> nutze <code>nftables</code> oder
-                    <code>ufw</code> und aktiviere nur nötige Ports
-                  </li>
-                  <li>
-                    <strong>SSH-Härtung:</strong> Passwort-Login deaktivieren,
-                    SSH-Keys verwenden
-                  </li>
-                  <li>
-                    <strong>AUR:</strong> prüfe PKGBUILD manuell; nutze
-                    vertrauenswürdige Helper (z.B. <code>yay</code>) mit
-                    Vorsicht
-                  </li>
-                  <li>
-                    <strong>Backups:</strong> regelmäßige Snapshots mit
-                    <code>timeshift</code> oder inkrementelle Backups mit
-                    <code>borg</code>
-                  </li>
-                  <li>
-                    <strong>Kernel & LTS:</strong> behalte stabile Kernel im
-                    Auge, installiere <code>linux-lts</code> wenn nötig
-                  </li>
-                </ul>
-              </div>
-
-              <div style="margin-top: 12px">
-                <strong>Hyprland (Wayland) — JK-Arch Hinweise</strong>
-                <div class="muted">
-                  Hyprland ist ein beliebter Wayland-Composer auf Arch.
-                  Hinweise:
-                </div>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-# Hyprland-Konfiguration: ~/.config/hypr/
-# Wallpaper (hyprpaper):
-hyprpaper set /pfad/zum/wallpaper.jpg
-# Autostart: ~/.config/hypr/autostart
-# Passe scale, gaps und binds in ~/.config/hypr/hyprland.conf an</pre>
-                </div>
-                <div class="muted">
-                  "end-4" habe ich als Hinweis auf dein gewünschtes
-                  Hyprland-Setup übernommen — passe Themes/scale entsprechend
-                  an.
-                </div>
-              </div>
-
-              <div style="margin-top: 12px">
-                <strong>SGE (Google Search Generative Experience)</strong>
-                <div class="muted">
-                  SGE ist experimentell; Brave Search ist standardmäßig genutzt.
-                  Achte bei SGE/Cloud-Features auf Datenschutz und benutze sie
-                  selektiv.
-                </div>
-              </div>
-            </section>
-
-            <footer
-              style="margin-top: 16px; color: var(--muted); font-size: 13px"
-            >
-              Hinweis: Diese Seite wurde so gestaltet, dass sie beim direkten
-              Öffnen via <code>file:///</code> funktioniert.
-            </footer>
-          </main>
-
-          <!-- CARD 1: PACMAN & CORE SYSTEMS -->
-          <div
-            class="card box"
-            id="card-arch-pacman"
-            data-card-id="card-arch-pacman"
-          >
-            <strong>Arch Linux — Paketmanagement (Pacman)</strong>
-            <div class="muted" style="margin-top: 6px">
-              Wichtigste Befehle zur Systempflege:
             </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>System vollständig aktualisieren:</strong>
+            <div id="news-list" class="news-list" aria-live="polite"></div>
+          </section>
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo pacman -Syu</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Neues Paket installieren:</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo pacman -S paketname</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Paket samt ungenutzter Abhängigkeiten entfernen:</strong
-                >
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo pacman -Rs paketname</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Offizielle Repositorys nach Begriff durchsuchen:</strong
-                >
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">pacman -Ss suchbegriff</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Nicht mehr benötigte Pakete (Orphans) aufspüren und
-                  löschen:</strong
-                >
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo pacman -Rns $(pacman -Qtdq)</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Paket-Cache komplett leeren (Speicherplatz
-                  freigeben):</strong
-                >
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo pacman -Scc</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <!-- CARD 2: AUR HELPER -->
-          <div class="card box" id="card-arch-aur" data-card-id="card-arch-aur">
-            <strong>Arch Linux — AUR Helper (yay / paru)</strong>
+          <section class="card box" id="card-arch-manual" data-card-id="card-arch-manual">
+            <strong>JK Gray Linux — Handbuch laden</strong>
             <div class="muted" style="margin-top: 6px">
-              Befehle für das Arch User Repository:
+              Das Handbuch wird nicht automatisch als Startinhalt angezeigt.
+              Lade es nur bei Bedarf aus <code>jk-arch-installer/manual.md</code>.
             </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>System inklusive AUR-Pakete aktualisieren:</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">yay -Syu</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Paket aus dem AUR installieren:</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">yay -S aur-paketname</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Das AUR nach einem Begriff durchsuchen:</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">yay -Ss suchbegriff</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <!-- CARD 3: SYSTEMD SERVICES -->
-          <div
-            class="card box"
-            id="card-arch-systemd"
-            data-card-id="card-arch-systemd"
-          >
-            <strong>Arch Linux — Systemd (Dienste &amp; Logs)</strong>
-            <div class="muted" style="margin-top: 6px">
-              Hintergrunddienste steuern und Fehler finden:
+            <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+              <button class="btn" id="manual-load" type="button">Handbuch automatisch laden</button>
+              <label for="manual-file">oder Datei auswählen:</label>
+              <input type="file" id="manual-file" accept=".md,text/markdown,text/plain" />
             </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>Dienst sofort starten:</strong>
+            <div id="manual-status" class="muted" style="margin-top: 8px"></div>
+            <div id="manual-content" class="markdown-content"></div>
+          </section>
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo systemctl start dienstname</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Dienst sofort stoppen:</strong>
+          <script>
+            (() => {
+              const list = document.getElementById("news-list");
+              const searchInput = document.getElementById("news-search");
+              const sortDropdown = document.getElementById("news-sort-dropdown");
+              const sortToggle = document.getElementById("news-sort-toggle");
+              let selectedSort = "newest";
+              const labels = { info: "Information", warning: "Warnung", error: "Fehler", success: "Behoben" };
+              const severityOrder = { error: 0, warning: 1, info: 2, success: 3 };
+              // Neue Meldungen werden ausschließlich hier in der HTML-Datei ergänzt.
+              const news = [
+                {
+                  title: "Hyprland 0.57 in JK Gray Linux noch nicht unterstützt",
+                  severity: "warning",
+                  text: "Bitte Hyprland 0.57 noch nicht einsetzen. Warte mit dem Update bis zum 15.11.2026 und verwende bis dahin eine unterstützte Version.",
+                  created: "2026-10-31",
+                },
+              ];
+              const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;",
+                '"': "&quot;", "'": "&#39;",
+              })[char]);
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo systemctl stop dienstname</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Automatischen Start bei Systemboot aktivieren:</strong>
+              function render() {
+                const query = searchInput.value.trim().toLocaleLowerCase("de");
+                const visibleNews = news
+                  .filter((item) => `${item.title} ${item.text} ${labels[item.severity]}`
+                    .toLocaleLowerCase("de").includes(query))
+                  .sort((a, b) => {
+                    if (selectedSort === "oldest") return a.created.localeCompare(b.created);
+                    if (selectedSort === "severity") {
+                      return severityOrder[a.severity] - severityOrder[b.severity]
+                        || b.created.localeCompare(a.created);
+                    }
+                    if (selectedSort === "title") return a.title.localeCompare(b.title, "de");
+                    return b.created.localeCompare(a.created);
+                  });
+                list.innerHTML = visibleNews.length
+                  ? visibleNews.map((item) => `
+                    <article class="news-item" data-severity="${item.severity}">
+                      <strong>${escape(item.title)}</strong>
+                      <div class="news-meta">
+                        <span>${escape(labels[item.severity])}</span>
+                        <span>${new Date(`${item.created}T12:00:00`).toLocaleDateString("de-DE")}</span>
+                      </div>
+                      <div style="margin-top: 8px; white-space: pre-wrap">${escape(item.text)}</div>
+                    </article>`).join("")
+                  : '<div class="muted">Keine passenden News gefunden.</div>';
+              }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo systemctl enable dienstname</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Automatischen Start bei Systemboot deaktivieren:</strong
-                >
+              searchInput.addEventListener("input", render);
+              sortToggle.addEventListener("click", () => {
+                const isOpen = sortDropdown.classList.toggle("open");
+                sortToggle.setAttribute("aria-expanded", String(isOpen));
+              });
+              document.querySelectorAll(".news-sort-option").forEach((option) => {
+                option.addEventListener("click", () => {
+                  selectedSort = option.dataset.sort;
+                  sortToggle.textContent = option.textContent;
+                  document.querySelectorAll(".news-sort-option").forEach((item) => {
+                    item.classList.toggle("active", item === option);
+                  });
+                  sortDropdown.classList.remove("open");
+                  sortToggle.setAttribute("aria-expanded", "false");
+                  render();
+                });
+              });
+              document.addEventListener("click", (event) => {
+                if (!sortDropdown.contains(event.target)) {
+                  sortDropdown.classList.remove("open");
+                  sortToggle.setAttribute("aria-expanded", "false");
+                }
+              });
+              render();
+            })();
+          </script>
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">sudo systemctl disable dienstname</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Aktuellen Status und Fehler eines Dienstes prüfen:</strong
-                >
+          <script>
+            (() => {
+              const content = document.getElementById("manual-content");
+              const status = document.getElementById("manual-status");
+              const path = "../../jk-arch-installer/manual.md";
+              const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;",
+                '"': "&quot;", "'": "&#39;",
+              })[char]);
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">systemctl status dienstname</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >System-Logs des aktuellen Boots auslesen
-                  (Fehlersuche):</strong
-                >
+              function slugify(value) {
+                return value
+                  .toLowerCase()
+                  .normalize("NFKD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/^-+|-+$/g, "");
+              }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">journalctl -xb</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
+              function renderInline(value, headingIds) {
+                let html = escape(value);
+                const tokens = [];
+                const token = (content) => {
+                  const key = `\u0000${tokens.length}\u0000`;
+                  tokens.push(content);
+                  return key;
+                };
 
-          <!-- CARD 4: SYSTEM MAINTENANCE -->
-          <div
-            class="card box"
-            id="card-arch-maintenance"
-            data-card-id="card-arch-maintenance"
-          >
-            <strong>Arch Linux — System-Wartung &amp; Spiegelserver</strong>
-            <div class="muted" style="margin-top: 6px">
-              Optimierung und Fehleranalyse:
-            </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong
-                  >Schnellste HTTPS-Spiegelserver via Reflector holen:</strong
-                >
+                html = html.replace(/`([^`]+)`/g, (_, code) =>
+                  token(`<code>${code}</code>`),
+                );
+                html = html.replace(
+                  /\[([^\]]+)\]\((#[^)]+|https?:\/\/[^)]+)\)/g,
+                  (_, label, href) => {
+                    const target = href.startsWith("#")
+                      ? `#${headingIds[slugify(href.slice(1))] || slugify(href.slice(1))}`
+                      : href;
+                    return token(
+                      `<a href="${target}"${href.startsWith("http") ? ' target="_blank" rel="noopener noreferrer"' : ""}>${label}</a>`,
+                    );
+                  },
+                );
+                html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+                html = html.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+                html = html.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, "$1<em>$2</em>");
+                html = html.replace(/(^|[^_])_([^_]+)_(?!_)/g, "$1<em>$2</em>");
+                return html.replace(/\u0000(\d+)\u0000/g, (_, index) => tokens[index]);
+              }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-sudo reflector --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Bremsen beim Systemstart identifizieren:</strong>
+              function renderMarkdown(markdown) {
+                const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+                const headings = [];
+                const headingIds = {};
+                lines.forEach((line) => {
+                  const match = line.match(/^(#{1,5})\s+(.+?)\s*#*\s*$/);
+                  if (match) {
+                    const base = slugify(match[2]) || `section-${headings.length + 1}`;
+                    let id = base;
+                    let suffix = 2;
+                    while (headings.some((heading) => heading.id === id)) id = `${base}-${suffix++}`;
+                    headings.push({ level: match[1].length, text: match[2], id });
+                    headingIds[slugify(match[2])] = id;
+                  }
+                });
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">systemd-analyze blame</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Festplattenbelegung übersichtlich anzeigen:</strong>
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">df -h</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
+                const renderBlocks = (blockLines) => {
+                  let html = "";
+                  let paragraph = [];
+                  let listType = null;
+                  let listItems = [];
+                  let blockquote = [];
+                  let code = [];
+                  let codeLanguage = "";
+                  let inCode = false;
 
-          <!-- CARD 5: NETWORK & WIFI -->
-          <div
-            class="card box"
-            id="card-arch-network"
-            data-card-id="card-arch-network"
-          >
-            <strong>Arch Linux — Netzwerk &amp; WLAN (NetworkManager)</strong>
-            <div class="muted" style="margin-top: 6px">
-              Verbindungen verwalten über das Terminal:
-            </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>Verfügbare WLAN-Netzwerke auflisten:</strong>
+                  const flushParagraph = () => {
+                    if (paragraph.length) {
+                      html += `<p>${renderInline(paragraph.join(" "), headingIds)}</p>`;
+                      paragraph = [];
+                    }
+                  };
+                  const flushList = () => {
+                    if (!listItems.length) return;
+                    html += `<${listType}>${listItems.map((item) =>
+                      `<li>${renderInline(item, headingIds)}</li>`).join("")}</${listType}>`;
+                    listItems = [];
+                    listType = null;
+                  };
+                  const flushQuote = () => {
+                    if (!blockquote.length) return;
+                    html += `<blockquote>${renderBlocks(blockquote)}</blockquote>`;
+                    blockquote = [];
+                  };
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">nmcli dev wifi list</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Mit einem WLAN-Netzwerk verbinden:</strong>
+                  for (let index = 0; index < blockLines.length; index += 1) {
+                    const line = blockLines[index];
+                    const fence = line.match(/^\s*```([\w+-]*)\s*$/);
+                    if (fence) {
+                      flushParagraph();
+                      flushList();
+                      flushQuote();
+                      if (inCode) {
+                        const language = codeLanguage
+                          ? `<span class="code-language">${escape(codeLanguage)}</span>`
+                          : "";
+                        html += `<div class="terminal-cmd"><div class="terminal-header"><span></span><span></span><span></span>${language}</div><pre class="cmd"><code>${escape(code.join("\n"))}</code></pre></div>`;
+                        code = [];
+                        codeLanguage = "";
+                      } else {
+                        codeLanguage = fence[1];
+                      }
+                      inCode = !inCode;
+                      continue;
+                    }
+                    if (inCode) {
+                      code.push(line);
+                      continue;
+                    }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-nmcli dev wifi connect "SSID_NAME" password "DEIN_PASSWORT"</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Netzwerkschnittstellen und IP-Adressen anzeigen:</strong
-                >
+                    const detailsStart = line.match(/^\s*<details(?:\s+open)?\s*>\s*$/i);
+                    if (detailsStart) {
+                      flushParagraph();
+                      flushList();
+                      flushQuote();
+                      const detailsLines = [];
+                      let summary = "Details anzeigen";
+                      index += 1;
+                      for (; index < blockLines.length; index += 1) {
+                        if (/^\s*<\/details>\s*$/i.test(blockLines[index])) break;
+                        const summaryMatch = blockLines[index].match(/^\s*<summary>(.*?)<\/summary>\s*$/i);
+                        if (summaryMatch) summary = summaryMatch[1];
+                        else detailsLines.push(blockLines[index]);
+                      }
+                      const initiallyOpen = detailsStart[0].toLowerCase().includes(" open");
+                      html += `<details${initiallyOpen ? " open" : ""}><summary>${renderInline(summary, headingIds)}</summary>${renderBlocks(detailsLines)}</details>`;
+                      continue;
+                    }
+                    if (/^\s*<summary>.*<\/summary>\s*$/i.test(line) || /^\s*<\/details>\s*$/i.test(line)) continue;
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">ip a</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Aktive Netzwerkverbindungen anzeigen:</strong>
+                    const heading = line.match(/^(#{1,5})\s+(.+?)\s*#*\s*$/);
+                    if (heading) {
+                      flushParagraph();
+                      flushList();
+                      flushQuote();
+                      const item = headings.shift();
+                      html += `<h${heading[1].length} id="${item.id}">${renderInline(heading[2], headingIds)}</h${heading[1].length}>`;
+                      continue;
+                    }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">nmcli connection show</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
+                    if (/^\s*>\s?/.test(line)) {
+                      flushParagraph();
+                      flushList();
+                      blockquote.push(line.replace(/^\s*>\s?/, ""));
+                      continue;
+                    }
+                    if (blockquote.length && !/^\s*>\s?/.test(line)) flushQuote();
 
-          <!-- CARD 6: HARDWARE & KERNEL -->
-          <div
-            class="card box"
-            id="card-arch-hardware"
-            data-card-id="card-arch-hardware"
-          >
-            <strong>Arch Linux — Hardware &amp; Kernel-Module</strong>
-            <div class="muted" style="margin-top: 6px">
-              System-Informationen und Treiber prüfen:
-            </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>Aktuell geladene Kernel-Version anzeigen:</strong>
+                    const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
+                    const ordered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+                    if (unordered || ordered) {
+                      flushParagraph();
+                      const nextType = ordered ? "ol" : "ul";
+                      if (listType && listType !== nextType) flushList();
+                      listType = nextType;
+                      listItems.push((unordered || ordered)[1]);
+                      continue;
+                    }
+                    if (listType) flushList();
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">uname -r</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >PCI-Geräte (z.B. Grafikkarte, WLAN-Chipsatz)
-                  auflisten:</strong
-                >
+                    if (!line.trim()) {
+                      flushParagraph();
+                      continue;
+                    }
+                    paragraph.push(line.trim());
+                  }
+                  if (inCode) {
+                    html += `<div class="terminal-cmd"><div class="terminal-header"><span></span><span></span><span></span></div><pre class="cmd"><code>${escape(code.join("\n"))}</code></pre></div>`;
+                  }
+                  flushParagraph();
+                  flushList();
+                  flushQuote();
+                  return html;
+                };
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">lspci -v</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Angeschlossene USB-Geräte anzeigen:</strong>
+                const toc = headings.length
+                  ? `<nav class="markdown-toc" aria-label="Inhaltsverzeichnis"><div class="markdown-toc-title">Inhaltsverzeichnis</div><ul>${headings.map((heading) =>
+                    `<li><a href="#${heading.id}">${renderInline(heading.text, headingIds)}</a></li>`).join("")}</ul></nav>`
+                  : "";
+                return `${toc}${renderBlocks(lines)}`;
+              }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">lsusb</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Geladene Kernel-Module (Treiber) durchsuchen:</strong>
+              function show(markdown, message) {
+                content.innerHTML = renderMarkdown(markdown);
+                status.textContent = message;
+              }
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">lsmod | grep -i modulname</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
+              document.getElementById("manual-load").addEventListener("click", async () => {
+                status.textContent = "Handbuch wird geladen …";
+                try {
+                  const response = await fetch(path);
+                  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                  show(await response.text(), "Vollständiges Handbuch geladen.");
+                } catch (error) {
+                  status.textContent = "Automatisches Laden wurde bei file:// blockiert. Bitte die Datei auswählen.";
+                  console.warn("Handbuch konnte nicht automatisch geladen werden:", error);
+                }
+              });
 
-          <!-- CARD 7: AUDIO MANAGEMENT -->
-          <div
-            class="card box"
-            id="card-arch-audio"
-            data-card-id="card-arch-audio"
-          >
-            <strong>Arch Linux — Audio-Management (PipeWire)</strong>
-            <div class="muted" style="margin-top: 6px">
-              Status prüfen und Soundprobleme beheben:
-            </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>Status aller PipeWire-Audio-Dienste prüfen:</strong>
+              document.getElementById("manual-file").addEventListener("change", async (event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                try {
+                  show(await file.text(), `${file.name} wurde geladen.`);
+                } catch (error) {
+                  status.textContent = `Handbuch konnte nicht geladen werden: ${error.message}`;
+                }
+              });
+            })();
+          </script>
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-systemctl --user status pipewire pipewire-pulse wireplumber</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Audio-Server neu starten bei Sound-Problemen:</strong>
 
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">
-systemctl --user restart pipewire pipewire-pulse wireplumber</pre>
-                </div>
-              </li>
-              <li>
-                <strong>Lautstärke im Terminal regeln (Mixer öffnen):</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">alsamixer</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <!-- CARD 8: LIVE-SYSTEM & RECOVERY -->
-          <div
-            class="card box"
-            id="card-arch-recovery"
-            data-card-id="card-arch-recovery"
-          >
-            <strong>Arch Linux — Notfall-System &amp; Chroot</strong>
-            <div class="muted" style="margin-top: 6px">
-              Kaputtes System über einen Arch-Live-USB-Stick reparieren:
-            </div>
-            <ul class="muted" style="margin-top: 8px">
-              <li>
-                <strong>Root-Partition einhängen (z. B. für Reparatur):</strong>
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">mount /dev/sdXy /mnt</pre>
-                </div>
-              </li>
-              <li>
-                <strong>In das installierte System wechseln (Chrooten):</strong>
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">arch-chroot /mnt</pre>
-                </div>
-              </li>
-              <li>
-                <strong
-                  >Bootloader (GRUB) innerhalb von Chroot neu
-                  generieren:</strong
-                >
-
-                <div class="terminal-cmd">
-                  <div class="terminal-header">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <pre class="cmd">grub-mkconfig -o /boot/grub/grub.cfg</pre>
-                </div>
-              </li>
-            </ul>
-          </div>
         </main>
-
         <aside id="aside">
           <div
             class="card box"
