@@ -1,0 +1,35 @@
+{
+    "id": "install_rea_agents",
+    "name": {
+        "de": "REA Agents installieren und einrichten",
+        "en": "Install and configure REA Agents"
+    },
+    "description": {
+        "de": "Richtet REA Agents über den Setup-Befehl ein und konfiguriert die Umgebung für KI-Agenten.",
+        "en": "Sets up REA Agents using the setup command and configures the environment for AI agents."
+    },
+    "question": {
+        "de": "Sollen REA Agents jetzt installiert und für KI-Agenten eingerichtet werden?",
+        "en": "Should REA Agents now be installed and configured for AI agents?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Startet die REA-Agents-Einrichtung über npx.",
+                "en": "Starts the REA Agents setup using npx."
+            },
+            "command": [
+                "npx",
+                "rea-agents",
+                "setup"
+            ],
+            "requires_root": false,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

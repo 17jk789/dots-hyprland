@@ -1,0 +1,34 @@
+{
+    "id": "install_cachyos_package_setup",
+    "name": {
+        "de": "CachyOS Package Setup installieren",
+        "en": "Install CachyOS Package Setup"
+    },
+    "description": {
+        "de": "Startet das Python-Installationsskript zur Einrichtung der offiziellen CachyOS-Repositories.",
+        "en": "Starts the Python installation script to configure the official CachyOS repositories."
+    },
+    "question": {
+        "de": "Sollen die offiziellen CachyOS-Repositories jetzt eingerichtet werden?",
+        "en": "Should the official CachyOS repositories be configured now?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Führt das CachyOS Package Setup Python-Skript aus.",
+                "en": "Executes the CachyOS Package Setup Python script."
+            },
+            "command": [
+                "python",
+                "~/dots-hyprland/jk-arch-installer/scripts/cachyos-package-setup.py"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

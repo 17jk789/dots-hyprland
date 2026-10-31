@@ -1,17 +1,5 @@
 {
     "id": "setup_eduroam",
-    "name": {
-        "de": "Universitäres WLAN (eduroam) einrichten",
-        "en": "Set up university Wi-Fi (eduroam)"
-    },
-    "description": {
-        "de": "Installiert die benötigten Netzwerkkomponenten und geteduroam zur sicheren Einrichtung von eduroam.",
-        "en": "Installs the required network components and geteduroam for secure eduroam setup."
-    },
-    "question": {
-        "de": "Wie soll eduroam eingerichtet werden?",
-        "en": "How should eduroam be set up?"
-    },
     "variants": {
         "gui": {
             "id": "eduroam_gui",

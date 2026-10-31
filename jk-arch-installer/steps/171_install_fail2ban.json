@@ -1,22 +1,24 @@
 {
     "id": "install_fail2ban",
-    "name": {
-        "de": "Fail2Ban installieren",
-        "en": "Install Fail2Ban"
-    },
-    "description": {
-        "de": "Wähle zwischen verschiedenen Fail2Ban-Installations- und Konfigurationsvarianten.",
-        "en": "Choose between different Fail2Ban installation and configuration variants."
-    },
-    "question": {
-        "de": "Welche Fail2Ban-Variante soll verwendet werden?",
-        "en": "Which Fail2Ban variant should be used?"
-    },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
     "variants": {
         "install_only": {
+            "id": "install_fail2ban_only",
+            "name": {
+                "de": "Fail2Ban installieren",
+                "en": "Install Fail2Ban"
+            },
+            "description": {
+                "de": "Installiert Fail2Ban ohne zusätzliche Konfiguration und ohne den Dienst automatisch zu aktivieren.",
+                "en": "Installs Fail2Ban without additional configuration or automatically enabling the service."
+            },
+            "question": {
+                "de": "Soll Fail2Ban lediglich installiert werden?",
+                "en": "Should Fail2Ban only be installed?"
+            },
+            "optional": true,
+            "exclusive_group": "fail2ban_method",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -39,6 +41,23 @@
             ]
         },
         "with_config": {
+            "id": "install_fail2ban_with_config",
+            "name": {
+                "de": "Fail2Ban installieren und konfigurieren",
+                "en": "Install and configure Fail2Ban"
+            },
+            "description": {
+                "de": "Installiert Fail2Ban, erstellt eine SSH-Schutzkonfiguration, aktiviert den Dienst und überprüft das SSH-Jail.",
+                "en": "Installs Fail2Ban, creates an SSH protection configuration, enables the service and checks the SSH jail."
+            },
+            "question": {
+                "de": "Soll Fail2Ban vollständig installiert, für SSH konfiguriert und aktiviert werden?",
+                "en": "Should Fail2Ban be fully installed, configured for SSH and enabled?"
+            },
+            "optional": true,
+            "exclusive_group": "fail2ban_method",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -110,6 +129,23 @@
             ]
         },
         "install_only_enable": {
+            "id": "install_fail2ban_enable",
+            "name": {
+                "de": "Fail2Ban installieren und aktivieren",
+                "en": "Install and enable Fail2Ban"
+            },
+            "description": {
+                "de": "Installiert Fail2Ban und aktiviert den Dienst dauerhaft, ohne eine zusätzliche Konfiguration zu erstellen.",
+                "en": "Installs Fail2Ban and permanently enables the service without creating additional configuration."
+            },
+            "question": {
+                "de": "Soll Fail2Ban installiert und sofort aktiviert werden, ohne zusätzliche Konfiguration?",
+                "en": "Should Fail2Ban be installed and enabled immediately without additional configuration?"
+            },
+            "optional": true,
+            "exclusive_group": "fail2ban_method",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -149,6 +185,23 @@
             ]
         },
         "with_config_no_enable": {
+            "id": "install_fail2ban_config_no_enable",
+            "name": {
+                "de": "Fail2Ban installieren und konfigurieren, aber nicht aktivieren",
+                "en": "Install and configure Fail2Ban without enabling"
+            },
+            "description": {
+                "de": "Installiert Fail2Ban und erstellt eine SSH-Schutzkonfiguration, aktiviert den Dienst jedoch nicht automatisch.",
+                "en": "Installs Fail2Ban and creates an SSH protection configuration without automatically enabling the service."
+            },
+            "question": {
+                "de": "Soll Fail2Ban installiert und für SSH konfiguriert, aber noch nicht aktiviert werden?",
+                "en": "Should Fail2Ban be installed and configured for SSH, but not enabled yet?"
+            },
+            "optional": true,
+            "exclusive_group": "fail2ban_method",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {

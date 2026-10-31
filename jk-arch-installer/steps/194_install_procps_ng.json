@@ -1,0 +1,37 @@
+{
+    "id": "install_procps_ng",
+    "name": {
+        "de": "procps-ng installieren",
+        "en": "Install procps-ng"
+    },
+    "description": {
+        "de": "Installiert grundlegende Linux-Systemwerkzeuge zur Prozessverwaltung, Systemüberwachung und Ressourcenanalyse.",
+        "en": "Installs essential Linux utilities for process management, system monitoring, and resource analysis."
+    },
+    "question": {
+        "de": "Soll procps-ng installiert werden?",
+        "en": "Should procps-ng be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert procps-ng über Pacman.",
+                "en": "Installs procps-ng using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "procps-ng"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

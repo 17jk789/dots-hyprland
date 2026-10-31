@@ -1,0 +1,38 @@
+{
+    "id": "install_cutter",
+    "name": {
+        "de": "Cutter und Ghidra installieren",
+        "en": "Install Cutter and Ghidra"
+    },
+    "description": {
+        "de": "Installiert Cutter und das Ghidra-Decompiler-Plugin für die Reverse-Engineering-Umgebung.",
+        "en": "Installs Cutter and the Ghidra decompiler plugin for the reverse engineering environment."
+    },
+    "question": {
+        "de": "Sollen Cutter und Ghidra installiert werden?",
+        "en": "Should Cutter and Ghidra be installed?"
+    },
+    "optional": true,
+    "continue_on_error": false,
+    "checks": [],
+    "commands": [
+        {
+            "description": {
+                "de": "Installiert Cutter (rz-cutter) und das Ghidra-Decompiler-Plugin (rz-ghidra) über Pacman.",
+                "en": "Installs Cutter (rz-cutter) and the Ghidra decompiler plugin (rz-ghidra) using Pacman."
+            },
+            "command": [
+                "pacman",
+                "-S",
+                "--needed",
+                "--noconfirm",
+                "rz-cutter",
+                "rz-ghidra"
+            ],
+            "requires_root": true,
+            "distros": [
+                "arch_based"
+            ]
+        }
+    ]
+}

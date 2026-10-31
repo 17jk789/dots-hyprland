@@ -84,6 +84,18 @@
             ]
         },
         {
+            "id": "install_cachyos_package_setup",
+            "name": {
+                "de": "✨ CachyOS Package Setup installieren",
+                "en": "✨ Install CachyOS Package Setup"
+            },
+            "description": {
+                "de": "Richtet die offiziellen CachyOS-Repositories auf einem Arch-basierten System ein und startet das CachyOS Package Setup.",
+                "en": "Configures the official CachyOS repositories on an Arch-based system and starts the CachyOS Package Setup."
+            },
+            "file": "197_install_cachyos_package_setup.json"
+        },
+        {
             "id": "install_gnome",
             "name": {
                 "de": "GNOME Desktop installieren",
@@ -3710,6 +3722,18 @@
             ]
         },
         {
+            "id": "install_cutter",
+            "name": {
+                "de": "Cutter und Ghidra installieren",
+                "en": "Install Cutter and Ghidra"
+            },
+            "description": {
+                "de": "Installiert Cutter und das Ghidra-Decompiler-Plugin für die Reverse-Engineering-Umgebung.",
+                "en": "Installs Cutter and the Ghidra decompiler plugin for the reverse engineering environment."
+            },
+            "file": "196_install_cutter.json"
+        },
+        {
             "id": "install_blackarch_menus",
             "name": {
                 "de": "✨ BlackArch-Menüs installieren",
@@ -3744,6 +3768,30 @@
                 "en": "Installs BlackArch artwork and visual assets for the BlackArch system."
             },
             "file": "184_install_blackarch_artwork.json"
+        },
+        {
+            "id": "install_procps_ng",
+            "name": {
+                "de": "✨️ procps-ng installieren",
+                "en": "✨️ Install procps-ng"
+            },
+            "description": {
+                "de": "Installiert grundlegende Linux-Systemwerkzeuge zur Prozessverwaltung, Systemüberwachung und Ressourcenanalyse.",
+                "en": "Installs essential Linux utilities for process management, system monitoring, and resource analysis."
+            },
+            "file": "194_install_procps_ng.json"
+        },
+        {
+            "id": "install_rea_agents",
+            "name": {
+                "de": "✨ REA Agents installieren und einrichten",
+                "en": "✨ Install and configure REA Agents"
+            },
+            "description": {
+                "de": "Installiert und konfiguriert REA Agents für die Integration und Einrichtung von KI-Agenten.",
+                "en": "Installs and configures REA Agents for AI agent integration and setup."
+            },
+            "file": "195_install_rea_agents.json"
         },
         {
             "id": "install_security_tools",

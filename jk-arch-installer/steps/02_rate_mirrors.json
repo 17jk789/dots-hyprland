@@ -1,30 +1,24 @@
 {
     "id": "rate_mirrors",
-
-    "name": {
-        "de": "Schnellste Mirrors finden",
-        "en": "Find fastest mirrors"
-    },
-
-    "description": {
-        "de": "Ermittelt die schnellsten Arch- oder CachyOS-Mirror-Server und kann anschließend das System aktualisieren.",
-        "en": "Finds the fastest Arch or CachyOS mirror servers and can optionally update the system afterwards."
-    },
-
-    "question": {
-        "de": "Sollen die schnellsten Mirrors ermittelt werden?",
-        "en": "Do you want to find the fastest mirrors?"
-    },
-
-    "optional": true,
-
-    "continue_on_error": true,
-
-    "checks": [],
-
     "variants": {
-
         "arch": {
+            "id": "rate_mirrors_arch",
+            "name": {
+                "de": "Schnellste Arch-Mirrors finden",
+                "en": "Find fastest Arch mirrors"
+            },
+            "description": {
+                "de": "Ermittelt und speichert die schnellsten Arch-Mirror-Server, ohne das System anschließend zu aktualisieren.",
+                "en": "Finds and saves the fastest Arch mirror servers without updating the system afterwards."
+            },
+            "question": {
+                "de": "Sollen die schnellsten Arch-Mirrors ermittelt werden?",
+                "en": "Do you want to find the fastest Arch mirrors?"
+            },
+            "optional": true,
+            "exclusive_group": "mirror_method",
+            "continue_on_error": true,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -34,6 +28,7 @@
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
                         "--noconfirm",
                         "reflector"
                     ],
@@ -44,8 +39,8 @@
                 },
                 {
                     "description": {
-                        "de": "Testet die verfügbaren Arch-Mirrors und wählt die schnellsten aus.",
-                        "en": "Tests the available Arch mirrors and selects the fastest ones."
+                        "de": "Testet die verfügbaren Arch-Mirrors und speichert die schnellsten in der Mirrorliste.",
+                        "en": "Tests the available Arch mirrors and saves the fastest ones to the mirror list."
                     },
                     "command": [
                         "reflector",
@@ -63,8 +58,24 @@
                 }
             ]
         },
-
         "cachyos": {
+            "id": "rate_mirrors_cachyos",
+            "name": {
+                "de": "Schnellste CachyOS-Mirrors finden",
+                "en": "Find fastest CachyOS mirrors"
+            },
+            "description": {
+                "de": "Ermittelt die schnellsten CachyOS-Mirror-Server, ohne das System anschließend zu aktualisieren.",
+                "en": "Finds the fastest CachyOS mirror servers without updating the system afterwards."
+            },
+            "question": {
+                "de": "Sollen die schnellsten CachyOS-Mirrors ermittelt werden?",
+                "en": "Do you want to find the fastest CachyOS mirrors?"
+            },
+            "optional": true,
+            "exclusive_group": "mirror_method",
+            "continue_on_error": true,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -74,6 +85,7 @@
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
                         "--noconfirm",
                         "cachyos-rate-mirrors"
                     ],
@@ -97,8 +109,24 @@
                 }
             ]
         },
-
         "arch_update": {
+            "id": "rate_mirrors_arch_update",
+            "name": {
+                "de": "Arch-Mirrors finden und System aktualisieren",
+                "en": "Find Arch mirrors and update system"
+            },
+            "description": {
+                "de": "Ermittelt die schnellsten Arch-Mirrors und aktualisiert anschließend das gesamte System.",
+                "en": "Finds the fastest Arch mirrors and then updates the entire system."
+            },
+            "question": {
+                "de": "Sollen die schnellsten Arch-Mirrors ermittelt und anschließend das System aktualisiert werden?",
+                "en": "Do you want to find the fastest Arch mirrors and then update the system?"
+            },
+            "optional": true,
+            "exclusive_group": "mirror_method",
+            "continue_on_error": true,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -108,6 +136,7 @@
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
                         "--noconfirm",
                         "reflector"
                     ],
@@ -118,8 +147,8 @@
                 },
                 {
                     "description": {
-                        "de": "Testet die verfügbaren Arch-Mirrors und wählt die schnellsten aus.",
-                        "en": "Tests the available Arch mirrors and selects the fastest ones."
+                        "de": "Testet die verfügbaren Arch-Mirrors und speichert die schnellsten in der Mirrorliste.",
+                        "en": "Tests the available Arch mirrors and saves the fastest ones to the mirror list."
                     },
                     "command": [
                         "reflector",
@@ -137,8 +166,8 @@
                 },
                 {
                     "description": {
-                        "de": "Aktualisiert anschließend das Arch-System.",
-                        "en": "Then updates the Arch system."
+                        "de": "Aktualisiert anschließend das gesamte Arch-System.",
+                        "en": "Then updates the entire Arch system."
                     },
                     "command": [
                         "pacman",
@@ -152,8 +181,24 @@
                 }
             ]
         },
-
         "cachyos_update": {
+            "id": "rate_mirrors_cachyos_update",
+            "name": {
+                "de": "CachyOS-Mirrors finden und System aktualisieren",
+                "en": "Find CachyOS mirrors and update system"
+            },
+            "description": {
+                "de": "Ermittelt die schnellsten CachyOS-Mirrors und aktualisiert anschließend das gesamte System.",
+                "en": "Finds the fastest CachyOS mirrors and then updates the entire system."
+            },
+            "question": {
+                "de": "Sollen die schnellsten CachyOS-Mirrors ermittelt und anschließend das System aktualisiert werden?",
+                "en": "Do you want to find the fastest CachyOS mirrors and then update the system?"
+            },
+            "optional": true,
+            "exclusive_group": "mirror_method",
+            "continue_on_error": true,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -163,6 +208,7 @@
                     "command": [
                         "pacman",
                         "-S",
+                        "--needed",
                         "--noconfirm",
                         "cachyos-rate-mirrors"
                     ],
@@ -186,8 +232,8 @@
                 },
                 {
                     "description": {
-                        "de": "Aktualisiert anschließend das CachyOS-System.",
-                        "en": "Then updates the CachyOS system."
+                        "de": "Aktualisiert anschließend das gesamte CachyOS-System.",
+                        "en": "Then updates the entire CachyOS system."
                     },
                     "command": [
                         "pacman",

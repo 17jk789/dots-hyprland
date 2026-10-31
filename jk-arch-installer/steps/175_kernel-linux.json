@@ -1,22 +1,24 @@
 {
     "id": "install_additional_kernel",
-    "name": {
-        "de": "Zusätzlichen Kernel installieren",
-        "en": "Install additional kernel"
-    },
-    "description": {
-        "de": "Installiert optional einen zusätzlichen Kernel neben dem vorhandenen Standard-Kernel.",
-        "en": "Optionally installs an additional kernel alongside the existing standard kernel."
-    },
-    "question": {
-        "de": "Welche zusätzliche Kernel-Variante soll installiert werden?",
-        "en": "Which additional kernel variant should be installed?"
-    },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
     "variants": {
         "lts": {
+            "id": "install_additional_kernel_lts",
+            "name": {
+                "de": "Arch-LTS-Kernel installieren",
+                "en": "Install Arch LTS kernel"
+            },
+            "description": {
+                "de": "Installiert optional den Arch-LTS-Kernel und die zugehörigen Header neben dem vorhandenen Standard-Kernel.",
+                "en": "Optionally installs the Arch LTS kernel and its headers alongside the existing standard kernel."
+            },
+            "question": {
+                "de": "Soll der Arch-LTS-Kernel zusätzlich installiert werden?",
+                "en": "Should the Arch LTS kernel be installed additionally?"
+            },
+            "optional": true,
+            "exclusive_group": "install_additional_kernel",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -40,6 +42,23 @@
             ]
         },
         "cachyos_lts": {
+            "id": "install_additional_kernel_cachyos_lts",
+            "name": {
+                "de": "CachyOS-LTS-Kernel installieren",
+                "en": "Install CachyOS LTS kernel"
+            },
+            "description": {
+                "de": "Installiert optional den linux-cachyos-lts Kernel aus dem CachyOS-Repository.",
+                "en": "Optionally installs the linux-cachyos-lts kernel from the CachyOS repository."
+            },
+            "question": {
+                "de": "Soll der CachyOS-LTS-Kernel zusätzlich installiert werden?",
+                "en": "Should the CachyOS LTS kernel be installed additionally?"
+            },
+            "optional": true,
+            "exclusive_group": "install_additional_kernel",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -61,6 +80,23 @@
             ]
         },
         "zen": {
+            "id": "install_additional_kernel_zen",
+            "name": {
+                "de": "Zen-Kernel installieren",
+                "en": "Install Zen kernel"
+            },
+            "description": {
+                "de": "Installiert optional den Zen-Kernel und die zugehörigen Header neben dem vorhandenen Standard-Kernel.",
+                "en": "Optionally installs the Zen kernel and its headers alongside the existing standard kernel."
+            },
+            "question": {
+                "de": "Soll der Zen-Kernel zusätzlich installiert werden?",
+                "en": "Should the Zen kernel be installed additionally?"
+            },
+            "optional": true,
+            "exclusive_group": "install_additional_kernel",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -84,6 +120,23 @@
             ]
         },
         "hardened": {
+            "id": "install_additional_kernel_hardened",
+            "name": {
+                "de": "Hardened-Kernel installieren",
+                "en": "Install hardened kernel"
+            },
+            "description": {
+                "de": "Installiert optional den gehärteten Arch-Kernel und die zugehörigen Header neben dem vorhandenen Standard-Kernel.",
+                "en": "Optionally installs the hardened Arch kernel and its headers alongside the existing standard kernel."
+            },
+            "question": {
+                "de": "Soll der gehärtete Arch-Kernel zusätzlich installiert werden?",
+                "en": "Should the hardened Arch kernel be installed additionally?"
+            },
+            "optional": true,
+            "exclusive_group": "install_additional_kernel",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -106,6 +159,23 @@
             ]
         },
         "cachyos_hardened": {
+            "id": "install_additional_kernel_cachyos_hardened",
+            "name": {
+                "de": "CachyOS-Hardened-Kernel installieren",
+                "en": "Install CachyOS hardened kernel"
+            },
+            "description": {
+                "de": "Installiert optional den gehärteten CachyOS-Kernel neben dem vorhandenen Standard-Kernel.",
+                "en": "Optionally installs the hardened CachyOS kernel alongside the existing standard kernel."
+            },
+            "question": {
+                "de": "Soll der gehärtete CachyOS-Kernel zusätzlich installiert werden?",
+                "en": "Should the hardened CachyOS kernel be installed additionally?"
+            },
+            "optional": true,
+            "exclusive_group": "install_additional_kernel",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {

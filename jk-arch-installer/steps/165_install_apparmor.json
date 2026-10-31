@@ -1,22 +1,24 @@
 {
     "id": "install_apparmor",
-    "name": {
-        "de": "AppArmor / SELinux installieren",
-        "en": "Install AppArmor / SELinux"
-    },
-    "description": {
-        "de": "Installiert AppArmor oder SELinux abhängig von der gewählten Variante.",
-        "en": "Installs AppArmor or SELinux depending on the selected variant."
-    },
-    "question": {
-        "de": "Welche Sicherheitslösung und Konfiguration soll verwendet werden?",
-        "en": "Which security solution and configuration should be used?"
-    },
-    "optional": true,
-    "continue_on_error": false,
-    "checks": [],
     "variants": {
         "apparmor_arch": {
+            "id": "install_apparmor_arch",
+            "name": {
+                "de": "AppArmor unter Arch Linux installieren",
+                "en": "Install AppArmor on Arch Linux"
+            },
+            "description": {
+                "de": "Installiert AppArmor unter Arch Linux, ohne zusätzliche Konfiguration oder Dienstaktivierung.",
+                "en": "Installs AppArmor on Arch Linux without additional configuration or service activation."
+            },
+            "question": {
+                "de": "Soll AppArmor unter Arch Linux installiert werden?",
+                "en": "Should AppArmor be installed on Arch Linux?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -38,6 +40,23 @@
             ]
         },
         "apparmor_arch_config": {
+            "id": "install_apparmor_arch_config",
+            "name": {
+                "de": "AppArmor unter Arch Linux installieren und konfigurieren",
+                "en": "Install and configure AppArmor on Arch Linux"
+            },
+            "description": {
+                "de": "Installiert AppArmor, aktiviert den Dienst und führt die Arch-Linux-AppArmor-Konfiguration aus.",
+                "en": "Installs AppArmor, enables the service and runs the Arch Linux AppArmor configuration."
+            },
+            "question": {
+                "de": "Soll AppArmor unter Arch Linux vollständig installiert und konfiguriert werden?",
+                "en": "Should AppArmor be fully installed and configured on Arch Linux?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -79,7 +98,7 @@
                     },
                     "command": [
                         "python",
-                        "/root/dots-hyprland/jk-arch-installer/scripts/config-app-armor.py"
+                        "~/dots-hyprland/jk-arch-installer/scripts/config-app-armor.py"
                     ],
                     "requires_root": true,
                     "distros": [
@@ -89,6 +108,23 @@
             ]
         },
         "apparmor_cachyos": {
+            "id": "install_apparmor_cachyos",
+            "name": {
+                "de": "AppArmor unter CachyOS installieren",
+                "en": "Install AppArmor on CachyOS"
+            },
+            "description": {
+                "de": "Installiert AppArmor und die AppArmor.d-Profile unter CachyOS, ohne zusätzliche Konfiguration oder Dienstaktivierung.",
+                "en": "Installs AppArmor and the AppArmor.d profiles on CachyOS without additional configuration or service activation."
+            },
+            "question": {
+                "de": "Soll AppArmor unter CachyOS installiert werden?",
+                "en": "Should AppArmor be installed on CachyOS?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -111,6 +147,23 @@
             ]
         },
         "apparmor_cachyos_config": {
+            "id": "install_apparmor_cachyos_config",
+            "name": {
+                "de": "AppArmor unter CachyOS installieren und konfigurieren",
+                "en": "Install and configure AppArmor on CachyOS"
+            },
+            "description": {
+                "de": "Installiert AppArmor und die AppArmor.d-Profile, aktiviert den Dienst und führt die CachyOS-AppArmor-Konfiguration aus.",
+                "en": "Installs AppArmor and the AppArmor.d profiles, enables the service and runs the CachyOS AppArmor configuration."
+            },
+            "question": {
+                "de": "Soll AppArmor unter CachyOS vollständig installiert und konfiguriert werden?",
+                "en": "Should AppArmor be fully installed and configured on CachyOS?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
@@ -153,7 +206,7 @@
                     },
                     "command": [
                         "python",
-                        "/root/dots-hyprland/jk-arch-installer/scripts/config-app-armor-cachy.py"
+                        "~/dots-hyprland/jk-arch-installer/scripts/config-app-armor-cachy.py"
                     ],
                     "requires_root": true,
                     "distros": [
@@ -163,11 +216,28 @@
             ]
         },
         "selinux": {
+            "id": "install_apparmor_selinux",
+            "name": {
+                "de": "SELinux unter Arch Linux installieren",
+                "en": "Install SELinux on Arch Linux"
+            },
+            "description": {
+                "de": "Fügt das inoffizielle SELinux-Repository hinzu, aktualisiert die Paketdatenbanken und installiert die SELinux-Basisumgebung.",
+                "en": "Adds the unofficial SELinux repository, updates the package databases and installs the SELinux base environment."
+            },
+            "question": {
+                "de": "Soll SELinux unter Arch Linux installiert werden?",
+                "en": "Should SELinux be installed on Arch Linux?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
-                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu.",
-                        "en": "Adds the unofficial SELinux repository for Arch Linux."
+                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu, sofern es noch nicht vorhanden ist.",
+                        "en": "Adds the unofficial SELinux repository for Arch Linux if it does not already exist."
                     },
                     "command": [
                         "sh",
@@ -215,11 +285,28 @@
             ]
         },
         "selinux_config": {
+            "id": "install_apparmor_selinux_config",
+            "name": {
+                "de": "SELinux unter Arch Linux installieren und konfigurieren",
+                "en": "Install and configure SELinux on Arch Linux"
+            },
+            "description": {
+                "de": "Installiert die SELinux-Basisumgebung und zusätzliche Verwaltungswerkzeuge und führt anschließend die SELinux-Konfiguration aus.",
+                "en": "Installs the SELinux base environment and additional management tools, then runs the SELinux configuration."
+            },
+            "question": {
+                "de": "Soll SELinux unter Arch Linux vollständig installiert und konfiguriert werden?",
+                "en": "Should SELinux be fully installed and configured on Arch Linux?"
+            },
+            "optional": true,
+            "exclusive_group": "security_solution",
+            "continue_on_error": false,
+            "checks": [],
             "commands": [
                 {
                     "description": {
-                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu.",
-                        "en": "Adds the unofficial SELinux repository for Arch Linux."
+                        "de": "Fügt das inoffizielle SELinux-Repository für Arch Linux hinzu, sofern es noch nicht vorhanden ist.",
+                        "en": "Adds the unofficial SELinux repository for Arch Linux if it does not already exist."
                     },
                     "command": [
                         "sh",
@@ -267,7 +354,7 @@
                 {
                     "description": {
                         "de": "Installiert SELinux-Werkzeuge für Verwaltung, Richtlinien und Dateikontexte.",
-                        "en": "Installs SELinux tools for management, policy handling and file contexts."
+                        "en": "Installs SELinux tools for management, policies and file contexts."
                     },
                     "command": [
                         "pacman",
@@ -292,7 +379,7 @@
                     },
                     "command": [
                         "python",
-                        "/root/dots-hyprland/jk-arch-installer/scripts/config-selinux.py"
+                        "~/dots-hyprland/jk-arch-installer/scripts/config-selinux.py"
                     ],
                     "requires_root": true,
                     "distros": [

@@ -1,17 +1,5 @@
 {
     "id": "install_ghidra",
-    "name": {
-        "de": "Ghidra installieren",
-        "en": "Install Ghidra"
-    },
-    "description": {
-        "de": "Installiert Ghidra zur Analyse von Binärdateien und für Software-Reverse-Engineering.",
-        "en": "Installs Ghidra for binary analysis and software reverse engineering."
-    },
-    "question": {
-        "de": "Wie soll Ghidra installiert werden?",
-        "en": "How should Ghidra be installed?"
-    },
     "variants": {
         "pacman": {
             "id": "ghidra_pacman",
