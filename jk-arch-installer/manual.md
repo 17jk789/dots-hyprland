@@ -21,13 +21,13 @@
 
 </pre>
 
-# Manual
+# JK Gray Linux Manual
 
-In diesem Handbuch werden die Schritte zur Installation und Konfiguration von Arch Linux mit dem JK-Arch-Installer beschrieben. Es umfasst die Einrichtung der im Installer vorgesehenen Entwicklungsumgebungen, Sicherheitsmaßnahmen und Softwarepakete.
+In diesem Handbuch werden die Schritte zur Installation und Konfiguration von Arch Linux mit dem JK Gray Installer beschrieben. Es umfasst die Einrichtung der im Installer vorgesehenen Entwicklungsumgebungen, Sicherheitsmaßnahmen und Softwarepakete.
 
 Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschritten von `inateller.py`. Es werden keine zusätzlichen Schritte oder Konfigurationen beschrieben, die nicht Bestandteil der eigentlichen Installation sind.
 
-- [Manual](#manual)
+- [JK Gray Linux Manual](#jk-gray-linux-manual)
 - [Meine Arch Config → GO!!!](#meine-arch-config--go)
   - [Entwicklung Plugins](#entwicklung-plugins)
     - [Zum Startpunkt wechseln](#zum-startpunkt-wechseln)
@@ -313,11 +313,11 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
   - [✨ Risikofreien Testlauf durchführen](#-risikofreien-testlauf-durchführen)
   - [✨ Vollständigen Malware-Scan durchführen](#-vollständigen-malware-scan-durchführen)
   - [✨ Bei einem positiven Malware-Befund](#-bei-einem-positiven-malware-befund)
-- [Use JK-Arch](#use-jk-arch)
+- [Use JK Gray](#use-jk-gray)
 
 # Meine Arch Config → GO!!!
 
-Bevor wir mit der eigentlichen Konfiguration anfangen, bereiten wir erstmal unser System vor. Wir installieren die wichtigsten Werkzeuge, aktualisieren das System und holen anschließend die JK-Arch Config.
+Bevor wir mit der eigentlichen Konfiguration anfangen, bereiten wir erstmal unser System vor. Wir installieren die wichtigsten Werkzeuge, aktualisieren das System und holen anschließend die JK Gray Config.
 
 ## Entwicklung Plugins
 
@@ -363,7 +363,7 @@ sudo pacman -Syu
 
 ### Die Werkzeuge für den Bau von Software installieren
 
-> Wir brauchen `git`, um später die JK-Arch Config zu klonen. `base-devel` enthält außerdem die wichtigsten Werkzeuge, die wir für das Bauen und Installieren einiger Pakete benötigen.
+> Wir brauchen `git`, um später die JK Gray Config zu klonen. `base-devel` enthält außerdem die wichtigsten Werkzeuge, die wir für das Bauen und Installieren einiger Pakete benötigen.
 
 ```bash
 sudo pacman -S --needed git base-devel
@@ -373,7 +373,7 @@ sudo pacman -S --needed git base-devel
 
 > Wichtig -> Firewall aktivieren!!!
 
-Für JK-Arch kannst du entweder **UFW** oder **firewalld** verwenden. Beide gleichzeitig solltest du nicht betreiben.
+Für JK Gray kannst du entweder **UFW** oder **firewalld** verwenden. Beide gleichzeitig solltest du nicht betreiben.
 
 <details>
 <summary>UFW installieren, falls noch nicht geschehen</summary>
@@ -472,7 +472,7 @@ sudo ufw delete <NUMMER>
 
 ### Die end-4/jk-arch Hyperland Konfiguration herunterladen und die Installation starten
 
-Als Nächstes installieren wir die end-4 Hyprland-Konfiguration. Sie dient als Grundlage für JK-Arch und wird später entsprechend angepasst.
+Als Nächstes installieren wir die end-4 Hyprland-Konfiguration. Sie dient als Grundlage für JK Gray und wird später entsprechend angepasst.
 
 Zuerst klonen wir das Repository und wechseln in das Verzeichnis:
 
@@ -734,7 +734,7 @@ sudo pacman -S --needed lua51
 
 Die zusätzliche GDB-Konfiguration musst du **nicht manuell** einrichten.
 
-JK-Arch bringt dafür bereits eine eigene Fish-Funktion mit:
+JK Gray bringt dafür bereits eine eigene Fish-Funktion mit:
 
 ```text
 ~/.config/fish/functions/gdb.fish
@@ -765,7 +765,7 @@ Falls du zusätzlich Core Dumps aktivieren möchtest, kannst du das temporär mi
 echo core | sudo tee /proc/sys/kernel/core_pattern
 ```
 
-> **Hinweis:** Diese Einstellung für `core_pattern` ist nicht dauerhaft und kann nach einem Neustart wieder zurückgesetzt werden. JK-Arch übernimmt die entsprechende Konfiguration bereits für dich.
+> **Hinweis:** Diese Einstellung für `core_pattern` ist nicht dauerhaft und kann nach einem Neustart wieder zurückgesetzt werden. JK Gray übernimmt die entsprechende Konfiguration bereits für dich.
 
 </details>
 
@@ -1091,7 +1091,7 @@ sudo pacman -S zig
 
 ### Die JetBrains Toolbox installieren und starten
 
-> Auch wenn NeoVim der Haupteditor in JK-Arch ist, gibt es Situationen, in denen eine vollwertige IDE einfach angenehmer ist – besonders bei großen Projekten, komplexem Debugging oder umfangreichen Build-Systemen.
+> Auch wenn NeoVim der Haupteditor in JK Gray ist, gibt es Situationen, in denen eine vollwertige IDE einfach angenehmer ist – besonders bei großen Projekten, komplexem Debugging oder umfangreichen Build-Systemen.
 
 Die **JetBrains Toolbox** verwaltet deine JetBrains-Programme zentral und ermöglicht es dir, IDEs wie **IntelliJ IDEA**, **CLion**, **PyCharm** oder andere JetBrains-Tools einfach zu installieren, aktualisieren und verwalten.
 
@@ -1351,7 +1351,7 @@ sudo pacman -S hunspell hunspell-de hunspell-en_us
 
 ### Moderne Terminal-Emulatoren installieren
 
-> `kitty` ist der **Standard-Terminal-Emulator von JK-Arch** und wird daher empfohlen. Er bietet GPU-Rendering, Tabs, Splits, Bildunterstützung und viele Anpassungsmöglichkeiten. Die JK-Arch-Konfiguration ist auf diesen Workflow abgestimmt.
+> `kitty` ist der **Standard-Terminal-Emulator von JK Gray** und wird daher empfohlen. Er bietet GPU-Rendering, Tabs, Splits, Bildunterstützung und viele Anpassungsmöglichkeiten. Die JK-Gray-Konfiguration ist auf diesen Workflow abgestimmt.
 >
 > `ghostty` ist ein moderner, sehr schneller Terminal-Emulator mit GPU-Beschleunigung und eine gute Alternative, falls du etwas Neues ausprobieren möchtest.
 >
@@ -1359,7 +1359,7 @@ sudo pacman -S hunspell hunspell-de hunspell-en_us
 >
 > `alacritty` ist ein schneller, GPU-beschleunigter Terminal-Emulator und auf vielen vorkonfigurierten Arch-Systemen wie CachyOS bereits vorhanden.
 >
-> `konsole` ist der Terminal-Emulator von KDE Plasma. Er ist hauptsächlich für KDE-Desktops gedacht und bietet eine enge Integration mit KDE-Anwendungen wie Dolphin. Für ein reines Hyprland-/JK-Arch-Setup ist er jedoch nicht die bevorzugte Wahl.
+> `konsole` ist der Terminal-Emulator von KDE Plasma. Er ist hauptsächlich für KDE-Desktops gedacht und bietet eine enge Integration mit KDE-Anwendungen wie Dolphin. Für ein reines Hyprland-/JK-Gray-Setup ist er jedoch nicht die bevorzugte Wahl.
 
 ```bash
 sudo pacman -S ghostty foot alacritty kitty konsole
@@ -1439,7 +1439,7 @@ sudo pacman -S languagetool
 
 > NeoVim wird hier zur vollständigen Entwicklungsumgebung ausgebaut. Wir installieren NeoVim, richten LazyVim als moderne Plugin-Basis ein und installieren eine Nerd Font, damit Icons, Symbole und UI-Elemente in NeoVim korrekt dargestellt werden.
 >
-> `neovim` ist der moderne Vim-Nachfolger und die Grundlage für die JK-Arch-Entwicklungsumgebung.
+> `neovim` ist der moderne Vim-Nachfolger und die Grundlage für die JK-Gray-Entwicklungsumgebung.
 >
 > `vim` wird zusätzlich installiert, da einige Tools und Scripts weiterhin auf die klassische Vim-Kompatibilität zurückgreifen.
 
@@ -1451,7 +1451,7 @@ sudo pacman -S neovim vim
 
 > Wir legen die Grundlage für unsere NeoVim-Umgebung. Dafür laden wir zuerst die **LazyVim Starter-Konfiguration** herunter. LazyVim ist keine eigene Version von NeoVim, sondern eine moderne vorkonfigurierte Plugin- und Struktur-Basis für NeoVim.
 >
-> Es kümmert sich unter anderem um Plugin-Verwaltung, eine saubere Ordnerstruktur und viele moderne Entwicklungsfunktionen. Die JK-Arch NeoVim-Konfiguration baut auf dieser Grundlage auf und erweitert sie mit eigenen Plugins, Themes, LSP-Setups und zusätzlichen Anpassungen.
+> Es kümmert sich unter anderem um Plugin-Verwaltung, eine saubere Ordnerstruktur und viele moderne Entwicklungsfunktionen. Die JK Gray NeoVim-Konfiguration baut auf dieser Grundlage auf und erweitert sie mit eigenen Plugins, Themes, LSP-Setups und zusätzlichen Anpassungen.
 
 ```bash
 git clone https://github.com/LazyVim/starter ~/.config/nvim
@@ -1503,7 +1503,7 @@ nvim
 
 ### Das System-Informationswerkzeug Fastfetch installieren
 
-> `fastfetch` zeigt dir beim Start oder auf Wunsch wichtige Informationen über dein System direkt im Terminal an. Es ist eine moderne Alternative zu `neofetch` und passt besonders gut zu einem minimalistischen, Terminal-zentrierten Setup wie JK-Arch.
+> `fastfetch` zeigt dir beim Start oder auf Wunsch wichtige Informationen über dein System direkt im Terminal an. Es ist eine moderne Alternative zu `neofetch` und passt besonders gut zu einem minimalistischen, Terminal-zentrierten Setup wie JK Gray.
 
 ```bash
 sudo pacman -S fastfetch
@@ -1561,7 +1561,7 @@ sudo pacman -S yazi
 
 ### ✨ Den Terminal-Dateimanager und die Bildvorschau installieren
 
-> `ranger` ist ein klassischer Terminal-Dateimanager mit einer großen Community und vielen Erweiterungen. Er funktioniert zuverlässig, wird in JK-Arch aber nicht bevorzugt, da `yazi` moderner und schneller ist.
+> `ranger` ist ein klassischer Terminal-Dateimanager mit einer großen Community und vielen Erweiterungen. Er funktioniert zuverlässig, wird in JK Gray aber nicht bevorzugt, da `yazi` moderner und schneller ist.
 >
 > `w3m` wird häufig zusammen mit `ranger` für Bildvorschauen im Terminal verwendet.
 
@@ -1578,7 +1578,7 @@ sudo pacman -S ranger w3m
 
 > `time` misst die Ausführungszeit von Programmen und Skripten. Es ist besonders nützlich, um die Performance von Befehlen zu analysieren und Engpässe zu identifizieren.
 >
-> **JK-Arch erweitert diesen Workflow mit der eigenen Fish-Funktion `jtime`.**  
+> **JK Gray erweitert diesen Workflow mit der eigenen Fish-Funktion `jtime`.**  
 > `jtime` ist ein modernes Benchmarking-, Profiling- und Tracing-Werkzeug, das mehrere Analysewerkzeuge unter einem einzigen Befehl zusammenfasst.
 
 ```bash
@@ -1607,7 +1607,7 @@ sudo pacman -S hyperfine
 
 > `tmux` ist ein Terminal-Multiplexer und ermöglicht es, mehrere Shell-Sitzungen, Fenster und Splits innerhalb eines einzigen Terminals zu verwalten.
 >
-> In JK-Arch wird `tmux` jedoch **nicht benötigt**. Der Standard-Terminal-Emulator `kitty` bringt bereits eigene Funktionen für Splits, Tabs und Fensterverwaltung mit und deckt damit den täglichen Workflow vollständig ab.
+> In JK Gray wird `tmux` jedoch **nicht benötigt**. Der Standard-Terminal-Emulator `kitty` bringt bereits eigene Funktionen für Splits, Tabs und Fensterverwaltung mit und deckt damit den täglichen Workflow vollständig ab.
 >
 > Für ein modernes Hyprland-/NeoVim-Setup mit Kitty ist `tmux` daher meistens überflüssig. Es kann aber weiterhin sinnvoll sein, wenn du:
 >
@@ -1615,7 +1615,7 @@ sudo pacman -S hyperfine
 > - lange laufende Prozesse unabhängig vom Terminal offen halten möchtest
 > - mit minimalen Terminals ohne integrierte Split-Funktionen arbeitest
 >
-> Für den normalen JK-Arch-Workflow mit `kitty`, `fish` und `NeoVim` kannst du `tmux` einfach überspringen.
+> Für den normalen JK-Gray-Workflow mit `kitty`, `fish` und `NeoVim` kannst du `tmux` einfach überspringen.
 
 <details>
 <summary>Installieren</summary>
@@ -1669,8 +1669,8 @@ sudo pacman -S bat
 > - Anzeige der Git-Historie
 > - schnelles Wechseln zwischen Repository-Bereichen
 >
-> **JK-Arch Integration:**
-> `lazygit` ist in JK-Arch bereits in den Workflow integriert:
+> **JK Gray Integration:**
+> `lazygit` ist in JK Gray bereits in den Workflow integriert:
 >
 > - In **NeoVim** wird es als Git-Oberfläche verwendet.
 > - Über die **Fish-Konfiguration** kann es direkt per Tastenkürzel **`Strg + G`** gestartet werden.
@@ -3331,7 +3331,7 @@ sudo apt install spice-vdagent
 
 #### BlackArch Configuration
 
-Du kannst die gleiche config wie bei JK-Arch verwenden nur bitte kein Hyperland in der QEMU VM verweden sonder KDE Plasma oder XFCE.
+Du kannst die gleiche config wie bei JK Gray verwenden nur bitte kein Hyperland in der QEMU VM verweden sonder KDE Plasma oder XFCE.
 
 ##### BlackArch installieren
 
@@ -6344,4 +6344,4 @@ sudo python -m aur_check --refresh --full
 
 > **Tipp:** AUR-Pakete sollten grundsätzlich vor der Installation überprüft werden. Besonders bei unbekannten, neuen oder verwaisten Paketen lohnt sich ein Blick auf das `PKGBUILD` und die Änderungen, bevor `yay` oder ein anderer AUR-Helper das Paket baut.
 
-# Use JK-Arch
+# Use JK Gray
