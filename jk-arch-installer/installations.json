@@ -2537,10 +2537,38 @@
                 "en": "Install Wireshark"
             },
             "description": {
-                "de": "Installiert Wireshark zur Überwachung und Analyse von Netzwerkverkehr.",
-                "en": "Installs Wireshark for monitoring and analyzing network traffic."
+                "de": "Installiert Wireshark zur Überwachung, Analyse und Fehlersuche bei Netzwerkverkehr mit optionaler Einrichtung der Paketaufzeichnungsberechtigungen.",
+                "en": "Installs Wireshark for monitoring, analyzing, and debugging network traffic with optional packet capture permission configuration."
             },
-            "file": "116_install_wireshark.json"
+            "file": "116_install_wireshark.json",
+            "substeps": [
+                {
+                    "id": "install_wireshark_setup",
+                    "variant": "setup",
+                    "name": {
+                        "de": "Wireshark installieren und einrichten",
+                        "en": "Install and configure Wireshark"
+                    },
+                    "description": {
+                        "de": "Installiert Wireshark, erstellt die wireshark-Gruppe und richtet die erforderlichen Berechtigungen für die Paketaufzeichnung ohne Root-Rechte ein.",
+                        "en": "Installs Wireshark, creates the wireshark group, and configures the required permissions for packet capturing without root privileges."
+                    },
+                    "exclusive_group": "wireshark_installation"
+                },
+                {
+                    "id": "install_wireshark_basic",
+                    "variant": "basic",
+                    "name": {
+                        "de": "Wireshark ohne zusätzliche Einrichtung installieren",
+                        "en": "Install Wireshark without additional configuration"
+                    },
+                    "description": {
+                        "de": "Installiert Wireshark mit grafischer Oberfläche und Kommandozeilenwerkzeugen ohne zusätzliche Gruppen- oder Berechtigungskonfiguration.",
+                        "en": "Installs Wireshark with its graphical interface and command-line tools without additional group or permission configuration."
+                    },
+                    "exclusive_group": "wireshark_installation"
+                }
+            ]
         },
         {
             "id": "install_krusader",

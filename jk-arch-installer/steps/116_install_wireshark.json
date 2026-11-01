@@ -1,37 +1,128 @@
 {
     "id": "install_wireshark",
-    "name": {
-        "de": "Wireshark installieren",
-        "en": "Install Wireshark"
-    },
-    "description": {
-        "de": "Installiert Wireshark zur Überwachung, Analyse und Fehlersuche bei Netzwerkverkehr.",
-        "en": "Installs Wireshark for monitoring, analyzing, and debugging network traffic."
-    },
-    "question": {
-        "de": "Soll Wireshark installiert werden?",
-        "en": "Should Wireshark be installed?"
-    },
-    "optional": false,
-    "continue_on_error": false,
-    "checks": [],
-    "commands": [
-        {
-            "description": {
-                "de": "Installiert die Qt-Version von Wireshark über Pacman.",
-                "en": "Installs the Qt version of Wireshark using Pacman."
+    "variants": {
+        "setup": {
+            "id": "install_wireshark_setup",
+            "name": {
+                "de": "Wireshark installieren und sicher einrichten",
+                "en": "Install and securely configure Wireshark"
             },
-            "command": [
-                "pacman",
-                "-S",
-                "--needed",
-                "--noconfirm",
-                "wireshark-qt"
-            ],
-            "requires_root": true,
-            "distros": [
-                "arch_based"
+            "description": {
+                "de": "Installiert Wireshark, konfiguriert die sichere Paketaufzeichnung und berechtigt ausschließlich den aktuell angemeldeten Benutzer über die Gruppe wireshark zur Paketaufzeichnung ohne Root-Rechte.",
+                "en": "Installs Wireshark, configures secure packet capturing and grants only the currently logged-in user packet capture permissions through the wireshark group without requiring root privileges."
+            },
+            "question": {
+                "de": "Soll Wireshark vollständig installiert und für eine sichere Paketaufzeichnung ohne Root-Rechte eingerichtet werden?",
+                "en": "Should Wireshark be fully installed and configured for secure packet capturing without root privileges?"
+            },
+            "optional": false,
+            "exclusive_group": "install_wireshark",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Wireshark mit grafischer Oberfläche und Kommandozeilenwerkzeugen. Das offizielle Arch-Paket richtet dabei die erforderlichen Berechtigungen für dumpcap ein.",
+                        "en": "Installs Wireshark with its graphical interface and command-line tools. The official Arch package configures the required permissions for dumpcap."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "wireshark-qt",
+                        "wireshark-cli"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Stellt sicher, dass die Systemgruppe wireshark existiert. Verwendet die vom Paket angelegte Gruppe oder erstellt sie als Systemgruppe, falls erforderlich.",
+                        "en": "Ensures that the wireshark system group exists. Uses the group created by the package or creates it as a system group if necessary."
+                    },
+                    "command": [
+                        "bash",
+                        "-c",
+                        "getent group wireshark >/dev/null || groupadd --system wireshark"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Ermittelt den ursprünglichen angemeldeten Benutzer, überprüft dessen Existenz und fügt ihn der Gruppe wireshark hinzu, ohne bestehende Gruppenmitgliedschaften zu verändern.",
+                        "en": "Identifies the original logged-in user, verifies that the account exists and adds it to the wireshark group without modifying existing group memberships."
+                    },
+                    "command": [
+                        "bash",
+                        "-c",
+                        "TARGET_USER=\"${SUDO_USER:-$(logname 2>/dev/null || true)}\"; if [ -z \"$TARGET_USER\" ] || [ \"$TARGET_USER\" = root ]; then echo 'ERROR: Cannot safely determine the original non-root user'; exit 1; fi; if ! getent passwd \"$TARGET_USER\" >/dev/null; then echo 'ERROR: Target user does not exist'; exit 1; fi; if [ \"$(id -u \"$TARGET_USER\")\" -eq 0 ]; then echo 'ERROR: Target user must not be root'; exit 1; fi; gpasswd -a \"$TARGET_USER\" wireshark"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                },
+                {
+                    "description": {
+                        "de": "Überprüft, ob dumpcap installiert ist und die vom Arch-Paket bereitgestellten Berechtigungen und Netzwerk-Capabilities vorhanden sind. Verändert keine Paketberechtigungen.",
+                        "en": "Ver verifies that dumpcap is installed and that the permissions and network capabilities provided by the Arch package are present. Does not modify package permissions."
+                    },
+                    "command": [
+                        "bash",
+                        "-c",
+                        "if [ ! -x /usr/bin/dumpcap ]; then echo 'ERROR: dumpcap is missing or not executable'; exit 1; fi; if ! getent group wireshark >/dev/null; then echo 'ERROR: wireshark group is missing'; exit 1; fi; if ! getcap /usr/bin/dumpcap | grep -q 'cap_net_admin'; then echo 'ERROR: dumpcap network capabilities are missing'; exit 1; fi; echo 'SUCCESS: Wireshark capture permissions are configured.'; ls -l /usr/bin/dumpcap; getcap /usr/bin/dumpcap"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        },
+        "basic": {
+            "id": "install_wireshark_basic",
+            "name": {
+                "de": "Wireshark installieren",
+                "en": "Install Wireshark"
+            },
+            "description": {
+                "de": "Installiert Wireshark mit grafischer Oberfläche und Kommandozeilenwerkzeugen ohne zusätzliche Benutzerberechtigungen.",
+                "en": "Installs Wireshark with its graphical interface and command-line tools without additional user permissions."
+            },
+            "question": {
+                "de": "Soll Wireshark installiert werden?",
+                "en": "Should Wireshark be installed?"
+            },
+            "optional": false,
+            "exclusive_group": "install_wireshark",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Wireshark inklusive grafischer Oberfläche und Kommandozeilenwerkzeugen.",
+                        "en": "Installs Wireshark including its graphical interface and command-line tools."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "wireshark-qt",
+                        "wireshark-cli"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
             ]
         }
-    ]
+    }
 }
