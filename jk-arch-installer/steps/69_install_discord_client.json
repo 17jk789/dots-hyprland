@@ -30,7 +30,7 @@
                         "-S",
                         "--needed",
                         "--noconfirm",
-                        "vesktop"
+                        "veskto-bin"
                     ],
                     "requires_root": true,
                     "distros": [
