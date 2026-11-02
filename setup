@@ -1937,17 +1937,17 @@ ${STY_RST}\n"
     printf "      Official Arch Linux guided installer.\n"
     printf "      ${STY_CYAN}archinstall will be installed automatically if required.${STY_RST}\n\n"
 
-    printf "  ${STY_GREEN}2${STY_RST} = ${STY_BOLD}JK Gray Linux Installer${STY_RST}\n"
+    printf "  ${STY_GREEN}2${STY_RST} = ${STY_BOLD}BlackArch Installer${STY_RST}\n"
+    printf "      BlackArch Linux installation using the BlackArch installer.\n"
+    printf "      Repository and installer availability will be checked automatically.\n\n"
+
+    printf "  ${STY_GREEN}3${STY_RST} = ${STY_BOLD}JK Gray Linux Installer${STY_RST} ${STY_YELLOW}[EXPERIMENTAL]${STY_RST}\n"
     printf "      Arch Linux + Hyprland + JK Gray Linux base configuration\n"
     printf "      Security and additional features can be configured afterwards.\n\n"
 
-    printf "  ${STY_YELLOW}3${STY_RST} = ${STY_BOLD}CachyOS New CLI Installer${STY_RST} ${STY_YELLOW}[EXPERIMENTAL]${STY_RST}\n"
+    printf "  ${STY_YELLOW}4${STY_RST} = ${STY_BOLD}CachyOS New CLI Installer${STY_RST} ${STY_YELLOW}[EXPERIMENTAL]${STY_RST}\n"
     printf "      CachyOS installer from the official GitHub repository.\n"
     printf "      ${STY_CYAN}The repository will be downloaded automatically if required.${STY_RST}\n\n"
-
-    printf "  ${STY_GREEN}4${STY_RST} = ${STY_BOLD}BlackArch Installer${STY_RST}\n"
-    printf "      BlackArch Linux installation using the BlackArch installer.\n"
-    printf "      Repository and installer availability will be checked automatically.\n\n"
 
     if [[ "${INSTALL_RECOMMENDATION}" == "5" ]]; then
       printf "  ${STY_GREEN}5${STY_RST} = ${STY_BOLD}No installation / Keep current configuration${STY_RST} ${STY_YELLOW}[RECOMMENDED]${STY_RST}\n"
@@ -1984,9 +1984,8 @@ ${STY_RST}\n"
       case "${INSTALL_OPTION}" in
 
         ###########################################################################
-        # OPTION 1 - JK GRAY LINUX
+        # OPTION 1 - OFFICIAL ARCHINSTALL
         ###########################################################################
-
         1)
 
           printf "\n${STY_YELLOW}[INFO] Preparing the official Archinstall installer...${STY_RST}\n\n"
@@ -2112,10 +2111,162 @@ EOF
           ;;
 
         ###########################################################################
-        # OPTION 2 - OFFICIAL ARCHINSTALL
+        # OPTION 2 - JK GRAY LINUX
         ###########################################################################
 
         2)
+
+          printf "\n${STY_BOLD}${STY_YELLOW}BlackArch Installer${STY_RST}\n\n"
+
+          timedatectl set-ntp true || {
+            printf "${STY_YELLOW}[WARNING] Could not enable network time synchronization.${STY_RST}\n"
+          }
+
+          #########################################################################
+          # INSTALL FROM BLACKARCH REPOSITORY
+          #########################################################################
+
+          if [[ "${BLACKARCH_AVAILABLE}" == "yes" ]]; then
+
+            printf "${STY_GREEN}[INFO] BlackArch repository detected.${STY_RST}\n"
+
+            if ! command -v blackarch-install >/dev/null 2>&1; then
+
+              printf "${STY_YELLOW}[INFO] Installing blackarch-installer via pacman...${STY_RST}\n\n"
+
+              if ! pacman -S --needed --noconfirm blackarch-installer; then
+                printf "${STY_RED}[ERROR] Failed to install blackarch-installer.${STY_RST}\n\n"
+                continue
+              fi
+
+            fi
+
+          #########################################################################
+          # NO BLACKARCH REPOSITORY - ASK ABOUT GITHUB INSTALLATION
+          #########################################################################
+
+          else
+
+            printf "${STY_YELLOW}[WARNING] BlackArch repository is not configured.${STY_RST}\n\n"
+            printf "The installer can alternatively be installed directly from GitHub.\n"
+            printf "Repository:\n"
+            printf "  https://github.com/BlackArch/blackarch-installer.git\n\n"
+
+            read -r -p "Install BlackArch installer directly from GitHub? [y/N]: " BLACKARCH_GIT_CONFIRM
+
+            case "${BLACKARCH_GIT_CONFIRM,,}" in
+
+              y|yes)
+
+                ###################################################################
+                # CHECK GIT
+                ###################################################################
+
+                if ! command -v git >/dev/null 2>&1; then
+
+                  printf "${STY_YELLOW}[INFO] Git is not installed. Installing Git...${STY_RST}\n\n"
+
+                  if ! pacman -S --needed --noconfirm git; then
+                    printf "${STY_RED}[ERROR] Failed to install Git.${STY_RST}\n\n"
+                    continue
+                  fi
+
+                fi
+
+                ###################################################################
+                # CLONE REPOSITORY
+                ###################################################################
+
+                BLACKARCH_SOURCE_DIR="${REPO_ROOT}/blackarch-installer"
+                BLACKARCH_INSTALL_DIR="/usr/share/blackarch-installer"
+                BLACKARCH_INSTALL_BIN="/usr/bin/blackarch-install"
+
+                if [[ ! -d "${BLACKARCH_SOURCE_DIR}/.git" ]]; then
+
+                  if [[ -e "${BLACKARCH_SOURCE_DIR}" ]]; then
+                    printf "${STY_RED}[ERROR] Destination exists but is not a Git repository:${STY_RST}\n"
+                    printf "  %s\n\n" "${BLACKARCH_SOURCE_DIR}"
+                    continue
+                  fi
+
+                  printf "${STY_YELLOW}[INFO] Cloning BlackArch installer from GitHub...${STY_RST}\n\n"
+
+                  if ! git clone \
+                    https://github.com/BlackArch/blackarch-installer.git \
+                    "${BLACKARCH_SOURCE_DIR}"; then
+                    printf "${STY_RED}[ERROR] Failed to clone BlackArch installer.${STY_RST}\n\n"
+                    continue
+                  fi
+
+                else
+
+                  printf "${STY_GREEN}[INFO] Existing BlackArch Git repository found.${STY_RST}\n"
+
+                fi
+
+                ###################################################################
+                # VERIFY SOURCE
+                ###################################################################
+
+                if [[ ! -f "${BLACKARCH_SOURCE_DIR}/blackarch-install" ]]; then
+                  printf "${STY_RED}[ERROR] blackarch-install script not found in cloned repository.${STY_RST}\n"
+                  printf "Expected: %s\n\n" "${BLACKARCH_SOURCE_DIR}/blackarch-install"
+                  continue
+                fi
+
+                ###################################################################
+                # INSTALL FILES
+                ###################################################################
+
+                printf "${STY_YELLOW}[INFO] Installing BlackArch installer files...${STY_RST}\n\n"
+
+                if ! install -d "${BLACKARCH_INSTALL_DIR}"; then
+                  printf "${STY_RED}[ERROR] Could not create installation directory.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! cp -a "${BLACKARCH_SOURCE_DIR}/." "${BLACKARCH_INSTALL_DIR}/"; then
+                  printf "${STY_RED}[ERROR] Failed to copy installer files.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! chmod +x "${BLACKARCH_INSTALL_DIR}/blackarch-install"; then
+                  printf "${STY_RED}[ERROR] Failed to make installer executable.${STY_RST}\n\n"
+                  continue
+                fi
+
+                if ! ln -sf \
+                  "${BLACKARCH_INSTALL_DIR}/blackarch-install" \
+                  "${BLACKARCH_INSTALL_BIN}"; then
+                  printf "${STY_RED}[ERROR] Failed to create installer symlink.${STY_RST}\n\n"
+                  continue
+                fi
+
+                printf "${STY_GREEN}[ OK ] BlackArch installer installed from GitHub.${STY_RST}\n\n"
+
+                ;;
+
+              ""|n|no)
+
+                printf "${STY_YELLOW}[INFO] GitHub installation cancelled.${STY_RST}\n\n"
+                continue
+                ;;
+
+              *)
+
+                printf "${STY_RED}Please enter y or n.${STY_RST}\n\n"
+                continue
+                ;;
+
+            esac
+
+          ;;
+
+        ###########################################################################
+        # OPTION 3 - JK GRAY LINUX Installer
+        ###########################################################################
+
+        3)
 
           if [[ "${JK_GRAY_INSTALLER_AVAILABLE}" != "yes" ]]; then
             printf "\n${STY_RED}[ERROR] JK Gray Linux installer is not available.${STY_RST}\n"
@@ -2193,10 +2344,10 @@ EOF
           ;;
 
         ###########################################################################
-        # OPTION 3 - CACHYOS NEW CLI INSTALLER
+        # OPTION 4 - CACHYOS NEW CLI INSTALLER
         ###########################################################################
 
-        3)
+        4)
 
           printf "\n"
           printf "${STY_BOLD}${STY_YELLOW}CachyOS New CLI Installer${STY_RST}\n"
@@ -2384,158 +2535,6 @@ EOF
             *)
               printf "${STY_RED}Please enter y or n.${STY_RST}\n"
               ;;
-
-          esac
-
-          ;;
-
-        ###########################################################################
-        # OPTION 4 - BLACKARCH INSTALLER
-        ###########################################################################
-
-        4)
-
-          printf "\n${STY_BOLD}${STY_YELLOW}BlackArch Installer${STY_RST}\n\n"
-
-          timedatectl set-ntp true || {
-            printf "${STY_YELLOW}[WARNING] Could not enable network time synchronization.${STY_RST}\n"
-          }
-
-          #########################################################################
-          # INSTALL FROM BLACKARCH REPOSITORY
-          #########################################################################
-
-          if [[ "${BLACKARCH_AVAILABLE}" == "yes" ]]; then
-
-            printf "${STY_GREEN}[INFO] BlackArch repository detected.${STY_RST}\n"
-
-            if ! command -v blackarch-install >/dev/null 2>&1; then
-
-              printf "${STY_YELLOW}[INFO] Installing blackarch-installer via pacman...${STY_RST}\n\n"
-
-              if ! pacman -S --needed --noconfirm blackarch-installer; then
-                printf "${STY_RED}[ERROR] Failed to install blackarch-installer.${STY_RST}\n\n"
-                continue
-              fi
-
-            fi
-
-          #########################################################################
-          # NO BLACKARCH REPOSITORY - ASK ABOUT GITHUB INSTALLATION
-          #########################################################################
-
-          else
-
-            printf "${STY_YELLOW}[WARNING] BlackArch repository is not configured.${STY_RST}\n\n"
-            printf "The installer can alternatively be installed directly from GitHub.\n"
-            printf "Repository:\n"
-            printf "  https://github.com/BlackArch/blackarch-installer.git\n\n"
-
-            read -r -p "Install BlackArch installer directly from GitHub? [y/N]: " BLACKARCH_GIT_CONFIRM
-
-            case "${BLACKARCH_GIT_CONFIRM,,}" in
-
-              y|yes)
-
-                ###################################################################
-                # CHECK GIT
-                ###################################################################
-
-                if ! command -v git >/dev/null 2>&1; then
-
-                  printf "${STY_YELLOW}[INFO] Git is not installed. Installing Git...${STY_RST}\n\n"
-
-                  if ! pacman -S --needed --noconfirm git; then
-                    printf "${STY_RED}[ERROR] Failed to install Git.${STY_RST}\n\n"
-                    continue
-                  fi
-
-                fi
-
-                ###################################################################
-                # CLONE REPOSITORY
-                ###################################################################
-
-                BLACKARCH_SOURCE_DIR="${REPO_ROOT}/blackarch-installer"
-                BLACKARCH_INSTALL_DIR="/usr/share/blackarch-installer"
-                BLACKARCH_INSTALL_BIN="/usr/bin/blackarch-install"
-
-                if [[ ! -d "${BLACKARCH_SOURCE_DIR}/.git" ]]; then
-
-                  if [[ -e "${BLACKARCH_SOURCE_DIR}" ]]; then
-                    printf "${STY_RED}[ERROR] Destination exists but is not a Git repository:${STY_RST}\n"
-                    printf "  %s\n\n" "${BLACKARCH_SOURCE_DIR}"
-                    continue
-                  fi
-
-                  printf "${STY_YELLOW}[INFO] Cloning BlackArch installer from GitHub...${STY_RST}\n\n"
-
-                  if ! git clone \
-                    https://github.com/BlackArch/blackarch-installer.git \
-                    "${BLACKARCH_SOURCE_DIR}"; then
-                    printf "${STY_RED}[ERROR] Failed to clone BlackArch installer.${STY_RST}\n\n"
-                    continue
-                  fi
-
-                else
-
-                  printf "${STY_GREEN}[INFO] Existing BlackArch Git repository found.${STY_RST}\n"
-
-                fi
-
-                ###################################################################
-                # VERIFY SOURCE
-                ###################################################################
-
-                if [[ ! -f "${BLACKARCH_SOURCE_DIR}/blackarch-install" ]]; then
-                  printf "${STY_RED}[ERROR] blackarch-install script not found in cloned repository.${STY_RST}\n"
-                  printf "Expected: %s\n\n" "${BLACKARCH_SOURCE_DIR}/blackarch-install"
-                  continue
-                fi
-
-                ###################################################################
-                # INSTALL FILES
-                ###################################################################
-
-                printf "${STY_YELLOW}[INFO] Installing BlackArch installer files...${STY_RST}\n\n"
-
-                if ! install -d "${BLACKARCH_INSTALL_DIR}"; then
-                  printf "${STY_RED}[ERROR] Could not create installation directory.${STY_RST}\n\n"
-                  continue
-                fi
-
-                if ! cp -a "${BLACKARCH_SOURCE_DIR}/." "${BLACKARCH_INSTALL_DIR}/"; then
-                  printf "${STY_RED}[ERROR] Failed to copy installer files.${STY_RST}\n\n"
-                  continue
-                fi
-
-                if ! chmod +x "${BLACKARCH_INSTALL_DIR}/blackarch-install"; then
-                  printf "${STY_RED}[ERROR] Failed to make installer executable.${STY_RST}\n\n"
-                  continue
-                fi
-
-                if ! ln -sf \
-                  "${BLACKARCH_INSTALL_DIR}/blackarch-install" \
-                  "${BLACKARCH_INSTALL_BIN}"; then
-                  printf "${STY_RED}[ERROR] Failed to create installer symlink.${STY_RST}\n\n"
-                  continue
-                fi
-
-                printf "${STY_GREEN}[ OK ] BlackArch installer installed from GitHub.${STY_RST}\n\n"
-
-                ;;
-
-              ""|n|no)
-
-                printf "${STY_YELLOW}[INFO] GitHub installation cancelled.${STY_RST}\n\n"
-                continue
-                ;;
-
-              *)
-
-                printf "${STY_RED}Please enter y or n.${STY_RST}\n\n"
-                continue
-                ;;
 
             esac
 
