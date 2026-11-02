@@ -40,7 +40,7 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [Die Firewall sofort einschalten und dauerhaft aktivieren](#die-firewall-sofort-einschalten-und-dauerhaft-aktivieren)
     - [UFW später verwalten](#ufw-später-verwalten)
     - [Die end-4/jk-arch Hyperland Konfiguration herunterladen und die Installation starten](#die-end-4jk-arch-hyperland-konfiguration-herunterladen-und-die-installation-starten)
-    - [✨ Den Hardened Kernel installieren](#-den-hardened-kernel-installieren)
+    - [✨ Zusätzlichen Kernel installieren](#-zusätzlichen-kernel-installieren)
     - [GNOME DE als Backup zu Hyprland](#gnome-de-als-backup-zu-hyprland)
     - [Den Quellcode von yay herunterladen und das Programm bauen und installieren](#den-quellcode-von-yay-herunterladen-und-das-programm-bauen-und-installieren)
     - [Kern-Werkzeuge und Entwickler-Tools installieren](#kern-werkzeuge-und-entwickler-tools-installieren)
@@ -50,12 +50,11 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
       - [Reverse Engineering](#reverse-engineering)
       - [Fuzzing \& Performance](#fuzzing--performance)
       - [GUI-Bibliotheken](#gui-bibliotheken)
+      - [NetworkManager \& Authentifizierung](#networkmanager--authentifizierung)
       - [Lua-Entwicklung](#lua-entwicklung)
-    - [Die Programmiersprache Lua in der Version 5.1 installieren](#die-programmiersprache-lua-in-der-version-51-installieren)
       - [✨ GDB-Konfiguration](#-gdb-konfiguration)
     - [Das Multilib-Repository in den Systemquellen aktivieren](#das-multilib-repository-in-den-systemquellen-aktivieren)
     - [Rust und Cargo installieren](#rust-und-cargo-installieren)
-    - [Plugin für Decompilation in radare2 (Terminal)](#plugin-für-decompilation-in-radare2-terminal)
     - [Go und Make über den Paketmanager installieren](#go-und-make-über-den-paketmanager-installieren)
       - [Weitere optionale Tools](#weitere-optionale-tools)
     - [✨ C/C++ Advanced Debugging installieren](#-cc-advanced-debugging-installieren)
@@ -82,9 +81,10 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Akku- und Hardware-Informationen auslesen](#-akku--und-hardware-informationen-auslesen)
     - [✨ Java-Laufzeitumgebung installieren](#-java-laufzeitumgebung-installieren)
     - [✨ Erweiterte Grammatik- und Stilprüfung mit LanguageTool](#-erweiterte-grammatik--und-stilprüfung-mit-languagetool)
-    - [✨ LazyVim und JetBrains Mono Nerd Font installieren](#-lazyvim-und-jetbrains-mono-nerd-font-installieren)
-      - [✨ LazyVim Starter-Konfiguration herunterladen](#-lazyvim-starter-konfiguration-herunterladen)
-      - [✨ JetBrains Mono Nerd Font installieren](#-jetbrains-mono-nerd-font-installieren)
+    - [NeoVim und Vim installieren](#neovim-und-vim-installieren)
+    - [Emacs installieren](#emacs-installieren)
+    - [LazyVim Starter-Konfiguration einrichten](#lazyvim-starter-konfiguration-einrichten)
+    - [JetBrains Mono Nerd Font installieren](#jetbrains-mono-nerd-font-installieren)
   - [Linux Power Tools](#linux-power-tools)
     - [Das System-Informationswerkzeug Fastfetch installieren](#das-system-informationswerkzeug-fastfetch-installieren)
     - [Den interaktiven Prozess-Viewer htop installieren](#den-interaktiven-prozess-viewer-htop-installieren)
@@ -118,13 +118,17 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Den datenschutzfokussierten LibreWolf Browser installieren](#-den-datenschutzfokussierten-librewolf-browser-installieren)
       - [LibreWolf-Theme Catppuccin installieren](#librewolf-theme-catppuccin-installieren)
     - [✨ Den datenschutzfokussierten Mullvad Browser installieren](#-den-datenschutzfokussierten-mullvad-browser-installieren)
-- [✨ Tor Browser installieren und einrichten](#-tor-browser-installieren-und-einrichten)
+    - [✨ Tor Browser installieren und einrichten](#-tor-browser-installieren-und-einrichten)
     - [✨ Google Chrome über den AUR-Helfer installieren](#-google-chrome-über-den-aur-helfer-installieren)
+    - [✨ Chromium installieren](#-chromium-installieren)
+    - [✨ Helium Browser installieren](#-helium-browser-installieren)
     - [✨ Die Firefox Developer Edition installieren](#-die-firefox-developer-edition-installieren)
     - [Das grafische Archivierungsprogramm Ark installieren](#das-grafische-archivierungsprogramm-ark-installieren)
     - [Den erweiterten KDE-Texteditor Kate installieren](#den-erweiterten-kde-texteditor-kate-installieren)
     - [Der grafische Bildbetrachter Gwenview installieren](#der-grafische-bildbetrachter-gwenview-installieren)
     - [Der universelle Dokumentenbetrachter Okular installieren](#der-universelle-dokumentenbetrachter-okular-installieren)
+    - [✨ PDF Arranger installieren](#-pdf-arranger-installieren)
+    - [✨ Tesseract OCR installieren](#-tesseract-ocr-installieren)
     - [Den universellen Medienplayer VLC installieren](#den-universellen-medienplayer-vlc-installieren)
     - [Den GNOME Video- und Audio-Player installieren](#den-gnome-video--und-audio-player-installieren)
     - [✨ Den Internetradio-Player Shortwave installieren](#-den-internetradio-player-shortwave-installieren)
@@ -232,7 +236,6 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Den ultraschnellen Download-Manager aria2 installieren](#-den-ultraschnellen-download-manager-aria2-installieren)
     - [✨ Das strukturelle Diff-Werkzeug Difftastic installieren](#-das-strukturelle-diff-werkzeug-difftastic-installieren)
     - [✨ Das offizielle GitHub-Kommandozeilenwerkzeug (GitHub CLI) installieren](#-das-offizielle-github-kommandozeilenwerkzeug-github-cli-installieren)
-    - [Das Software-Reverse-Engineering-Framework Ghidra über yay installieren](#das-software-reverse-engineering-framework-ghidra-über-yay-installieren)
     - [✨ Das universitäre WLAN (eduroam) fehlerfrei einrichten](#-das-universitäre-wlan-eduroam-fehlerfrei-einrichten)
     - [✨ Die offizielle Open-Source-Alternative für Universitäts-VPNs installieren](#-die-offizielle-open-source-alternative-für-universitäts-vpns-installieren)
     - [Nützliche Fish plugins](#nützliche-fish-plugins)
@@ -249,8 +252,20 @@ Der Inhalt orientiert sich vollständig an den Funktionen und Installationsschri
     - [✨ Die moderne Schachdatenbank- und Analyse-Software En Croissant installieren](#-die-moderne-schachdatenbank--und-analyse-software-en-croissant-installieren)
     - [✨ Den Boot-Bildschirm (Plymouth) anpassen und das System-Abbild neu bauen](#-den-boot-bildschirm-plymouth-anpassen-und-das-system-abbild-neu-bauen)
     - [✨ SDDM installieren](#-sddm-installieren)
-  - [Nach der Neovim-Konfiguration](#nach-der-neovim-konfiguration)
+  - [Nach der NeoVim-Konfiguration](#nach-der-neovim-konfiguration)
     - [Code über den LSP-Server im Editor formatieren](#code-über-den-lsp-server-im-editor-formatieren)
+- [BlackArch installieren](#blackarch-installieren-1)
+  - [BlackArch Tools installieren](#blackarch-tools-installieren)
+      - [Einzelne Toolgruppen installieren](#einzelne-toolgruppen-installieren)
+  - [Das Software-Reverse-Engineering-Framework Ghidra installieren](#das-software-reverse-engineering-framework-ghidra-installieren)
+  - [Plugin für Decompilation in radare2 installieren](#plugin-für-decompilation-in-radare2-installieren)
+  - [Cutter und Ghidra installieren](#cutter-und-ghidra-installieren)
+  - [✨ BlackArch-Menüs installieren](#-blackarch-menüs-installieren)
+  - [✨ Wordlistctl installieren](#-wordlistctl-installieren)
+  - [✨ BlackArch-Design installieren](#-blackarch-design-installieren)
+  - [✨ procps-ng installieren](#-procps-ng-installieren)
+  - [✨ REA Agents installieren und einrichten](#-rea-agents-installieren-und-einrichten)
+  - [✨ JKs Sicherheits- und Pentesting-Tools installieren](#-jks-sicherheits--und-pentesting-tools-installieren)
 - [✨ UFW ist langsam](#-ufw-ist-langsam)
 - [✨ Langsames Internet über WLAN beheben](#-langsames-internet-über-wlan-beheben)
 - [✨ Firefox ist langsam](#-firefox-ist-langsam)
@@ -366,7 +381,7 @@ sudo pacman -Syu
 > Wir brauchen `git`, um später die JK Gray Config zu klonen. `base-devel` enthält außerdem die wichtigsten Werkzeuge, die wir für das Bauen und Installieren einiger Pakete benötigen.
 
 ```bash
-sudo pacman -S --needed git base-devel
+sudo pacman -S git base-devel
 ```
 
 ### Die Firewall sofort einschalten und dauerhaft aktivieren
@@ -509,38 +524,66 @@ Wenn alles für dich passt, kannst du die Installation starten:
 
 > **Wichtig**: Lies dir die Ausgaben des Installers durch und bestätige nur Schritte, bei denen du weißt, was sie machen. Ein Installationsscript solltest du grundsätzlich nicht blind mit sudo oder Root-Rechten ausführen.
 
-### ✨ Den Hardened Kernel installieren
+### ✨ Zusätzlichen Kernel installieren
 
-> Ein **Hardened Kernel** ist ein gehärteter Linux-Kernel, der zusätzliche Sicherheitsmaßnahmen gegenüber einem normalen Kernel bietet. Die konkrete Kernel-Variante hängt von der verwendeten Distribution ab:
->
-> * **Arch Linux:** `linux-hardened`
-> * **CachyOS:** `linux-cachyos-hardened`
+> Unter Linux gibt es verschiedene Kernel-Varianten, die jeweils unterschiedliche Schwerpunkte setzen. Ein zusätzlicher Kernel kann parallel zum vorhandenen Standard-Kernel installiert werden, sodass du beim Systemstart zwischen den verfügbaren Kernel-Versionen wählen kannst.
 
 <details>
-<summary>✨ Arch Linux</summary>
+<summary>✨ Arch LTS-Kernel</summary>
 
-Unter Arch Linux wird der Hardened Kernel zusammen mit den zugehörigen Headern installiert:
+> Der LTS-Kernel (Long Term Support) erhält langfristige Wartung und Sicherheitsupdates. Er eignet sich besonders für Systeme, bei denen Stabilität und Zuverlässigkeit im Vordergrund stehen.
+
+```bash
+sudo pacman -S linux-lts linux-lts-headers
+```
+
+</details>
+
+<details>
+<summary>✨ CachyOS LTS-Kernel</summary>
+
+> Der CachyOS LTS-Kernel basiert auf einer langfristig unterstützten Kernel-Version und wird speziell für CachyOS bereitgestellt.
+
+```bash
+sudo pacman -S linux-cachyos-lts
+```
+
+</details>
+
+<details>
+<summary>✨ Zen-Kernel</summary>
+
+> Der Zen-Kernel enthält verschiedene Optimierungen mit Fokus auf Desktop-Performance und geringe Latenzen. Er ist besonders für interaktive Desktop-Systeme interessant.
+
+```bash
+sudo pacman -S linux-zen linux-zen-headers
+```
+
+</details>
+
+<details>
+<summary>✨ Arch Hardened-Kernel</summary>
+
+> Der Hardened-Kernel enthält zusätzliche Sicherheitsmaßnahmen und gehärtete Kernel-Einstellungen, um die Angriffsfläche des Systems zu reduzieren.
 
 ```bash
 sudo pacman -S linux-hardened linux-hardened-headers
 ```
 
-Nach der Installation steht der `linux-hardened` Kernel beim nächsten Neustart über den Bootloader zur Auswahl.
-
 </details>
 
 <details>
-<summary>✨ CachyOS</summary>
+<summary>✨ CachyOS Hardened-Kernel</summary>
 
-Unter CachyOS wird der Hardened Kernel direkt über `pacman` installiert:
+> Der CachyOS Hardened-Kernel kombiniert zusätzliche Sicherheitsmaßnahmen mit der CachyOS-spezifischen Kernel-Konfiguration.
 
 ```bash
 sudo pacman -S linux-cachyos-hardened
 ```
 
-Nach der Installation steht der `linux-cachyos-hardened` Kernel beim nächsten Neustart über den Bootloader zur Auswahl.
-
 </details>
+
+> **Hinweis:** Die Kernel-Header werden für die Kompilierung externer Kernel-Module benötigt, beispielsweise für DKMS-Treiber. Die CachyOS-Varianten sind ausschließlich über die entsprechenden CachyOS-Repositories verfügbar.
 
 ### GNOME DE als Backup zu Hyprland
 
@@ -556,7 +599,7 @@ Nach der Installation steht der `linux-cachyos-hardened` Kernel beim nächsten N
 Für die normale GNOME-Installation:
 
 ```bash
-sudo pacman -S --needed gnome
+sudo pacman -S gnome
 ```
 
 Dadurch wird die GNOME-Desktopumgebung mit den benötigten Standardkomponenten installiert.
@@ -569,7 +612,7 @@ Dadurch wird die GNOME-Desktopumgebung mit den benötigten Standardkomponenten i
 Wer eine umfangreichere GNOME-Installation mit zusätzlichen GNOME-Anwendungen und Komponenten möchte, kann zusätzlich `gnome-extra` installieren:
 
 ```bash
-sudo pacman -S --needed gnome gnome-extra
+sudo pacman -S gnome gnome-extra
 ```
 
 > `gnome-extra` enthält zusätzliche GNOME-Anwendungen und Komponenten, die nicht Bestandteil der grundlegenden `gnome`-Paketgruppe sind.
@@ -664,19 +707,19 @@ makepkg -si
 
 Jetzt wird's spaßig. 😎
 
-Jetzt installieren wir die wichtigsten Werkzeuge für Entwicklung, Debugging, Reverse Engineering, Fuzzing und Security. Das ist der Teil, bei dem wir aus einer normalen Arch-Installation langsam eine richtige Power-User-Kiste machen.
+Jetzt installieren wir die wichtigsten Werkzeuge für Entwicklung, Debugging, Reverse Engineering, Fuzzing, Security und Linux-GUI-Entwicklung. Das ist der Teil, bei dem wir aus einer normalen Arch-Installation langsam eine richtige Power-User-Kiste machen.
 
 #### Basis-Tools
 
-> `curl` und `wget` laden Dateien aus dem Internet, `unzip` entpackt ZIP-Archive, `git-delta` macht Git-Diffs deutlich angenehmer lesbar, `fzf` bietet eine schnelle interaktive Suche im Terminal, `cmark` verarbeitet Markdown, `shellcheck` findet Fehler in Shell-Scripts, `man-db` verwaltet Manpages, `man-pages` stellt Linux-Dokumentation bereit, `texinfo` liefert GNU-Info-Dokumentation und `which` findet ausführbare Programme im `PATH`.
+> `curl` und `wget` laden Dateien aus dem Internet, `unzip` entpackt ZIP-Archive und `git-delta` sorgt für deutlich übersichtlichere Git-Diffs. `fzf` bietet eine schnelle interaktive Suche im Terminal, während `atuin` deine Shell-Befehlshistorie erweitert und durchsuchbar macht. `cmark` verarbeitet Markdown, `shellcheck` findet Fehler in Shell-Scripts, `man-db` verwaltet Manpages, `man-pages` stellt Linux-Dokumentation bereit, `texinfo` liefert GNU-Info-Dokumentation und `which` findet ausführbare Programme im `PATH`.
 
 ```bash
-sudo pacman -S curl wget unzip git-delta fzf cmark shellcheck man-db man-pages texinfo which
+sudo pacman -S curl wget unzip git-delta fzf atuin cmark shellcheck man-db man-pages texinfo which
 ```
 
 #### Compiler & Toolchain
 
-> `gcc`, `clang` und `llvm` bilden die Compiler-Toolchain, `lldb` und `clang-tools-extra` liefern zusätzliche Entwicklungs- und Debugging-Werkzeuge, `cmake` und `ninja` kümmern sich um Build-Systeme, `valgrind` analysiert Speicherfehler und `flawfinder`, `splint` und `bear` helfen bei Codeanalyse und der Entwicklung größerer C/C++-Projekte. `direnv` verwaltet automatisch Umgebungsvariablen für unterschiedliche Projektverzeichnisse.
+> `gcc`, `clang` und `llvm` bilden die Compiler-Toolchain für C/C++ und weitere Programmiersprachen. `lib32-gcc-libs` stellt zusätzlich 32-Bit-Laufzeitbibliotheken für GCC bereit. `lldb` und `clang-tools-extra` liefern zusätzliche Debugging- und Entwicklungswerkzeuge, darunter hilfreiche Funktionen zur Codeanalyse. `cmake` und `ninja` kümmern sich um Build-Systeme, während `valgrind` Speicherfehler und problematische Speicherzugriffe analysiert. `flawfinder` und `splint` unterstützen die statische Sicherheits- und Codeanalyse. `bear` erstellt Compilation-Datenbanken für C/C++-Projekte, die beispielsweise von Code-Editoren und Analysewerkzeugen verwendet werden. `direnv` verwaltet automatisch Umgebungsvariablen für unterschiedliche Projektverzeichnisse.
 
 ```bash
 sudo pacman -S gcc lib32-gcc-libs llvm clang lldb cmake ninja valgrind clang-tools-extra flawfinder splint bear direnv
@@ -684,7 +727,7 @@ sudo pacman -S gcc lib32-gcc-libs llvm clang lldb cmake ninja valgrind clang-too
 
 #### Debugging
 
-> `gdb` ist der klassische GNU-Debugger, `gef` und `pwndbg` erweitern GDB speziell für modernes Debugging und Binary Exploitation, während `strace` und `ltrace` zeigen, welche System- bzw. Library-Aufrufe ein Programm ausführt.
+> `gdb` ist der klassische GNU-Debugger und ermöglicht es, Programme Schritt für Schritt auszuführen, Variablen zu untersuchen und Fehler zu analysieren. `gef` und `pwndbg` erweitern GDB um zusätzliche Funktionen für modernes Debugging, Exploit-Entwicklung und Binary Exploitation. `strace` und `ltrace` zeigen, welche System- bzw. Library-Aufrufe ein Programm ausführt, und helfen dadurch bei der Analyse seines Laufzeitverhaltens.
 
 ```bash
 sudo pacman -S gdb gef pwndbg strace ltrace
@@ -692,7 +735,7 @@ sudo pacman -S gdb gef pwndbg strace ltrace
 
 #### Reverse Engineering
 
-> `rizin` dient zur Analyse und zum Reverse Engineering von Binaries, `binwalk` untersucht Firmware und Binärdateien, `yara` erkennt Dateien anhand definierter Regeln, `elfutils` liefert Werkzeuge für ELF-Dateien und `checksec` zeigt wichtige Security-Eigenschaften von Binaries.
+> `rizin` dient zur Analyse und zum Reverse Engineering von Binaries. `binwalk` untersucht Firmware und Binärdateien auf enthaltene Daten und Dateisysteme. `yara` erkennt Dateien anhand selbst definierter Regeln und eignet sich beispielsweise zur Malware-Analyse. `elfutils` liefert Werkzeuge zur Untersuchung und Verarbeitung von ELF-Dateien, während `checksec` wichtige Security-Eigenschaften von ausführbaren Dateien und Bibliotheken anzeigt.
 
 ```bash
 sudo pacman -S rizin binwalk yara elfutils checksec
@@ -700,7 +743,7 @@ sudo pacman -S rizin binwalk yara elfutils checksec
 
 #### Fuzzing & Performance
 
-> `afl++` ist ein leistungsfähiger Fuzzer zum automatisierten Finden von Bugs, `perf` analysiert die Performance von Programmen und dem Linux-Kernel und `cppcheck` sucht nach möglichen Fehlern und Problemen in C/C++-Code.
+> `afl++` ist ein leistungsfähiger Fuzzer, der Programme automatisiert mit unterschiedlichen Eingaben testet, um Abstürze, Fehler und potenzielle Sicherheitslücken aufzuspüren. `perf` analysiert die Performance von Programmen und dem Linux-Kernel und hilft dabei, Performance-Engpässe zu identifizieren. `cppcheck` ergänzt das Ganze durch eine statische Analyse von C/C++-Code und sucht nach möglichen Fehlern und problematischen Konstruktionen.
 
 ```bash
 sudo pacman -S afl++ perf cppcheck
@@ -708,10 +751,18 @@ sudo pacman -S afl++ perf cppcheck
 
 #### GUI-Bibliotheken
 
-> `gtk4` und `libadwaita` bilden die Grundlage für moderne Linux-GUIs, `librsvg` rendert SVG-Grafiken und `adwaita-icon-theme` stellt passende Icons für GTK-Anwendungen bereit.
+> `gtk4` und `libadwaita` bilden die Grundlage für moderne Linux-GUIs. GTK4 stellt das GUI-Toolkit bereit, während libadwaita zusätzliche Komponenten und Gestaltungskonventionen für moderne GNOME-Anwendungen liefert. `librsvg` rendert SVG-Grafiken und `adwaita-icon-theme` stellt passende Icons für GTK-Anwendungen bereit.
 
 ```bash
 sudo pacman -S gtk4 libadwaita librsvg adwaita-icon-theme
+```
+
+#### NetworkManager & Authentifizierung
+
+> `network-manager-applet` stellt ein grafisches Applet zur Verwaltung von Netzwerkverbindungen über NetworkManager bereit. Damit lassen sich beispielsweise WLAN-Verbindungen bequem über eine grafische Oberfläche verwalten. `polkit` übernimmt die privilegienbasierte Authentifizierung und ermöglicht es grafischen Anwendungen, bei Bedarf Berechtigungen für administrative Aktionen anzufordern.
+
+```bash
+sudo pacman -S network-manager-applet polkit
 ```
 
 #### Lua-Entwicklung
@@ -720,14 +771,6 @@ sudo pacman -S gtk4 libadwaita librsvg adwaita-icon-theme
 
 ```bash
 sudo pacman -S luarocks
-```
-
-### Die Programmiersprache Lua in der Version 5.1 installieren
-
-> Lua 5.1 wird von einigen älteren Lua-Modulen und Tools benötigt und kann parallel zu neueren Lua-Versionen installiert werden. Für bestimmte Neovim-Plugins oder Entwicklungsumgebungen ist diese Version weiterhin relevant.
-
-```bash
-sudo pacman -S --needed lua51
 ```
 
 #### ✨ GDB-Konfiguration
@@ -874,42 +917,6 @@ cargo install --locked cargo-watch
 cargo install --locked cargo-bloat
 cargo install --locked cargo-binutils
 ```
-
-</details>
-
-### Plugin für Decompilation in radare2 (Terminal)
-
-> `radare2` ist ein mächtiges Framework zur Analyse und zum Reverse Engineering von Binaries. `r2ghidra` bringt die Ghidra-Decompiler-Engine direkt in radare2 und ermöglicht es dir, kompilierten Code wieder in eine besser lesbare Darstellung zu dekompilieren.
-
-Installation:
-
-```bash
-sudo pacman -Syu radare2 r2ghidra
-```
-
-✨ Falls du zusätzlich mit `r2pipe` arbeiten möchtest, kannst du die Python-Bindings installieren:
-
-<details>
-<summary>Installieren</summary>
-
-```bash
-sudo pacman -S python-r2pipe
-```
-
-</details>
-
-<details>
-<summary>✨ Alternative: r2pm verwenden</summary>
-
-Falls du `r2ghidra` nicht über dein Paketmanagement installieren möchtest, kannst du das Plugin alternativ über den radare2 Package Manager (`r2pm`) installieren:
-
-```bash
-r2pm -U
-r2pm -init
-r2pm -i r2ghidra
-```
-
-> **Hinweis:** Verwende am besten **eine** der beiden Methoden und installiere `r2ghidra` nicht doppelt.
 
 </details>
 
@@ -1432,72 +1439,109 @@ sudo pacman -S languagetool
 
 </details>
 
-### ✨ LazyVim und JetBrains Mono Nerd Font installieren
+### NeoVim und Vim installieren
 
-> [!IMPORTANT]
-> Hinweis: Die unten aufgeführten manuellen Schritte zur Einrichtung von LazyVim und der JetBrains Mono Nerd Font sind standardmäßig nicht mehr notwendig. Das neue Installationsskript von doshyperland bringt bereits die vollautomatisierte Funktion install_neovim_lazyvim_nerdfont mit, die alle Pakete, Abhängigkeiten, Konfigurationen und Schriftarten fehlerfrei und in der korrekten Reihenfolge einrichtet.
-
-> NeoVim wird hier zur vollständigen Entwicklungsumgebung ausgebaut. Wir installieren NeoVim, richten LazyVim als moderne Plugin-Basis ein und installieren eine Nerd Font, damit Icons, Symbole und UI-Elemente in NeoVim korrekt dargestellt werden.
+> `neovim` ist der moderne Vim-Nachfolger und bildet die Grundlage unserer NeoVim-Entwicklungsumgebung. Er bietet eine moderne Plugin-Architektur, umfangreiche Anpassungsmöglichkeiten und eine leistungsfähige Integration von Entwicklungswerkzeugen.
 >
-> `neovim` ist der moderne Vim-Nachfolger und die Grundlage für die JK-Gray-Entwicklungsumgebung.
->
-> `vim` wird zusätzlich installiert, da einige Tools und Scripts weiterhin auf die klassische Vim-Kompatibilität zurückgreifen.
+> `vim` wird zusätzlich installiert, da einige Tools und Skripte weiterhin auf die klassische Vim-Kompatibilität zurückgreifen.
 
 ```bash
 sudo pacman -S neovim vim
 ```
 
-#### ✨ LazyVim Starter-Konfiguration herunterladen
+### Emacs installieren
 
-> Wir legen die Grundlage für unsere NeoVim-Umgebung. Dafür laden wir zuerst die **LazyVim Starter-Konfiguration** herunter. LazyVim ist keine eigene Version von NeoVim, sondern eine moderne vorkonfigurierte Plugin- und Struktur-Basis für NeoVim.
+> `emacs` ist ein extrem erweiterbarer Texteditor, der weit über die Funktionen eines klassischen Editors hinausgeht. Durch seine umfangreiche Plugin-Architektur und Konfigurationsmöglichkeiten kann er zu einer vollständigen Entwicklungsumgebung ausgebaut werden.
+
+<details>
+<summary>✨ Emacs mit Doom Emacs installieren</summary>
+
+> **Doom Emacs** ist eine moderne, modulare und vorkonfigurierte Emacs-Konfiguration. Sie erweitert Emacs um zahlreiche Entwicklungsfunktionen, sinnvolle Standardeinstellungen und eine strukturierte Plugin-Verwaltung.
 >
-> Es kümmert sich unter anderem um Plugin-Verwaltung, eine saubere Ordnerstruktur und viele moderne Entwicklungsfunktionen. Die JK Gray NeoVim-Konfiguration baut auf dieser Grundlage auf und erweitert sie mit eigenen Plugins, Themes, LSP-Setups und zusätzlichen Anpassungen.
+> Zunächst installieren wir Emacs:
+
+```bash
+sudo pacman -S emacs
+```
+
+Anschließend laden wir das offizielle Doom-Emacs-Core-Repository herunter:
+
+```bash
+git clone --depth 1 https://github.com/doomemacs/core ~/.config/emacs
+```
+
+Danach starten wir die Installation und Konfiguration von Doom Emacs:
+
+```bash
+~/.config/emacs/bin/doom install
+```
+
+> Dadurch wird Doom Emacs eingerichtet und die benötigte Konfiguration vorbereitet.
+
+</details>
+
+<details>
+<summary>✨ Emacs ohne Doom Emacs installieren</summary>
+
+> Falls du lieber mit einer eigenen Emacs-Konfiguration arbeiten möchtest, kannst du Emacs auch ohne zusätzliche Konfigurationsframeworks installieren.
+>
+> Diese Variante installiert ausschließlich den klassischen Emacs-Texteditor über Pacman:
+
+```bash
+sudo pacman -S emacs
+```
+
+> Anschließend kannst du Emacs vollständig nach deinen eigenen Vorstellungen konfigurieren und bei Bedarf individuelle Erweiterungen installieren.
+
+</details>
+
+### LazyVim Starter-Konfiguration einrichten
+
+> **LazyVim** ist eine moderne, vorkonfigurierte Plugin- und Konfigurationsbasis für NeoVim. Sie stellt eine strukturierte Plugin-Verwaltung, sinnvolle Standardeinstellungen und zahlreiche moderne Entwicklungsfunktionen bereit.
+>
+> Die JK-Gray-NeoVim-Konfiguration baut auf diesem Starter auf und erweitert ihn um eigene Plugins, Themes, LSP-Konfigurationen und weitere individuelle Anpassungen.
+
+Zunächst laden wir die offizielle LazyVim Starter-Konfiguration herunter:
 
 ```bash
 git clone https://github.com/LazyVim/starter ~/.config/nvim
 ```
 
-Danach entfernen wir die Git-Historie des Starter-Repositories:
+Anschließend entfernen wir die Git-Historie des ursprünglichen Starter-Repositories:
 
 ```bash
-rm -rf ~/.config/nvim/.git 
+rm -rf ~/.config/nvim/.git
 ```
 
-> Dadurch bleibt nur deine eigene Konfiguration erhalten und sie ist nicht mehr direkt mit dem LazyVim-Starter-Repository verbunden.
+> Dadurch wird die heruntergeladene Konfiguration von ihrem ursprünglichen Repository getrennt. Die Dateien bleiben erhalten und können unabhängig als eigene NeoVim-Konfiguration weiterentwickelt werden.
 
-#### ✨ JetBrains Mono Nerd Font installieren
+### JetBrains Mono Nerd Font installieren
 
-> Viele NeoVim-Themes und Plugins verwenden spezielle Symbole und Icons. Ohne eine Nerd Font werden diese oft falsch oder als leere Zeichen dargestellt.
+> Die **JetBrains Mono Nerd Font** ist eine erweiterte Variante der JetBrains-Mono-Schriftart. Sie enthält zusätzliche Icons, Symbole und Glyphen, die von vielen NeoVim-Themes, Plugins und Terminal-Anwendungen verwendet werden.
+>
+> Ohne eine geeignete Nerd Font können diese Symbole falsch oder als leere Zeichen dargestellt werden.
 
-Font-Verzeichnis erstellen:
+Zunächst erstellen wir das lokale Font-Verzeichnis:
 
 ```bash
 mkdir -p ~/.local/share/fonts
 cd ~/.local/share/fonts
 ```
 
-JetBrains Mono Nerd Font herunterladen und entpacken:
+Anschließend laden wir die aktuelle JetBrains Mono Nerd Font herunter und entpacken sie:
 
 ```bash
-# JetBrains Mono Nerd Font herunterladen und entpacken
 wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
 unzip JetBrainsMono.zip -d JetBrainsMono
 ```
 
-Font-Cache aktualisieren:
+Damit das System die neue Schriftart erkennt, aktualisieren wir abschließend den Font-Cache:
 
 ```bash
-# Font-Cache aktualisieren
 fc-cache -fv
 ```
 
-Jetzt kannst du NeoVim starten:
-
-```bash
-nvim
-```
-
-> Beim ersten Start lädt LazyVim automatisch die benötigten Plugins herunter und richtet die Entwicklungsumgebung ein.
+> Nach der Installation kannst du die **JetBrainsMono Nerd Font** in deinem Terminal-Emulator als Schriftart auswählen. Dadurch werden die zusätzlichen Icons und Symbole in NeoVim und seinen Plugins korrekt dargestellt.
 
 ## Linux Power Tools
 
@@ -1818,7 +1862,7 @@ printf '%s\n' '[Desktop Entry]' 'Name=GitKraken' 'Comment=Git Client' 'Exec=/opt
 > Besonders unter Wayland-Compositors wie Hyprland bietet Vesktop häufig eine bessere Erfahrung als der originale Discord-Client.
 
 ```bash
-sudo pacman -S vesktop
+sudo pacman -S veskto-bin
 ```
 
 <details>
@@ -1928,7 +1972,7 @@ sudo pacman -S mullvad-browser-bin
 
 </details>
 
-# ✨ Tor Browser installieren und einrichten
+### ✨ Tor Browser installieren und einrichten
 
 > Der **Tor Browser** ist ein speziell konfigurierter Browser, der den Datenverkehr über das Tor-Netzwerk leitet und auf Datenschutz sowie Anonymität ausgelegt ist.
 >
@@ -1966,6 +2010,36 @@ torbrowser-launcher
 ```bash
 yay -S google-chrome
 # flatpak install --noninteractive flathub com.google.Chrome
+```
+
+</details>
+
+### ✨ Chromium installieren
+
+> **Chromium** ist ein Open-Source-Webbrowser und bildet die technische Grundlage für zahlreiche Browser, darunter Google Chrome, Microsoft Edge und weitere Chromium-basierte Browser. Er bietet eine schnelle Browser-Erfahrung und unterstützt zahlreiche Erweiterungen.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S chromium
+# yay -Schromium
+# flatpak install --noninteractive flathub org.chromium.Chromium
+```
+
+</details>
+
+### ✨ Helium Browser installieren
+
+> **Helium** ist ein datenschutzorientierter Webbrowser, der auf Chromium basiert. Er legt besonderen Wert auf Privatsphäre, entfernt zahlreiche Tracking- und Google-Komponenten und bietet eine schlanke Browser-Erfahrung.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S helium-browser
+# yay -S helium-browser-bin
+# flatpak install --noninteractive flathub net.imput.helium
 ```
 
 </details>
@@ -2014,6 +2088,32 @@ sudo pacman -S gwenview
 ```bash
 sudo pacman -S okular
 ```
+
+### ✨ PDF Arranger installieren
+
+> **PDF Arranger** ist ein einfaches grafisches Werkzeug zur Bearbeitung von PDF-Dateien. Damit lassen sich PDF-Seiten zusammenfügen, aufteilen, sortieren, drehen, löschen und neu anordnen.
+
+<details>
+<summary>✨ Installieren</summary>
+
+```bash
+sudo pacman -S pdfarranger
+```
+
+</details>
+
+### ✨ Tesseract OCR installieren
+
+> **Tesseract OCR** ist eine Texterkennungssoftware (OCR), mit der sich Text aus Bildern und gescannten Dokumenten auslesen lässt.
+
+<details>
+<summary>✨ Installieren</summary>
+
+```bash
+sudo pacman -S tesseract
+```
+
+</details>
 
 ### Den universellen Medienplayer VLC installieren
 
@@ -3895,15 +3995,6 @@ sudo pacman -S github-cli
 
 </details>
 
-### Das Software-Reverse-Engineering-Framework Ghidra über yay installieren
-
-> **Ghidra** ist ein Software-Reverse-Engineering-Framework, das von der National Security Agency (NSA) entwickelt wurde. Es bietet eine Vielzahl von Tools zur Analyse von Binärdateien und zur Durchführung von Reverse Engineering.
-
-```bash
-sudo pacman -S ghidra
-# yay -S ghidra
-```
-
 ### ✨ Das universitäre WLAN (eduroam) fehlerfrei einrichten
 
 > **eduroam** ist ein weltweites WLAN-Netzwerk für Studierende, Forschende und Mitarbeitende von Bildungseinrichtungen. Es ermöglicht den sicheren Zugang zu WLAN-Diensten an teilnehmenden Institutionen.
@@ -3912,7 +4003,7 @@ sudo pacman -S ghidra
 <summary>Installieren</summary>
 
 ```bash
-sudo pacman -S --needed networkmanager python-dbus ca-certificates
+sudo pacman -S networkmanager python-dbus ca-certificates
 yay -S geteduroam-gui
 ```
 
@@ -4194,14 +4285,14 @@ sudo systemctl enable sddm
 
 </details>
 
-## Nach der Neovim-Konfiguration
+## Nach der NeoVim-Konfiguration
 
-> Nach der Einrichtung von **Neovim** können je nach verwendeten Sprachservern und Plugins noch einige Anpassungen oder Bereinigungen notwendig sein.
+> Nach der Einrichtung von **NeoVim** können je nach verwendeten Sprachservern und Plugins noch einige Anpassungen oder Bereinigungen notwendig sein.
 
 <details>
 <summary>C/C++: Alte Clang-Format-Dateien entfernen</summary>
 
-> Falls Neovim beziehungsweise ein Plugin automatisch `.clang-format`-Dateien im Cache angelegt hat, können diese entfernt werden.
+> Falls NeoVim beziehungsweise ein Plugin automatisch `.clang-format`-Dateien im Cache angelegt hat, können diese entfernt werden.
 
 ```bash
 find ~ -name ".clang-format" -path "*/.cache/nvim/*" -delete
@@ -4210,7 +4301,7 @@ find ~ -name ".clang-format" -path "*/.cache/nvim/*" -delete
 </details>
 
 <details>
-<summary>Java: Google Java Format für Neovim bereitstellen</summary>
+<summary>Java: Google Java Format für NeoVim bereitstellen</summary>
 
 > Für die Java-Formatierung kann die offizielle **Google Java Style**-Konfiguration verwendet werden.
 >
@@ -4266,7 +4357,7 @@ git checkout -- app/yarn.lock
 
 ### Code über den LSP-Server im Editor formatieren
 
-> **Neovim** kann den aktuell geöffneten Quellcode direkt über den konfigurierten **LSP-Server (Language Server Protocol)** formatieren.
+> **NeoVim** kann den aktuell geöffneten Quellcode direkt über den konfigurierten **LSP-Server (Language Server Protocol)** formatieren.
 >
 > Dadurch wird der Code automatisch entsprechend der vom jeweiligen Sprachserver bereitgestellten Formatierungsregeln formatiert.
 
@@ -4290,6 +4381,350 @@ Zeile 480:
 // property list<string> excludedSites: ["quora.com", "facebook.com"]
 property list<string> excludedSites: []
 ``` -->
+
+# BlackArch installieren
+
+> **BlackArch** ist eine auf Arch Linux basierende Linux-Distribution für Penetration Testing, IT-Sicherheit und digitale Forensik. Sie stellt eine umfangreiche Sammlung an Sicherheitswerkzeugen bereit, die unter anderem für Netzwerk-Analysen, Schwachstellenprüfungen, Exploit-Entwicklung und Sicherheits-Audits verwendet werden können.
+>
+> Wir integrieren das offizielle BlackArch-Repository in unser bestehendes Arch-System. Dadurch können die BlackArch-Werkzeuge direkt über Pacman installiert und aktualisiert werden, ohne das gesamte Betriebssystem wechseln zu müssen.
+>
+> **Hinweis:** Die Integration erweitert dein System um eine große Sammlung sicherheitsrelevanter Werkzeuge. Installiere nur die Tools, die du tatsächlich benötigst, und verwende sie ausschließlich auf Systemen, für die du eine entsprechende Berechtigung besitzt.
+
+Zunächst laden wir das offizielle BlackArch-Installationsskript herunter:
+
+```bash
+curl -O https://blackarch.org/strap.sh
+```
+
+Bevor wir das Skript ausführen, überprüfen wir dessen SHA1-Prüfsumme. Dadurch stellen wir sicher, dass die heruntergeladene Datei mit der erwarteten Version übereinstimmt:
+
+```bash
+echo 00688950aaf5e5804d2abebb8d3d3ea1d28525ed strap.sh | sha1sum -c
+```
+
+> Wenn die Prüfung erfolgreich ist, sollte `strap.sh: OK` ausgegeben werden. Schlägt die Prüfung fehl, darf das Skript nicht ausgeführt werden.
+
+Anschließend machen wir das Installationsskript ausführbar:
+
+```bash
+chmod +x strap.sh
+```
+
+Nun führen wir das offizielle BlackArch-Installationsskript mit Root-Rechten aus:
+
+```bash
+sudo ./strap.sh
+```
+
+> Das Skript richtet das BlackArch-Repository ein und integriert die benötigten Paketquellen und Schlüssel in die bestehende Arch-Linux-Installation.
+
+Abschließend aktualisieren wir die Paketdatenbanken und installieren alle verfügbaren Systemupdates:
+
+```bash
+sudo pacman -Syu
+```
+
+> Nach erfolgreicher Installation steht das BlackArch-Repository zur Verfügung. Die enthaltenen Sicherheitswerkzeuge können nun gezielt über Pacman installiert werden.
+
+**Beispiel:** Mit folgendem Befehl kannst du dir die verfügbaren BlackArch-Paketgruppen anzeigen lassen:
+
+```bash
+pacman -Sg | grep blackarch
+```
+
+## BlackArch Tools installieren
+
+> **BlackArch** stellt eine umfangreiche Sammlung spezialisierter Sicherheitswerkzeuge für Penetration Testing, IT-Security, digitale Forensik und Sicherheitsanalysen bereit.
+>
+> Nachdem das BlackArch-Repository eingerichtet wurde, können die enthaltenen Werkzeuge direkt über Pacman installiert werden.
+>
+> Die Werkzeuge sind in verschiedene Kategorien unterteilt. Dadurch kannst du gezielt die Toolgruppen installieren, die du für deine Arbeit benötigst, ohne dein System unnötig mit sämtlichen verfügbaren Werkzeugen zu erweitern.
+>
+> **Wähle zwischen der vollständigen Installation aller BlackArch-Tools oder einzelnen Toolgruppen.**
+
+<details>
+<summary>Alle BlackArch Tools installieren</summary>
+
+> Mit dieser Option installierst du die vollständige BlackArch-Toolgruppe. Dadurch werden sämtliche verfügbaren Kategorien und die darin enthaltenen Werkzeuge installiert.
+>
+> **Hinweis:** Die vollständige Installation benötigt sehr viel Speicherplatz und kann zahlreiche zusätzliche Abhängigkeiten mitbringen. Für die meisten Anwender ist es sinnvoller, nur die benötigten Kategorien auszuwählen.
+
+```bash
+sudo pacman -S blackarch
+```
+
+</details>
+
+<details>
+<summary>Einzelne BlackArch Toolgruppen installieren</summary>
+
+> Alternativ kannst du einzelne Kategorien installieren. Jede Kategorie enthält eine thematisch zusammengehörige Sammlung von Sicherheitswerkzeugen.
+>
+> Die folgenden Gruppen stehen zur Verfügung:
+
+**System, Automatisierung und allgemeine Werkzeuge**
+
+| Kategorie | Paket |
+|---|---|
+| Anti-Forensic Tools | `blackarch-anti-forensic` |
+| Automation Tools | `blackarch-automation` |
+| AI Tools | `blackarch-ai` |
+| Automotive Tools | `blackarch-automobile` |
+| Hardware Tools | `blackarch-hardware` |
+| GPU Tools | `blackarch-gpu` |
+| Miscellaneous Tools | `blackarch-misc` |
+
+**Analyse, Entwicklung und Reverse Engineering**
+
+| Kategorie | Paket |
+|---|---|
+| Binary Tools | `blackarch-binary` |
+| Code Audit Tools | `blackarch-code-audit` |
+| Debugger Tools | `blackarch-debugger` |
+| Decompiler Tools | `blackarch-decompiler` |
+| Disassembler Tools | `blackarch-disassembler` |
+| Reverse Engineering Tools | `blackarch-reversing` |
+| Fuzzing Tools | `blackarch-fuzzer` |
+
+**Netzwerk und Kommunikation**
+
+| Kategorie | Paket |
+|---|---|
+| Networking Tools | `blackarch-networking` |
+| Bluetooth Tools | `blackarch-bluetooth` |
+| Wireless Tools | `blackarch-wireless` |
+| NFC Tools | `blackarch-nfc` |
+| Radio Tools | `blackarch-radio` |
+| VoIP Tools | `blackarch-voip` |
+| Proxy Tools | `blackarch-proxy` |
+| Tunnel Tools | `blackarch-tunnel` |
+
+**Security, Pentesting und Exploitation**
+
+| Kategorie | Paket |
+|---|---|
+| Backdoor Tools | `blackarch-backdoor` |
+| Cracking Tools | `blackarch-cracker` |
+| Crypto Tools | `blackarch-crypto` |
+| DoS Tools | `blackarch-dos` |
+| Exploitation Tools | `blackarch-exploitation` |
+| Fingerprint Tools | `blackarch-fingerprint` |
+| Honeypot Tools | `blackarch-honeypot` |
+| IDS Tools | `blackarch-ids` |
+| Reconnaissance Tools | `blackarch-recon` |
+| Scan Tools | `blackarch-scan` |
+| Scanner Tools | `blackarch-scanner` |
+| Sniffer Tools | `blackarch-sniffer` |
+| Spoofing Tools | `blackarch-spoof` |
+
+**Forensik und spezialisierte Werkzeuge**
+
+| Kategorie | Paket |
+|---|---|
+| Firmware Tools | `blackarch-firmware` |
+| Forensic Tools | `blackarch-forensic` |
+| Keylogger Tools | `blackarch-keylogger` |
+| Malware Tools | `blackarch-malware` |
+| Packer Tools | `blackarch-packer` |
+| Steganography Tools | `blackarch-stego` |
+| Unpacker Tools | `blackarch-unpacker` |
+
+**Mobile, Web und Social Engineering**
+
+| Kategorie | Paket |
+|---|---|
+| Mobile Tools | `blackarch-mobile` |
+| Mobile Reversing Tools | `blackarch-mobile-reversing` |
+| Social Engineering Tools | `blackarch-social` |
+| Web Application Tools | `blackarch-webapp` |
+| Windows Tools | `blackarch-windows` |
+
+</details>
+
+#### Einzelne Toolgruppen installieren
+
+> Jede Kategorie kann unabhängig über Pacman installiert werden. Ersetze dafür den Paketnamen durch die gewünschte BlackArch-Toolgruppe.
+
+Beispielsweise installieren wir die Networking Tools:
+
+```bash
+sudo pacman -S blackarch-networking
+```
+
+Oder die Reverse Engineering Tools:
+
+```bash
+sudo pacman -S blackarch-reversing
+```
+
+Du kannst auch mehrere Kategorien gleichzeitig installieren:
+
+```bash
+sudo pacman -S blackarch-networking blackarch-recon blackarch-forensic
+```
+
+> **Ergebnis:** BlackArch ist in dein Arch-System integriert und du kannst die verfügbaren Sicherheitswerkzeuge flexibel nach deinem persönlichen Anwendungsbereich installieren und verwalten.
+
+## Das Software-Reverse-Engineering-Framework Ghidra installieren
+
+> **Ghidra** ist ein Software-Reverse-Engineering-Framework, das von der National Security Agency (NSA) entwickelt wurde. Es bietet eine Vielzahl von Tools zur Analyse von Binärdateien und zur Durchführung von Reverse Engineering.
+
+```bash
+sudo pacman -S ghidra
+# yay -S ghidra
+```
+
+## Plugin für Decompilation in radare2 installieren
+
+> `radare2` ist ein mächtiges Framework zur Analyse und zum Reverse Engineering von Binaries. `r2ghidra` bringt die Ghidra-Decompiler-Engine direkt in radare2 und ermöglicht es dir, kompilierten Code wieder in eine besser lesbare Darstellung zu dekompilieren.
+
+Installation:
+
+```bash
+sudo pacman -S radare2 r2ghidra
+```
+
+✨ Falls du zusätzlich mit `r2pipe` arbeiten möchtest, kannst du die Python-Bindings installieren:
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S python-r2pipe
+```
+
+</details>
+
+<details>
+<summary>✨ Alternative: r2pm verwenden</summary>
+
+Falls du `r2ghidra` nicht über dein Paketmanagement installieren möchtest, kannst du das Plugin alternativ über den radare2 Package Manager (`r2pm`) installieren:
+
+```bash
+r2pm -U
+r2pm -init
+r2pm -i r2ghidra
+```
+
+> **Hinweis:** Verwende am besten **eine** der beiden Methoden und installiere `r2ghidra` nicht doppelt.
+
+</details>
+
+## Cutter und Ghidra installieren
+
+> Installiert **Cutter** (`rz-cutter`) und das **Ghidra-Decompiler-Plugin** (`rz-ghidra`) über Pacman. Beide Pakete werden für die Reverse-Engineering-Umgebung benötigt.
+
+```bash
+sudo pacman -S rz-cutter rz-ghidra
+```
+
+## ✨ BlackArch-Menüs installieren
+
+> `blackarch-menus` ist ein Paket zur Installation der Menüeinträge des BlackArch-Repositories für die Integration der Werkzeuge in die Desktop-Umgebung.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S blackarch-menus
+```
+
+</details>
+
+## ✨ Wordlistctl installieren
+
+> `wordlistctl` ist ein Werkzeug zur Verwaltung, Suche und Installation von Wortlisten für Sicherheitsanalysen und Penetration Testing.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S wordlistctl
+```
+
+</details>
+
+## ✨ BlackArch-Design installieren
+
+> `blackarch-artwork` ist ein Artwork-Paket mit grafischen Designelementen und Hintergrundbildern für die visuelle Gestaltung der BlackArch-Umgebung.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S blackarch-artwork
+```
+
+</details>
+
+## ✨ procps-ng installieren
+
+> `procps-ng` ist eine Sammlung grundlegender Linux-Systemwerkzeuge zur Prozessverwaltung, Systemüberwachung und Analyse von Systemressourcen.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S procps-ng
+```
+
+</details>
+
+## ✨ REA Agents installieren und einrichten
+
+> **REA Agents** ermöglicht die Einrichtung einer Umgebung für KI-Agenten. Über den Setup-Befehl werden die benötigten Komponenten eingerichtet und die Umgebung für die Arbeit mit KI-Agenten vorbereitet.
+
+<details>
+<summary>Installieren</summary>
+
+Die Installation erfolgt über `npx`. Dadurch kann der Setup-Prozess direkt gestartet werden, ohne REA Agents vorher manuell global installieren zu müssen.
+
+Mit folgendem Befehl startest du die Einrichtung:
+
+```bash
+npx rea-agents setup
+```
+
+Der Setup-Prozess übernimmt die weitere Einrichtung der REA-Agents-Umgebung.
+
+**Hinweis**: Der Setup-Prozess wird ohne Root-Rechte ausgeführt. Folge den Anweisungen des Einrichtungsprogramms, um die Konfiguration abzuschließen.
+
+</details>
+
+## ✨ JKs Sicherheits- und Pentesting-Tools installieren
+
+> JKs Sicherheits- und Pentesting-Tools bieten eine grundlegende Sammlung wichtiger Werkzeuge für Netzwerkdiagnose, Web-Security, OSINT, Sicherheitsanalysen und Penetration Testing.
+
+Viele dieser Werkzeuge sind bereits Bestandteil von BlackArch. Sie werden hier dennoch zusätzlich als separate Installation angeboten, damit alle Pentester eine solide Grundausstattung der wichtigsten Sicherheitswerkzeuge erhalten.
+
+<details>
+<summary>Installieren</summary>
+
+```bash
+sudo pacman -S --needed \
+nmap \
+metasploit \
+hydra \
+wireshark-qt \
+john \
+nikto \
+whatweb \
+theHarvester \
+shodan \
+bind-tools \
+tcpdump \
+netcat-openbsd \
+koadic \
+setoolkit \
+sliver \
+powersploit \
+sslyze \
+sslscan \
+testssl.sh \
+hashcat
+```
+
+</details>
 
 # ✨ UFW ist langsam
 
@@ -4650,29 +5085,48 @@ sudo systemctl enable --now mullvad-daemon.service
 
 # ✨ Tor Client installieren und einrichten
 
-> **Tor** ermöglicht anonymisierte Netzwerkverbindungen, indem der Datenverkehr über das Tor-Netzwerk geleitet wird. Der **Tor Client** stellt Anwendungen eine Verbindung zum Tor-Netzwerk bereit.
->
-> Unter Arch Linux kann der Tor Client installiert und als Systemdienst eingerichtet werden.
+> **Tor** ermöglicht anonymisierte Netzwerkverbindungen über das Tor-Netzwerk. Unter Arch Linux können wir entweder nur Tor installieren oder zusätzlich `torctl` verwenden, um den gesamten Systemverkehr einschließlich DNS-Anfragen über Tor umzuleiten.
 
 <details>
-<summary>✨ Tor Client installieren</summary>
+<summary>✨ Variante 1: Nur Tor installieren (empfohlen)</summary>
 
-> Der Tor Client ermöglicht Anwendungen die Verbindung mit dem Tor-Netzwerk.
+> Installiert den Tor Client und aktiviert anschließend den Tor-Dienst, sodass er direkt gestartet wird und bei jedem Systemstart automatisch verfügbar ist.
 
 ```bash
 sudo pacman -S tor
 ```
 
-</details>
-
-<details>
-<summary>✨ Tor-Dienst aktivieren</summary>
-
-> Nach der Installation kann der Tor-Dienst aktiviert und direkt gestartet werden.
-
 ```bash
 sudo systemctl enable --now tor
 ```
+
+> Tor läuft anschließend als Systemdienst und stellt standardmäßig einen SOCKS5-Proxy unter `127.0.0.1:9050` bereit.
+
+</details>
+
+<details>
+<summary>⚠️ Variante 2: Tor mit torctl installieren (experimentell)</summary>
+
+> `torctl` ist ein Shell-Script von BlackArch, das den gesamten Systemverkehr einschließlich DNS-Anfragen über Tor umleiten kann. Das Projekt ist allerdings veraltet (letztes Release: v0.5.7 von 2021) und kann mit UFW oder anderen Firewall-Regeln kollidieren.
+
+```bash
+sudo pacman -S tor torctl
+```
+
+**Wichtige Befehle:**
+
+```bash
+sudo torctl start    # Tor aktivieren und Verkehr umleiten
+sudo torctl stop     # Tor beenden und Clearnet wiederherstellen
+sudo torctl status   # Status anzeigen
+sudo torctl restart  # Tor und Netzwerkregeln neu starten
+sudo torctl chngid   # Tor-Identität wechseln
+sudo torctl ip       # Öffentliche IP anzeigen
+```
+
+Weitere Funktionen sind `autostart`, `autowipe`, `chngmac` und `rvmac`.
+
+> **Achtung:** Vor der Verwendung Firewall-Regeln und Projektkompatibilität prüfen. Eine Tor-Umleitung garantiert außerdem keine vollständige Anonymität.
 
 </details>
 
@@ -5540,7 +5994,7 @@ sudo freshclam
 
 > Anschließend können wichtige Entwicklungs- und Konfigurationsverzeichnisse überprüft werden.
 
-Neovim-Konfiguration und Cache:
+NeoVim-Konfiguration und Cache:
 
 ```bash
 clamscan -r -i ~/.config/nvim ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
@@ -5960,7 +6414,7 @@ sudo pacman -Syu
 Installiere die SELinux-Varianten der Basis-Pakete:
 
 ```bash
-sudo pacman -S --needed base-selinux base-devel-selinux
+sudo pacman -S base-selinux base-devel-selinux
 ```
 
 Diese Pakete stellen die SELinux-kompatible Basisumgebung bereit.
@@ -5977,8 +6431,7 @@ Diese Pakete stellen die SELinux-kompatible Basisumgebung bereit.
 Für Verwaltung, Policy-Verarbeitung und Dateikontexte:
 
 ```bash
-sudo pacman -S --needed \
-    selinux-python \
+sudo pacman -S selinux-python \
     policycoreutils \
     semodule-utils \
     setools \
