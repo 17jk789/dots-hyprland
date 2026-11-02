@@ -2015,7 +2015,7 @@ ${STY_RST}\n"
           printf "${STY_GREEN}[ OK ] archinstall is ready.${STY_RST}\n\n"
 
           # Prepare JK Gray Linux Archinstall configuration
-          CONFIG_DIR="/root/jk-gray"
+          CONFIG_DIR="${HOME}/.config/jk-gray"
           CONFIG_FILE="${CONFIG_DIR}/config.json"
 
           mkdir -p "${CONFIG_DIR}"
