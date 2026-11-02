@@ -2045,11 +2045,18 @@ ${STY_RST}\n"
           # Create Archinstall configuration
           cat > "${CONFIG_FILE}" <<'EOF'
 {
-  "profile": {
-    "main": "Desktop",
-    "details": [
-      "Hyprland"
-    ]
+  "profile_config": {
+    "profile": {
+      "main": "Desktop",
+      "details": [
+        "Hyprland"
+      ],
+      "custom_settings": {
+        "Hyprland": {
+          "seat_access": "polkit"
+        }
+      }
+    }
   }
 }
 EOF
