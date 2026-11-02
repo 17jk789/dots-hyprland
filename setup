@@ -2041,7 +2041,7 @@ EOF
 
           printf "${STY_YELLOW}[INFO] Starting official Archinstall...${STY_RST}\n\n"
 
-          if archinstall --config "${CONFIG_FILE}"; then
+          if sudo archinstall --config "${CONFIG_FILE}"; then
             INSTALLER_EXIT_CODE=0
           else
             INSTALLER_EXIT_CODE=$?
