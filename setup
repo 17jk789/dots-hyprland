@@ -1991,22 +1991,41 @@ ${STY_RST}\n"
 
           printf "\n${STY_YELLOW}[INFO] Preparing the official Archinstall installer...${STY_RST}\n\n"
 
-          timedatectl set-ntp true
+          # Root privilege handler
+          run_privileged() {
+            if [[ ${EUID} -eq 0 ]]; then
+              "$@"
 
+            elif command -v sudo >/dev/null 2>&1 && sudo -v 2>/dev/null; then
+              sudo "$@"
+
+            elif command -v su >/dev/null 2>&1; then
+              su -c "$(printf '%q ' "$@")"
+
+            else
+              return 1
+            fi
+          }
+
+          # Enable network time synchronization
+          if ! run_privileged timedatectl set-ntp true; then
+            printf "${STY_YELLOW}[WARNING] Could not enable NTP synchronization.${STY_RST}\n"
+          fi
+
+          # Check Archinstall availability
           if ! command -v archinstall >/dev/null 2>&1; then
 
             printf "${STY_YELLOW}[INFO] archinstall is not installed.${STY_RST}\n"
             printf "${STY_CYAN}[INFO] Installing archinstall from the Arch repositories...${STY_RST}\n\n"
 
-            pacman -Sy --needed --noconfirm archinstall
-
-            if [[ $? -ne 0 ]]; then
+            if ! run_privileged pacman -Sy --needed --noconfirm archinstall; then
               printf "${STY_RED}[ERROR] Failed to install archinstall.${STY_RST}\n"
-              printf "${STY_YELLOW}Please check your network connection and pacman mirrors.${STY_RST}\n\n"
+              printf "${STY_YELLOW}Please check your network connection, pacman mirrors and root permissions.${STY_RST}\n\n"
               continue
             fi
           fi
 
+          # Verify installation
           if ! command -v archinstall >/dev/null 2>&1; then
             printf "${STY_RED}[ERROR] archinstall is still unavailable after installation.${STY_RST}\n"
             continue
@@ -2018,8 +2037,12 @@ ${STY_RST}\n"
           CONFIG_DIR="${HOME}/.config/jk-gray"
           CONFIG_FILE="${CONFIG_DIR}/config.json"
 
-          mkdir -p "${CONFIG_DIR}"
+          if ! mkdir -p "${CONFIG_DIR}"; then
+            printf "${STY_RED}[ERROR] Failed to create configuration directory.${STY_RST}\n"
+            continue
+          fi
 
+          # Create Archinstall configuration
           cat > "${CONFIG_FILE}" <<'EOF'
 {
   "profile": {
@@ -2039,14 +2062,16 @@ EOF
           printf "${STY_GREEN}[ OK ] JK Gray Linux configuration created.${STY_RST}\n"
           printf "${STY_CYAN}[INFO] Desktop environment: Hyprland${STY_RST}\n\n"
 
+          # Start official Archinstall
           printf "${STY_YELLOW}[INFO] Starting official Archinstall...${STY_RST}\n\n"
 
-          if sudo archinstall --config "${CONFIG_FILE}"; then
+          if run_privileged archinstall --config "${CONFIG_FILE}"; then
             INSTALLER_EXIT_CODE=0
           else
             INSTALLER_EXIT_CODE=$?
           fi
 
+          # Handle installer errors
           if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
             printf "\n${STY_RED}[ERROR] archinstall exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
             continue
@@ -2054,6 +2079,7 @@ EOF
 
           printf "\n${STY_GREEN}[ OK ] Archinstall completed.${STY_RST}\n\n"
 
+          # Reboot confirmation
           printf "${STY_YELLOW}The system should now be rebooted into the new installation.${STY_RST}\n\n"
 
           read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
