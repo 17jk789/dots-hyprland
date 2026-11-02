@@ -1933,13 +1933,13 @@ ${STY_RST}\n"
 
     printf "\n"
 
-    printf "  ${STY_GREEN}1${STY_RST} = ${STY_BOLD}JK Gray Linux Installer${STY_RST}\n"
-    printf "      Arch Linux + Hyprland + JK Gray Linux base configuration\n"
-    printf "      Security and additional features can be configured afterwards.\n\n"
-
-    printf "  ${STY_GREEN}2${STY_RST} = ${STY_BOLD}Archinstall${STY_RST}\n"
+    printf "  ${STY_GREEN}1${STY_RST} = ${STY_BOLD}Archinstall${STY_RST}\n"
     printf "      Official Arch Linux guided installer.\n"
     printf "      ${STY_CYAN}archinstall will be installed automatically if required.${STY_RST}\n\n"
+
+    printf "  ${STY_GREEN}2${STY_RST} = ${STY_BOLD}JK Gray Linux Installer${STY_RST}\n"
+    printf "      Arch Linux + Hyprland + JK Gray Linux base configuration\n"
+    printf "      Security and additional features can be configured afterwards.\n\n"
 
     printf "  ${STY_YELLOW}3${STY_RST} = ${STY_BOLD}CachyOS New CLI Installer${STY_RST} ${STY_YELLOW}[EXPERIMENTAL]${STY_RST}\n"
     printf "      CachyOS installer from the official GitHub repository.\n"
@@ -1988,6 +1988,101 @@ ${STY_RST}\n"
         ###########################################################################
 
         1)
+
+          printf "\n${STY_YELLOW}[INFO] Preparing the official Archinstall installer...${STY_RST}\n\n"
+
+          timedatectl set-ntp true
+
+          if ! command -v archinstall >/dev/null 2>&1; then
+
+            printf "${STY_YELLOW}[INFO] archinstall is not installed.${STY_RST}\n"
+            printf "${STY_CYAN}[INFO] Installing archinstall from the Arch repositories...${STY_RST}\n\n"
+
+            pacman -Sy --needed --noconfirm archinstall
+
+            if [[ $? -ne 0 ]]; then
+              printf "${STY_RED}[ERROR] Failed to install archinstall.${STY_RST}\n"
+              printf "${STY_YELLOW}Please check your network connection and pacman mirrors.${STY_RST}\n\n"
+              continue
+            fi
+          fi
+
+          if ! command -v archinstall >/dev/null 2>&1; then
+            printf "${STY_RED}[ERROR] archinstall is still unavailable after installation.${STY_RST}\n"
+            continue
+          fi
+
+          printf "${STY_GREEN}[ OK ] archinstall is ready.${STY_RST}\n\n"
+
+          # Prepare JK Gray Linux Archinstall configuration
+          CONFIG_DIR="/root/jk-gray"
+          CONFIG_FILE="${CONFIG_DIR}/config.json"
+
+          mkdir -p "${CONFIG_DIR}"
+
+          cat > "${CONFIG_FILE}" <<'EOF'
+{
+  "profile": {
+    "main": "Desktop",
+    "details": [
+      "Hyprland"
+    ]
+  }
+}
+EOF
+
+          if [[ $? -ne 0 ]]; then
+            printf "${STY_RED}[ERROR] Failed to create Archinstall configuration.${STY_RST}\n"
+            continue
+          fi
+
+          printf "${STY_GREEN}[ OK ] JK Gray Linux configuration created.${STY_RST}\n"
+          printf "${STY_CYAN}[INFO] Desktop environment: Hyprland${STY_RST}\n\n"
+
+          printf "${STY_YELLOW}[INFO] Starting official Archinstall...${STY_RST}\n\n"
+
+          if archinstall --config "${CONFIG_FILE}"; then
+            INSTALLER_EXIT_CODE=0
+          else
+            INSTALLER_EXIT_CODE=$?
+          fi
+
+          if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
+            printf "\n${STY_RED}[ERROR] archinstall exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
+            continue
+          fi
+
+          printf "\n${STY_GREEN}[ OK ] Archinstall completed.${STY_RST}\n\n"
+
+          printf "${STY_YELLOW}The system should now be rebooted into the new installation.${STY_RST}\n\n"
+
+          read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
+
+          case "${REBOOT_CONFIRM,,}" in
+            ""|y|yes)
+              printf "${STY_YELLOW}[INFO] Rebooting...${STY_RST}\n"
+              sleep 2
+              reboot
+              exit 0
+              ;;
+
+            n|no)
+              printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
+              break
+              ;;
+
+            *)
+              printf "${STY_RED}Please enter y or n.${STY_RST}\n"
+              ;;
+          esac
+
+          ;;
+
+        ###########################################################################
+        # OPTION 2 - OFFICIAL ARCHINSTALL
+        ###########################################################################
+
+        2)
 
           if [[ "${JK_GRAY_INSTALLER_AVAILABLE}" != "yes" ]]; then
             printf "\n${STY_RED}[ERROR] JK Gray Linux installer is not available.${STY_RST}\n"
@@ -2057,73 +2152,6 @@ ${STY_RST}\n"
               printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
               break
               ;;
-            *)
-              printf "${STY_RED}Please enter y or n.${STY_RST}\n"
-              ;;
-          esac
-
-          ;;
-
-        ###########################################################################
-        # OPTION 2 - OFFICIAL ARCHINSTALL
-        ###########################################################################
-
-        2)
-
-          printf "\n${STY_YELLOW}[INFO] Preparing the official Archinstall installer...${STY_RST}\n\n"
-
-          timedatectl set-ntp true
-
-          if ! command -v archinstall >/dev/null 2>&1; then
-
-            printf "${STY_YELLOW}[INFO] archinstall is not installed.${STY_RST}\n"
-            printf "${STY_CYAN}[INFO] Installing archinstall from the Arch repositories...${STY_RST}\n\n"
-
-            pacman -Sy --noconfirm archinstall
-
-            if [[ $? -ne 0 ]]; then
-              printf "${STY_RED}[ERROR] Failed to install archinstall.${STY_RST}\n"
-              printf "${STY_YELLOW}Please check your network connection and pacman mirrors.${STY_RST}\n\n"
-              continue
-            fi
-          fi
-
-          if ! command -v archinstall >/dev/null 2>&1; then
-            printf "${STY_RED}[ERROR] archinstall is still unavailable after installation.${STY_RST}\n"
-            continue
-          fi
-
-          printf "${STY_GREEN}[ OK ] archinstall is ready.${STY_RST}\n\n"
-          printf "${STY_YELLOW}[INFO] Starting official Archinstall...${STY_RST}\n\n"
-
-          archinstall
-
-          INSTALLER_EXIT_CODE=$?
-
-          if [[ ${INSTALLER_EXIT_CODE} -ne 0 ]]; then
-            printf "\n${STY_RED}[ERROR] archinstall exited with code ${INSTALLER_EXIT_CODE}.${STY_RST}\n"
-            continue
-          fi
-
-          printf "\n${STY_GREEN}[ OK ] Archinstall completed.${STY_RST}\n\n"
-
-          printf "${STY_YELLOW}The system should now be rebooted into the new installation.${STY_RST}\n\n"
-
-          read -r -p "Reboot now? [Y/n]: " REBOOT_CONFIRM
-
-          case "${REBOOT_CONFIRM,,}" in
-            ""|y|yes)
-              printf "${STY_YELLOW}[INFO] Rebooting...${STY_RST}\n"
-              sleep 2
-              reboot
-              exit 0
-              ;;
-
-            n|no)
-              printf "${STY_YELLOW}[INFO] Reboot cancelled.${STY_RST}\n"
-              break
-              ;;
-
             *)
               printf "${STY_RED}Please enter y or n.${STY_RST}\n"
               ;;
