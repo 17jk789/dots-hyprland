@@ -1,0 +1,81 @@
+{
+    "id": "install_brave_origin",
+    "variants": {
+        "pacman": {
+            "id": "install_brave_origin_pacman",
+            "name": {
+                "de": "Brave Origin über Pacman installieren",
+                "en": "Install Brave Origin with Pacman"
+            },
+            "description": {
+                "de": "Installiert Brave Origin über Pacman.",
+                "en": "Installs Brave Origin using Pacman."
+            },
+            "question": {
+                "de": "Soll Brave Origin über Pacman installiert werden?",
+                "en": "Should Brave Origin be installed using Pacman?"
+            },
+            "optional": false,
+            "exclusive_group": "brave_origin_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Brave Origin über Pacman.",
+                        "en": "Installs Brave Origin using Pacman."
+                    },
+                    "command": [
+                        "pacman",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "brave-origin-bin"
+                    ],
+                    "requires_root": true,
+                    "distros": [
+                        "cachyos"
+                    ]
+                }
+            ]
+        },
+        "yay": {
+            "id": "install_brave_origin_yay",
+            "name": {
+                "de": "Brave Origin über yay installieren",
+                "en": "Install Brave Origin with yay"
+            },
+            "description": {
+                "de": "Installiert Brave Origin über das AUR mit yay.",
+                "en": "Installs Brave Origin from the AUR using yay."
+            },
+            "question": {
+                "de": "Soll Brave Origin über yay installiert werden?",
+                "en": "Should Brave Origin be installed using yay?"
+            },
+            "optional": true,
+            "exclusive_group": "brave_origin_method",
+            "continue_on_error": false,
+            "checks": [],
+            "commands": [
+                {
+                    "description": {
+                        "de": "Installiert Brave Origin über yay.",
+                        "en": "Installs Brave Origin using yay."
+                    },
+                    "command": [
+                        "yay",
+                        "-S",
+                        "--needed",
+                        "--noconfirm",
+                        "brave-origin-bin"
+                    ],
+                    "requires_root": false,
+                    "distros": [
+                        "arch_based"
+                    ]
+                }
+            ]
+        }
+    }
+}
