@@ -128,11 +128,12 @@
         "asvetliakov.vscode-neovim": 1
     },
 
-    // --- Terminal: fish for interactive work -----------------------------
-    "terminal.integrated.defaultProfile.linux": "fish",
+    // --- Terminal: zsh for interactive work -----------------------------
+    // Use zsh as the default shell because fish hangs and does not render properly in the VS Code terminal.
+    "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.profiles.linux": {
-        "fish": {
-            "path": "/usr/bin/fish",
+        "zsh": {
+            "path": "/usr/bin/zsh",
             "args": ["--login"]
         }
     },
@@ -150,8 +151,6 @@
     "terminal.integrated.scrollback": 8000,
     "terminal.integrated.shellIntegration.enabled": true,
     "terminal.integrated.enableMultiLinePasteWarning": "auto",
-    // config/runner.lua deliberately uses /usr/bin/bash for POSIX task strings.
-    // The regular interactive terminal above remains fish.
 
     // --- Rust Analyzer: Marketplace extension owns the language server -----
     "rust-analyzer.checkOnSave": true,

@@ -71,10 +71,11 @@ local function run_vscode(command, title, opts)
       name: args.title || "Neovim Task",
       cwd,
       location,
-      // Use bash for predictable POSIX command syntax, even when the user's
-      // normal integrated-terminal profile is fish.
-      shellPath: "/usr/bin/bash",
-      shellArgs: ["--noprofile", "--norc", "-i"],
+      // Use Zsh as the default shell for VS Code task execution.
+      // Zsh provides reliable POSIX-compatible command syntax
+      // while supporting the user's preferred Zsh environment.
+      shellPath: "/usr/bin/zsh",
+      shellArgs: ["--login", "-f", "-i"],
     });
 
     terminal.show(false);

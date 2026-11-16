@@ -409,14 +409,23 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(ev)
     local buf = ev.buf
     local file = shellquote(file_path())
-    if vim.bo[buf].filetype == "fish" then
+    local ft = vim.bo[buf].filetype
+
+    if ft == "fish" then
       map_cmd(buf, "<leader>rpr", "fish -n " .. file .. " && fish " .. file,
         "Fish Syntax Check + Run")
       map_cmd(buf, "<leader>rpl", "fish -n " .. file, "Fish Syntax Check")
       map_cmd(buf, "<leader>rpf", "fish_indent -w " .. file, "Fish Format")
+
+    elseif ft == "zsh" then
+      map_cmd(buf, "<leader>rpr", "zsh -n " .. file .. " && zsh " .. file,
+        "Zsh Syntax Check + Run")
+      map_cmd(buf, "<leader>rpl", "zsh -n " .. file,
+        "Zsh Syntax Check")
+
     else
       map_cmd(buf, "<leader>rpr", "bash -n " .. file .. " && bash " .. file,
-        "Shell Syntax Check + Run")
+        "Bash Syntax Check + Run")
       map_cmd(buf, "<leader>rpl", "shellcheck " .. file, "ShellCheck")
       map_cmd(buf, "<leader>rpf", "shfmt -w " .. file, "shfmt")
     end

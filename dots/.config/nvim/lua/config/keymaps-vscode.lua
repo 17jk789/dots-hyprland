@@ -86,14 +86,14 @@ map({ "n", "x" }, "<leader>/", "editor.action.commentLine", "Toggle Comment")
 map("n", "<C-b>", "workbench.action.toggleSidebarVisibility", "Toggle Sidebar")
 map("n", "<leader>e", "workbench.view.explorer", "Explorer")
 map("n", "<leader>xx", "workbench.actions.view.problems", "Problems")
--- VS Code native Fish terminals
+-- VS Code native Zsh terminals
 map("n", "<leader>tt",
   "workbench.action.createTerminalEditor",
-  "New Fish Terminal Editor")
+  "New Zsh Terminal Editor")
 
 map("n", "<leader>tT",
   "workbench.action.terminal.toggleTerminal",
-  "Toggle Fish Terminal")
+  "Toggle Zsh Terminal")
 
 map("n", "<leader>ft",
   "workbench.action.terminal.toggleTerminal",
