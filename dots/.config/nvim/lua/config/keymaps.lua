@@ -1,5 +1,12 @@
 -- config/keymaps.lua
 
+-- Keep plugin-dependent maps in standalone Neovim only.
+-- VS Code gets its own native-command mappings from keymaps_vscode.lua.
+if vim.g.vscode then
+  require("config.keymaps_vscode")
+  return
+end
+
 -- local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -433,10 +440,6 @@ vim.api.nvim_create_user_command("LspInfo", function()
   vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, {
     title = "LSP Info",
   })
-end, {})
-
-vim.api.nvim_create_user_command("LspClient", function()
-  vim.cmd("checkhealth lsp")
 end, {})
 
 vim.api.nvim_create_user_command("LspClient", function()

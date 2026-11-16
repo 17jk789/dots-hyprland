@@ -1,5 +1,10 @@
 -- config/options.lua
 
+-- Load VS Code specific configuration
+if vim.g.vscode then
+  require("config.vscode_options")
+end
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 

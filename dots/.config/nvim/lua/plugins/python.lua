@@ -353,6 +353,10 @@ return {
 
 	{
 		"3rd/image.nvim",
+
+        -- Nicht in VS Code laden
+        enabled = not vim.g.vscode,
+
 		cond = function()
 			local term = os.getenv("TERM") or ""
 			local term_program = os.getenv("TERM_PROGRAM") or ""

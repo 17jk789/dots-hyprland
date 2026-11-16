@@ -32,7 +32,7 @@ return {
 				"dockerfile",
 				"terraform",
 				"nginx",
-				"tmux",
+				-- "tmux",
 				"ssh_config",
 				"diff",
 				"toml",

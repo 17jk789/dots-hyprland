@@ -1,231 +1,141 @@
 {
+    // =====================================================================
+    // ARCH LINUX / VS CODE + VSCODE-NEOVIM
+    // VS Code owns language services, formatting, debugging and workbench UI.
+    // Neovim owns modal editing only while running inside VS Code.
+    // Paste into: Preferences: Open User Settings (JSON)
+    // =====================================================================
+
+    // --- Editor: focused, responsive, Neovim-friendly --------------------
+    "editor.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+    "editor.fontSize": 15,
+    "editor.fontWeight": "400",
+    "editor.fontLigatures": true,
+    "editor.letterSpacing": 0,
+    "editor.lineHeight": 1.6,
+    "editor.cursorBlinking": "solid",
+    "editor.cursorSmoothCaretAnimation": "off",
+    "editor.smoothScrolling": false,
     "editor.mouseWheelZoom": true,
-    // "python.defaultInterpreterPath": "...",
-    "github.copilot.enable": {
-        "*": true,
-        "plaintext": true,
-        "markdown": true,
-        "scminput": true
-    },
-    "gitlens.ai.enabled": false,
-    // "editor.mouseWheelZoom": true,
-    "editor.cursorSmoothCaretAnimation": "on",
-    "editor.smoothScrolling": true,
-    // "editor.bracketPairColorization.enabled": true, // Seit VS Code 1.71+ ist das Standard
-    "editor.guides.bracketPairs": true,
     "editor.lineNumbers": "relative",
+    "editor.cursorSurroundingLines": 9,
+    "editor.minimap.enabled": false,
+    "editor.stickyScroll.enabled": false,
+    "editor.wordWrap": "off",
+    "editor.renderLineHighlight": "gutter",
+    "editor.renderWhitespace": "selection",
+    "editor.guides.bracketPairs": "active",
+    "editor.bracketPairColorization.enabled": true,
     "editor.occurrencesHighlight": "off",
     "editor.selectionHighlight": false,
-    "editor.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
-    "editor.fontWeight": "400",
-    "editor.letterSpacing": 0,
-    "editor.fontLigatures": true,
-    "editor.fontSize": 15,
-    "editor.lineHeight": 1.6,
+    "editor.suggest.preview": false,
+    "editor.inlineSuggest.enabled": false,
+    "editor.largeFileOptimizations": true,
+    "editor.detectIndentation": false,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.detectIndentation": true,
+    "editor.rulers": [100],
+    "editor.formatOnSave": false,
+
+    // IntelliSense remains VS Code's responsibility in Insert mode.
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.suggestSelection": "first",
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.wordBasedSuggestions": "matchingDocuments",
+
+    // --- Files ------------------------------------------------------------
+    "files.autoSave": "off",
     "files.insertFinalNewline": true,
-    // "files.exclude": {
-    //    "**/.git": true,
-    //    "**/node_modules": true,
-    //    "**/.DS_Store": true
-    // },
-    "files.autoSave": "off", // Kein automatisches Speichern, um ungewollte Änderungen zu vermeiden
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.encoding": "utf8",
+
+    // Exclude high-churn/generated trees from watchers and text search.
+    // Keep .git itself visible to VS Code's Git integration.
     "files.watcherExclude": {
-        "**/.git/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/.git/worktrees/**": true,
+        "**/node_modules/**": true,
         "**/target/**": true,
-        "**/node_modules/**": true
+        "**/.venv/**": true,
+        "**/venv/**": true,
+        "**/__pycache__/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.mypy_cache/**": true,
+        "**/.ruff_cache/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/.next/**": true,
+        "**/coverage/**": true
     },
-    // "[json]": {
-    //     "editor.tabSize": 4,
-    //     "editor.insertSpaces": true,
-    //     "editor.detectIndentation": false,
-    //     "editor.formatOnSave": true
-    // },
-    // "[jsonc]": {
-    //     "editor.tabSize": 4,
-    //     "editor.insertSpaces": true,
-    //     "editor.detectIndentation": false,
-    //     "editor.formatOnSave": true
-    // },
-    "[latex]": {
-        "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 80,
-        "editor.wrappingIndent": "indent"
+    "search.exclude": {
+        "**/.git/objects/**": true,
+        "**/node_modules/**": true,
+        "**/target/**": true,
+        "**/.venv/**": true,
+        "**/venv/**": true,
+        "**/__pycache__/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.mypy_cache/**": true,
+        "**/.ruff_cache/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/.next/**": true,
+        "**/coverage/**": true
     },
-    "window.titleBarStyle": "custom",
-    "window.nativeTabs": false,
-    "window.restoreWindows": "all",
-    "window.zoomLevel": 0,
-    "window.nativeFullScreen": true,
-    "editor.minimap.enabled": false,
     "search.smartCase": true,
-    "workbench.editor.enablePreview": false,
+    "search.followSymlinks": false,
+
+    // --- Workbench: quiet Catppuccin layout -------------------------------
     "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.iconTheme": "catppuccin-mocha",
     "workbench.activityBar.location": "top",
     "workbench.sideBar.location": "right",
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.value": 14,
+    "workbench.editor.limit.perEditorGroup": true,
+    "window.titleBarStyle": "custom",
     "window.menuBarVisibility": "compact",
     "window.commandCenter": false,
-    "vim.useSystemClipboard": true,
-    "vim.incsearch": true,
-    "vim.hlsearch": true,
-    "vim.visualstar": true,
-    "vim.cursorStylePerMode": true,
-    "vim.expandtab": true,
-    "vim.tabstop": 4,
-    "vim.shiftwidth": 4,
-    "vim.softtabstop": 4,
-    "vim.surround": true,
-    "vim.commentary": true,
-    "vim.remapKeys": true,
-    "vim.jumpBackwards": true,
-    // "vim.visualModeKeyBindingsNonRecursive": [],
-    "vim.leader": "<space>",
-    // "vim.recordMacroKey": "q",
-    // "vim.repeatMacroKey": "@",
-    "vim.recordMacroKey": null,
-    "vim.repeatMacroKey": null,
-    "vim.autoread": true,
-    "vim.splitbelow": true,
-    "vim.splitright": true,
-    // "vim.handleKeys": {},
-    "vim.useCtrlKeys": true,
-    // "vim.smartRelativeLine": true,
-    "vim.timeout": 500,
-    "vim.colorcolumn": "80",
-    "vim.showmatch": true,
-    "vim.matchpairs": "(:),{:},[:],<:>",
-    "vim.wrap": true,
-    // "vim.autowrite": false, // Kein automatisches Schreiben,
-    "vim.handleKeys": {
-        "<C-b>": false,
-        "<C-j>": false,
-        "u": false
+    "window.zoomLevel": 0,
+
+    // --- Security / privacy ----------------------------------------------
+    "security.workspace.trust.enabled": true,
+    "security.workspace.trust.startupPrompt": "once",
+    "security.workspace.trust.untrustedFiles": "prompt",
+    "telemetry.telemetryLevel": "off",
+    "extensions.autoCheckUpdates": true,
+    "extensions.autoUpdate": "on",
+
+    // --- Git --------------------------------------------------------------
+    "git.autofetch": false,
+    "git.confirmSync": true,
+    "git.enableSmartCommit": false,
+    "git.openRepositoryInParentFolders": "prompt",
+    "gitlens.ai.enabled": false,
+
+    // --- vscode-neovim: real Neovim backend -------------------------------
+    // Verify with: command -v nvim
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
     },
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "d"
-            ],
-            "after": [
-                "\"",
-                "_",
-                "d"
-            ]
-        },
-        {
-            "before": [
-                "d",
-                "d"
-            ],
-            "after": [
-                "\"",
-                "_",
-                "d",
-                "d"
-            ]
+
+    // --- Terminal: fish for interactive work -----------------------------
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "terminal.integrated.profiles.linux": {
+        "fish": {
+            "path": "/usr/bin/fish",
+            "args": ["--login"]
         }
-    ],
-    "vim.visualModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "d"
-            ],
-            "after": [
-                "\"",
-                "_",
-                "d"
-            ]
-        }
-    ],
-    "vim.statusBarColorControl": true,
-    // "vim.statusBarColors.normal": ["#78A4F1", "#ffffff"],
-    // "vim.statusBarColors.insert": ["#BF616A", "#ffffff"],
-    // "vim.statusBarColors.visual": ["#B48EAD", "#ffffff"],
-    // "vim.statusBarColors.visualline": ["#B48EAD", "#ffffff"],
-    // "vim.statusBarColors.visualblock": ["#A3BE8C", "#ffffff"],
-    // "vim.statusBarColors.replace": ["#D08770", "#ffffff"],
-    // "vim.statusBarColors.commandlineinprogress": ["#020408", "#ffffff"],
-    // "vim.statusBarColors.searchinprogressmode": ["#020408", "#ffffff"],
-    // "vim.statusBarColors.easymotionmode": ["#020408", "#ffffff"],
-    // "vim.statusBarColors.easymotioninputmode": ["#020408", "#ffffff"],
-    // "vim.statusBarColors.surroundinputmode": ["#020408", "#ffffff"],
-    // Catppuccin Mocha
-    "vim.statusBarColors.normal": [
-        "#C5AAF1",
-        "#11111b"
-    ],
-    "vim.statusBarColors.insert": [
-        "#89b4fa",
-        "#11111b"
-    ],
-    "vim.statusBarColors.visual": [
-        "#a6e3a1",
-        "#11111b"
-    ],
-    "vim.statusBarColors.visualline": [
-        "#b4befe",
-        "#11111b"
-    ],
-    "vim.statusBarColors.visualblock": [
-        "#fab387",
-        "#11111b"
-    ],
-    "vim.statusBarColors.replace": [
-        "#f38ba8",
-        "#11111b"
-    ],
-    "vim.statusBarColors.commandlineinprogress": [
-        "#11111A",
-        "#cdd6f4"
-    ],
-    "vim.statusBarColors.searchinprogressmode": [
-        "#11111A",
-        "#cdd6f4"
-    ],
-    "vim.statusBarColors.easymotionmode": [
-        "#11111A",
-        "#11111b"
-    ],
-    "vim.statusBarColors.easymotioninputmode": [
-        "#11111A",
-        "#11111b"
-    ],
-    "vim.statusBarColors.surroundinputmode": [
-        "#11111A",
-        "#11111b"
-    ],
-    "editor.wordWrap": "on",
-    "workbench.colorCustomizations": {
-        "statusBar.background": "#b4befe",
-        "statusBar.noFolderBackground": "#b4befe",
-        "statusBar.debuggingBackground": "#b4befe",
-        "statusBar.foreground": "#11111b",
-        "statusBar.debuggingForeground": "#11111b"
     },
-    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
-    "rust-analyzer.procMacro.enable": true,
-    "rust-analyzer.checkOnSave": true,
-    "rust-analyzer.checkOnSave.command": "clippy",
-    // "rust-analyzer.checkOnSave.command": "check" // fatser
-    "rust-analyzer.checkOnSave.extraArgs": [
-        "--",
-        "-W",
-        "clippy::all"
-    ],
-    "rust-analyzer.inlayHints.enable": true,
-    "rust-analyzer.inlayHints.typeHints": true,
-    "rust-analyzer.inlayHints.parameterHints": true,
-    "rust-analyzer.lens.enable": true,
-    "rust-analyzer.diagnostics.disabled": [
-        "unresolved-proc-macro"
-    ],
-    "rust-analyzer.server.extraEnv": {
-        "RA_LRU_CAP": "100000"
-    },
-    "git.autofetch": true,
-    "git.confirmSync": false,
     "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.gpuAcceleration": "on",
@@ -233,18 +143,456 @@
     "terminal.integrated.fontWeight": "400",
     "terminal.integrated.letterSpacing": 0,
     "terminal.integrated.lineHeight": 1.2,
-    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorBlinking": false,
     "terminal.integrated.cursorStyle": "line",
     "terminal.external.linuxExec": "kitty",
-    "terminal.integrated.smoothScrolling": true,
-    "terminal.integrated.scrollback": 10000,
-    "terminal.integrated.profiles.linux": {
-        "fish": {
-            "path": "/usr/bin/fish"
+    "terminal.integrated.smoothScrolling": false,
+    "terminal.integrated.scrollback": 8000,
+    "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.enableMultiLinePasteWarning": "auto",
+    // config/runner.lua deliberately uses /usr/bin/bash for POSIX task strings.
+    // The regular interactive terminal above remains fish.
+
+    // --- Rust Analyzer: Marketplace extension owns the language server -----
+    "rust-analyzer.checkOnSave": true,
+    "rust-analyzer.check.command": "check",
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.cargo.allTargets": false,
+    "rust-analyzer.cargo.buildScripts.enable": true,
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.inlayHints.typeHints.enable": true,
+    "rust-analyzer.inlayHints.parameterHints.enable": true,
+    "rust-analyzer.inlayHints.maxLength": 30,
+    "rust-analyzer.lens.enable": false,
+
+    // --- C / C++: clangd extension is the only language engine -------------
+    "clangd.arguments": [
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--header-insertion=never"
+    ],
+
+    // --- Python: Pylance for language features, Ruff for lint + format -----
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.terminal.activateEnvironment": true,
+
+    // --- Java -------------------------------------------------------------
+    "java.configuration.updateBuildConfiguration": "interactive",
+
+    // --- AI: disabled by default -----------------------------------------
+    "github.copilot.enable": {
+        "*": false
+    },
+
+    // --- Language-specific formatters -----------------------------------
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
         }
     },
-    "terminal.integrated.defaultProfile.linux": "fish"
+    "[rust]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "[c]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[cpp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[java]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "[javascript]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[typescript]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[javascriptreact]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[typescriptreact]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[html]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 100,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.trimTrailingWhitespace": false
+    },
+    "[shellscript]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "MufanQiu.shell-format-wasm"
+    },
+    "[fish]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "bmalehorn.vscode-fish"
+    },
+    "[latex]": {
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 100,
+        "editor.wrappingIndent": "indent"
+    }
 }
+
+// {
+//     "editor.mouseWheelZoom": true,
+//     // "python.defaultInterpreterPath": "...",
+//     "github.copilot.enable": {
+//         "*": true,
+//         "plaintext": true,
+//         "markdown": true,
+//         "scminput": true
+//     },
+//     "gitlens.ai.enabled": false,
+//     // "editor.mouseWheelZoom": true,
+//     "editor.cursorSmoothCaretAnimation": "on",
+//     "editor.smoothScrolling": true,
+//     // "editor.bracketPairColorization.enabled": true, // Seit VS Code 1.71+ ist das Standard
+//     "editor.guides.bracketPairs": true,
+//     "editor.lineNumbers": "relative",
+//     "editor.occurrencesHighlight": "off",
+//     "editor.selectionHighlight": false,
+//     "editor.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+//     "editor.fontWeight": "400",
+//     "editor.letterSpacing": 0,
+//     "editor.fontLigatures": true,
+//     "editor.fontSize": 15,
+//     "editor.lineHeight": 1.6,
+//     "editor.tabSize": 4,
+//     "editor.insertSpaces": true,
+//     "editor.detectIndentation": true,
+//     "files.insertFinalNewline": true,
+//     // "files.exclude": {
+//     //    "**/.git": true,
+//     //    "**/node_modules": true,
+//     //    "**/.DS_Store": true
+//     // },
+//     "files.autoSave": "off", // Kein automatisches Speichern, um ungewollte Änderungen zu vermeiden
+//     "files.watcherExclude": {
+//         "**/.git/**": true,
+//         "**/target/**": true,
+//         "**/node_modules/**": true
+//     },
+//     // "[json]": {
+//     //     "editor.tabSize": 4,
+//     //     "editor.insertSpaces": true,
+//     //     "editor.detectIndentation": false,
+//     //     "editor.formatOnSave": true
+//     // },
+//     // "[jsonc]": {
+//     //     "editor.tabSize": 4,
+//     //     "editor.insertSpaces": true,
+//     //     "editor.detectIndentation": false,
+//     //     "editor.formatOnSave": true
+//     // },
+//     "[latex]": {
+//         "editor.wordWrap": "wordWrapColumn",
+//         "editor.wordWrapColumn": 80,
+//         "editor.wrappingIndent": "indent"
+//     },
+//     "window.titleBarStyle": "custom",
+//     "window.nativeTabs": false,
+//     "window.restoreWindows": "all",
+//     "window.zoomLevel": 0,
+//     "window.nativeFullScreen": true,
+//     "editor.minimap.enabled": false,
+//     "search.smartCase": true,
+//     "workbench.editor.enablePreview": false,
+//     "workbench.colorTheme": "Catppuccin Mocha",
+//     "workbench.activityBar.location": "top",
+//     "workbench.sideBar.location": "right",
+//     "window.menuBarVisibility": "compact",
+//     "window.commandCenter": false,
+//     "vim.useSystemClipboard": true,
+//     "vim.incsearch": true,
+//     "vim.hlsearch": true,
+//     "vim.visualstar": true,
+//     "vim.cursorStylePerMode": true,
+//     "vim.expandtab": true,
+//     "vim.tabstop": 4,
+//     "vim.shiftwidth": 4,
+//     "vim.softtabstop": 4,
+//     "vim.surround": true,
+//     "vim.commentary": true,
+//     "vim.remapKeys": true,
+//     "vim.jumpBackwards": true,
+//     // "vim.visualModeKeyBindingsNonRecursive": [],
+//     "vim.leader": "<space>",
+//     // "vim.recordMacroKey": "q",
+//     // "vim.repeatMacroKey": "@",
+//     "vim.recordMacroKey": null,
+//     "vim.repeatMacroKey": null,
+//     "vim.autoread": true,
+//     "vim.splitbelow": true,
+//     "vim.splitright": true,
+//     // "vim.handleKeys": {},
+//     "vim.useCtrlKeys": true,
+//     // "vim.smartRelativeLine": true,
+//     "vim.timeout": 500,
+//     "vim.colorcolumn": "80",
+//     "vim.showmatch": true,
+//     "vim.matchpairs": "(:),{:},[:],<:>",
+//     "vim.wrap": true,
+//     // "vim.autowrite": false, // Kein automatisches Schreiben,
+//     "vim.handleKeys": {
+//         "<C-b>": false,
+//         "<C-j>": false,
+//         "u": false
+//     },
+//     "vim.normalModeKeyBindingsNonRecursive": [
+//         {
+//             "before": [
+//                 "d"
+//             ],
+//             "after": [
+//                 "\"",
+//                 "_",
+//                 "d"
+//             ]
+//         },
+//         {
+//             "before": [
+//                 "d",
+//                 "d"
+//             ],
+//             "after": [
+//                 "\"",
+//                 "_",
+//                 "d",
+//                 "d"
+//             ]
+//         }
+//     ],
+//     "vim.visualModeKeyBindingsNonRecursive": [
+//         {
+//             "before": [
+//                 "d"
+//             ],
+//             "after": [
+//                 "\"",
+//                 "_",
+//                 "d"
+//             ]
+//         }
+//     ],
+//     "vim.statusBarColorControl": true,
+//     // "vim.statusBarColors.normal": ["#78A4F1", "#ffffff"],
+//     // "vim.statusBarColors.insert": ["#BF616A", "#ffffff"],
+//     // "vim.statusBarColors.visual": ["#B48EAD", "#ffffff"],
+//     // "vim.statusBarColors.visualline": ["#B48EAD", "#ffffff"],
+//     // "vim.statusBarColors.visualblock": ["#A3BE8C", "#ffffff"],
+//     // "vim.statusBarColors.replace": ["#D08770", "#ffffff"],
+//     // "vim.statusBarColors.commandlineinprogress": ["#020408", "#ffffff"],
+//     // "vim.statusBarColors.searchinprogressmode": ["#020408", "#ffffff"],
+//     // "vim.statusBarColors.easymotionmode": ["#020408", "#ffffff"],
+//     // "vim.statusBarColors.easymotioninputmode": ["#020408", "#ffffff"],
+//     // "vim.statusBarColors.surroundinputmode": ["#020408", "#ffffff"],
+//     // Catppuccin Mocha - Vim Status Bar
+//     "vim.statusBarColors.normal": [
+//         "#C5AAF1",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.insert": [
+//         "#89b4fa",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.visual": [
+//         "#a6e3a1",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.visualline": [
+//         "#b4befe",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.visualblock": [
+//         "#fab387",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.replace": [
+//         "#f38ba8",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.commandlineinprogress": [
+//         "#11111A",
+//         "#cdd6f4"
+//     ],
+//     "vim.statusBarColors.searchinprogressmode": [
+//         "#11111A",
+//         "#cdd6f4"
+//     ],
+//     "vim.statusBarColors.easymotionmode": [
+//         "#11111A",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.easymotioninputmode": [
+//         "#11111A",
+//         "#11111b"
+//     ],
+//     "vim.statusBarColors.surroundinputmode": [
+//         "#11111A",
+//         "#11111b"
+//     ],
+//     "editor.wordWrap": "on",
+//     "workbench.colorCustomizations": {
+//         // Status Bar
+//         "statusBar.background": "#CBA6F7",
+//         "statusBar.foreground": "#1E1E2E",
+//         "statusBar.border": "#CBA6F7",
+
+//         // No Folder
+//         "statusBar.noFolderBackground": "#CBA6F7",
+//         "statusBar.noFolderForeground": "#1E1E2E",
+
+//         // Debugging
+//         "statusBar.debuggingBackground": "#F38BA8",
+//         "statusBar.debuggingForeground": "#1E1E2E",
+
+//         // Status Bar Items
+//         "statusBarItem.foreground": "#1E1E2E",
+//         "statusBarItem.hoverForeground": "#1E1E2E",
+//         "statusBarItem.hoverBackground": "#B4BEFE",
+//         "statusBarItem.activeBackground": "#B4BEFE",
+
+//         // Remote / Extension Status Bar
+//         "statusBarItem.remoteBackground": "#CBA6F7",
+//         "statusBarItem.remoteForeground": "#1E1E2E",
+
+//         // Prominent Items
+//         "statusBarItem.prominentForeground": "#1E1E2E",
+//         "statusBarItem.prominentBackground": "#CBA6F7",
+//         "statusBarItem.prominentHoverForeground": "#1E1E2E",
+//         "statusBarItem.prominentHoverBackground": "#B4BEFE"
+//     },
+//     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+//     "rust-analyzer.procMacro.enable": true,
+//     "rust-analyzer.checkOnSave": true,
+//     "rust-analyzer.checkOnSave.command": "clippy",
+//     // "rust-analyzer.checkOnSave.command": "check" // fatser
+//     "rust-analyzer.checkOnSave.extraArgs": [
+//         "--",
+//         "-W",
+//         "clippy::all"
+//     ],
+//     "rust-analyzer.inlayHints.enable": true,
+//     "rust-analyzer.inlayHints.typeHints": true,
+//     "rust-analyzer.inlayHints.parameterHints": true,
+//     "rust-analyzer.lens.enable": true,
+//     "rust-analyzer.diagnostics.disabled": [
+//         "unresolved-proc-macro"
+//     ],
+//     "rust-analyzer.server.extraEnv": {
+//         "RA_LRU_CAP": "100000"
+//     },
+//     "git.autofetch": true,
+//     "git.confirmSync": false,
+//     "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace",
+//     "terminal.integrated.fontSize": 14,
+//     "terminal.integrated.gpuAcceleration": "on",
+//     // "terminal.integrated.fontWeight": "normal",
+//     "terminal.integrated.fontWeight": "400",
+//     "terminal.integrated.letterSpacing": 0,
+//     "terminal.integrated.lineHeight": 1.2,
+//     "terminal.integrated.cursorBlinking": true,
+//     "terminal.integrated.cursorStyle": "line",
+//     "terminal.external.linuxExec": "kitty",
+//     "terminal.integrated.smoothScrolling": true,
+//     "terminal.integrated.scrollback": 10000,
+//     "terminal.integrated.profiles.linux": {
+//         "fish": {
+//             "path": "/usr/bin/fish"
+//         }
+//     },
+//     "terminal.integrated.defaultProfile.linux": "fish"
+// }
+
 // {
 //     // Editor
 //     "editor.mouseWheelZoom": true,

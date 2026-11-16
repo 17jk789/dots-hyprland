@@ -128,6 +128,15 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	end,
 })
 
+-- VS Code uses its own editor/terminal UI. The remaining FileType maps below
+-- rely on native Neovim :terminal, Telescope, DAP, and other Nvim UI plugins.
+-- Keep them for standalone Neovim only; VS Code equivalents live in
+
+if vim.g.vscode then
+  require("config.autocmds_vscode")
+  return
+end
+
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
 	pattern = "rust",
@@ -1855,7 +1864,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 		vim.keymap.set(
 			"n",
-			"<leader>rpb",
+			"<leader>rpB",
 			":split | terminal go test -bench ./... -benchmem<CR>",
 			{ desc = "Go Benchmark", silent = true, buffer = true }
 		)
@@ -2036,6 +2045,8 @@ vim.api.nvim_create_autocmd("FileType", {
 				return "npm"
 			end
 		end
+
+		local pm = get_pm()
 
 		-- Build
 		vim.keymap.set("n", "<leader>rrb", function()
