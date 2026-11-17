@@ -1,11 +1,9 @@
--- lua/config/runner.lua
---
--- One command runner for BOTH environments:
---   * Standalone Neovim: opens a native terminal split.
---   * VS Code + vscode-neovim: creates a visible VS Code integrated terminal.
---
--- Commands are only executed after an explicit keypress. They run with the
--- current user's permissions; this is not a sandbox.
+-- config/runner.lua
+
+-- Shared explicit task runner:
+--   * Standalone Neovim: native terminal split.
+--   * VS Code: integrated terminal using terminal.integrated.defaultProfile.
+-- Commands run only after an explicit keypress and with the user's permissions.
 
 local M = {}
 
@@ -15,13 +13,10 @@ end
 
 local function run_native(command, opts)
   opts = opts or {}
-
   vim.cmd("botright 14split")
 
-  local shell = vim.o.shell
+  local argv = { vim.o.shell }
   local shell_flags = vim.split(vim.o.shellcmdflag or "-c", "%s+", { trim = true })
-  local argv = { shell }
-
   vim.list_extend(argv, shell_flags)
   table.insert(argv, command)
 
@@ -35,7 +30,6 @@ local function run_native(command, opts)
     notify("Could not start terminal process.", vim.log.levels.ERROR)
     return nil
   end
-
   vim.cmd("startinsert")
   return job
 end
@@ -46,11 +40,9 @@ local function run_vscode(command, title, opts)
     notify("The vscode-neovim Lua API is unavailable.", vim.log.levels.ERROR)
     return nil
   end
-
   opts = opts or {}
 
-  -- Arguments are passed separately to vscode.eval_async; the command is
-  -- never interpolated into JavaScript source.
+  -- Pass command/cwd/title as arguments, never interpolate them into JS source.
   local js = [[
     const editor = vscode.window.activeTextEditor;
     const editorFolder = editor
@@ -59,14 +51,12 @@ local function run_vscode(command, title, opts)
     const firstFolder = vscode.workspace.workspaceFolders?.[0];
     const cwd = args.cwd || editorFolder?.uri.fsPath || firstFolder?.uri.fsPath;
     const activeTerminal = vscode.window.activeTerminal;
-
-    // If a terminal is already active, split beside it (the closest VS Code
-    // equivalent to the original `:split | terminal ...` workflow). Otherwise
-    // use the configured default terminal location.
     const location = activeTerminal
       ? { parentTerminal: activeTerminal }
       : undefined;
 
+    // Omitting shellPath/shellArgs makes VS Code use the user's configured
+    // terminal.integrated.defaultProfile.linux (Zsh in this setup).
     const terminal = vscode.window.createTerminal({
       name: args.title || "Neovim Task",
       cwd,
@@ -97,7 +87,6 @@ local function run_vscode(command, title, opts)
       end
     end,
   })
-
   return true
 end
 
@@ -111,13 +100,10 @@ function M.run(command, title, opts)
     notify("Empty command rejected.", vim.log.levels.ERROR)
     return nil
   end
-
   opts = opts or {}
-
   if vim.g.vscode then
     return run_vscode(command, title, opts)
   end
-
   return run_native(command, opts)
 end
 

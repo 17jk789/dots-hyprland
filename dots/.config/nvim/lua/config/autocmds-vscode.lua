@@ -121,43 +121,77 @@ vim.api.nvim_create_autocmd("FileType", {
       "cmake --build build && gprof ./build/app gmon.out | head -30",
       "GProf Analysis")
 
-    -- Keep the per-file C/C++ compiler runners as alternatives to CMake.
+    -- Single-file builds always go into a private build directory. This avoids
+    -- collisions with source-tree directories such as ./test or ./main.
+    local function save_buffer()
+      local ok, err = pcall(vim.api.nvim_buf_call, buf, function()
+        vim.cmd("silent write")
+      end)
+      if not ok then
+        vim.notify("Could not save before build: " .. tostring(err), vim.log.levels.ERROR)
+      end
+      return ok
+    end
+
+    local function build_paths()
+      local file = vim.api.nvim_buf_get_name(buf)
+      if file == "" then
+        vim.notify("Save this file before compiling.", vim.log.levels.WARN)
+        return nil
+      end
+      local dir = vim.fn.fnamemodify(file, ":p:h")
+      local base = vim.fn.fnamemodify(file, ":t:r")
+      local outdir = dir .. "/.nvim-build"
+      return file, dir, base, outdir, outdir .. "/" .. base
+    end
+
+    local function compile_and_run(compiler, standard, flags, title)
+      local file, dir, base, outdir, output = build_paths()
+      if not file or not save_buffer() then
+        return
+      end
+      local command = "mkdir -p " .. shellquote(outdir)
+        .. " && if [ -d " .. shellquote(output) .. " ]; then "
+        .. "echo " .. shellquote("Refusing to overwrite a directory: " .. base) .. " >&2; exit 73; fi"
+        .. " && " .. compiler .. " " .. standard .. " " .. flags
+        .. " " .. shellquote(file) .. " -o " .. shellquote(output)
+        .. " && " .. shellquote(output)
+      runner.run(command, title, { cwd = dir })
+    end
+
+    local function compile_only(compiler, standard, title)
+      local file, dir, base, outdir = build_paths()
+      if not file or not save_buffer() then
+        return
+      end
+      local object = outdir .. "/" .. base .. ".o"
+      local command = "mkdir -p " .. shellquote(outdir)
+        .. " && " .. compiler .. " " .. standard
+        .. " -Wall -Wextra -Wpedantic -g -c " .. shellquote(file)
+        .. " -o " .. shellquote(object)
+      runner.run(command, title, { cwd = dir })
+    end
+
     if vim.bo[buf].filetype == "c" then
       map_fn(buf, "<leader>rcr", function()
-        local file, dir, base = file_path(), file_dir(), file_base()
-        vim.cmd("write")
-        local cmd = "cd " .. shellquote(dir)
-          .. " && gcc -std=c17 -Wall -Wextra -g " .. shellquote(file)
-          .. " -o " .. shellquote(base) .. " && ./" .. shellquote(base)
-        runner.run(cmd, "GCC Compile + Run")
-      end, "GCC Compile + Run")
-      map_cmd(buf, "<leader>rco",
-        "gcc -O2 -Wall -Wextra " .. shellquote(file_path()) .. " -o " .. shellquote(file_base())
-          .. " && ./" .. shellquote(file_base()),
-        "GCC Optimized Compile + Run",
-        { cwd = file_dir() })
-      map_cmd(buf, "<leader>rcc",
-        "gcc -c " .. shellquote(file_path()),
-        "GCC Compile Only",
-        { cwd = file_dir() })
+        compile_and_run("gcc", "-std=c17", "-Wall -Wextra -Wpedantic -g", "GCC Debug Build + Run")
+      end, "GCC Debug Build + Run")
+      map_fn(buf, "<leader>rco", function()
+        compile_and_run("gcc", "-std=c17", "-O2 -Wall -Wextra -Wpedantic", "GCC Optimized Build + Run")
+      end, "GCC Optimized Build + Run")
+      map_fn(buf, "<leader>rcc", function()
+        compile_only("gcc", "-std=c17", "GCC Compile Only")
+      end, "GCC Compile Only")
     elseif vim.bo[buf].filetype == "cpp" then
       map_fn(buf, "<leader>rpr", function()
-        local file, dir, base = file_path(), file_dir(), file_base()
-        vim.cmd("write")
-        local cmd = "cd " .. shellquote(dir)
-          .. " && g++ -std=c++20 -Wall -Wextra -g " .. shellquote(file)
-          .. " -o " .. shellquote(base) .. " && ./" .. shellquote(base)
-        runner.run(cmd, "G++ Compile + Run")
-      end, "G++ Compile + Run")
-      map_cmd(buf, "<leader>rpo",
-        "g++ -O2 -Wall -Wextra -std=c++20 " .. shellquote(file_path()) .. " -o " .. shellquote(file_base())
-          .. " && ./" .. shellquote(file_base()),
-        "G++ Optimized Compile + Run",
-        { cwd = file_dir() })
-      map_cmd(buf, "<leader>rpc",
-        "g++ -c " .. shellquote(file_path()),
-        "G++ Compile Only",
-        { cwd = file_dir() })
+        compile_and_run("g++", "-std=c++20", "-Wall -Wextra -Wpedantic -g", "G++ Debug Build + Run")
+      end, "G++ Debug Build + Run")
+      map_fn(buf, "<leader>rpo", function()
+        compile_and_run("g++", "-std=c++20", "-O2 -Wall -Wextra -Wpedantic", "G++ Optimized Build + Run")
+      end, "G++ Optimized Build + Run")
+      map_fn(buf, "<leader>rpc", function()
+        compile_only("g++", "-std=c++20", "G++ Compile Only")
+      end, "G++ Compile Only")
     end
 
     map_fn(buf, "<leader>rrCM", function()
@@ -438,20 +472,30 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "asm", "nasm", "s" },
   callback = function(ev)
     local buf = ev.buf
-    local file = shellquote(file_path())
-    local base = shellquote(file_base())
-    local dir = shellquote(file_dir())
+    local raw_file = file_path()
+    local raw_dir = file_dir()
+    local raw_base = file_base()
+    local file = shellquote(raw_file)
+    local outdir = raw_dir .. "/.nvim-build"
+    local object = shellquote(outdir .. "/" .. raw_base .. ".o")
+    local output = shellquote(outdir .. "/" .. raw_base)
+    local listing = shellquote(outdir .. "/" .. raw_base .. ".lst")
+    local dir = shellquote(raw_dir)
     map_cmd(buf, "<leader>rar",
-      "cd " .. dir .. " && nasm -f elf64 " .. file .. " -o " .. base .. ".o && ld " .. base .. ".o -o " .. base .. " && ./" .. base,
+      "mkdir -p " .. shellquote(outdir) .. " && cd " .. dir
+        .. " && nasm -f elf64 " .. file .. " -o " .. object
+        .. " && ld " .. object .. " -o " .. output .. " && " .. output,
       "NASM Assemble + Link + Run")
     map_cmd(buf, "<leader>rad",
-      "cd " .. dir .. " && nasm -f elf64 -g -F dwarf " .. file .. " -o " .. base .. ".o && ld " .. base .. ".o -o " .. base,
+      "mkdir -p " .. shellquote(outdir) .. " && cd " .. dir
+        .. " && nasm -f elf64 -g -F dwarf " .. file .. " -o " .. object
+        .. " && ld " .. object .. " -o " .. output,
       "NASM Debug Build")
     map_cmd(buf, "<leader>rac",
-      "cd " .. dir .. " && nasm -f elf64 " .. file .. " -o " .. base .. ".o",
+      "mkdir -p " .. shellquote(outdir) .. " && nasm -f elf64 " .. file .. " -o " .. object,
       "NASM Compile Only")
     map_cmd(buf, "<leader>ral",
-      "cd " .. dir .. " && nasm -f elf64 " .. file .. " -l " .. base .. ".lst",
+      "mkdir -p " .. shellquote(outdir) .. " && nasm -f elf64 " .. file .. " -l " .. listing,
       "NASM Listing")
   end,
 })

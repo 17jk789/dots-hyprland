@@ -1,19 +1,8 @@
 [
-    // Space + t + t → Terminal als Editor-Tab
-    {
-        "key": "space + t + t",
-        "command": "workbench.action.createTerminalEditor",
-        "when": "editorTextFocus"
-    },
-
-    // Space + t + Shift+T → Terminal im unteren Panel
-    {
-        "key": "space + t + shift+t",
-        "command": "workbench.action.terminal.toggleTerminal",
-        "when": "editorTextFocus"
-    },
-
-    // Leader: Space is sent to Neovim outside Insert mode.
+    // Leader-space passthrough. Do not add multi-step space chords here:
+    // VS Code keybindings support two-stroke chords only. LazyVim's longer
+    // leader sequences (for example <leader>xx and <leader>tt) are handled by
+    // Neovim's keymap engine.
     {
         "key": "space",
         "command": "vscode-neovim.send",
@@ -21,8 +10,7 @@
         "args": " "
     },
 
-    // These custom control shortcuts have Neovim mappings in Normal mode only.
-    // Restrict the passthrough to Normal mode so Visual mode keeps VS Code defaults.
+    // Explicit control-key forwarding in Normal mode.
     { "key": "ctrl+p", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<C-p>" },
     { "key": "ctrl+f", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<C-f>" },
     { "key": "ctrl+o", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<C-o>" },
@@ -30,11 +18,11 @@
     { "key": "ctrl+s", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<C-s>" },
     { "key": "ctrl+shift+p", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<C-S-p>" },
 
-    // Uppercase H/L navigate VS Code editor tabs in Normal mode.
+    // H/L navigate VS Code editor tabs in Normal mode.
     { "key": "shift+h", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<S-h>" },
     { "key": "shift+l", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<S-l>" },
 
-    // VS Code debugger commands are invoked from Neovim's Normal mode maps.
+    // Debugger function keys.
     { "key": "f5", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<F5>" },
     { "key": "f9", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<F9>" },
     { "key": "f10", "command": "vscode-neovim.send", "when": "editorTextFocus && neovim.init && neovim.mode == normal", "args": "<F10>" },

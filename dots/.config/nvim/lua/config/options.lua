@@ -1,247 +1,163 @@
 -- config/options.lua
 
--- Load VS Code specific configuration
-if vim.g.vscode then
-  require("config.vscode_options")
+local is_vscode = not not vim.g.vscode
+
+if is_vscode then
+  require("config.vscode-options")
 end
 
-vim.opt.number = true
-vim.opt.relativenumber = true
-
--- vim.opt.wrap = true
--- vim.opt.linebreak = true -- bricht an Wortgrenzen
--- vim.opt.breakindent = true -- entspricht "wrappingIndent": "indent"
--- vim.opt.colorcolumn = "80" -- nur visuelle Markierung bei Spalte 80
-
-vim.api.nvim_create_user_command("WrapToggle", function()
-	vim.opt.wrap = not vim.opt.wrap:get()
-	vim.opt.linebreak = vim.opt.wrap:get()
-	vim.opt.breakindent = vim.opt.wrap:get()
-	vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
-end, {})
-
--- vim.cmd [[
---   augroup NumberToggle
---     autocmd!
---     autocmd InsertEnter * set norelativenumber
---     autocmd InsertLeave * set relativenumber
---   augroup END
--- ]]
-
--- vim.keymap.set("t", "<C-g>", [[>C-\><C-n>]], { noremap = true, silent = true})
-vim.keymap.set("t", "<C-g>", "<C-\\><C-n>", { noremap = true, silent = true })
-
+-- Keep Neovim's editing semantics aligned with the editor defaults.
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
-vim.opt.scrolloff = 9
-
--- new
-vim.opt.smarttab = true
 vim.opt.autoindent = true
+vim.opt.smarttab = true
+if not is_vscode or vim.g.vscode_clipboard then
+  vim.opt.clipboard = "unnamedplus"
+end
 
+vim.filetype.add({
+  pattern = {
+    [".*docker%-compose.*yaml"] = "yaml",
+    [".*docker%-compose.*yml"] = "yaml",
+    [".*%.gitlab%-ci%.yaml"] = "yaml",
+    [".*%.gitlab%-ci%.yml"] = "yaml",
+    [".*helm%-values.*%.yaml"] = "yaml",
+    [".*helm%-values.*%.yml"] = "yaml",
+  },
+})
+
+if is_vscode then
+  -- VS Code handles editor chrome, status bar, diagnostics, formatting and LSP.
+  -- Match the user's VS Code tab sizes for common 2-space filetypes.
+  local two_space_filetypes = {
+    "javascript", "javascriptreact", "typescript", "typescriptreact",
+    "html", "css", "scss", "json", "yaml", "markdown",
+  }
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = two_space_filetypes,
+    callback = function(ev)
+      vim.bo[ev.buf].tabstop = 2
+      vim.bo[ev.buf].shiftwidth = 2
+      vim.bo[ev.buf].expandtab = true
+    end,
+  })
+
+  vim.api.nvim_create_user_command("WrapToggle", function()
+    require("vscode").action("editor.action.toggleWordWrap")
+  end, { desc = "Toggle VS Code Word Wrap" })
+  return
+end
+
+-- Everything below belongs exclusively to standalone Neovim.
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 9
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
-
-vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 250
-
 vim.opt.mouse = "a"
--- vim.opt.mouse = "nvi"
 
--- vim.opt.winbar = "%=%m %f  | %l/%L"
+vim.keymap.set("t", "<C-g>", "<C-\\><C-n>", { noremap = true, silent = true })
 
--- local function get_ls_style()
---   local path = vim.fn.expand("%:p")
---   if path == "" then
---     return ""
---   end
-
---   -- Home kürzen zu ~
---   local home = vim.fn.expand("$HOME")
---   local rel_path = path:gsub("^" .. vim.pesc(home), "~")
-
---   -- File stats
---   local stat = vim.uv.fs_stat(path)
---   if not stat then
---     return rel_path
---   end
-
---   local perms = vim.fn.getfperm(path)
---   local size = stat.size
-
---   local mtime = os.date("%b %d %H:%M", stat.mtime.sec)
-
---   -- local file = vim.fn.fnamemodify(path, ":t")
-
---   -- local text = table.concat({
---   --   -- " " .. rel_path,
---   --   rel_path,
---   --   "󰌾 " .. perms,
---   --   "󰈔 " .. size .. "B",
---   --   " " .. mtime,
---   --   -- "󰈙 " .. file,
---   -- }, " › ")
-
---   local text = table.concat({
---     -- " " .. rel_path,
---     rel_path,
---     perms,
---     size .. "B",
---     mtime,
---     -- "󰈙 " .. file,
---   }, " › ")
-
---   -- limit 80% window width
---   local winwidth = vim.fn.winwidth(0)
---   local maxlen = math.floor(winwidth * 0.8)
-
---   if vim.fn.strdisplaywidth(text) > maxlen then
---     text = vim.fn.strcharpart(text, 0, maxlen - 1) .. "…"
---   end
-
---   return "%=%m " .. text
--- end
+vim.api.nvim_create_user_command("WrapToggle", function()
+  vim.opt.wrap = not vim.opt.wrap:get()
+  vim.opt.linebreak = vim.opt.wrap:get()
+  vim.opt.breakindent = vim.opt.wrap:get()
+  vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
+end, { desc = "Toggle Wrap" })
 
 local function get_ls_style()
-	-- Das Fenster, das gerade gerendert wird
-	local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
-	local bufnr = vim.api.nvim_win_get_buf(winid)
+  local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
+  local bufnr = vim.api.nvim_win_get_buf(winid)
+  local ft = vim.bo[bufnr].filetype
+  local bt = vim.bo[bufnr].buftype
+  if bt ~= "" or ft:find("snacks") then
+    return ""
+  end
 
-	-- 1. Hardcore Filter: Buffer-Typen und Filetypes
-	local ft = vim.bo[bufnr].filetype
-	local bt = vim.bo[bufnr].buftype
+  local path = vim.api.nvim_buf_get_name(bufnr)
+  if path == "" or path:find("snacks_explorer") then
+    return ""
+  end
 
-	-- Erweitere die Liste, falls Snacks Explorer einen anderen Namen nutzt
-	if
-		bt ~= ""
-		or ft == "snacks_explorer"
-		or ft == "snacks_layout"
-		or ft == "snacks_picker_list"
-		or ft:find("snacks")
-	then
-		return ""
-	end
+  local home = vim.fn.expand("$HOME")
+  local rel_path = path:gsub("^" .. vim.pesc(home), "~")
+  local stat = vim.uv.fs_stat(path)
+  local info = rel_path
+  if stat then
+    info = string.format("%s › %s › %s › %s",
+      rel_path,
+      vim.fn.getfperm(path),
+      math.floor(stat.size / 1024) .. "KB",
+      os.date("%b %d %H:%M", stat.mtime.sec))
+  end
 
-	-- 2. Pfad-Check: Verhindert Anzeige in leeren Buffern
-	local path = vim.api.nvim_buf_get_name(bufnr)
-	if path == "" or path:find("snacks_explorer") then
-		return ""
-	end
-
-	-- 3. Daten sammeln
-	local home = vim.fn.expand("$HOME")
-	local rel_path = path:gsub("^" .. vim.pesc(home), "~")
-	local stat = vim.uv.fs_stat(path)
-
-	local info = rel_path
-	if stat then
-		local perms = vim.fn.getfperm(path)
-		local size = math.floor(stat.size / 1024) .. "KB"
-		local mtime = os.date("%b %d %H:%M", stat.mtime.sec)
-		info = string.format("%s › %s › %s › %s", rel_path, perms, size, mtime)
-	end
-
-	-- 4. Platz-Check
-	local winwidth = vim.api.nvim_win_get_width(winid)
-	if winwidth < 50 then
-		return ""
-	end -- Zu schmal (z.B. Explorer-Leiste)
-
-	local maxlen = math.floor(winwidth * 0.8)
-	if #info > maxlen then
-		info = "…" .. info:sub(-(maxlen - 1))
-	end
-
-	return "%=%m " .. info
+  local width = vim.api.nvim_win_get_width(winid)
+  if width < 50 then
+    return ""
+  end
+  local maxlen = math.floor(width * 0.8)
+  if #info > maxlen then
+    info = "…" .. info:sub(-(maxlen - 1))
+  end
+  return "%=%m " .. info
 end
 
 _G.winbar = get_ls_style
 vim.opt.winbar = "%!v:lua.winbar()"
 
--- vim.filetype.add({
---   extension = {
---     fxml = "xml",
---   },
--- })
-
-vim.filetype.add({
-	pattern = {
-		[".*docker%-compose.*yaml"] = "yaml",
-		[".*docker%-compose.*yml"] = "yaml",
-		[".*%.gitlab%-ci%.yaml"] = "yaml",
-		[".*%.gitlab%-ci%.yml"] = "yaml",
-		[".*helm%-values.*%.yaml"] = "yaml",
-		[".*helm%-values.*%.yml"] = "yaml",
-	},
-})
-
--- Mason-Binaries zum System-Pfad hinzufügen (behebt "CLI not found")
+-- Mason binaries are added only for standalone Neovim tools.
 local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
 if vim.fn.isdirectory(mason_bin) == 1 then
-	local path_sep = package.config:sub(1, 1) == "\\" and ";" or ":"
-	vim.env.PATH = mason_bin .. path_sep .. vim.env.PATH
+  local sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+  vim.env.PATH = mason_bin .. sep .. (vim.env.PATH or "")
 end
 
--- vim.g.loaded_ruby_provider = 0
--- vim.g.loaded_perl_provider = 0
--- vim.g.loaded_node_provider = 0
--- vim.g.loaded_python3_provider = 0
-
--- Beruhigt den Snacks-Healthcheck
 vim.api.nvim_set_hl(0, "SnacksNormal", { fg = "#cba6f7", bg = "NONE" })
 vim.api.nvim_set_hl(0, "SnacksIndent", { fg = "#585b70", bg = "NONE" })
 
 vim.diagnostic.config({
-	virtual_text = {
-		prefix = "●",
-		spacing = 2,
-		source = "if_many",
-	},
-	float = {
-		border = "rounded",
-	},
-	severity_sort = true,
+  virtual_text = { prefix = "●", spacing = 2, source = "if_many" },
+  float = { border = "rounded" },
+  severity_sort = true,
 })
 
--- vim.opt.guicursor = "n-v-c:block,i:block-blinkwait500-blinkon500-blinkoff500"
-
 local function is_binary(path)
-	local fd = vim.loop.fs_open(path, "r", 438)
-	if not fd then
-		return false
-	end
-
-	local data = vim.loop.fs_read(fd, 1024, 0)
-	vim.loop.fs_close(fd)
-
-	return data and data:find("\0", 1, true) ~= nil
+  local fd = vim.uv.fs_open(path, "r", 438)
+  if not fd then
+    return false
+  end
+  local data = vim.uv.fs_read(fd, 1024, 0)
+  vim.uv.fs_close(fd)
+  return data and data:find("\0", 1, true) ~= nil
 end
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-	callback = function(args)
-		local buf = args.buf
-		local file = args.file
-
-		if file == "" or vim.fn.filereadable(file) == 0 then
-			return
-		end
-
-		if not is_binary(file) then
-			return
-		end
-
-		vim.bo[buf].modifiable = true
-		vim.cmd("%!hexdump -C")
-
-		vim.bo[buf].filetype = "hexdump"
-		vim.bo[buf].readonly = true
-		vim.bo[buf].modifiable = false
-		vim.bo[buf].modified = false
-	end,
+  group = vim.api.nvim_create_augroup("StandaloneBinaryHexView", { clear = true }),
+  callback = function(ev)
+    local file = ev.file
+    if file == "" or vim.fn.filereadable(file) == 0 or not is_binary(file) then
+      return
+    end
+    vim.api.nvim_buf_call(ev.buf, function()
+      vim.bo[ev.buf].modifiable = true
+      vim.cmd("%!hexdump -C")
+      vim.bo[ev.buf].filetype = "hexdump"
+      vim.bo[ev.buf].readonly = true
+      vim.bo[ev.buf].modifiable = false
+      vim.bo[ev.buf].modified = false
+    end)
+  end,
 })
 
+-- Prevent LazyVim from starting its own Roslyn LSP server.
+-- C# language support is handled by the VS Code C# extensions instead.
+-- The dummy command "true" acts as a harmless no-op.
+-- Empty filetypes and a nil root_dir prevent the server from attaching
+-- to C# files or projects.
+-- Diagnostics are ignored to avoid duplicate or unwanted messages.
 vim.lsp.config("roslyn_ls", {
 	cmd = { "true" }, -- harmless no-op
 	filetypes = {},
@@ -253,3 +169,257 @@ vim.lsp.config("roslyn_ls", {
 		["textDocument/publishDiagnostics"] = function() end,
 	},
 })
+
+-- -- Load VS Code specific configuration
+-- if vim.g.vscode then
+--   require("config.vscode-options")
+-- end
+
+-- vim.opt.number = true
+-- vim.opt.relativenumber = true
+
+-- -- vim.opt.wrap = true
+-- -- vim.opt.linebreak = true -- bricht an Wortgrenzen
+-- -- vim.opt.breakindent = true -- entspricht "wrappingIndent": "indent"
+-- -- vim.opt.colorcolumn = "80" -- nur visuelle Markierung bei Spalte 80
+
+-- vim.api.nvim_create_user_command("WrapToggle", function()
+-- 	vim.opt.wrap = not vim.opt.wrap:get()
+-- 	vim.opt.linebreak = vim.opt.wrap:get()
+-- 	vim.opt.breakindent = vim.opt.wrap:get()
+-- 	vim.opt.colorcolumn = vim.opt.wrap:get() and "80" or ""
+-- end, {})
+
+-- -- vim.cmd [[
+-- --   augroup NumberToggle
+-- --     autocmd!
+-- --     autocmd InsertEnter * set norelativenumber
+-- --     autocmd InsertLeave * set relativenumber
+-- --   augroup END
+-- -- ]]
+
+-- -- vim.keymap.set("t", "<C-g>", [[>C-\><C-n>]], { noremap = true, silent = true})
+-- vim.keymap.set("t", "<C-g>", "<C-\\><C-n>", { noremap = true, silent = true })
+
+-- vim.opt.tabstop = 4
+-- vim.opt.shiftwidth = 4
+-- vim.opt.expandtab = true
+-- vim.opt.smartindent = true
+-- vim.opt.scrolloff = 9
+
+-- -- new
+-- vim.opt.smarttab = true
+-- vim.opt.autoindent = true
+
+-- vim.opt.termguicolors = true
+-- vim.opt.signcolumn = "yes"
+
+-- vim.opt.clipboard = "unnamedplus"
+-- vim.opt.updatetime = 250
+
+-- vim.opt.mouse = "a"
+-- -- vim.opt.mouse = "nvi"
+
+-- -- vim.opt.winbar = "%=%m %f  | %l/%L"
+
+-- -- local function get_ls_style()
+-- --   local path = vim.fn.expand("%:p")
+-- --   if path == "" then
+-- --     return ""
+-- --   end
+
+-- --   -- Home kürzen zu ~
+-- --   local home = vim.fn.expand("$HOME")
+-- --   local rel_path = path:gsub("^" .. vim.pesc(home), "~")
+
+-- --   -- File stats
+-- --   local stat = vim.uv.fs_stat(path)
+-- --   if not stat then
+-- --     return rel_path
+-- --   end
+
+-- --   local perms = vim.fn.getfperm(path)
+-- --   local size = stat.size
+
+-- --   local mtime = os.date("%b %d %H:%M", stat.mtime.sec)
+
+-- --   -- local file = vim.fn.fnamemodify(path, ":t")
+
+-- --   -- local text = table.concat({
+-- --   --   -- " " .. rel_path,
+-- --   --   rel_path,
+-- --   --   "󰌾 " .. perms,
+-- --   --   "󰈔 " .. size .. "B",
+-- --   --   " " .. mtime,
+-- --   --   -- "󰈙 " .. file,
+-- --   -- }, " › ")
+
+-- --   local text = table.concat({
+-- --     -- " " .. rel_path,
+-- --     rel_path,
+-- --     perms,
+-- --     size .. "B",
+-- --     mtime,
+-- --     -- "󰈙 " .. file,
+-- --   }, " › ")
+
+-- --   -- limit 80% window width
+-- --   local winwidth = vim.fn.winwidth(0)
+-- --   local maxlen = math.floor(winwidth * 0.8)
+
+-- --   if vim.fn.strdisplaywidth(text) > maxlen then
+-- --     text = vim.fn.strcharpart(text, 0, maxlen - 1) .. "…"
+-- --   end
+
+-- --   return "%=%m " .. text
+-- -- end
+
+-- local function get_ls_style()
+-- 	-- Das Fenster, das gerade gerendert wird
+-- 	local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
+-- 	local bufnr = vim.api.nvim_win_get_buf(winid)
+
+-- 	-- 1. Hardcore Filter: Buffer-Typen und Filetypes
+-- 	local ft = vim.bo[bufnr].filetype
+-- 	local bt = vim.bo[bufnr].buftype
+
+-- 	-- Erweitere die Liste, falls Snacks Explorer einen anderen Namen nutzt
+-- 	if
+-- 		bt ~= ""
+-- 		or ft == "snacks_explorer"
+-- 		or ft == "snacks_layout"
+-- 		or ft == "snacks_picker_list"
+-- 		or ft:find("snacks")
+-- 	then
+-- 		return ""
+-- 	end
+
+-- 	-- 2. Pfad-Check: Verhindert Anzeige in leeren Buffern
+-- 	local path = vim.api.nvim_buf_get_name(bufnr)
+-- 	if path == "" or path:find("snacks_explorer") then
+-- 		return ""
+-- 	end
+
+-- 	-- 3. Daten sammeln
+-- 	local home = vim.fn.expand("$HOME")
+-- 	local rel_path = path:gsub("^" .. vim.pesc(home), "~")
+-- 	local stat = vim.uv.fs_stat(path)
+
+-- 	local info = rel_path
+-- 	if stat then
+-- 		local perms = vim.fn.getfperm(path)
+-- 		local size = math.floor(stat.size / 1024) .. "KB"
+-- 		local mtime = os.date("%b %d %H:%M", stat.mtime.sec)
+-- 		info = string.format("%s › %s › %s › %s", rel_path, perms, size, mtime)
+-- 	end
+
+-- 	-- 4. Platz-Check
+-- 	local winwidth = vim.api.nvim_win_get_width(winid)
+-- 	if winwidth < 50 then
+-- 		return ""
+-- 	end -- Zu schmal (z.B. Explorer-Leiste)
+
+-- 	local maxlen = math.floor(winwidth * 0.8)
+-- 	if #info > maxlen then
+-- 		info = "…" .. info:sub(-(maxlen - 1))
+-- 	end
+
+-- 	return "%=%m " .. info
+-- end
+
+-- _G.winbar = get_ls_style
+-- vim.opt.winbar = "%!v:lua.winbar()"
+
+-- -- vim.filetype.add({
+-- --   extension = {
+-- --     fxml = "xml",
+-- --   },
+-- -- })
+
+-- vim.filetype.add({
+-- 	pattern = {
+-- 		[".*docker%-compose.*yaml"] = "yaml",
+-- 		[".*docker%-compose.*yml"] = "yaml",
+-- 		[".*%.gitlab%-ci%.yaml"] = "yaml",
+-- 		[".*%.gitlab%-ci%.yml"] = "yaml",
+-- 		[".*helm%-values.*%.yaml"] = "yaml",
+-- 		[".*helm%-values.*%.yml"] = "yaml",
+-- 	},
+-- })
+
+-- -- Mason-Binaries zum System-Pfad hinzufügen (behebt "CLI not found")
+-- local mason_bin = vim.fn.stdpath("data") .. "/mason/bin"
+-- if vim.fn.isdirectory(mason_bin) == 1 then
+-- 	local path_sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+-- 	vim.env.PATH = mason_bin .. path_sep .. vim.env.PATH
+-- end
+
+-- -- vim.g.loaded_ruby_provider = 0
+-- -- vim.g.loaded_perl_provider = 0
+-- -- vim.g.loaded_node_provider = 0
+-- -- vim.g.loaded_python3_provider = 0
+
+-- -- Beruhigt den Snacks-Healthcheck
+-- vim.api.nvim_set_hl(0, "SnacksNormal", { fg = "#cba6f7", bg = "NONE" })
+-- vim.api.nvim_set_hl(0, "SnacksIndent", { fg = "#585b70", bg = "NONE" })
+
+-- vim.diagnostic.config({
+-- 	virtual_text = {
+-- 		prefix = "●",
+-- 		spacing = 2,
+-- 		source = "if_many",
+-- 	},
+-- 	float = {
+-- 		border = "rounded",
+-- 	},
+-- 	severity_sort = true,
+-- })
+
+-- -- vim.opt.guicursor = "n-v-c:block,i:block-blinkwait500-blinkon500-blinkoff500"
+
+-- local function is_binary(path)
+-- 	local fd = vim.loop.fs_open(path, "r", 438)
+-- 	if not fd then
+-- 		return false
+-- 	end
+
+-- 	local data = vim.loop.fs_read(fd, 1024, 0)
+-- 	vim.loop.fs_close(fd)
+
+-- 	return data and data:find("\0", 1, true) ~= nil
+-- end
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+-- 	callback = function(args)
+-- 		local buf = args.buf
+-- 		local file = args.file
+
+-- 		if file == "" or vim.fn.filereadable(file) == 0 then
+-- 			return
+-- 		end
+
+-- 		if not is_binary(file) then
+-- 			return
+-- 		end
+
+-- 		vim.bo[buf].modifiable = true
+-- 		vim.cmd("%!hexdump -C")
+
+-- 		vim.bo[buf].filetype = "hexdump"
+-- 		vim.bo[buf].readonly = true
+-- 		vim.bo[buf].modifiable = false
+-- 		vim.bo[buf].modified = false
+-- 	end,
+-- })
+
+-- vim.lsp.config("roslyn_ls", {
+-- 	cmd = { "true" }, -- harmless no-op
+-- 	filetypes = {},
+-- 	root_dir = function()
+-- 		return nil
+-- 	end,
+-- 	single_file_support = false,
+-- 	handlers = {
+-- 		["textDocument/publishDiagnostics"] = function() end,
+-- 	},
+-- })

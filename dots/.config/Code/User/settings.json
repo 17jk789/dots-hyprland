@@ -306,7 +306,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "MufanQiu.shell-format-wasm"
+        "editor.defaultFormatter": "foxundermoon.shell-format"
     },
     "[fish]": {
         "editor.tabSize": 4,
@@ -318,6 +318,19 @@
         "editor.wordWrap": "wordWrapColumn",
         "editor.wordWrapColumn": 100,
         "editor.wrappingIndent": "indent"
+    },
+    "[go]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true
+    },
+    "[csharp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true
+    },
+    "[xml]": {
+        "editor.formatOnSave": true
     }
 }
 

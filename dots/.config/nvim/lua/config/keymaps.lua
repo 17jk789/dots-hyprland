@@ -3,7 +3,7 @@
 -- Keep plugin-dependent maps in standalone Neovim only.
 -- VS Code gets its own native-command mappings from keymaps_vscode.lua.
 if vim.g.vscode then
-  require("config.keymaps_vscode")
+  require("config.keymaps-vscode")
   return
 end
 

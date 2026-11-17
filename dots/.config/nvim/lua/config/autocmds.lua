@@ -133,7 +133,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 -- Keep them for standalone Neovim only; VS Code equivalents live in
 
 if vim.g.vscode then
-  require("config.autocmds_vscode")
+  require("config.autocmds-vscode")
   return
 end
 

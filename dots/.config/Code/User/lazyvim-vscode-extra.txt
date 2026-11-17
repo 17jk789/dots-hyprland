@@ -1,0 +1,14 @@
+LazyVim VS Code extra
+=====================
+
+Empfohlener Weg:
+  1. In VS Code die Command Palette öffnen.
+  2. :LazyExtras ausführen.
+  3. vscode aktivieren.
+  4. LazyVim / Neovim neu starten.
+
+Nicht gleichzeitig zusätzlich lazyvim.plugins.extras.vscode manuell in lazy.lua
+importieren, wenn der Extra bereits über lazyvim.json / :LazyExtras aktiv ist.
+
+In eigenen Plugin-Specs keine vscode=true-Markierung für Plugins setzen, die
+Neovim-eigene LSP-, Mason-, Formatting-, Linting- oder DAP-Dienste starten.
