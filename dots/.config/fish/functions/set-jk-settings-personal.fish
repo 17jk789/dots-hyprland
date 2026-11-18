@@ -87,7 +87,7 @@ function set-jk-settings-personal --description "Configures the personal JK illo
             "workspaceZoom": 1
         },
         "thumbnailPath": "",
-        "wallpaperPath": "/home/user/dots-hyprland/wallpaper/wallpaper9.png",
+        "wallpaperPath": "/home/user/dots-hyprland/wallpaper/wallpaper4.png",
         "widgets": {
             "clock": {
                 "cookie": {
