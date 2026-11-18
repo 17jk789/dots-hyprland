@@ -75,7 +75,7 @@ function set-jk-settings-stable --description "Configures the stable JK illogica
             "workspaceZoom": 1
         },
         "thumbnailPath": "",
-        "wallpaperPath": "/home/jk/Pictures/image.jpg",
+        "wallpaperPath": "/home/user/dots-hyprland/wallpaper/wallpaper9.png",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -361,13 +361,13 @@ function set-jk-settings-stable --description "Configures the stable JK illogica
         "updateInterval": 3000
     },
     "screenRecord": {
-        "savePath": "/home/jk/Videos"
+        "savePath": "/home/user/Videos"
     },
     "screenSnip": {
-        "savePath": ""
+        "savePath": "/home/user/Pictures"
     },
     "search": {
-        "engineBaseUrl": "https://www.google.com/search?q=",
+        "engineBaseUrl": "https://search.brave.com/search?q=",
         "excludedSites": [
         ],
         "imageSearch": {
@@ -546,8 +546,8 @@ function set-jk-settings-stable --description "Configures the stable JK illogica
     },
     "workSafety": {
         "enable": {
-            "clipboard": false,
-            "wallpaper": false
+            "clipboard": true,
+            "wallpaper": true
         },
         "triggerCondition": {
             "fileKeywords": [
@@ -591,8 +591,8 @@ function set-jk-settings-stable --description "Configures the stable JK illogica
 }
 ')
 
-    # /home/jk durch den aktuellen Benutzer ersetzen
-    set json (string replace -a "/home/jk" "$HOME" "$json")
+    # /home/user durch den aktuellen Benutzer ersetzen
+    set json (string replace -a "/home/user" "$HOME" "$json")
 
     printf '%s\n' "$json" >"$config"
 

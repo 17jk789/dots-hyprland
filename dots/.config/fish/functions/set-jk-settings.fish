@@ -87,7 +87,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
             "workspaceZoom": 1
         },
         "thumbnailPath": "",
-        "wallpaperPath": "/home/jk/Pictures/image.jpg",
+        "wallpaperPath": "/home/user/dots-hyprland/wallpaper/wallpaper8.png",
         "widgets": {
             "clock": {
                 "cookie": {
@@ -373,13 +373,15 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
         "updateInterval": 3000
     },
     "screenRecord": {
-        "savePath": "/home/jk/Videos"
+        "savePath": "/home/user/Videos"
     },
     "screenSnip": {
-        "savePath": ""
+        "savePath": "/home/user/Pictures"
     },
     "search": {
-        "engineBaseUrl": "https://www.google.com/search?q=",
+        "engineBaseUrl": "https://search.brave.com/search?q=",
+        "excludedSites": [
+        ],
         "imageSearch": {
             "imageSearchEngineBaseUrl": "https://lens.google.com/uploadbyurl?url=",
             "useCircleSelection": false
@@ -565,7 +567,7 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
     "workSafety": {
         "enable": {
             "clipboard": false,
-            "wallpaper": false
+            "wallpaper": true
         },
         "triggerCondition": {
             "fileKeywords": [
@@ -609,8 +611,8 @@ function set-jk-settings --description "Configures the JK illogical-impulse sett
 }
 ')
 
-    # /home/jk durch den aktuellen Benutzer ersetzen
-    set json (string replace -a "/home/jk" "$HOME" "$json")
+    # /home/user durch den aktuellen Benutzer ersetzen
+    set json (string replace -a "/home/user" "$HOME" "$json")
 
     printf '%s\n' "$json" >"$config"
 
