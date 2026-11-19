@@ -117,7 +117,7 @@ function set-jk-settings-personal --description "Configures the personal JK illo
                     "showDate": true,
                     "vertical": false
                 },
-                "enable": false,
+                "enable": true,
                 "placementStrategy": "leastBusy",
                 "quote": {
                     "enable": true,
