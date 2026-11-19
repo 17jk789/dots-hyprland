@@ -109,11 +109,11 @@ hl.config({
 			input_methods_ignorealpha = 0.8
 		},
 		shadow = {
-			enabled = true,
-			range = 100,
-			offset = { 0, 25 },
-			render_power = 4,
-			color = "rgba(00000030)"
+            enabled = true,
+            range = 20,
+            offset = {0, 2},
+            render_power = 4,
+            color = "rgba(00000020)"
 		},
 		-- Dim
 		dim_inactive = false,
