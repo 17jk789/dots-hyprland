@@ -11,6 +11,7 @@ local qsScripts = "$HOME/.config/quickshell/$qsConfig/scripts"
 local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
+local paste_pending = false
 
 hl.bind("SUPER + SUPER_L", function()
 	hl.dispatch(hl.dsp.global("quickshell:searchToggleRelease"))
@@ -744,6 +745,10 @@ hl.bind(
 )
 
 hl.bind("CTRL + SUPER + L", function()
+	if paste_pending then
+		return
+	end
+
 	-- Voraussetzung in Firefox (about:config): devtools.chrome.enabled = true
 	local js_code = [[
 (() => {
@@ -783,6 +788,36 @@ hl.bind("CTRL + SUPER + L", function()
 		key = "J",
 		window = "activewindow",
 	}))
+
+    -- Timer gegen Mehrfachausführung absichern
+	paste_pending = true
+
+	-- 3. Warten bis Konsole fokusiert ist, dann Einfügen & Ausführen
+	hl.timer(function()
+		hl.dispatch(hl.dsp.send_shortcut({
+			mods = "CTRL",
+			key = "V",
+			window = "activewindow",
+		}))
+
+		hl.timer(function()
+			hl.dispatch(hl.dsp.send_shortcut({
+				mods = "",
+				key = "RETURN",
+				window = "activewindow",
+			}))
+
+			-- 4. Kurz warten, dann Konsole per Shortcut statt hartem Close schließen
+			hl.timer(function()
+				hl.dispatch(hl.dsp.window.close())
+				paste_pending = false
+
+			end, { timeout = 150, type = "oneshot" })
+
+		end, { timeout = 100, type = "oneshot" })
+
+	end, { timeout = 800, type = "oneshot" })
+
 end, { description = "Firefox: Toggle Letterboxing" })
 
 hl.bind(
