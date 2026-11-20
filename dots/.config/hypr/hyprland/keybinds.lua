@@ -455,11 +455,11 @@ for i = 1, 4 do
 		"ALT + SUPER + mouse_",
 	}
 
-	local keycombos = { 
-		key[1] .. "up", 
-		key[1] .. "down", 
-		key[2] .. "up", 
-		key[2] .. "down" 
+	local keycombos = {
+		key[1] .. "up",
+		key[1] .. "down",
+		key[2] .. "up",
+		key[2] .. "down"
 	}
 
 	local prefix = { "r-", "r+", "r-", "r+" }
@@ -720,6 +720,8 @@ hl.bind("XF86Calculator", hl.dsp.exec_cmd("qalculate-gtk"), { description = "App
 
 hl.bind("CTRL + SUPER + G", hl.dsp.exec_cmd("fish -c 'glasstoggle 0.80'"), { description = "Toggle glass mode" })
 
+hl.bind("CTRL + SUPER + ALT + G", hl.dsp.exec_cmd("fish -c 'glasstoggle full 0.80'"), { description = "Toggle full glass mode" })
+
 hl.bind("CTRL + SUPER + B", hl.dsp.exec_cmd("fish -c border-visible"), { description = "Toggle border visibility" })
 
 --##! Apps
@@ -740,6 +742,48 @@ hl.bind(
 	hl.dsp.exec_cmd("mullvad-browser -P"),
 	{ description = "App: Mullvad Browser" }
 )
+
+hl.bind("CTRL + SUPER + L", function()
+	-- Voraussetzung in Firefox (about:config): devtools.chrome.enabled = true
+	local js_code = [[
+(() => {
+    const prefs = Cc["@mozilla.org/preferences-service;1"]
+        .getService(Ci.nsIPrefBranch);
+
+    const key = "privacy.resistFingerprinting.letterboxing";
+    const forceSizeKey =
+        "privacy.resistFingerprinting.letterboxing.didForceSize";
+
+    const current = prefs.getBoolPref(key, true);
+    const next = !current;
+
+    prefs.setBoolPref(key, next);
+
+    if (next) {
+        prefs.setBoolPref(forceSizeKey, true);
+    } else {
+        prefs.clearUserPref(forceSizeKey);
+    }
+
+    return "Letterboxing: " + (next ? "AN" : "AUS");
+})();
+]]
+
+	-- 1. Code ohne unnötigen Zeilenumbruch in die Zwischenablage kopieren
+	hl.exec_cmd("wl-copy << 'EOF'\n" .. js_code .. "\nEOF")
+
+	-- 2. OS-Popup anzeigen
+	hl.exec_cmd(
+        'notify-send -u normal "Firefox Letterboxing" "Code copied! Note: devtools.chrome.enabled must be set to true in about:config."'
+	)
+
+	-- 3. Firefox-Browserkonsole öffnen
+	hl.dispatch(hl.dsp.send_shortcut({
+		mods = "CTRL + SHIFT",
+		key = "J",
+		window = "activewindow",
+	}))
+end, { description = "Firefox: Toggle Letterboxing" })
 
 hl.bind(
 	"SUPER + SHIFT + W",
